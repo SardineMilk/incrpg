@@ -4,6 +4,9 @@ export const DIALOGUES = {
 // More boilerplate but more flexibility
 // Have action as special case?
 
+// TODO set up message title filtering for known NPC names
+
+
 title: {
     result: [
         eff.sendMessage("", ""),
