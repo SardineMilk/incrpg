@@ -1,23 +1,24 @@
+import { TRIGGER_DEFS } from "../data/triggerDefs.js";
 import { CONDITIONS } from "../data/conditionsData.js";
 import { applyEffect, applyScaledEffect } from "./effects.js";
 import { meetsRequirements } from "./requirements.js";
-import { withContext } from "../data/formulas.js";
+import { withContext } from "../data/formulaDefs.js";
 
-function processTrigger(game, triggerType, context) {
+// Called by applyEffect after each effect is applied.
+// Walks all active conditions and fires any whose triggers match.
+export function processTrigger(game, triggerType, context) {
     for (const [id, state] of Object.entries(game.activeConditions)) {
-        const conditionDef = CONDITIONS[id];
-        if (!conditionDef.triggers) continue;
+        const def = CONDITIONS[id];
+        if (!def.triggers) continue;
 
-        const matchingTriggers = conditionDef.triggers.filter(t => t.type === triggerType);
-        if (!matchingTriggers.length) continue;
-        if (!matchingTriggers.some(t => checkTrigger(t, context))) continue;
-        if (!meetsRequirements(game, conditionDef)) continue;
+        const matching = def.triggers.filter(t => t.type === triggerType);
+        if (!matching.length) continue;
+        if (!matching.some(t => checkTrigger(t, context))) continue;
+        if (!meetsRequirements(game, def)) continue;
 
-        // This will break
-        // have fun
         withContext(context, () => {
-            for (const effect of conditionDef.effects) {
-                if (state.strength != 1) applyScaledEffect(game, effect, state.strength);
+            for (const effect of def.effects) {
+                if (state.strength !== 1) applyScaledEffect(game, effect, state.strength);
                 else applyEffect(game, effect);
             }
         });
@@ -25,50 +26,7 @@ function processTrigger(game, triggerType, context) {
 }
 
 function checkTrigger(trigger, context) {
-    switch (trigger.type) {
-        case "resourceGain":
-            return context.resource === trigger.resource && context.amount >= trigger.min;
-        case "resourceLoss":
-            return context.resource === trigger.resource && context.amount <= -trigger.min;
-        case "gainSkillXp":
-            if (!context.skill) return false;
-            return (context.skill === trigger.skill) || (trigger.skill == undefined);
-        case "locationChanges":
-            if (trigger.tags.length === 0) return true;
-            return trigger.tags.every(tag => context.tags?.includes(tag));
-        case "conditionApplied":
-            return context.condition === trigger.condition;
-        case "actionChanges":
-            return true;
-        case "tick":
-            return true;
-        default:
-            return false;
-    }
-}
-
-export function processEffectEvents(game, effect) {
-    switch (effect.type) {
-        case "grantSkillXp":
-            processTrigger(game, "gainSkillXp", effect);
-            break;
-        case "applyCondition":
-            processTrigger(game, "conditionApplied", effect);
-            break;
-        case "changeResource":
-            if (effect.amount > 0)
-                processTrigger(game, "resourceGain", effect);
-            else if (effect.amount < 0)
-                processTrigger(game, "resourceLoss", effect);
-            break;
-        case "setLocation":
-            processTrigger(game, "locationChanges", effect);
-            break;
-        case "setActiveAction":
-            processTrigger(game, "actionChanges", effect);
-            break;
-        case "tick":
-            processTrigger(game, "tick", effect);
-            break;
-    }
+    const def = TRIGGER_DEFS[trigger.type];
+    if (!def) { console.warn("Unknown trigger type:", trigger.type); return false; }
+    return def.check(trigger, context);
 }

@@ -1,5 +1,4 @@
-import { req, eff, evt } from "./structure.js"
-import { fml } from "./formulas.js";
+import { req, eff, evt, fml } from "./structure.js"
 
 const INHERENT_EFFECTS = {
     // Will need to clamp max/min health 

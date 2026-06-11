@@ -1,5 +1,4 @@
-import { req } from "./structure.js";
-import { eff } from "./structure.js";
+import { eff, req } from "./structure.js";
 
 export const ACTIONS = {
 
