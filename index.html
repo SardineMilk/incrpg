@@ -1,65 +1,68 @@
 <!-- index.html -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IncRPG</title>
-    <link rel="shortcut icon" type="image/png" href="resources/rat.png">
+    <link rel="shortcut icon" type="image/png" href="resources/rat.png" />
 
-    <link rel="stylesheet" href="main.css">
-</head>
-<body>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
     <div class="game-container">
-        <header>
-            <p>Incredible Rat Punching Game</p>
-        </header>
+      <header>
+        <p>Incredible Rat Punching Game</p>
+      </header>
 
-        <main class="game-screen">
-            <div class="hero-box">
-                <div class="name-box">Hero</div>
-                <div class="status-box">
-                    <div class="health-bar" id="health-bar">HP</div>
-                    <div class="stamina-bar" id="stamina-bar">SP</div>
-                    <div class="mental-bar" id="mental-bar">MP</div>
-                </div>
-                <div class="stats-box" id="stats-box">
-                    <!-- 4 physical, 4 mental. Power, Resilience, Speed, Accuracy -->
-                    <!-- Current numbers and progress injected by JS -->
-                </div>
-                <div class="money-box" id="money-box">Gold</div>
-                <div class="effects-box">Active Effects</div>
-            </div>
-            
-            <div id="skills-box">
-                <!-- Current visible skills injected here -->
-                <!-- Skills become visible after 50% of progress to level 1-->
-            </div>
+      <main class="game-screen">
+        <div class="hero-box">
+          <div class="name-box">Hero</div>
+          <div class="status-box">
+            <div class="health-bar" id="health-bar">HP</div>
+            <div class="stamina-bar" id="stamina-bar">SP</div>
+            <div class="mental-bar" id="mental-bar">MP</div>
+          </div>
+          <div class="stats-box" id="stats-box">
+            <!-- 4 physical, 4 mental. Power, Resilience, Speed, Accuracy -->
+            <!-- Current numbers and progress injected by JS -->
+          </div>
+          <div class="money-box" id="money-box">Gold</div>
+          <div class="effects-box">Active Effects</div>
+        </div>
 
-            <div id="actions-box">
-                <!-- Available actions injected here -->
-            </div>
+        <div id="skills-box">
+          <!-- Current visible skills injected here -->
+          <!-- Skills become visible after 50% of progress to level 1-->
+        </div>
 
-            <div id="tasks-box">
-                <!-- Current tasks injected here-->
-            </div>
+        <div id="actions-box">
+          <!-- Available actions injected here -->
+        </div>
 
-            <div id="log-box">
-                <!-- Log of events -->
-            </div>
+        <div id="tasks-box">
+          <!-- Current tasks injected here-->
+        </div>
 
-        </main>
+        <div id="log-box">
+          <!-- Log of events -->
+        </div>
+      </main>
 
-        <footer>
-            <p>SardineMilk</p>
-            <a href="https://github.com/SardineMilk/incrpg" target="_blank">
-                <img src="resources/github-logo.svg" alt="GitHub" class="logo">
-            </a>
-            <a href="https://buymeacoffee.com/sardinemilk" target="_blank">
-                <img src="resources/bmc-logo.svg" alt="Buy Me A Coffee" class="logo">
-            </a>
-        </footer>
+      <footer>
+        <p>SardineMilk</p>
+        <a href="https://github.com/SardineMilk/incrpg" target="_blank">
+          <img src="resources/github-logo.svg" alt="GitHub" class="logo" />
+        </a>
+        <a href="https://buymeacoffee.com/sardinemilk" target="_blank">
+          <img
+            src="resources/bmc-logo.svg"
+            alt="Buy Me A Coffee"
+            class="logo"
+          />
+        </a>
+      </footer>
     </div>
     <script type="module" src="src/main.js"></script>
-</body>
+  </body>
 </html>

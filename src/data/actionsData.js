@@ -1,13 +1,10 @@
 import { eff, req } from "./structure.js";
 
 export const ACTIONS = {
-
   jogging: {
     name: "Jogging",
     duration: 20,
-    requirements: [
-      req.locationHasTag("outside"),
-    ],
+    requirements: [req.locationHasTag("outside")],
 
     attributes: {
       strength: 0.2,
@@ -21,28 +18,24 @@ export const ACTIONS = {
     },
 
     skills: {
-      running:1,
-      exercise:0.5,
+      running: 1,
+      exercise: 0.5,
     },
 
-    tick: [
-      eff.changeResource("stamina", -2),
-    ],
+    tick: [eff.changeResource("stamina", -2)],
 
     result: [
       //eff.sendMessage("Result", "You went for a short run"),
       eff.changeResource("health", -1),
       eff.grantSkillXp("running", 20),
       eff.grantSkillXp("exercise", 10),
-    ]
+    ],
   },
 
   calisthenics: {
     name: "Calisthenics",
     duration: 20,
-    requirements: [
-      req.locationHasTag("outside"),
-    ],
+    requirements: [req.locationHasTag("outside")],
 
     attributes: {
       strength: 1,
@@ -56,27 +49,22 @@ export const ACTIONS = {
     },
 
     skills: {
-      exercise:1,
+      exercise: 1,
     },
 
-    tick: [
-      eff.changeResource("stamina", -2),
-    ],
+    tick: [eff.changeResource("stamina", -2)],
 
     result: [
       //eff.sendMessage("Result", "You went for a short run"),
       eff.changeResource("health", -1),
       eff.grantSkillXp("exercise", 10),
-    ]
+    ],
   },
 
   trainSword: {
     name: "Train Sword",
     duration: 30,
-    requirements: [
-      req.item("sword"),
-      req.locationHasTag("outside"),
-    ],
+    requirements: [req.item("sword"), req.locationHasTag("outside")],
 
     attributes: {
       strength: 0.7,
@@ -94,10 +82,7 @@ export const ACTIONS = {
       training: 0.5,
     },
 
-    result: [
-      eff.changeResource("stamina", -5),
-      eff.grantSkillXp("sword", 25),
-    ],
+    result: [eff.changeResource("stamina", -5), eff.grantSkillXp("sword", 25)],
   },
 
   meditate: {
@@ -116,19 +101,14 @@ export const ACTIONS = {
       perception: 0.2,
     },
 
-
     skills: {
       meditation: 1,
       breathing: 0.5,
     },
 
-    tick: [
-      eff.changeResource("mental", -2),
-    ],
+    tick: [eff.changeResource("mental", -2)],
 
-    result: [
-      eff.grantSkillXp("meditation", 20),
-    ],
+    result: [eff.grantSkillXp("meditation", 20)],
   },
 
   sleeping: {
@@ -147,18 +127,12 @@ export const ACTIONS = {
       perception: 0,
     },
 
-
     skills: {
       sleeping: 1,
     },
 
+    tick: [eff.applyCondition("sleeping", 1)],
 
-    tick: [
-      eff.applyCondition("sleeping", 1),
-    ],
-
-    result: [
-      eff.grantSkillXp("sleeping", 20),
-    ],
+    result: [eff.grantSkillXp("sleeping", 20)],
   },
 };

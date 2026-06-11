@@ -11,58 +11,61 @@
  */
 
 export const TRIGGER_DEFS = {
+  tick: {
+    create: () => ({ type: "tick" }),
+    check: () => true,
+  },
 
-    tick: {
-        create: () => ({ type: "tick" }),
-        check: () => true,
+  actionChanges: {
+    create: () => ({ type: "actionChanges" }),
+    check: () => true, // TODO specific action or group by tag, like LocationChanges
+  },
+
+  resourceGain: {
+    create: (resource, min = 1) => ({ type: "resourceGain", resource, min }),
+    check: (trigger, ctx) =>
+      ctx.resource === trigger.resource && ctx.amount >= trigger.min,
+  },
+
+  resourceLoss: {
+    create: (resource, min = 1) => ({ type: "resourceLoss", resource, min }),
+    check: (trigger, ctx) =>
+      ctx.resource === trigger.resource && ctx.amount <= -trigger.min,
+  },
+
+  resourceDropsBelowThreshold: {
+    create: (resource, threshold) => ({
+      type: "resourceDropsBelowThreshold",
+      resource,
+      threshold,
+    }),
+    check: (trigger, ctx) =>
+      ctx.resource === trigger.resource && ctx.current < trigger.threshold,
+  },
+
+  gainSkillXp: {
+    // skill is optional - none fires on any skill gaining xp
+    create: (skill) => ({ type: "gainSkillXp", skill }),
+    check: (trigger, ctx) => {
+      if (!ctx.skill) return false;
+      return trigger.skill == null || ctx.skill === trigger.skill;
     },
+  },
 
-    actionChanges: {
-        create: () => ({ type: "actionChanges" }),
-        check: () => true,  // TODO specific action or group by tag, like LocationChanges
-    },
+  conditionApplied: {
+    create: (condition) => ({ type: "conditionApplied", condition }),
+    check: (trigger, ctx) => ctx.condition === trigger.condition,
+  },
 
-    resourceGain: {
-        create: (resource, min = 1) => ({ type: "resourceGain", resource, min }),
-        check: (trigger, ctx) =>
-            ctx.resource === trigger.resource && ctx.amount >= trigger.min,
-    },
-
-    resourceLoss: {
-        create: (resource, min = 1) => ({ type: "resourceLoss", resource, min }),
-        check: (trigger, ctx) =>
-            ctx.resource === trigger.resource && ctx.amount <= -trigger.min,
-    },
-
-    resourceDropsBelowThreshold: {
-        create: (resource, threshold) => ({ type: "resourceDropsBelowThreshold", resource, threshold }),
-        check: (trigger, ctx) =>
-            ctx.resource === trigger.resource && ctx.current < trigger.threshold,
-    },
-
-    gainSkillXp: {
-        // skill is optional - none fires on any skill gaining xp
-        create: (skill) => ({ type: "gainSkillXp", skill }),
-        check: (trigger, ctx) => {
-            if (!ctx.skill) return false;
-            return trigger.skill == null || ctx.skill === trigger.skill;
-        },
-    },
-
-    conditionApplied: {
-        create: (condition) => ({ type: "conditionApplied", condition }),
-        check: (trigger, ctx) => ctx.condition === trigger.condition,
-    },
-
-    locationChanges: {
-        // tags is optional - none fires on any location change
-        create: (tags = []) => ({ type: "locationChanges", tags }),
-        check: (trigger, ctx) =>
-            trigger.tags.length === 0 || trigger.tags.every(tag => ctx.tags?.includes(tag)),
-    },
-
+  locationChanges: {
+    // tags is optional - none fires on any location change
+    create: (tags = []) => ({ type: "locationChanges", tags }),
+    check: (trigger, ctx) =>
+      trigger.tags.length === 0 ||
+      trigger.tags.every((tag) => ctx.tags?.includes(tag)),
+  },
 };
 
 export const evt = Object.fromEntries(
-    Object.entries(TRIGGER_DEFS).map(([key, def]) => [key, def.create])
+  Object.entries(TRIGGER_DEFS).map(([key, def]) => [key, def.create]),
 );

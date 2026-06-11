@@ -4,5 +4,5 @@ export const NPCS = {
     location: "village_1",
     tags: ["human", "elder", "quest_giver"],
     actions: "elder_maren_dialogue",
-  }
-}
+  },
+};

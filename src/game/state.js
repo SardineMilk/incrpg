@@ -1,13 +1,12 @@
 // This should be constructed from save data
 export const game = {
-
   tick: 0,
 
   resources: {
     health: {
       current: 100,
       max: 100,
-      multiplier: 1,  // TODO use this
+      multiplier: 1, // TODO use this
     },
 
     stamina: {
@@ -22,7 +21,6 @@ export const game = {
       multiplier: 1,
     },
   },
-
 
   activeConditions: {
     health_regen: {},
@@ -47,10 +45,8 @@ export const game = {
       progress: 0,
       completions: 0,
       competency: 1,
-    }
+    },
   },
-  
 
   flags: {},
-
 };

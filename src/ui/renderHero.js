@@ -1,5 +1,4 @@
 export function renderHero(game) {
-
   document.getElementById("health-bar").innerText =
     `HP ${Math.floor(game.resources.health.current)}/${game.resources.health.max}`;
 
@@ -17,19 +16,26 @@ export function renderHero(game) {
 }
 
 function renderStats(game) {
-
   const box = document.getElementById("stats-box");
 
   box.innerHTML = "";
 
-  const attributes = ["strength", "constitution", "agility", "dexterity", "intelligence", "willpower", "wit", "perception"];
+  const attributes = [
+    "strength",
+    "constitution",
+    "agility",
+    "dexterity",
+    "intelligence",
+    "willpower",
+    "wit",
+    "perception",
+  ];
   for (const attrId of attributes) {
     const div = document.createElement("div");
 
     div.className = "attribute-box";
 
-    div.innerText =
-      `${capitalize(attrId)}: ${game.skills[attrId].level}`;
+    div.innerText = `${capitalize(attrId)}: ${game.skills[attrId].level}`;
 
     box.appendChild(div);
   }

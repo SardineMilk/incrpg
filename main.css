@@ -1,21 +1,21 @@
 :root {
-    /* Theme */
-    --colour-background: #111827;
-    --colour-surface: #1f2937;
-    --colour-primary: #2563eb;
-    --colour-border: #374151;
-    --colour-text: #f3f4f6;
+  /* Theme */
+  --colour-background: #111827;
+  --colour-surface: #1f2937;
+  --colour-primary: #2563eb;
+  --colour-border: #374151;
+  --colour-text: #f3f4f6;
 
-    /* Layout */
-    --radius: 8px;
-    --radius-sm: 6px;
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
+  /* Layout */
+  --radius: 8px;
+  --radius-sm: 6px;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
 
-    /* Effects */
-    --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --transition: 0.2s ease;
+  /* Effects */
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --transition: 0.2s ease;
 }
 
 /*
@@ -23,14 +23,14 @@
 */
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    font-family: "Gill Sans", sans-serif;
-    background: var(--colour-background);
-    color: var(--colour-text);
+  margin: 0;
+  font-family: "Gill Sans", sans-serif;
+  background: var(--colour-background);
+  color: var(--colour-text);
 }
 
 /*
@@ -38,35 +38,35 @@ body {
 */
 
 .game-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .game-screen {
-    display: flex;
-    flex: 1;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-xs);
-    overflow: hidden;
-    min-height: 0;
+  display: flex;
+  flex: 1;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs);
+  overflow: hidden;
+  min-height: 0;
 }
 
 header,
 footer {
-    padding: var(--spacing-md);
-    background: var(--colour-surface);
+  padding: var(--spacing-md);
+  background: var(--colour-surface);
 }
 
 header {
-    border-bottom: 1px solid var(--colour-border);
+  border-bottom: 1px solid var(--colour-border);
 }
 
 footer {
-    display: flex;
-    justify-content: space-between;
-    text-align: center;
-    border-top: 1px solid var(--colour-border);
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  border-top: 1px solid var(--colour-border);
 }
 
 /*
@@ -78,24 +78,24 @@ footer {
 #actions-box,
 #tasks-box,
 #log-box {
-    background: var(--colour-surface);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+  background: var(--colour-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
 .hero-box,
 #skills-box,
 #actions-box,
 #tasks-box {
-    flex: 1;
-    padding: var(--spacing-xs);
+  flex: 1;
+  padding: var(--spacing-xs);
 }
 
 #log-box {
-    flex: 0 0 300px;
-    height: 400px;
-    padding: var(--spacing-sm);
-    overflow-y: auto;
+  flex: 0 0 300px;
+  height: 400px;
+  padding: var(--spacing-sm);
+  overflow-y: auto;
 }
 
 /*
@@ -110,7 +110,7 @@ footer {
 .attribute-box,
 .action-entry,
 .log-element {
-    border-radius: var(--radius-sm);
+  border-radius: var(--radius-sm);
 }
 
 /* 
@@ -123,9 +123,9 @@ footer {
 .mental-bar,
 .money-box,
 .attribute-box {
-    margin-bottom: var(--spacing-sm);
-    padding: var(--spacing-sm);
-    background: var(--colour-primary);
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--colour-primary);
 }
 
 /* 
@@ -133,10 +133,10 @@ footer {
 */
 
 .log-element {
-    padding: var(--spacing-sm);
-    background: var(--colour-background);
-    border: 1px solid var(--colour-border);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  padding: var(--spacing-sm);
+  background: var(--colour-background);
+  border: 1px solid var(--colour-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 /*
@@ -144,8 +144,8 @@ footer {
 */
 
 .status-box {
-    display: flex;
-    gap: var(--spacing-sm);
+  display: flex;
+  gap: var(--spacing-sm);
 }
 
 /*
@@ -153,48 +153,48 @@ footer {
 */
 
 .action-entry {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
 
-    margin-bottom: var(--spacing-sm);
-    padding: 0.75rem;
+  margin-bottom: var(--spacing-sm);
+  padding: 0.75rem;
 
-    background: var(--colour-background);
-    border: 1px solid var(--colour-border);
+  background: var(--colour-background);
+  border: 1px solid var(--colour-border);
 
-    transition:
-        border-color var(--transition),
-        background-color var(--transition);
+  transition:
+    border-color var(--transition),
+    background-color var(--transition);
 }
 
 .active-action {
-    border-color: #60a5fa;
-    background: rgba(37, 99, 235, 0.08);
+  border-color: #60a5fa;
+  background: rgba(37, 99, 235, 0.08);
 }
 
 .action-info {
-    font-size: 0.9rem;
-    opacity: 0.85;
+  font-size: 0.9rem;
+  opacity: 0.85;
 }
 
 .action-button {
-    padding: 0.5rem 0.75rem;
-    border: none;
-    border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: var(--radius-sm);
 
-    background: var(--colour-primary);
-    color: var(--colour-text);
+  background: var(--colour-primary);
+  color: var(--colour-text);
 
-    font-weight: 600;
-    cursor: pointer;
+  font-weight: 600;
+  cursor: pointer;
 
-    transition: filter var(--transition);
+  transition: filter var(--transition);
 }
 
 .action-button:hover {
-    filter: brightness(1.08);
+  filter: brightness(1.08);
 }
 
 /* 
@@ -202,23 +202,23 @@ footer {
 */
 
 .skill-bar {
-    width: 100%;
-    height: 6px;
-    margin-top: 4px;
+  width: 100%;
+  height: 6px;
+  margin-top: 4px;
 
-    overflow: hidden;
-    border-radius: 999px;
+  overflow: hidden;
+  border-radius: 999px;
 
-    background: var(--colour-background);
+  background: var(--colour-background);
 }
 
 .skill-bar-fill {
-    height: 100%;
-    width: 0%;
+  height: 100%;
+  width: 0%;
 
-    background: var(--colour-primary);
+  background: var(--colour-primary);
 
-    transition: width var(--transition);
+  transition: width var(--transition);
 }
 
 /*
@@ -226,6 +226,6 @@ footer {
 */
 
 .logo {
-    width: 36px;
-    height: 36px;
+  width: 36px;
+  height: 36px;
 }

@@ -3,13 +3,15 @@ import { CONDITIONS } from "../data/conditionsData.js";
 import { applyEffect } from "./effects.js";
 import { applySkillEffects, grantSkillXp } from "./skills.js";
 import { game } from "./state.js";
-import { initialiseState} from "../utils/state_creator.js";
-import { calculateActionCompetency, calculateActionsCompetency } from "./actions.js";
+import { initialiseState } from "../utils/state_creator.js";
+import {
+  calculateActionCompetency,
+  calculateActionsCompetency,
+} from "./actions.js";
 import { processConditions } from "./conditions.js";
 import { LogType, EventLog } from "./log.js";
 import { setIntervalFix, clearIntervalFix } from "../utils/throttleFix.js";
 import { eff } from "../data/structure.js";
-
 
 const TICK_RATE = 1000 / 20;
 
@@ -18,7 +20,7 @@ export function startTicking(render) {
   initialiseState(game);
 
   // TODO factor this out
-  game.log = new EventLog({container: document.getElementById("log-box")})
+  game.log = new EventLog({ container: document.getElementById("log-box") });
   game.log.container.scrollTop = game.log.container.scrollHeight;
   game.log.followTail = true;
 
@@ -39,15 +41,13 @@ export function startTicking(render) {
   };
 }
 
-
 function tick() {
-  applyEffect(game, {type:"tick"});
+  applyEffect(game, { type: "tick" });
 
   for (const skillId in game.skills) {
     game.skills[skillId].multiplier = 1;
     game.skills[skillId].bonus.flat = 0;
     game.skills[skillId].bonus.multiplier = 1;
-
   }
   for (const conditionId in game.activeConditions) {
     game.activeConditions[conditionId].strength = 1;
@@ -57,9 +57,9 @@ function tick() {
 
   for (const skillId in game.skills) {
     const skill = game.skills[skillId];
-    game.skills[skillId].level = (skill.base + skill.bonus.flat) * skill.bonus.multiplier;
+    game.skills[skillId].level =
+      (skill.base + skill.bonus.flat) * skill.bonus.multiplier;
   }
-        
 
   applySkillEffects(game);
 
@@ -70,15 +70,15 @@ function tick() {
   if (game.activeAction) {
     processAction();
   }
-
 }
-
 
 function processAction() {
   const current_id = game.activeAction;
   const action = ACTIONS[current_id];
 
-  let duration = Math.ceil(action.duration / game.actions[current_id].competency);
+  let duration = Math.ceil(
+    action.duration / game.actions[current_id].competency,
+  );
 
   // Grant attribute xp
   if (action.attributes) {
@@ -89,9 +89,9 @@ function processAction() {
   // Apply tick effects
   if (action.tick) {
     for (const effect of action.tick) {
-      if (game.activeAction !== current_id) break;  // If effect causes action to be changed  
+      if (game.activeAction !== current_id) break; // If effect causes action to be changed
       applyEffect(game, effect);
-    } 
+    }
   }
   game.actions[current_id].progress += 1;
   if (game.actions[current_id].progress >= duration) {
@@ -100,6 +100,5 @@ function processAction() {
     }
     game.actions[current_id].completions += 1;
     game.actions[current_id].progress = 0;
-
   }
 }

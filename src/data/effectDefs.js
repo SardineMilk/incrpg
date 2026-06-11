@@ -19,152 +19,174 @@ import { LOCATIONS } from "./locationsData.js";
  */
 
 function scaleAmount(game, effect, mul) {
-    const prev = effect.amount;
-    return { ...effect, amount: (g) => (typeof prev === "function" ? prev(g) : prev) * mul };
+  const prev = effect.amount;
+  return {
+    ...effect,
+    amount: (g) => (typeof prev === "function" ? prev(g) : prev) * mul,
+  };
 }
 
 export const EFFECT_DEFS = {
+  // ── Skills ────────────────────────────────────────────────────────────────
 
-    // ── Skills ────────────────────────────────────────────────────────────────
-
-    grantSkillXp: {
-        create: (skill, amount) => ({ type: "grantSkillXp", skill, amount }),
-        apply(game, e, { grantSkillXp }) {
-            if (e.skill == null) return null;
-            grantSkillXp(game, e.skill, e.amount);
-            return "gainSkillXp";
-        },
-        scale: scaleAmount,
+  grantSkillXp: {
+    create: (skill, amount) => ({ type: "grantSkillXp", skill, amount }),
+    apply(game, e, { grantSkillXp }) {
+      if (e.skill == null) return null;
+      grantSkillXp(game, e.skill, e.amount);
+      return "gainSkillXp";
     },
+    scale: scaleAmount,
+  },
 
-    skillXpMultiplier: {
-        create: (skill, amount) => ({ type: "skillXpMultiplier", skill, amount }),
-        apply(game, e) {
-            if (e.skill == null) return null;
-            game.skills[e.skill].multiplier += e.amount;
-        },
-        scale: scaleAmount,
+  skillXpMultiplier: {
+    create: (skill, amount) => ({ type: "skillXpMultiplier", skill, amount }),
+    apply(game, e) {
+      if (e.skill == null) return null;
+      game.skills[e.skill].multiplier += e.amount;
     },
+    scale: scaleAmount,
+  },
 
-    skillLevelBonus: {
-        create: (skill, flat = 0, multiplier = 0) => ({ type: "skillLevelBonus", skill, flat, multiplier }),
-        apply(game, e) {
-            if (e.skill == null) return null;
-            game.skills[e.skill].bonus.flat       += e.flat;
-            game.skills[e.skill].bonus.multiplier += e.multiplier;
-        },
+  skillLevelBonus: {
+    create: (skill, flat = 0, multiplier = 0) => ({
+      type: "skillLevelBonus",
+      skill,
+      flat,
+      multiplier,
+    }),
+    apply(game, e) {
+      if (e.skill == null) return null;
+      game.skills[e.skill].bonus.flat += e.flat;
+      game.skills[e.skill].bonus.multiplier += e.multiplier;
     },
+  },
 
-    // ── Conditions ────────────────────────────────────────────────────────────
+  // ── Conditions ────────────────────────────────────────────────────────────
 
-    applyCondition: {
-        create: (condition, amount = null) => ({ type: "applyCondition", condition, amount }),
-        apply(game, e) {
-            game.activeConditions[e.condition] ??= { strength: 1 };
-            if (e.amount == null || e.condition == null) return null;
-            const cond = game.activeConditions[e.condition];
-            cond.duration = (cond.duration ?? 0) + e.amount;
-            return "conditionApplied";
-        },
+  applyCondition: {
+    create: (condition, amount = null) => ({
+      type: "applyCondition",
+      condition,
+      amount,
+    }),
+    apply(game, e) {
+      game.activeConditions[e.condition] ??= { strength: 1 };
+      if (e.amount == null || e.condition == null) return null;
+      const cond = game.activeConditions[e.condition];
+      cond.duration = (cond.duration ?? 0) + e.amount;
+      return "conditionApplied";
     },
+  },
 
-    changeConditionStrength: {
-        create: (condition, amount) => ({ type: "changeConditionStrength", condition, amount }),
-        apply(game, e) {
-            if (!game.activeConditions[e.condition]) return null;
-            game.activeConditions[e.condition].strength += e.amount;
-        },
-        scale: scaleAmount,
+  changeConditionStrength: {
+    create: (condition, amount) => ({
+      type: "changeConditionStrength",
+      condition,
+      amount,
+    }),
+    apply(game, e) {
+      if (!game.activeConditions[e.condition]) return null;
+      game.activeConditions[e.condition].strength += e.amount;
     },
+    scale: scaleAmount,
+  },
 
-    // CONDITIONS injected via ctx — importing conditionsData.js here would
-    // create a circular init-time dep (conditionsData → structure → effectDefs → conditionsData).
-    changeConditionTagStrength: {
-        create: (tag, amount) => ({ type: "changeConditionTagStrength", tag, amount }),
-        apply(game, e, { CONDITIONS }) {
-            for (const id in game.activeConditions) {
-                if (CONDITIONS[id]?.tags?.includes(e.tag))
-                    game.activeConditions[id].strength += e.amount;
-            }
-        },
+  // CONDITIONS injected via ctx — importing conditionsData.js here would
+  // create a circular init-time dep (conditionsData → structure → effectDefs → conditionsData).
+  changeConditionTagStrength: {
+    create: (tag, amount) => ({
+      type: "changeConditionTagStrength",
+      tag,
+      amount,
+    }),
+    apply(game, e, { CONDITIONS }) {
+      for (const id in game.activeConditions) {
+        if (CONDITIONS[id]?.tags?.includes(e.tag))
+          game.activeConditions[id].strength += e.amount;
+      }
     },
+  },
 
-    // ── Resources ─────────────────────────────────────────────────────────────
+  // ── Resources ─────────────────────────────────────────────────────────────
 
-    changeResource: {
-        create: (resource, amount) => ({ type: "changeResource", resource, amount }),
-        apply(game, e) {
-            game.resources[e.resource].current += e.amount;
-            if (e.amount > 0) return "resourceGain";
-            if (e.amount < 0) return "resourceLoss";
-            return null;
-        },
-        scale: scaleAmount,
+  changeResource: {
+    create: (resource, amount) => ({
+      type: "changeResource",
+      resource,
+      amount,
+    }),
+    apply(game, e) {
+      game.resources[e.resource].current += e.amount;
+      if (e.amount > 0) return "resourceGain";
+      if (e.amount < 0) return "resourceLoss";
+      return null;
     },
+    scale: scaleAmount,
+  },
 
-    setResource: {
-        create: (resource, amount) => ({ type: "setResource", resource, amount }),
-        apply(game, e) {
-            game.resources[e.resource].current = e.amount;
-        },
+  setResource: {
+    create: (resource, amount) => ({ type: "setResource", resource, amount }),
+    apply(game, e) {
+      game.resources[e.resource].current = e.amount;
     },
+  },
 
-    // ── World ─────────────────────────────────────────────────────────────────
+  // ── World ─────────────────────────────────────────────────────────────────
 
-    setLocation: {
-        create: (location) => ({ type: "setLocation", location }),
-        apply(game, e) {
-            game.location = e.location;
-            const tags = LOCATIONS[e.location]?.tags ?? [];
-            // Trigger needs the location's tags, not just the effect fields
-            return { type: "locationChanges", context: { ...e, tags } };
-        },
+  setLocation: {
+    create: (location) => ({ type: "setLocation", location }),
+    apply(game, e) {
+      game.location = e.location;
+      const tags = LOCATIONS[e.location]?.tags ?? [];
+      // Trigger needs the location's tags, not just the effect fields
+      return { type: "locationChanges", context: { ...e, tags } };
     },
+  },
 
-    setActiveAction: {
-        create: (action) => ({ type: "setActiveAction", action }),
-        apply(game, e) {
-            game.activeAction = e.action;
-            return "actionChanges";
-        },
+  setActiveAction: {
+    create: (action) => ({ type: "setActiveAction", action }),
+    apply(game, e) {
+      game.activeAction = e.action;
+      return "actionChanges";
     },
+  },
 
-    // ── UI / Log ──────────────────────────────────────────────────────────────
+  // ── UI / Log ──────────────────────────────────────────────────────────────
 
-    sendMessage: {
-        create: (category, message) => ({ type: "sendMessage", category, message }),
-        apply(game, e) {
-            game.log.append(LogType.ACTION, e.message);
-        },
+  sendMessage: {
+    create: (category, message) => ({ type: "sendMessage", category, message }),
+    apply(game, e) {
+      game.log.append(LogType.ACTION, e.message);
     },
+  },
 
-    presentChoice: {
-        create: (options) => ({ type: "presentChoice", options }),
-        apply(game, e) {
-            // TODO hook into UI properly
-            game.log.append(LogType.ACTION, e.options);
-        },
+  presentChoice: {
+    create: (options) => ({ type: "presentChoice", options }),
+    apply(game, e) {
+      // TODO hook into UI properly
+      game.log.append(LogType.ACTION, e.options);
     },
+  },
 
-    // ── Misc ──────────────────────────────────────────────────────────────────
+  // ── Misc ──────────────────────────────────────────────────────────────────
 
-    setFlag: {
-        create: (flag, value) => ({ type: "setFlag", flag, value }),
-        apply(game, e) {
-            game.flags[e.flag] = e.value;
-        },
+  setFlag: {
+    create: (flag, value) => ({ type: "setFlag", flag, value }),
+    apply(game, e) {
+      game.flags[e.flag] = e.value;
     },
+  },
 
-    tick: {
-        create: () => ({ type: "tick" }),
-        apply(game) {
-            game.tick++;
-            return "tick";
-        },
+  tick: {
+    create: () => ({ type: "tick" }),
+    apply(game) {
+      game.tick++;
+      return "tick";
     },
-
+  },
 };
 
 export const eff = Object.fromEntries(
-    Object.entries(EFFECT_DEFS).map(([key, def]) => [key, def.create])
+  Object.entries(EFFECT_DEFS).map(([key, def]) => [key, def.create]),
 );

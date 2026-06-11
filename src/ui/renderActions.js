@@ -1,43 +1,47 @@
 import { ACTIONS } from "../data/actionsData.js";
 
 export function renderActions(game) {
-    const container = document.getElementById("actions-box");
-    if (!container) return;
+  const container = document.getElementById("actions-box");
+  if (!container) return;
 
-    for (const actionId in ACTIONS) {
-        const action = ACTIONS[actionId];
-        const state = game.actions[actionId] || { progress: 0, completions: 0, competency: 1 };
-        const actionDuration = Math.ceil(action.duration / state.competency);
+  for (const actionId in ACTIONS) {
+    const action = ACTIONS[actionId];
+    const state = game.actions[actionId] || {
+      progress: 0,
+      completions: 0,
+      competency: 1,
+    };
+    const actionDuration = Math.ceil(action.duration / state.competency);
 
-        let entry = container.querySelector(`[data-action="${actionId}"]`);
-        let button;
-        let info;
+    let entry = container.querySelector(`[data-action="${actionId}"]`);
+    let button;
+    let info;
 
-        if (!entry) {
-            entry = document.createElement("div");
-            entry.className = "action-entry";
-            entry.dataset.action = actionId;
+    if (!entry) {
+      entry = document.createElement("div");
+      entry.className = "action-entry";
+      entry.dataset.action = actionId;
 
-            button = document.createElement("button");
-            button.type = "button";
-            button.className = "action-button";
-            button.addEventListener("click", () => {
-                game.activeAction = actionId;
-            });
+      button = document.createElement("button");
+      button.type = "button";
+      button.className = "action-button";
+      button.addEventListener("click", () => {
+        game.activeAction = actionId;
+      });
 
-            info = document.createElement("div");
-            info.className = "action-info";
+      info = document.createElement("div");
+      info.className = "action-info";
 
-            entry.appendChild(button);
-            entry.appendChild(info);
-            container.appendChild(entry);
-        } else {
-            button = entry.querySelector(".action-button");
-            info = entry.querySelector(".action-info");
-        }
-
-        button.textContent = `${action.name} (${Math.round(state.competency * 100)}%)`;
-        info.innerText = `${state.progress}/${actionDuration} (${action.duration})`;
-        entry.classList.toggle("active-action", game.activeAction === actionId);
+      entry.appendChild(button);
+      entry.appendChild(info);
+      container.appendChild(entry);
+    } else {
+      button = entry.querySelector(".action-button");
+      info = entry.querySelector(".action-info");
     }
+
+    button.textContent = `${action.name} (${Math.round(state.competency * 100)}%)`;
+    info.innerText = `${state.progress}/${actionDuration} (${action.duration})`;
+    entry.classList.toggle("active-action", game.activeAction === actionId);
+  }
 }
