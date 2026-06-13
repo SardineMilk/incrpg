@@ -3,12 +3,13 @@
   --colour-background: #111827;
   --colour-surface: #1f2937;
   --colour-primary: #2563eb;
-  --colour-border: #374151;
-  --colour-text: #f3f4f6;
+  --colour-select:  #60a5fa;
+  --colour-border:  #374151;
+  --colour-text:    #f3f4f6;
 
   /* Layout */
-  --radius: 8px;
-  --radius-sm: 6px;
+  --radius: 1px;
+  --radius-sm: 1px;
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
@@ -170,7 +171,7 @@ footer {
 }
 
 .active-action {
-  border-color: #60a5fa;
+  border-color: var(--colour-select);
   background: rgba(37, 99, 235, 0.08);
 }
 
