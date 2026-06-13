@@ -1,16 +1,8 @@
 import { eff } from "./structure.js";
 export const SKILLS = {
-  // Attribute skills to allow them to level up.
+  // Attribute skills to allow them to level up and apply effects based on level.
   // Don't add milestones
-  // These should increase max Health, Stamina and Mental
-  /* 
-  * Str - stamina/health
-  * Con - health
-  * Agi - stamina
-  * Int - mental
-  * Wil - mental/health
-  * Wit - mental/stamina
-  */ 
+  // The rendering code treats them as a special case
   strength: { 
     name: "Strength",
     level: [
