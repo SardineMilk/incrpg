@@ -138,6 +138,19 @@ export const EFFECT_DEFS = {
       game.resources[e.resource].current = e.amount;
     },
   },
+  
+  changeResourceMax: {
+    create: (resource, amount) => ({
+      type: "changeResourceMax",
+      resource,
+      amount,
+    }),
+    apply(game, e) {
+      game.resources[e.resource].max += e.amount;
+      return null;
+    },
+    scale: scaleAmount,
+  },
 
   // ── World ─────────────────────────────────────────────────────────────────
 

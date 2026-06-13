@@ -44,6 +44,7 @@ export function startTicking(render) {
 function tick() {
   applyEffect(game, { type: "tick" });
 
+  // TODO proper state wipe system
   for (const skillId in game.skills) {
     game.skills[skillId].multiplier = 1;
     game.skills[skillId].bonus.flat = 0;
@@ -51,6 +52,9 @@ function tick() {
   }
   for (const conditionId in game.activeConditions) {
     game.activeConditions[conditionId].strength = 1;
+  }
+  for (const resourceId in game.resources) {
+    game.resources[resourceId].max = 100;
   }
 
   processConditions(game);

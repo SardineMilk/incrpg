@@ -3,14 +3,63 @@ export const SKILLS = {
   // Attribute skills to allow them to level up.
   // Don't add milestones
   // These should increase max Health, Stamina and Mental
-  strength: { name: "Strength", level: [] },
-  constitution: { name: "Constitution", level: [] },
-  agility: { name: "Agility", level: [] },
-  dexterity: { name: "Dexterity", level: [] },
-  intelligence: { name: "Intelligence", level: [] },
-  willpower: { name: "Willpower", level: [] },
-  wit: { name: "Wit", level: [] },
-  perception: { name: "Perception", level: [] },
+  /* 
+  * Str - stamina/health
+  * Con - health
+  * Agi - stamina
+  * Int - mental
+  * Wil - mental/health
+  * Wit - mental/stamina
+  */ 
+  strength: { 
+    name: "Strength",
+    level: [
+      eff.changeResourceMax("health", 0.5),
+      eff.changeResourceMax("stamina", 0.5),
+    ], 
+  },
+  constitution: { 
+    name: "Constitution",
+    level: [
+      eff.changeResourceMax("health", 1),
+    ], 
+  },
+  agility: { 
+    name: "Agility",
+    level: [
+      eff.changeResourceMax("stamina", 1),
+    ], 
+  },
+  dexterity: { 
+    name: "Dexterity",
+    level: [
+    ], 
+  },
+  intelligence: { 
+    name: "Intelligence",
+    level: [
+      eff.changeResourceMax("mental", 1),
+    ], 
+  },
+  willpower: { 
+    name: "Willpower",
+    level: [
+      eff.changeResourceMax("health", 0.5),
+      eff.changeResourceMax("mental", 0.5),
+    ], 
+  },
+  wit: { 
+    name: "Wit",
+    level: [
+      eff.changeResourceMax("stamina", 0.5),
+      eff.changeResourceMax("mental", 0.5),
+    ], 
+  },
+  perception: { 
+    name: "Perception",
+    level: [
+    ], 
+  },
 
   combat: {
     name: "Combat",

@@ -5,12 +5,14 @@ import { processTrigger } from "./events.js";
 
 // Injected into apply() for effects that need game-logic deps without
 // creating a circular init-time dependency through conditionsData/skills.
+// TODO - Fix, this is stupid
 const ctx = { grantSkillXp, CONDITIONS };
 
 function resolve(game, val) {
   return typeof val === "function" ? val(game) : val;
 }
 
+// TODO generalise and apply to other structures
 function resolveEffect(game, effect) {
   const e = { ...effect };
   for (const [key, val] of Object.entries(e)) {

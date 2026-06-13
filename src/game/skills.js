@@ -30,7 +30,7 @@ export function applySkillEffects(game) {
     const skillData = SKILLS[skillId];
 
     // Apply per-level effects
-    for (let i = 0; i <= skill.level; i++) {
+    for (let i = 1; i <= skill.level; i++) {
       for (const effect of skillData.level || []) applyEffect(game, effect);
     }
     // Apply milestone effects
