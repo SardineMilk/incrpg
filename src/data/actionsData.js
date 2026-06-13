@@ -1,15 +1,48 @@
 import { eff, req } from "./structure.js";
 
 export const ACTIONS = {
-  jogging: {
-    name: "Jogging",
-    duration: 20,
-    requirements: [req.locationHasTag("outside")],
+  walk: {
+    name: "Walk",
+    tags: ["traversal"],
+    duration: 100,
 
     attributes: {
-      strength: 0.2,
+      strength: 0,
       constitution: 0.5,
-      agility: 1,
+      agility: 0.5,
+      dexterity: 0.2,
+      intelligence: 0,
+      willpower: 0,
+      wit: 0,
+      perception: 0.2,
+    },
+
+    skills: {
+      walking: 1,
+    },
+
+    tick: [
+      eff.changeCheckDifficulty(-10),
+      eff.changeResource("stamina", -1)
+    ],
+
+    result: [
+      eff.changeResource("health", -1),
+      eff.grantSkillXp("running", 20),
+      eff.grantSkillXp("exercise", 10),
+      eff.activityProgress(1),
+    ],
+  },
+
+  jog: {
+    name: "Jog",
+    tags: ["traversal"],
+    duration: 50,
+
+    attributes: {
+      strength: 0,
+      constitution: 0.5,
+      agility: 0.5,
       dexterity: 0.2,
       intelligence: 0,
       willpower: 0.2,
@@ -22,107 +55,63 @@ export const ACTIONS = {
       exercise: 0.5,
     },
 
-    tick: [eff.changeResource("stamina", -2)],
+    tick: [
+      eff.changeResource("stamina", -5)
+    ],
 
     result: [
-      //eff.sendMessage("Result", "You went for a short run"),
-      eff.changeResource("health", -1),
       eff.grantSkillXp("running", 20),
       eff.grantSkillXp("exercise", 10),
+      eff.activityProgress(2),
     ],
   },
 
-  calisthenics: {
-    name: "Calisthenics",
+  sprint: {
+    name: "Sprint",
+    tags: ["traversal"],
     duration: 20,
-    requirements: [req.locationHasTag("outside")],
 
     attributes: {
-      strength: 1,
+      strength: 0.2,
       constitution: 0.5,
-      agility: 0.2,
-      dexterity: 0.5,
+      agility: 1,
+      dexterity: 0,
       intelligence: 0,
-      willpower: 0.2,
+      willpower: 0.5,
       wit: 0,
       perception: 0,
     },
 
     skills: {
+      running: 1,
       exercise: 1,
     },
 
-    tick: [eff.changeResource("stamina", -2)],
+    tick: [
+      eff.changeCheckDifficulty(10),
+      eff.changeResource("stamina", -10),
+      eff.changeResource("health", -2),
+    ],
 
     result: [
-      //eff.sendMessage("Result", "You went for a short run"),
-      eff.changeResource("health", -1),
-      eff.grantSkillXp("exercise", 10),
+      eff.grantSkillXp("running", 50),
+      eff.grantSkillXp("exercise", 30),
+      eff.activityProgress(5),
     ],
   },
 
-  trainSword: {
-    name: "Train Sword",
-    duration: 30,
-    requirements: [req.item("sword"), req.locationHasTag("outside")],
-
-    attributes: {
-      strength: 0.7,
-      constitution: 0.5,
-      agility: 0.7,
-      dexterity: 0.5,
-      intelligence: 0.2,
-      willpower: 0.2,
-      wit: 0.2,
-      perception: 0.2,
-    },
-
-    skills: {
-      sword: 1,
-      training: 0.5,
-    },
-
-    result: [eff.changeResource("stamina", -5), eff.grantSkillXp("sword", 25)],
-  },
-
-  meditate: {
-    name: "Meditate",
-
-    duration: 50,
-
-    attributes: {
-      strength: 0,
-      constitution: 0.2,
-      agility: 0,
-      dexterity: 0,
-      intelligence: 0.5,
-      willpower: 1,
-      wit: 0.5,
-      perception: 0.2,
-    },
-
-    skills: {
-      meditation: 1,
-      breathing: 0.5,
-    },
-
-    tick: [eff.changeResource("mental", -2)],
-
-    result: [eff.grantSkillXp("meditation", 20)],
-  },
-
-  sleeping: {
-    name: "Sleeping",
-
+  sleep: {
+    name: "Sleep",
+    tags: ["rest"],
     duration: 100,
 
     attributes: {
       strength: 0,
-      constitution: 0.2,
+      constitution: 0.5,
       agility: 0,
       dexterity: 0,
       intelligence: 0,
-      willpower: 0.2,
+      willpower: 0.5,
       wit: 0,
       perception: 0,
     },
@@ -134,5 +123,76 @@ export const ACTIONS = {
     tick: [eff.applyCondition("sleeping", 1)],
 
     result: [eff.grantSkillXp("sleeping", 20)],
+  },
+
+};
+
+
+export const ADVERSARY_ACTIONS = {
+  root_trip:{
+    name:"Avoid tripping on a root",
+    tags: ["ground", "nature"],
+    duration: 20,
+    check: {
+      difficulty: 10,
+      skills: {},
+      success: [],
+      failure: [],
+    },
+  }, 
+  mud_puddle:{
+    name:"Dodge a puddle of mud",
+    tags: ["ground", "earth"],
+    duration: 20,
+    check: {
+      difficulty: 10,
+      skills: {},
+      success: [],
+      failure: [],
+    },
+  }, 
+  thorn_bush:{
+    name:"Fend off a thorny branch",
+    tags: ["nature"],
+    duration: 20,
+    check: {
+      difficulty: 10,
+      skills: {},
+      success: [],
+      failure: [],
+    },
+  }, 
+  wind_gust:{
+    name:"Push through a sudden gust of wind",
+    tags: ["weather"],
+    duration: 20,
+    check: {
+      difficulty: 10,
+      skills: {},
+      success: [],
+      failure: [],
+    },
+  },
+  spot_trail:{
+    name:"Find where the trail continues",
+    tags: [],
+    duration: 20,
+    check: {
+      difficulty: 10,
+      skills: {},
+      success: [],
+      failure: [],
+    },
+  },
+  ignore_wisps:{
+    name:"Ignore the lure of Will-o'-the-wisps",
+    tags: ["fae"],
+    duration: 20,
+    check: {
+      difficulty: 10,
+      skills: {},
+      success: [],
+      failure: [],
+    },
   },
 };

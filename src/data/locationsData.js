@@ -1,5 +1,5 @@
 export const LOCATIONS = {
-  village_1: {
+  new_meldrum: {
     name: "New Meldrum",
     tags: ["outside", "forest", "town"],
   },
@@ -9,8 +9,13 @@ export const LOCATIONS = {
     tags: ["inside", "forest", "town", "building"],
   },
 
-  village_1_library: {
+  new_meldrum_library: {
     name: "New Meldrum Public Library",
     tags: ["inside", "forest", "town", "building"],
   },
+
+  meldrum_shaw: {
+    name: "Meldrum Shaw",
+    tags: ["outside", "forest"],
+  }
 };

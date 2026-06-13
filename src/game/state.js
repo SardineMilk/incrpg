@@ -38,7 +38,7 @@ export const game = {
 
   location: "village_1",
 
-  activeAction: "jogging",
+  activeAction: "jog",
 
   actions: {
     jogging: {
@@ -48,5 +48,14 @@ export const game = {
     },
   },
 
-  flags: {},
+  flags: {
+    checkDifficulty: {
+      value: 0,
+      flat: 0,
+      multiplier: 1,
+    },
+
+    activityProgress: 0,
+  
+  },
 };

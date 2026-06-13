@@ -52,7 +52,7 @@ const INHERENT_EFFECTS = {
       ],
     ],
     effects: [
-      eff.setActiveAction("sleeping"),
+      eff.setActiveAction("sleep"),
       eff.sendMessage("SYSTEM", "You pass out"),
     ],
   },

@@ -79,7 +79,7 @@ function tick() {
 function processAction() {
   const current_id = game.activeAction;
   const action = ACTIONS[current_id];
-
+  if (action == undefined) console.warn("Current action not in ACTIONS: ", current_id);
   let duration = Math.ceil(
     action.duration / game.actions[current_id].competency,
   );
