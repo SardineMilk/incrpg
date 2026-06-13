@@ -16,6 +16,10 @@ import { LOCATIONS } from "./locationsData.js";
  * ctx is injected by effects.js to break circular init-time deps:
  *   { grantSkillXp, CONDITIONS }
  * Effects that don't need external deps can ignore it.
+ * 
+ * Most effects have their outcomes reset each tick
+ * E.g. skillXpMultiplier for each skill starts at 1 each tick, and is built from active condition effects
+ * Some effects are PERSISTENT. These have a lasting effect on the state. It should be fairly obvious which is which 
  */
 
 function scaleAmount(game, effect, mul) {
@@ -29,6 +33,7 @@ function scaleAmount(game, effect, mul) {
 export const EFFECT_DEFS = {
   // ── Skills ────────────────────────────────────────────────────────────────
 
+  // PERSISTENT
   grantSkillXp: {
     create: (skill, amount) => ({ type: "grantSkillXp", skill, amount }),
     apply(game, e, { grantSkillXp }) {
@@ -64,6 +69,7 @@ export const EFFECT_DEFS = {
 
   // ── Conditions ────────────────────────────────────────────────────────────
 
+  // PERSISTENT
   applyCondition: {
     create: (condition, amount = null) => ({
       type: "applyCondition",
@@ -110,6 +116,7 @@ export const EFFECT_DEFS = {
 
   // ── Resources ─────────────────────────────────────────────────────────────
 
+  // PERSISTENT
   changeResource: {
     create: (resource, amount) => ({
       type: "changeResource",

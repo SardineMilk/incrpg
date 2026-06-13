@@ -68,47 +68,75 @@ const INHERENT_EFFECTS = {
   },
 
 
-  // Attribute Imbalance - apply effects if attribute x is more than attribute y, named as x_y
+  /* Attribute Imbalance - apply effects if attribute x is more than attribute y, named as x_y
+  * Should have a large effect on gameplay, and be thematic
+  * Generally negative but with benefits to niche playstyles
+  * Example effects (not final): 
+  * Wit > Int makes powerful magic much less effective, but weaker magic gets a chance to cast twice
+  * Agi > Con increases speed, but you take damage when moving fast
+  * Con > Wil makes you take ~10% less damage, but when you lose health lose mental ~20% of the amount 
+  */ 
   imbalance_str_con: {
-    requirements: [req.moreThan(fml.skillLevel("strength"),  fml.skillLevel("constitution"))],
+    requirements: [
+      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("constitution")),
+      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("constitution")), 10),
+    ],
     effects: [
-      eff.changeConditionStrength("imbalance_str_con", fml.sub(fml.skillLevel("strength"),  fml.skillLevel("constitution")))
+
     ]
   },
   imbalance_str_agi: {
-    requirements: [req.moreThan(fml.skillLevel("strength"),  fml.skillLevel("agility"))],
+    requirements: [
+      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("agility")),
+      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("agility")), 10),
+    ],
     effects: [
-      eff.changeConditionStrength("imbalance_str_agi", fml.sub(fml.skillLevel("strength"),  fml.skillLevel("agility")))
+
     ]
   },
   imbalance_str_dex: {
-    requirements: [req.moreThan(fml.skillLevel("strength"),  fml.skillLevel("dexterity"))],
+    requirements: [
+      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("dexterity")),
+      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("dexterity")), 10),
+    ],
     effects: [
-      eff.changeConditionStrength("imbalance_str_dex", fml.sub(fml.skillLevel("strength"),  fml.skillLevel("dexterity")))
+
     ]
   },
   imbalance_str_int: {
-    requirements: [req.moreThan(fml.skillLevel("strength"),  fml.skillLevel("intelligence"))],
+    requirements: [
+      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("intelligence")),
+      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("intelligence")), 10),
+    ],
     effects: [
-      eff.changeConditionStrength("imbalance_str_int", fml.sub(fml.skillLevel("strength"),  fml.skillLevel("intelligence")))
+
     ]
   },
   imbalance_str_wil: {
-    requirements: [req.moreThan(fml.skillLevel("strength"),  fml.skillLevel("willpower"))],
+    requirements: [
+      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("willpower")),
+      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("willpower")), 10),
+    ],
     effects: [
-      eff.changeConditionStrength("imbalance_str_wil", fml.sub(fml.skillLevel("strength"),  fml.skillLevel("willpower")))
+
     ]
   }, 
   imbalance_str_wit: {
-    requirements: [req.moreThan(fml.skillLevel("strength"),  fml.skillLevel("wit"))],
+    requirements: [
+      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("wit")),
+      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("wit")), 10),
+    ],
     effects: [
-      eff.changeConditionStrength("imbalance_str_wit", fml.sub(fml.skillLevel("strength"),  fml.skillLevel("wit")))
+
     ]
   }, 
   imbalance_str_per: {
-    requirements: [req.moreThan(fml.skillLevel("strength"),  fml.skillLevel("perception"))],
+    requirements: [
+      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("perception")),
+      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("perception")), 10),
+    ],
     effects: [
-      eff.changeConditionStrength("imbalance_str_per", fml.sub(fml.skillLevel("strength"),  fml.skillLevel("perception")))
+
     ]
   }, 
 
