@@ -27,9 +27,7 @@ export const ACTIONS = {
     ],
 
     result: [
-      eff.changeResource("health", -1),
-      eff.grantSkillXp("running", 20),
-      eff.grantSkillXp("exercise", 10),
+      eff.grantSkillXp("walking", 20),
       eff.activityProgress(1),
     ],
   },
