@@ -84,6 +84,15 @@ export const REQUIREMENT_DEFS = {
     create: (flag) => ({ type: "flagSet", flag }),
     check: (game, r) => !!game.flags[resolve(game, r.flag)],
   },
+
+  lessThan: {
+    create: (x, y) => ({ type: "lessThan", x, y}),
+    check: (game, r) => resolve(game, r.x) < resolve(game, r.y),
+  },
+  moreThan: {
+    create: (x, y) => ({ type: "moreThan", x, y}),
+    check: (game, r) => resolve(game, r.x) > resolve(game, r.y),
+  },
 };
 
 export const req = Object.fromEntries(

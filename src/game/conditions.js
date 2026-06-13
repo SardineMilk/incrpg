@@ -10,11 +10,10 @@ export function processConditions(game) {
   for (const [id, state] of Object.entries(game.activeConditions)) {
     const conditionDef = CONDITIONS[id];
 
-    // Dont apply conditions with triggers
-    if (conditionDef.triggers) continue;
+    if (conditionDef.triggers) continue;  // Dont apply conditions with triggers
+    if (!meetsRequirements(game, conditionDef)) continue;  // Only apply if condition meets requitements
     for (const effect of conditionDef.effects) {
       if (effect.type === "changeConditionStrength") continue; // already handled
-      if (!meetsRequirements(game, conditionDef)) continue;
 
       if (state.strength != 1) applyScaledEffect(game, effect, state.strength);
       else applyEffect(game, effect);
@@ -40,9 +39,9 @@ function applyConditionStrengthEffects(game) {
   for (const [id, state] of Object.entries(game.activeConditions)) {
     const conditionDef = CONDITIONS[id];
 
-    // Dont apply conditions with triggers
-    if (conditionDef.triggers) continue;
-    if (!meetsRequirements(game, conditionDef)) continue;
+    if (conditionDef.triggers) continue;  // Dont apply conditions with triggers
+    if (!meetsRequirements(game, conditionDef)) continue;  // Only apply if condition meets requitements
+
     for (const effect of conditionDef.effects) {
       if (effect.type !== "changeConditionStrength") continue; // only strength modifiers
       applyEffect(game, effect);

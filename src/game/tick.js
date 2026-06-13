@@ -79,6 +79,7 @@ function processAction() {
   let duration = Math.ceil(
     action.duration / game.actions[current_id].competency,
   );
+  game.actions[current_id].progress += 1;
 
   // Grant attribute xp
   if (action.attributes) {
@@ -86,14 +87,16 @@ function processAction() {
       grantSkillXp(game, attribute, action.attributes[attribute]);
     }
   }
+
   // Apply tick effects
   if (action.tick) {
     for (const effect of action.tick) {
-      if (game.activeAction !== current_id) break; // If effect causes action to be changed
+      if (game.activeAction !== current_id) break; // If effect causes action to be changed. Maybe remove?
       applyEffect(game, effect);
     }
   }
-  game.actions[current_id].progress += 1;
+
+  // Completion
   if (game.actions[current_id].progress >= duration) {
     for (const effect of action.result) {
       applyEffect(game, effect);
