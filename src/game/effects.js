@@ -6,7 +6,7 @@ import { processTrigger } from "./events.js";
 // Injected into apply() for effects that need game-logic deps without
 // creating a circular init-time dependency through conditionsData/skills.
 // TODO - Fix, this is stupid
-const ctx = { grantSkillXp, CONDITIONS };
+const ctx = { CONDITIONS };
 
 function resolve(game, val) {
   return typeof val === "function" ? val(game) : val;

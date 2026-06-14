@@ -36,9 +36,10 @@ export const EFFECT_DEFS = {
   // PERSISTENT
   grantSkillXp: {
     create: (skill, amount) => ({ type: "grantSkillXp", skill, amount }),
-    apply(game, e, { grantSkillXp }) {
+    apply(game, e) {
       if (e.skill == null) return null;
-      grantSkillXp(game, e.skill, e.amount);
+      const xpForSkill = e.amount * game.skills[e.skill].multiplier;
+      game.skills[e.skill].xp += xpForSkill;
       return "gainSkillXp";
     },
     scale: scaleAmount,

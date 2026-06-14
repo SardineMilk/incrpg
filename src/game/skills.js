@@ -11,23 +11,23 @@ export function xpToNext(level) {
 }
 
 export function grantSkillXp(game, skillId, amount) {
-  const skill = game.skills[skillId];
 
-  const xpForSkill = amount * game.skills[skillId].multiplier;
-  skill.xp += xpForSkill; // TODO add modifiers
-  while (skill.xp >= xpToNext(skill.base)) {
-    skill.xp -= xpToNext(skill.base);
-    skill.base++;
-
-    const skillMessage = `${SKILLS[skillId].name} leveled to ${skill.base}`;
-    game.log.append(LogType.SKILL, skillMessage);
-  }
+  
 }
 
 export function applySkillEffects(game) {
   for (const skillId in game.skills) {
     const skill = game.skills[skillId];
     const skillData = SKILLS[skillId];
+
+    // Level up skills
+    while (skill.xp >= xpToNext(skill.base)) {
+      skill.xp -= xpToNext(skill.base);
+      skill.base++;
+
+      const skillMessage = `${SKILLS[skillId].name} leveled to ${skill.base}`;
+      game.log.append(LogType.SKILL, skillMessage);
+    }
 
     // Apply per-level effects
     for (let i = 1; i <= skill.level; i++) {
