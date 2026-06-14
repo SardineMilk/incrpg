@@ -1,11 +1,10 @@
 import { EFFECT_DEFS } from "../data/effectDefs.js";
-import { CONDITIONS } from "../data/conditionsData.js";
-import { grantSkillXp } from "./skills.js";
 import { processTrigger } from "./events.js";
 
 // Injected into apply() for effects that need game-logic deps without
 // creating a circular init-time dependency through conditionsData/skills.
 // TODO - Fix, this is stupid
+import { CONDITIONS } from "../data/conditionsData.js";
 const ctx = { CONDITIONS };
 
 function resolve(game, val) {
@@ -13,7 +12,7 @@ function resolve(game, val) {
 }
 
 // TODO generalise and apply to other structures
-function resolveEffect(game, effect) {
+function resolveFormulas(game, effect) {
   const e = { ...effect };
   for (const [key, val] of Object.entries(e)) {
     if (key !== "type") e[key] = resolve(game, val);
@@ -21,8 +20,24 @@ function resolveEffect(game, effect) {
   return e;
 }
 
+// Resolve single target or by-tag selections
+function resolveTargets(game, ctx, target) {
+  if (typeof target === "function") return target(game, ctx);
+  if (target == null) return [];
+  return [target];
+}
+// TODO actually implement this
+export const sel = {
+  /** All active conditions that carry the given tag. */
+  // TODO - set effect.condition for every result?
+  conditionsByTag: (tag) => (game, ctx) =>
+    Object.keys(game.activeConditions).filter((id) =>
+    ctx.CONDITIONS[id]?. tags?. includes(tag)
+  ),
+};
+
 export function applyEffect(game, effect) {
-  const e = resolveEffect(game, effect);
+  const e = resolveFormulas(game, effect);
   const def = EFFECT_DEFS[e.type];
 
   if (!def) {

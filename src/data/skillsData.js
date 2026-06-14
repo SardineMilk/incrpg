@@ -1,4 +1,6 @@
-import { eff } from "./structure.js";
+import { eff } from "./effectDefs.js";
+
+
 export const SKILLS = {
   // Attribute skills to allow them to level up and apply effects based on level.
   // Don't add milestones

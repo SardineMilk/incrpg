@@ -1,7 +1,7 @@
 import { SKILLS } from "../data/skillsData.js";
 import { LogType } from "./log.js";
 import { applyEffect } from "./effects.js";
-import { eff } from "../data/structure.js";
+import { eff } from "../data/effectDefs.js";
 
 export function xpToNext(level) {
   // xpToNext = Math.floor(scalingFactor * Math.pow(2, level/5));
@@ -10,10 +10,6 @@ export function xpToNext(level) {
   return Math.floor(scalingFactor * Math.pow(2, level / 5));
 }
 
-export function grantSkillXp(game, skillId, amount) {
-
-  
-}
 
 export function applySkillEffects(game) {
   for (const skillId in game.skills) {

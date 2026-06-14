@@ -1,4 +1,5 @@
-import { eff, req } from "./structure.js";
+import { eff } from "./effectDefs.js";
+import { req } from "./requirementDefs.js";
 
 export const ACTIONS = {
   walk: {

@@ -1,7 +1,7 @@
 import { ACTIONS } from "../data/actionsData.js";
 import { CONDITIONS } from "../data/conditionsData.js";
 import { applyEffect } from "./effects.js";
-import { applySkillEffects, grantSkillXp } from "./skills.js";
+import { applySkillEffects } from "./skills.js";
 import { game } from "./state.js";
 import { initialiseState } from "../utils/state_creator.js";
 import {
@@ -11,8 +11,7 @@ import {
 import { processConditions } from "./conditions.js";
 import { LogType, EventLog } from "./log.js";
 import { setIntervalFix, clearIntervalFix } from "../utils/throttleFix.js";
-import { eff } from "../data/structure.js";
-
+import { eff } from "../data/effectDefs.js";
 const TICK_RATE = 1000 / 20;
 
 let intervalId = null;
@@ -88,7 +87,8 @@ function processAction() {
   // Grant attribute xp
   if (action.attributes) {
     for (const attribute in action.attributes) {
-      grantSkillXp(game, attribute, action.attributes[attribute]);
+      const xpForSkill = action.attributes[attribute] * game.skills[attribute].multiplier;
+      game.skills[attribute].xp += xpForSkill;
     }
   }
 
