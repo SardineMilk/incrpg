@@ -596,7 +596,12 @@ const TEMP_CONDITIONS = {
   sleeping: {
     name: "Sleeping",
     description: "You are asleep, greatly boosting your natural recovery",
-    effects: [eff.changeConditionTagStrength("passive_regen", 10)],
+    effects: [
+      // TODO use a selector instead
+      eff.changeConditionStrength("health_regen", 10),
+      eff.changeConditionStrength("stamina_regen", 10),
+      eff.changeConditionStrength("mental_regen", 10),
+    ],
   },
 
   wet: {

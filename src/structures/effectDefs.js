@@ -99,22 +99,6 @@ export const EFFECT_DEFS = {
     scale: scaleAmount,
   },
 
-  // CONDITIONS injected via ctx — importing conditionsData.js here would
-  // create a circular init-time dep (conditionsData → structure → effectDefs → conditionsData).
-  changeConditionTagStrength: {
-    create: (tag, amount) => ({
-      type: "changeConditionTagStrength",
-      tag,
-      amount,
-    }),
-    apply(game, e, { CONDITIONS }) {
-      for (const id in game.activeConditions) {
-        if (CONDITIONS[id]?.tags?.includes(e.tag))
-          game.activeConditions[id].strength += e.amount;
-      }
-    },
-  },
-
   // ── Resources ─────────────────────────────────────────────────────────────
 
   // PERSISTENT
