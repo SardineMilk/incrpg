@@ -1,4 +1,4 @@
-import { REQUIREMENT_DEFS } from "../data/requirementDefs.js";
+import { REQUIREMENT_DEFS } from "../structures/requirementDefs.js";
 
 function meetsRequirement(game, requirement) {
   const def = REQUIREMENT_DEFS[requirement.type];

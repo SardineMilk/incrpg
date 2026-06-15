@@ -1,4 +1,4 @@
-import { LOCATIONS } from "./locationsData.js";
+import { LOCATIONS } from "../data/locationsData.js";
 
 /*
  * Each entry defines one requirement type:

@@ -1,7 +1,7 @@
 import { eff } from "../structures/effectDefs.js";
-import { req } from "./requirementDefs.js";
+import { req } from "../structures/requirementDefs.js";
 import { evt } from "../structures/triggerDefs.js";
-import { fml } from "./formulaDefs.js";
+import { fml } from "../structures/formulaDefs.js";
 
 // Need to special-case these. Apply all at start of game
 // Inherent Effects are always active, and may have strict requirements or triggers

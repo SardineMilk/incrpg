@@ -26,15 +26,7 @@ function resolveTargets(game, ctx, target) {
   if (target == null) return [];
   return [target];
 }
-// TODO actually implement this
-export const sel = {
-  /** All active conditions that carry the given tag. */
-  // TODO - set effect.condition for every result?
-  conditionsByTag: (tag) => (game, ctx) =>
-    Object.keys(game.activeConditions).filter((id) =>
-    ctx.CONDITIONS[id]?. tags?. includes(tag)
-  ),
-};
+
 
 export function applyEffect(game, effect) {
   const e = resolveFormulas(game, effect);
@@ -45,6 +37,9 @@ export function applyEffect(game, effect) {
     return;
   }
 
+  // resolveTargets
+  // loop through targets
+  // everything after this in loop
   const result = def.apply(game, e, ctx);
 
   if (result) {

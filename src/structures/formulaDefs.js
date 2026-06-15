@@ -1,4 +1,4 @@
-import { SKILLS } from "./skillsData.js";
+import { SKILLS } from "../data/skillsData.js";
 import { game } from "../game/state.js";
 
 const res = (val) => (typeof val === "function" ? val() : val);
