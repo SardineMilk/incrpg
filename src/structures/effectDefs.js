@@ -1,5 +1,5 @@
 import { LogType } from "../game/log.js";
-import { LOCATIONS } from "./locationsData.js";
+import { LOCATIONS } from "../data/locationsData.js";
 
 /*
  * Each entry defines one effect type:

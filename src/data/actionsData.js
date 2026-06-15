@@ -1,4 +1,4 @@
-import { eff } from "./effectDefs.js";
+import { eff } from "../structures/effectDefs.js";
 import { req } from "./requirementDefs.js";
 
 export const ACTIONS = {

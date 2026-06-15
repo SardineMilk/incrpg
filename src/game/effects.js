@@ -1,4 +1,4 @@
-import { EFFECT_DEFS } from "../data/effectDefs.js";
+import { EFFECT_DEFS } from "../structures/effectDefs.js";
 import { processTrigger } from "./events.js";
 
 // Injected into apply() for effects that need game-logic deps without

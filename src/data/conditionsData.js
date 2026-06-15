@@ -1,6 +1,6 @@
-import { eff } from "./effectDefs.js";
+import { eff } from "../structures/effectDefs.js";
 import { req } from "./requirementDefs.js";
-import { evt } from "./triggerDefs.js";
+import { evt } from "../structures/triggerDefs.js";
 import { fml } from "./formulaDefs.js";
 
 // Need to special-case these. Apply all at start of game

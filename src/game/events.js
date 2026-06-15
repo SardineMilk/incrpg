@@ -1,4 +1,4 @@
-import { TRIGGER_DEFS } from "../data/triggerDefs.js";
+import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
 import { CONDITIONS } from "../data/conditionsData.js";
 import { applyEffect, applyScaledEffect } from "./effects.js";
 import { meetsRequirements } from "./requirements.js";
