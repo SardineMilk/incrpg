@@ -50,8 +50,9 @@ export const REQUIREMENT_DEFS = {
       resource,
       value,
     }),
-    check: (game, r) =>
-      game.resources[r.resource].current < r.value,
+    check: (game, r) => {
+      return game.resources[r.resource].current < r.value;
+    },
   },
 
   hasCondition: {

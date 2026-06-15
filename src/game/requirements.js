@@ -2,6 +2,8 @@ import { REQUIREMENT_DEFS } from "../structures/requirementDefs.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
 import { resolveFormulas } from "../structures/formulaDefs.js";
 
+// TODO this doesnt expand properly
+
 function expandLevel(game, arr) {
   return arr.flatMap((item) => {
     if (Array.isArray(item)) return [expandLevel(game, item)]; 
