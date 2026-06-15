@@ -1,8 +1,4 @@
-import { CONDITIONS } from "../data/conditionsData.js";
-import { SKILLS } from "../data/skillsData.js";
-import { LOCATIONS } from "../data/locationsData.js";
-const _CTX = { CONDITIONS, SKILLS, LOCATIONS };
-
+import { byTag } from "../utils/tagIndex.js";
 
 // Tag selectors so resolveTargets can find them in arbitrary fields
 // New effect structures have unkown field names, so hardcoding won't work
@@ -11,7 +7,7 @@ const _CTX = { CONDITIONS, SKILLS, LOCATIONS };
 
 const SELECTOR = Symbol("selector");
 function makeSelector(fn) {
-  const wrapped = (game, ctx) => fn(game, ctx);
+  const wrapped = (game) => fn(game);
   wrapped[SELECTOR] = true;
   return wrapped;
 }
@@ -26,7 +22,7 @@ export function resolveTargets(game, structure) {
     if (key === "type") continue;
     if (!isSelector(val)) continue;
 
-    const values = val(game, _CTX);
+    const values = val(game);
     return values.map((v) => ({ ...structure, [key]: v }));
   }
   return [structure];
@@ -48,53 +44,40 @@ export function resolveTargets(game, structure) {
  */
 
 export const sel = {
-  // ── Conditions ──────────────────────────────────────────────────────────────
 
-  /** All active conditions that carry the given tag. */
+  // ── Conditions ────────────────────────────────────────────────────────────
+
+  /** Ids from the CONDITIONS dataset that carry `tag` AND are currently active. */
   conditionsByTag: (tag) =>
-    makeSelector((game, { CONDITIONS }) =>
-      Object.keys(game.activeConditions).filter((id) =>
-        CONDITIONS[id]?.tags?.includes(tag)
-      )
+    makeSelector((game) =>
+      byTag("conditions", tag).filter((id) => id in game.activeConditions)
     ),
 
-  /** Every condition that exists in the data (active or not). */
+  /** All ids from the CONDITIONS dataset that carry `tag` (active or not). */
   allConditionsByTag: (tag) =>
-    makeSelector((_game, { CONDITIONS }) =>
-      Object.keys(CONDITIONS).filter((id) =>
-        CONDITIONS[id]?.tags?.includes(tag)
-      )
-    ),
+    makeSelector(() => byTag("conditions", tag)),
 
-  // ── Skills ──────────────────────────────────────────────────────────────────
+  // ── Skills ────────────────────────────────────────────────────────────────
 
-  /** All skills the player currently has (from game.skills) with a given tag. */
+  /** Ids from the SKILLS dataset that carry `tag` AND are present on the player. */
   skillsByTag: (tag) =>
-    makeSelector((game, { SKILLS }) =>
-      Object.keys(game.skills).filter((id) => SKILLS[id]?.tags?.includes(tag))
+    makeSelector((game) =>
+      byTag("skills", tag).filter((id) => id in game.skills)
     ),
 
-  /** All skills defined in SKILLS data with a given tag. */
+  /** All ids from the SKILLS dataset that carry `tag`. */
   allSkillsByTag: (tag) =>
-    makeSelector((_game, { SKILLS }) =>
-      Object.keys(SKILLS).filter((id) => SKILLS[id]?.tags?.includes(tag))
-    ),
+    makeSelector(() => byTag("skills", tag)),
 
-  // ── Locations ───────────────────────────────────────────────────────────────
+  // ── Locations ─────────────────────────────────────────────────────────────
 
-  /** All locations in the data that carry the given tag. */
+  /** All location ids that carry `tag`. */
   locationsByTag: (tag) =>
-    makeSelector((_game, { LOCATIONS }) =>
-      Object.keys(LOCATIONS).filter((id) =>
-        LOCATIONS[id]?.tags?.includes(tag)
-      )
-    ),
+    makeSelector(() => byTag("locations", tag)),
 
-  // ── Other ───────────────────────────────────────────────────────────────────
+  // ── Escape hatches ────────────────────────────────────────────────────────
 
-
-  /** Supply a raw array of Id's directly */
+  /** Supply an array of tags directly */
   ids: (...ids) => makeSelector(() => ids.flat()),
-
 
 };
