@@ -3,6 +3,8 @@ import { CONDITIONS } from "../data/conditionsData.js";
 import { applyEffect, applyScaledEffect } from "./effects.js";
 import { meetsRequirements } from "./requirements.js";
 import { withContext } from "../structures/formulaDefs.js";
+import { resolveTargets } from "../structures/selectorDefs.js";
+import { resolveFormulas } from "../structures/formulaDefs.js";
 
 // Called by applyEffect after each effect is applied.
 // Walks all active conditions and fires any whose triggers match.
@@ -27,10 +29,14 @@ export function processTrigger(game, triggerType, context) {
 }
 
 function checkTrigger(trigger, context) {
-  const def = TRIGGER_DEFS[trigger.type];
-  if (!def) {
-    console.warn("Unknown trigger type:", trigger.type);
-    return false;
-  }
-  return def.check(trigger, context);
+  const expanded = resolveTargets(game, trigger);
+  return expanded.some((t) => {
+    const r = resolveFormulas(game, t);
+    const def = TRIGGER_DEFS[r.type];
+    if (!def) {
+      console.warn("Unknown trigger type:", r.type);
+      return false;
+    }
+    return def.check(r, context);
+  });
 }

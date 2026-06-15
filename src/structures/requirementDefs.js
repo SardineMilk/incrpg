@@ -11,11 +11,6 @@ import { LOCATIONS } from "../data/locationsData.js";
  *   [A, B, C]              -> A && B && C
  *   [[A, B], [C, D]]       -> (A || B) && (C || D)
  */
-
-function resolve(game, val) {
-  return typeof val === "function" ? val(game) : val;
-}
-
 export const REQUIREMENT_DEFS = {
   item: {
     create: (item) => ({ type: "item", item }),
@@ -29,12 +24,12 @@ export const REQUIREMENT_DEFS = {
 
   skillMoreThan: {
     create: (skill, value) => ({ type: "skillMoreThan", skill, value }),
-    check: (game, r) => game.skills[r.skill].level >= resolve(game, r.value),
+    check: (game, r) => game.skills[r.skill].level >= r.value,
   },
 
   skillBaseMoreThan: {
     create: (skill, value) => ({ type: "skillBaseMoreThan", skill, value }),
-    check: (game, r) => game.skills[r.skill].base >= resolve(game, r.value),
+    check: (game, r) => game.skills[r.skill].base >= r.value,
   },
 
   resourceUnderMaxBy: {
@@ -45,7 +40,7 @@ export const REQUIREMENT_DEFS = {
     }),
     check(game, r) {
       const res = game.resources[r.resource];
-      return res.current < res.max - resolve(game, r.value);
+      return res.current < res.max - r.value;
     },
   },
 
@@ -56,7 +51,7 @@ export const REQUIREMENT_DEFS = {
       value,
     }),
     check: (game, r) =>
-      game.resources[r.resource].current < resolve(game, r.value),
+      game.resources[r.resource].current < r.value,
   },
 
   hasCondition: {
@@ -69,7 +64,7 @@ export const REQUIREMENT_DEFS = {
       if (!(r.condition in game.activeConditions)) return false;
       if (r.min_duration == null) return true;
       return (
-        resolve(game, r.min_duration) <=
+        r.min_duration <=
         game.activeConditions[r.condition].duration
       );
     },
@@ -82,16 +77,16 @@ export const REQUIREMENT_DEFS = {
 
   flagSet: {
     create: (flag) => ({ type: "flagSet", flag }),
-    check: (game, r) => !!game.flags[resolve(game, r.flag)],
+    check: (game, r) => !!game.flags[r.flag],
   },
 
   lessThan: {
     create: (x, y) => ({ type: "lessThan", x, y}),
-    check: (game, r) => resolve(game, r.x) < resolve(game, r.y),
+    check: (game, r) => r.x < r.y,
   },
   moreThan: {
     create: (x, y) => ({ type: "moreThan", x, y}),
-    check: (game, r) => resolve(game, r.x) > resolve(game, r.y),
+    check: (game, r) => r.x > r.y,
   },
 };
 

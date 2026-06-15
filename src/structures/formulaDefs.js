@@ -1,5 +1,6 @@
 import { SKILLS } from "../data/skillsData.js";
 import { game } from "../game/state.js";
+import { isSelector } from "./selectorDefs.js";
 
 const res = (val) => (typeof val === "function" ? val() : val);
 export const lift =
@@ -48,3 +49,15 @@ const definitions = {
 export const fml = Object.fromEntries(
   Object.entries(definitions).map(([name, fn]) => [name, lift(fn)]),
 );
+
+
+export function resolveFormulas(game, structure) {
+  const result = { ...structure };
+  for (const [key, val] of Object.entries(result)) {
+    if (key === "type") continue;
+    if (typeof val !== "function") continue;
+    if (isSelector(val)) continue;
+    result[key] = val(game);
+  }
+  return result;
+}

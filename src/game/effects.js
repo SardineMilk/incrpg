@@ -1,18 +1,11 @@
 import { EFFECT_DEFS } from "../structures/effectDefs.js";
 import { processTrigger } from "./events.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
+import { resolveFormulas } from "../structures/formulaDefs.js";
+
 
 function resolve(game, val) {
   return typeof val === "function" ? val(game) : val;
-}
-
-// TODO generalise and apply to other structures
-function resolveFormulas(game, effect) {
-  const e = { ...effect };
-  for (const [key, val] of Object.entries(e)) {
-    if (key !== "type") e[key] = resolve(game, val);
-  }
-  return e;
 }
 
 

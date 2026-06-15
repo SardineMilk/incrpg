@@ -1,27 +1,36 @@
 import { REQUIREMENT_DEFS } from "../structures/requirementDefs.js";
+import { resolveTargets } from "../structures/selectorDefs.js";
+import { resolveFormulas } from "../structures/formulaDefs.js";
+
+function expandLevel(game, arr) {
+  return arr.flatMap((item) => {
+    if (Array.isArray(item)) return [expandLevel(game, item)]; 
+    return resolveTargets(game, item);          
+  });               
+}
 
 function meetsRequirement(game, requirement) {
-  const def = REQUIREMENT_DEFS[requirement.type];
+  const r = resolveFormulas(game, requirement);
+  const def = REQUIREMENT_DEFS[r.type];
   if (!def) {
-    console.warn("Unknown requirement type:", requirement.type);
+    console.warn("Unknown requirement type:", r.type);
     return false;
   }
-  return def.check(game, requirement);
+  return def.check(game, r);
 }
 
-function meetsRequirementsGroup(game, group) {
-  return group.some((r) => meetsRequirement(game, r));
-}
-
-export function meetsRequirements(game, thing) {
-  const reqs = thing.requirements;
+export function meetsRequirements(game, structure) {
+  const reqs = structure.requirements;
   if (!reqs || reqs.length === 0) return true;
 
-  // [[A, B], [C, D]] -> (A || B) && (C || D)
-  if (Array.isArray(reqs[0])) {
-    return reqs.every((group) => meetsRequirementsGroup(game, group));
-  }
+  // Expand all selectors at every level before evaluating.
+  const expanded = expandLevel(game, reqs);
 
-  // [A, B, C] -> A && B && C
-  return reqs.every((r) => meetsRequirement(game, r));
+  // Outer level is always AND
+  // Array items are OR groups
+  return expanded.every((item) =>
+    Array.isArray(item)
+      ? item.some((r) => meetsRequirement(game, r))
+      : meetsRequirement(game, item)
+  );
 }
