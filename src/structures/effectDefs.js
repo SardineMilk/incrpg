@@ -176,6 +176,7 @@ export const EFFECT_DEFS = {
       game.location = e.location;
       const tags = LOCATIONS[e.location]?.tags ?? [];
       // Trigger needs the location's tags, not just the effect fields
+      // TODO refactor this to be trigger's problem
       return { type: "locationChanges", context: { ...e, tags } };
     },
   },
