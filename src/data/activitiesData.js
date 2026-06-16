@@ -11,12 +11,24 @@ export const ACTIVITIES = {
         result: [],
         tags: ["traversal"],
         adversary_actions: {        
-            "root_trip":1, 
-            "mud_puddle":1, 
-            "thorn_bush":0.5, 
-            "wind_gust":0.25,
-            "spot_trail": 0.25,
-            "ignore_wisps": 0.25,
+            root_trip:{
+                weight: 1,
+            },
+            mud_puddle:{
+                weight: 1,
+            },
+            thorn_bush:{
+                weight: 0.5,
+            },
+            wind_gust:{
+                weight: 0.25,
+            },
+            spot_trail:{
+                weight:  0.25,
+            },
+            ignore_wisps:{
+                weight:  0.25,
+            },
         },
     }
 },
