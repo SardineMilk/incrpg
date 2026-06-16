@@ -44,16 +44,10 @@ const INHERENT_EFFECTS = {
 
   death: {
     triggers: [
-      evt.resourceLoss("health"),
-      evt.resourceLoss("stamina"),
-      evt.resourceLoss("mental"),
+      evt.resourceLoss(sel.ids(["health", "stamina", "mental"])),
     ],
     requirements: [
-      [
-        req.resourceLessThan("health", 0),
-        req.resourceLessThan("stamina", 0),
-        req.resourceLessThan("mental", 0),
-      ],
+      [req.resourceLessThan(sel.ids(["health", "stamina", "mental"]), 0),],
     ],
     effects: [
       eff.setActiveAction("sleep"),
