@@ -31,8 +31,8 @@ const definitions = {
 
   conditionStrength: (game, condition) =>
     game.activeConditions[condition]?.strength,
-  resourceCurrent: (game, resource) => game.resources[resource]?.current,
-  flagValue: (game, flag) => game.flags[flag],
+  resourceValue: (game, resource) => game.resources[resource]?.value,
+  stat: (game, stat) => game.stats[stat],
   skillLevel: (game, skill) => game.skills[skill]?.level,
   skillParent: (_game, skill) => SKILLS[skill]?.parent,
 

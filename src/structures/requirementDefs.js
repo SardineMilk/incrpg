@@ -32,26 +32,14 @@ export const REQUIREMENT_DEFS = {
     check: (game, r) => game.skills[r.skill].base >= r.value,
   },
 
-  resourceUnderMaxBy: {
-    create: (resource, value) => ({
-      type: "resourceUnderMaxBy",
-      resource,
+  valueLessThan: {
+    create: (value, amount) => ({
+      type: "valueLessThan",
       value,
-    }),
-    check(game, r) {
-      const res = game.resources[r.resource];
-      return res.current < res.max - r.value;
-    },
-  },
-
-  resourceLessThan: {
-    create: (resource, value) => ({
-      type: "resourceLessThan",
-      resource,
-      value,
+      amount,
     }),
     check: (game, r) => {
-      return game.resources[r.resource].current < r.value;
+      return game.values[r.value] < r.amount;
     },
   },
 

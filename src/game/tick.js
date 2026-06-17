@@ -45,8 +45,9 @@ function tick() {
 
   // TODO proper state wipe system
   for (const skillId in game.skills) {
-    game.skills[skillId].multiplier = 1;
+    game.skills[skillId].xpMultiplier = 1;
     game.skills[skillId].bonus.flat = 0;
+    game.skills[skillId].bonus.percent = 0;
     game.skills[skillId].bonus.multiplier = 1;
   }
   for (const conditionId in game.activeConditions) {
@@ -62,6 +63,7 @@ function tick() {
     const skill = game.skills[skillId];
     game.skills[skillId].level =
       (skill.base + skill.bonus.flat) * skill.bonus.multiplier;
+      console.log(skill.level)
   }
 
   applySkillEffects(game);

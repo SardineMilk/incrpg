@@ -22,6 +22,7 @@ import { LOCATIONS } from "../data/locationsData.js";
  * Some effects are PERSISTENT. These have a lasting effect on the state. It should be fairly obvious which is which 
  */
 
+// TODO - actually work out what should be scaled
 function scaleAmount(game, effect, mul) {
   const prev = effect.amount;
   return {
@@ -38,7 +39,7 @@ export const EFFECT_DEFS = {
     create: (skill, amount) => ({ type: "grantSkillXp", skill, amount }),
     apply(game, e) {
       if (e.skill == null) return null;
-      const xpForSkill = e.amount * game.skills[e.skill].multiplier;
+      const xpForSkill = e.amount * game.skills[e.skill].xpMultiplier;
       game.skills[e.skill].xp += xpForSkill;
       return "gainSkillXp";
     },
@@ -49,22 +50,26 @@ export const EFFECT_DEFS = {
     create: (skill, amount) => ({ type: "skillXpMultiplier", skill, amount }),
     apply(game, e) {
       if (e.skill == null) return null;
-      game.skills[e.skill].multiplier += e.amount;
+      game.skills[e.skill].xpMultiplier *= e.amount;
     },
     scale: scaleAmount,
   },
 
   skillLevelBonus: {
-    create: (skill, flat = 0, multiplier = 0) => ({
+    create: (skill, flat = 0, percent=0, multiplier = 0) => ({
       type: "skillLevelBonus",
       skill,
       flat,
+      percent,
       multiplier,
     }),
     apply(game, e) {
       if (e.skill == null) return null;
-      game.skills[e.skill].bonus.flat += e.flat;
-      game.skills[e.skill].bonus.multiplier += e.multiplier;
+      const s = game.skills[e.skill]; 
+      s.bonus.flat += e.flat;
+      s.bonus.percent += e.percent;
+      s.bonus.multiplier *= e.multiplier;
+      s.level = (s.base + s.bonus.flat) * s.bonus.percent * s.bonus.multiplier;
     },
   },
 
@@ -87,54 +92,99 @@ export const EFFECT_DEFS = {
   },
 
   changeConditionStrength: {
-    create: (condition, amount) => ({
+    create: (condition, flat, percent, multiplier) => ({
       type: "changeConditionStrength",
       condition,
-      amount,
+      flat,
+      percent,
+      multiplier
     }),
     apply(game, e) {
       if (!game.activeConditions[e.condition]) return null;
-      game.activeConditions[e.condition].strength += e.amount;
+      const c = game.activeConditions[e.condition];
+      c.bonus.flat += e.flat;
+      c.bonus.percent += e.percent;
+      c.bonus.multiplier *= e.multiplier;
+      c.strength = c.bonus.flat * c.bonus.percent * c.bonus.multiplier;
     },
     scale: scaleAmount,
   },
 
-  // ── Resources ─────────────────────────────────────────────────────────────
+  // ── Stats ─────────────────────────────────────────────────────────────
 
   // PERSISTENT
-  changeResource: {
-    create: (resource, amount) => ({
-      type: "changeResource",
-      resource,
+  changeStat: {
+    create: (stat, amount) => ({
+      type: "changeStat",
+      stat,
       amount,
     }),
     apply(game, e) {
-      game.resources[e.resource].current += e.amount;
-      if (e.amount > 0) return "resourceGain";
-      if (e.amount < 0) return "resourceLoss";
+      game.stats[e.stat] = game.stats[e.stat] || 0;
+      game.stats[e.stat] += e.amount;
+      if (e.amount > 0) return "statGain";
+      if (e.amount < 0) return "statLoss";
       return null;
     },
     scale: scaleAmount,
   },
 
-  setResource: {
-    create: (resource, amount) => ({ type: "setResource", resource, amount }),
-    apply(game, e) {
-      game.resources[e.resource].current = e.amount;
-    },
-  },
-  
-  changeResourceMax: {
-    create: (resource, amount) => ({
-      type: "changeResourceMax",
-      resource,
-      amount,
+  setStat: {
+    create: (stat, amount) => ({ 
+      type: "setStat", 
+      stat, 
+      amount ,
     }),
     apply(game, e) {
-      game.resources[e.resource].max += e.amount;
-      return null;
+      game.stats[e.stat] = e.amount;
     },
-    scale: scaleAmount,
+  },
+
+
+  // Used to clean up state
+  removeStat: {
+    create: (stat) => ({ 
+      type: "removeStat", 
+      stat, 
+    }),
+    apply(game, e) {
+      // TODO undefined stat behaviour
+      delete game.stats[e.stat];
+    },
+  },
+
+  changeValue: {
+    create: (value, flat, percent, multiplier) => ({
+      type: "changeValue",
+      value,
+      flat,
+      percent,
+      multiplier,
+    }),
+    apply(game, e) {
+      game.values[e.value] = game.values[e.value] || {flat:0, percent:1, multiplier:1};
+      const s = game.values[e.value];
+      s.flat += e.flat;
+      s.percent += e.percent;
+      s.multiplier *= e.multiplier;
+      s.value = s.flat * s.percent * s.multiplier;
+    },
+    scale: scaleAmount,  // TODO this is wrong
+  },
+
+  setValue: {
+    create: (value, flat, percent, multiplier) => ({
+      type: "setValue",
+      value,
+      flat,
+      percent,
+      multiplier,
+    }),
+    apply(game, e) {
+      game.values[e.value] = {flat:e.flat, percent:e.percent, multiplier:e.multiplier};
+      game.values[e.value] = s.flat * s.percent * s.multiplier;
+    },
+    scale: scaleAmount,  // TODO this is wrong
   },
 
   // ── Activity ──────────────────────────────────────────────────────────────
