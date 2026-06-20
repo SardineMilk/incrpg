@@ -39,7 +39,6 @@ export const REQUIREMENT_DEFS = {
       amount,
     }),
     check: (game, r) => {
-      console.log(r.value, game.values[r.value], r.amount);
       return game.values[r.value] < r.amount;
     },
   },

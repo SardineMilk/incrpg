@@ -120,7 +120,6 @@ export const EFFECT_DEFS = {
       amount,
     }),
     apply(game, e) {
-      if (isNaN(e.value)) console.warn(e)
       game.values[e.value] = game.values[e.value] || 0;
       game.values[e.value] += e.amount;
 
