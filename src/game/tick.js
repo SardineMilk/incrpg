@@ -63,7 +63,6 @@ function tick() {
     const skill = game.skills[skillId];
     game.skills[skillId].level =
       (skill.base + skill.bonus.flat) * skill.bonus.multiplier;
-      console.log(skill.level)
   }
 
   applySkillEffects(game);

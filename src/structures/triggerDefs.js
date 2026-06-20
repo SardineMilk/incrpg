@@ -21,16 +21,16 @@ export const TRIGGER_DEFS = {
     check: () => true, // TODO specific action or group by tag, like LocationChanges
   },
 
-  resourceGain: {
-    create: (resource, min = 1) => ({ type: "resourceGain", resource, min }),
+  valueGain: {
+    create: (value, min = 1) => ({ type: "valueGain", value, min }),
     check: (trigger, ctx) =>
-      ctx.resource === trigger.resource && ctx.amount >= trigger.min,
+      ctx.value === trigger.value && ctx.amount >= trigger.min,
   },
 
-  resourceLoss: {
-    create: (resource, min = 1) => ({ type: "resourceLoss", resource, min }),
+  valueLoss: {
+    create: (value, min = 1) => ({ type: "valueLoss", value, min }),
     check: (trigger, ctx) =>
-      ctx.resource === trigger.resource && ctx.amount <= -trigger.min,
+      ctx.value === trigger.value && ctx.amount <= -trigger.min,
   },
 
   resourceDropsBelowThreshold: {

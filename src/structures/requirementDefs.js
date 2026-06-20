@@ -39,6 +39,7 @@ export const REQUIREMENT_DEFS = {
       amount,
     }),
     check: (game, r) => {
+      console.log(r.value, game.values[r.value], r.amount);
       return game.values[r.value] < r.amount;
     },
   },
@@ -77,6 +78,14 @@ export const REQUIREMENT_DEFS = {
     create: (x, y) => ({ type: "moreThan", x, y}),
     check: (game, r) => r.x > r.y,
   },
+  eq: {
+    create: (x, y) => ({ type: "eq", x, y}),
+    check: (game, r) => r.x == r.y,
+  }, 
+  neq: {
+    create: (x, y) => ({ type: "neq", x, y}),
+    check: (game, r) => r.x != r.y,
+  }, 
 };
 
 export const req = Object.fromEntries(

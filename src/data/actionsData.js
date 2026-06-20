@@ -24,7 +24,7 @@ export const ACTIONS = {
 
     tick: [
       eff.changeCheckDifficulty(-10),
-      eff.changeResource("stamina", -1)
+      eff.changeValue("stamina", -1)
     ],
 
     result: [
@@ -55,7 +55,7 @@ export const ACTIONS = {
     },
 
     tick: [
-      eff.changeResource("stamina", -5)
+      eff.changeValue("stamina", -5)
     ],
 
     result: [
@@ -88,8 +88,8 @@ export const ACTIONS = {
 
     tick: [
       eff.changeCheckDifficulty(10),
-      eff.changeResource("stamina", -10),
-      eff.changeResource("health", -2),
+      eff.changeValue("stamina", -10),
+      eff.changeValue("health", -2),
     ],
 
     result: [

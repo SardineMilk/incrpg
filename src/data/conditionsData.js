@@ -12,42 +12,54 @@ const INHERENT_EFFECTS = {
     tags: ["passive_regen"],
     triggers: [evt.tick()],
     requirements: [
-      req.resourceUnderMaxBy("health", fml.conditionStrength("health_regen")),
+      req.neq(fml.attribute("healthMax"), fml.value("health"))
     ],
     effects: [
-      eff.changeResource("health", 1),
-      eff.grantSkillXp("regeneration", 0.1),
+      eff.setValue(
+        "healthRegenAmount",
+        fml.min(fml.sub(fml.attribute("healthMax"), fml.value("health")), fml.conditionStrength("healthRegen"))
+      ),
+      eff.changeValue("health", fml.value("healthRegenAmount")),
+      eff.grantSkillXp("regeneration", fml.value("healthRegenAmount")),
     ],
   },
   stamina_regen: {
     tags: ["passive_regen"],
     triggers: [evt.tick()],
     requirements: [
-      req.resourceUnderMaxBy("stamina", fml.conditionStrength("stamina_regen")),
+      req.neq(fml.attribute("staminaMax"), fml.value("stamina"))
     ],
     effects: [
-      eff.changeResource("stamina", 1),
-      eff.grantSkillXp("breathing", 0.1),
+      eff.setValue(
+        "staminaRegenAmount",
+        fml.min(fml.sub(fml.attribute("staminaMax"), fml.value("stamina")), fml.conditionStrength("staminaRegen"))
+      ),
+      eff.changeValue("stamina", fml.value("staminaRegenAmount")),
+      eff.grantSkillXp("breathing", fml.value("staminaRegenAmount")),
     ],
   },
   mental_regen: {
     tags: ["passive_regen"],
     triggers: [evt.tick()],
     requirements: [
-      req.resourceUnderMaxBy("mental", fml.conditionStrength("mental_regen")),
+      req.neq(fml.attribute("mentalMax"), fml.value("mental"))
     ],
     effects: [
-      eff.changeResource("mental", 1),
-      eff.grantSkillXp("mindfulness", 0.1),
+      eff.setValue(
+        "mentalRegenAmount",
+        fml.min(fml.sub(fml.attribute("mentalMax"), fml.value("mental")), fml.conditionStrength("mentalRegen"))
+      ),
+      eff.changeValue("mental", fml.value("mentalRegenAmount")),
+      eff.grantSkillXp("mindfulness", fml.value("mentalRegenAmount")),
     ],
   },
 
   death: {
     triggers: [
-      evt.resourceLoss(sel.ids(["health", "stamina", "mental"])),
+      evt.valueLoss(sel.ids(["health", "stamina", "mental"])),
     ],
     requirements: [
-      [req.resourceLessThan(sel.ids(["health", "stamina", "mental"]), 0),],
+      [req.valueLessThan(sel.ids(["health", "stamina", "mental"]), 0),],
     ],
     effects: [
       eff.setActiveAction("sleep"),
@@ -627,8 +639,8 @@ const TEMP_CONDITIONS = {
     description:
       "The chaos of battle is getting to you. You're getting stressed and fatigued",
     effects: [
-      eff.changeResource("stamina", -1),
-      eff.changeResource("mental", -1),
+      eff.changeValue("stamina", -1),
+      eff.changeValue("mental", -1),
     ],
   },
 };

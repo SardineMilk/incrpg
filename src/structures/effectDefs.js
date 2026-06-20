@@ -110,60 +110,63 @@ export const EFFECT_DEFS = {
     scale: scaleAmount,
   },
 
-  // ── Stats ─────────────────────────────────────────────────────────────
+  // ── Values ─────────────────────────────────────────────────────────────
 
   // PERSISTENT
-  changeStat: {
-    create: (stat, amount) => ({
-      type: "changeStat",
-      stat,
+  changeValue: {
+    create: (value, amount) => ({
+      type: "changeValue",
+      value,
       amount,
     }),
     apply(game, e) {
-      game.stats[e.stat] = game.stats[e.stat] || 0;
-      game.stats[e.stat] += e.amount;
-      if (e.amount > 0) return "statGain";
-      if (e.amount < 0) return "statLoss";
+      if (e.amount == NaN) return null; 
+      game.values[e.value] = game.values[e.value] || 0;
+      game.values[e.value] += e.amount;
+      if (e.amount > 0) return "valueGain";
+      if (e.amount < 0) return "valueLoss";
       return null;
     },
     scale: scaleAmount,
   },
 
-  setStat: {
-    create: (stat, amount) => ({ 
-      type: "setStat", 
-      stat, 
+  setValue: {
+    create: (value, amount) => ({ 
+      type: "setValue", 
+      value, 
       amount ,
     }),
     apply(game, e) {
-      game.stats[e.stat] = e.amount;
+      game.values[e.value] = e.amount;
     },
   },
 
 
   // Used to clean up state
-  removeStat: {
-    create: (stat) => ({ 
-      type: "removeStat", 
-      stat, 
+  removeValue: {
+    create: (value) => ({ 
+      type: "removeValue", 
+      value, 
     }),
     apply(game, e) {
-      // TODO undefined stat behaviour
-      delete game.stats[e.stat];
+      // TODO undefined value behaviour
+      delete game.values[e.value];
     },
   },
 
-  changeValue: {
-    create: (value, flat, percent, multiplier) => ({
-      type: "changeValue",
-      value,
+
+  // ── Attribute ─────────────────────────────────────────────────────────────
+  changeAttribute: {
+    create: (attribute, flat=0, percent=0, multiplier=1) => ({
+      type: "changeAttribute",
+      attribute,
       flat,
       percent,
       multiplier,
     }),
     apply(game, e) {
-      game.values[e.value] = game.values[e.value] || {flat:0, percent:1, multiplier:1};
-      const s = game.values[e.value];
+      game.attributes[e.attribute] = game.attributes[e.attribute] || {flat:0, percent:1, multiplier:1};
+      const s = game.attributes[e.attribute];
       s.flat += e.flat;
       s.percent += e.percent;
       s.multiplier *= e.multiplier;
@@ -172,19 +175,31 @@ export const EFFECT_DEFS = {
     scale: scaleAmount,  // TODO this is wrong
   },
 
-  setValue: {
-    create: (value, flat, percent, multiplier) => ({
-      type: "setValue",
-      value,
+  setAttribute: {
+    create: (attribute, flat, percent, multiplier) => ({
+      type: "setAttribute",
+      attribute,
       flat,
       percent,
       multiplier,
     }),
     apply(game, e) {
-      game.values[e.value] = {flat:e.flat, percent:e.percent, multiplier:e.multiplier};
-      game.values[e.value] = s.flat * s.percent * s.multiplier;
+      game.attributes[e.attribute] = {flat:e.flat, percent:e.percent, multiplier:e.multiplier};
+      game.attributes[e.attribute].value = s.flat * s.percent * s.multiplier;
     },
     scale: scaleAmount,  // TODO this is wrong
+  },
+
+  // Used to clean up state
+  removeAttribute: {
+    create: (attribute) => ({ 
+      type: "removeAttribute", 
+      attribute, 
+    }),
+    apply(game, e) {
+      // TODO undefined attribute behaviour
+      delete game.attributes[e.attribute];
+    },
   },
 
   // ── Activity ──────────────────────────────────────────────────────────────

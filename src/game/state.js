@@ -58,4 +58,11 @@ export const game = {
     activityProgress: 0,
   
   },
+
+  values: {
+    health: 100,
+    stamina: 100,
+    mental: 100,
+  },
+  attributes: {},
 };
