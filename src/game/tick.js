@@ -50,11 +50,11 @@ function tick() {
     game.skills[skillId].bonus.percent = 0;
     game.skills[skillId].bonus.multiplier = 1;
   }
+  for (const attr in game.attributes) {
+    applyEffect(game, { type: "setAttribute", attribute:attr, flat:1, percent:1, multiplier:1})
+  }
   for (const conditionId in game.activeConditions) {
     game.activeConditions[conditionId].strength = 1;
-  }
-  for (const resourceId in game.resources) {
-    game.resources[resourceId].max = 100;
   }
 
   processConditions(game);

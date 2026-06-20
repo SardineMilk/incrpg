@@ -29,6 +29,7 @@ const definitions = {
   contextSkill: (_game) => currentContext().skill,
   contextCondition: (_game) => currentContext().condition,
 
+  // TODO - when this is undefined, it makes nasty bugs. Make sure this doesnt happen again
   conditionStrength: (game, condition) =>
     game.activeConditions[condition]?.strength,
   attribute: (game, attribute) => game.attributes[attribute]?.value,

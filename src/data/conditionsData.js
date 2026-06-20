@@ -17,7 +17,7 @@ const INHERENT_EFFECTS = {
     effects: [
       eff.setValue(
         "healthRegenAmount",
-        fml.min(fml.sub(fml.attribute("healthMax"), fml.value("health")), fml.conditionStrength("healthRegen"))
+        fml.min(fml.sub(fml.attribute("healthMax"), fml.value("health")), fml.conditionStrength("health_regen"))
       ),
       eff.changeValue("health", fml.value("healthRegenAmount")),
       eff.grantSkillXp("regeneration", fml.value("healthRegenAmount")),
@@ -32,7 +32,7 @@ const INHERENT_EFFECTS = {
     effects: [
       eff.setValue(
         "staminaRegenAmount",
-        fml.min(fml.sub(fml.attribute("staminaMax"), fml.value("stamina")), fml.conditionStrength("staminaRegen"))
+        fml.min(fml.sub(fml.attribute("staminaMax"), fml.value("stamina")), fml.conditionStrength("stamina_regen"))
       ),
       eff.changeValue("stamina", fml.value("staminaRegenAmount")),
       eff.grantSkillXp("breathing", fml.value("staminaRegenAmount")),
@@ -47,7 +47,7 @@ const INHERENT_EFFECTS = {
     effects: [
       eff.setValue(
         "mentalRegenAmount",
-        fml.min(fml.sub(fml.attribute("mentalMax"), fml.value("mental")), fml.conditionStrength("mentalRegen"))
+        fml.min(fml.sub(fml.attribute("mentalMax"), fml.value("mental")), fml.conditionStrength("mental_regen"))
       ),
       eff.changeValue("mental", fml.value("mentalRegenAmount")),
       eff.grantSkillXp("mindfulness", fml.value("mentalRegenAmount")),

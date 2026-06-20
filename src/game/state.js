@@ -64,5 +64,24 @@ export const game = {
     stamina: 100,
     mental: 100,
   },
-  attributes: {},
+  attributes: {
+    healthMax: {
+      value: 100,
+      flat: 100,
+      percent: 1,
+      multiplier: 1,
+    },
+    staminaMax: {
+      value: 100,
+      flat: 100,
+      percent: 1,
+      multiplier: 1,
+    },
+    mentalMax: {
+      value: 100,
+      flat: 100,
+      percent: 1,
+      multiplier: 1,
+    },
+  },
 };

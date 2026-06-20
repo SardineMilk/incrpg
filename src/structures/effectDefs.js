@@ -120,9 +120,10 @@ export const EFFECT_DEFS = {
       amount,
     }),
     apply(game, e) {
-      if (e.amount == NaN) return null; 
+      if (isNaN(e.value)) console.warn(e)
       game.values[e.value] = game.values[e.value] || 0;
       game.values[e.value] += e.amount;
+
       if (e.amount > 0) return "valueGain";
       if (e.amount < 0) return "valueLoss";
       return null;
@@ -167,9 +168,9 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       game.attributes[e.attribute] = game.attributes[e.attribute] || {flat:0, percent:1, multiplier:1};
       const s = game.attributes[e.attribute];
-      s.flat += e.flat;
-      s.percent += e.percent;
-      s.multiplier *= e.multiplier;
+      s.flat += e.flat || 0;
+      s.percent += e.percent || 0;
+      s.multiplier *= e.multiplier || 1;
       s.value = s.flat * s.percent * s.multiplier;
     },
     scale: scaleAmount,  // TODO this is wrong
@@ -185,7 +186,7 @@ export const EFFECT_DEFS = {
     }),
     apply(game, e) {
       game.attributes[e.attribute] = {flat:e.flat, percent:e.percent, multiplier:e.multiplier};
-      game.attributes[e.attribute].value = s.flat * s.percent * s.multiplier;
+      game.attributes[e.attribute].value = e.flat * e.percent * e.multiplier;
     },
     scale: scaleAmount,  // TODO this is wrong
   },
@@ -285,6 +286,13 @@ export const EFFECT_DEFS = {
     apply(game) {
       game.tick++;
       return "tick";
+    },
+  },
+
+  log: {
+    create: (str) => ({ type: "log", str }),
+    apply(game, e) {
+      console.log(e.str);
     },
   },
 };
