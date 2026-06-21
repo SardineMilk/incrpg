@@ -1,5 +1,5 @@
-import { eff, req } from "./structure.js";
-
+import { eff } from "../structures/effectDefs.js";
+import { req } from "../structures/requirementDefs.js";
 // Activities should mostly replace actions as the default way the player interacts with the world
 //
 
@@ -31,4 +31,4 @@ export const ACTIVITIES = {
             },
         },
     }
-},
+}

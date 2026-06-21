@@ -88,7 +88,7 @@ recovery: {
     name: "Regeneration",
     description:
       "If you keep getting hurt, your body learns to heal faster. Thats how it works.",
-    level: [eff.changeConditionStrength("health_regen", 0, 0.05, 1)],
+    level: [eff.changeConditionStrength("health_regen", 0.05, 0, 1)],
     parent: "recovery",
     milestones: {
       5: [eff.skillLevelBonus("constitution", 1, 0)],
@@ -117,7 +117,7 @@ recovery: {
     name: "Breathing",
     description:
       "You're breathing wrong. In through the nose. Bring air down to the belly. Out through the mouth.",
-    level: [eff.changeConditionStrength("stamina_regen", 0, 0.05, 1)],
+    level: [eff.changeConditionStrength("stamina_regen", 0.05, 0, 1)],
     parent: "recovery",
     milestones: {
       5: [eff.skillLevelBonus("constitution", 1, 0)],
@@ -147,7 +147,7 @@ recovery: {
     name: "Mindfulness",
     description:
       "Become more aware of your mental state, whats affecting it, and how to improve it.",
-    level: [eff.changeConditionStrength("mental_regen", 0, 0.05, 1)],
+    level: [eff.changeConditionStrength("mental_regen", 0.05, 0, 1)],
     parent: "recovery",
     milestones: {
       5: [

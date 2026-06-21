@@ -1,3 +1,6 @@
+import { eff } from "../structures/effectDefs.js";
+import { req } from "../structures/requirementDefs.js";
+
 export const DIALOGUES = {
   // Swap action for result?
   // More boilerplate but more flexibility
