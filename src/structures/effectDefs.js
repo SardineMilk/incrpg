@@ -56,7 +56,7 @@ export const EFFECT_DEFS = {
   },
 
   skillLevelBonus: {
-    create: (skill, flat = 0, percent=0, multiplier = 0) => ({
+    create: (skill, flat = 0, percent=0, multiplier = 1) => ({
       type: "skillLevelBonus",
       skill,
       flat,
@@ -154,7 +154,6 @@ export const EFFECT_DEFS = {
     },
   },
 
-
   // ── Attribute ─────────────────────────────────────────────────────────────
   changeAttribute: {
     create: (attribute, flat=0, percent=0, multiplier=1) => ({
@@ -209,29 +208,12 @@ export const EFFECT_DEFS = {
       amount,
     }),
     apply(game, e) {
-      game.flags.activityProgress += e.amount;
+      game.values.activityProgress += e.amount;
       return null;
     },
     scale: scaleAmount,
   },
 
-  // ── Action ────────────────────────────────────────────────────────────────
-
-  changeCheckDifficulty: {
-    create: (tag=null, flat, multiplier=0) => ({
-      type: "changeCheckDifficulty",
-      tag,
-      flat,
-      multiplier,
-    }),
-    apply(game, e) {
-      game.flags.checkDifficulty.flat += e.flat;
-      game.flags.checkDifficulty.multiplier += e.multiplier;
-      game.flags.checkDifficulty.value = game.flags.checkDifficulty.flat * game.flags.checkDifficulty.multiplier 
-      return null;
-    },
-    scale: scaleAmount,
-  },
 
   // ── World ─────────────────────────────────────────────────────────────────
 

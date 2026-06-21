@@ -55,6 +55,127 @@ export const SKILLS = {
     ], 
   },
 
+recovery: {
+    name: "Recovery",
+    description:
+      "Restore yourself to peak condition. Should you be proud of this skill?",
+    level: [],
+    parent: null,
+    milestones: {
+      5: [eff.skillLevelBonus("constitution", 1, 0)],
+      10: [
+        eff.skillXpMultiplier("recovery", 0.1),
+        eff.skillLevelBonus("willpower", 1, 0),
+      ],
+      20: [
+        eff.skillLevelBonus("constitution", 0, 1.1),
+        eff.changeConditionStrength("injury", -0.1),
+      ],
+      40: [
+        eff.skillXpMultiplier("recovery", 0.2),
+        eff.changeConditionStrength("injury", -0.15),
+        eff.skillLevelBonus("constitution", 0, 1.15),
+      ],
+      80: [
+        eff.skillLevelBonus("constitution", 0, 1.25),
+        eff.changeConditionStrength("injury", -0.25),
+        eff.changeConditionStrength("illness", -0.2),
+      ],
+    },
+  },
+
+  regeneration: {
+    name: "Regeneration",
+    description:
+      "If you keep getting hurt, your body learns to heal faster. Thats how it works.",
+    level: [eff.changeConditionStrength("health_regen", 0, 0.05, 1)],
+    parent: "recovery",
+    milestones: {
+      5: [eff.skillLevelBonus("constitution", 1, 0)],
+      10: [
+        eff.skillXpMultiplier("regeneration", 0.15),
+        eff.changeConditionStrength("bleeding", -0.1),
+      ],
+      20: [
+        eff.skillLevelBonus("constitution", 0, 1.1),
+        eff.changeConditionStrength("injury", -0.1),
+      ],
+      40: [
+        eff.skillXpMultiplier("regeneration", 0.2),
+        eff.changeConditionStrength("injury", -0.15),
+        eff.changeConditionStrength("bleeding", -0.2),
+      ],
+      80: [
+        eff.skillLevelBonus("constitution", 0, 1.25),
+        eff.changeConditionStrength("injury", -0.3),
+        eff.changeConditionStrength("bleeding", -0.3),
+      ],
+    },
+  },
+
+  breathing: {
+    name: "Breathing",
+    description:
+      "You're breathing wrong. In through the nose. Bring air down to the belly. Out through the mouth.",
+    level: [eff.changeConditionStrength("stamina_regen", 0, 0.05, 1)],
+    parent: "recovery",
+    milestones: {
+      5: [eff.skillLevelBonus("constitution", 1, 0)],
+      10: [
+        eff.skillXpMultiplier("breathing", 0.15),
+        eff.skillLevelBonus("willpower", 1, 0),
+      ],
+      20: [
+        eff.skillLevelBonus("constitution", 0, 1.1),
+        eff.changeConditionStrength("winded", -0.2),
+      ],
+      40: [
+        eff.skillXpMultiplier("breathing", 0.2),
+        eff.changeConditionStrength("winded", -0.3),
+        eff.grantSkillXp("meditation", 30),
+      ],
+      80: [
+        eff.skillLevelBonus("constitution", 0, 1.2),
+        eff.skillLevelBonus("willpower", 0, 1.1),
+        eff.changeConditionStrength("winded", -0.4),
+        eff.changeConditionStrength("panicking", -0.25),
+      ],
+    },
+  },
+
+  mindfulness: {
+    name: "Mindfulness",
+    description:
+      "Become more aware of your mental state, whats affecting it, and how to improve it.",
+    level: [eff.changeConditionStrength("mental_regen", 0, 0.05, 1)],
+    parent: "recovery",
+    milestones: {
+      5: [
+        eff.skillLevelBonus("willpower", 1, 0),
+        eff.skillLevelBonus("perception", 1, 0),
+      ],
+      10: [
+        eff.skillXpMultiplier("mindfulness", 0.15),
+        eff.grantSkillXp("meditation", 20),
+      ],
+      20: [
+        eff.skillLevelBonus("willpower", 0, 1.1),
+        eff.changeConditionStrength("mental", -0.1),
+      ],
+      40: [
+        eff.skillXpMultiplier("mindfulness", 0.2),
+        eff.changeConditionStrength("mental", -0.2),
+        eff.skillLevelBonus("perception", 0, 1.1),
+      ],
+      80: [
+        eff.skillLevelBonus("willpower", 0, 1.25),
+        eff.changeConditionStrength("mental", -0.3),
+        eff.changeConditionStrength("fear", -0.3),
+        eff.changeConditionStrength("despair", -0.25),
+      ],
+    },
+  },
+
   combat: {
     name: "Combat",
     description: "Pit your mind and body against another in battle.",
@@ -364,127 +485,6 @@ export const SKILLS = {
         eff.skillLevelBonus("agility", 0, 1.2),
         eff.changeConditionStrength("fear", -0.2),
         eff.changeConditionStrength("stunned", 0.2),
-      ],
-    },
-  },
-
-  recovery: {
-    name: "Recovery",
-    description:
-      "Restore yourself to peak condition. Should you be proud of this skill?",
-    level: [],
-    parent: null,
-    milestones: {
-      5: [eff.skillLevelBonus("constitution", 1, 0)],
-      10: [
-        eff.skillXpMultiplier("recovery", 0.1),
-        eff.skillLevelBonus("willpower", 1, 0),
-      ],
-      20: [
-        eff.skillLevelBonus("constitution", 0, 1.1),
-        eff.changeConditionStrength("injury", -0.1),
-      ],
-      40: [
-        eff.skillXpMultiplier("recovery", 0.2),
-        eff.changeConditionStrength("injury", -0.15),
-        eff.skillLevelBonus("constitution", 0, 1.15),
-      ],
-      80: [
-        eff.skillLevelBonus("constitution", 0, 1.25),
-        eff.changeConditionStrength("injury", -0.25),
-        eff.changeConditionStrength("illness", -0.2),
-      ],
-    },
-  },
-
-  regeneration: {
-    name: "Regeneration",
-    description:
-      "If you keep getting hurt, your body learns to heal faster. Thats how it works.",
-    level: [],
-    parent: "recovery",
-    milestones: {
-      5: [eff.skillLevelBonus("constitution", 1, 0)],
-      10: [
-        eff.skillXpMultiplier("regeneration", 0.15),
-        eff.changeConditionStrength("bleeding", -0.1),
-      ],
-      20: [
-        eff.skillLevelBonus("constitution", 0, 1.1),
-        eff.changeConditionStrength("injury", -0.1),
-      ],
-      40: [
-        eff.skillXpMultiplier("regeneration", 0.2),
-        eff.changeConditionStrength("injury", -0.15),
-        eff.changeConditionStrength("bleeding", -0.2),
-      ],
-      80: [
-        eff.skillLevelBonus("constitution", 0, 1.25),
-        eff.changeConditionStrength("injury", -0.3),
-        eff.changeConditionStrength("bleeding", -0.3),
-      ],
-    },
-  },
-
-  breathing: {
-    name: "Breathing",
-    description:
-      "You're breathing wrong. In through the nose. Bring air down to the belly. Out through the mouth.",
-    level: [],
-    parent: "recovery",
-    milestones: {
-      5: [eff.skillLevelBonus("constitution", 1, 0)],
-      10: [
-        eff.skillXpMultiplier("breathing", 0.15),
-        eff.skillLevelBonus("willpower", 1, 0),
-      ],
-      20: [
-        eff.skillLevelBonus("constitution", 0, 1.1),
-        eff.changeConditionStrength("winded", -0.2),
-      ],
-      40: [
-        eff.skillXpMultiplier("breathing", 0.2),
-        eff.changeConditionStrength("winded", -0.3),
-        eff.grantSkillXp("meditation", 30),
-      ],
-      80: [
-        eff.skillLevelBonus("constitution", 0, 1.2),
-        eff.skillLevelBonus("willpower", 0, 1.1),
-        eff.changeConditionStrength("winded", -0.4),
-        eff.changeConditionStrength("panicking", -0.25),
-      ],
-    },
-  },
-
-  mindfulness: {
-    name: "Mindfulness",
-    description:
-      "Become more aware of your mental state, whats affecting it, and how to improve it.",
-    level: [],
-    parent: "recovery",
-    milestones: {
-      5: [
-        eff.skillLevelBonus("willpower", 1, 0),
-        eff.skillLevelBonus("perception", 1, 0),
-      ],
-      10: [
-        eff.skillXpMultiplier("mindfulness", 0.15),
-        eff.grantSkillXp("meditation", 20),
-      ],
-      20: [
-        eff.skillLevelBonus("willpower", 0, 1.1),
-        eff.changeConditionStrength("mental", -0.1),
-      ],
-      40: [
-        eff.skillXpMultiplier("mindfulness", 0.2),
-        eff.changeConditionStrength("mental", -0.2),
-        eff.skillLevelBonus("perception", 0, 1.1),
-      ],
-      80: [
-        eff.skillLevelBonus("willpower", 0, 1.25),
-        eff.changeConditionStrength("mental", -0.3),
-        eff.changeConditionStrength("fear", -0.3),
-        eff.changeConditionStrength("despair", -0.25),
       ],
     },
   },

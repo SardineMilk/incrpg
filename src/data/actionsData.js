@@ -23,7 +23,7 @@ export const ACTIONS = {
     },
 
     tick: [
-      eff.changeCheckDifficulty(-10),
+      eff.changeValue("check_difficulty", -10),
       eff.changeValue("stamina", -1)
     ],
 
@@ -87,7 +87,7 @@ export const ACTIONS = {
     },
 
     tick: [
-      eff.changeCheckDifficulty(10),
+      eff.changeValue("check_difficulty", 10),
       eff.changeValue("stamina", -10),
       eff.changeValue("health", -2),
     ],

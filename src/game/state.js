@@ -2,25 +2,6 @@
 export const game = {
   tick: 0,
 
-  resources: {
-    health: {
-      current: 100,
-      max: 100,
-      multiplier: 1, // TODO use this
-    },
-
-    stamina: {
-      current: 100,
-      max: 100,
-      multiplier: 1,
-    },
-
-    mental: {
-      current: 100,
-      max: 100,
-      multiplier: 1,
-    },
-  },
 
   activeConditions: {
     health_regen: {},
@@ -28,6 +9,7 @@ export const game = {
     mental_regen: {},
     death: {},
     parent_xp: {},
+    human: {},
   },
 
   inventory: {
@@ -48,16 +30,7 @@ export const game = {
     },
   },
 
-  flags: {
-    checkDifficulty: {
-      value: 0,
-      flat: 0,
-      multiplier: 1,
-    },
 
-    activityProgress: 0,
-  
-  },
 
   values: {
     health: 100,

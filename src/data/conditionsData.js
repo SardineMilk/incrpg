@@ -12,7 +12,7 @@ const INHERENT_EFFECTS = {
     tags: ["passive_regen"],
     triggers: [evt.tick()],
     requirements: [
-      req.neq(fml.attribute("healthMax"), fml.value("health"))
+      req.geq(fml.attribute("healthMax"), fml.value("health"))
     ],
     effects: [
       eff.setValue(
@@ -27,13 +27,18 @@ const INHERENT_EFFECTS = {
     tags: ["passive_regen"],
     triggers: [evt.tick()],
     requirements: [
-      req.neq(fml.attribute("staminaMax"), fml.value("stamina"))
+      req.leq(fml.value("stamina"), fml.attribute("staminaMax"))
     ],
     effects: [
       eff.setValue(
         "staminaRegenAmount",
-        fml.min(fml.sub(fml.attribute("staminaMax"), fml.value("stamina")), fml.conditionStrength("stamina_regen"))
+        fml.sub(fml.attribute("staminaMax"), fml.value("stamina"))
       ),
+      eff.setValue(
+        "staminaRegenAmount",
+        fml.clamp(fml.value("staminaRegenAmount"), 0, fml.conditionStrength("stamina_regen"))
+      ),
+
       eff.changeValue("stamina", fml.value("staminaRegenAmount")),
       eff.grantSkillXp("breathing", fml.value("staminaRegenAmount")),
     ],
@@ -42,7 +47,7 @@ const INHERENT_EFFECTS = {
     tags: ["passive_regen"],
     triggers: [evt.tick()],
     requirements: [
-      req.neq(fml.attribute("mentalMax"), fml.value("mental"))
+      req.geq(fml.attribute("mentalMax"), fml.value("mental"))
     ],
     effects: [
       eff.setValue(
@@ -77,6 +82,13 @@ const INHERENT_EFFECTS = {
     ],
   },
 
+  human: {
+    effects: [
+      eff.changeAttribute("healthMax", 100, 0, 0),
+      eff.changeAttribute("staminaMax", 100, 0, 0),
+      eff.changeAttribute("mentalMax", 100, 0, 0),
+    ],
+  },
 
   /* Attribute Imbalance - apply effects if attribute x is more than attribute y, named as x_y
   * Should have a large effect on gameplay, and be thematic
@@ -604,7 +616,9 @@ const TEMP_CONDITIONS = {
     name: "Sleeping",
     description: "You are asleep, greatly boosting your natural recovery",
     effects: [
-      eff.changeConditionStrength(sel.conditionsByTag("passive_regen"), 10),
+      eff.changeConditionStrength(sel.conditionsByTag("passive_regen"), 10, 0, 1),
+      eff.changeConditionStrength("stamina_regen", 5, 0, 1),
+
     ],
   },
 

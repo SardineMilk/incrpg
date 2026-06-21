@@ -36,7 +36,6 @@ export function applyEffect(game, effect) {
 export function changeEffectStrength(game, effect, multiplier) {
   const def = EFFECT_DEFS[effect.type];
   if (def?.scale) return def.scale(game, effect, multiplier);
-  console.warn("Cannot scale effect:", effect.type);
   return effect;
 }
 

@@ -41,7 +41,7 @@ export function startTicking(render) {
 }
 
 function tick() {
-  applyEffect(game, { type: "tick" });
+
 
   // TODO proper state wipe system
   for (const skillId in game.skills) {
@@ -51,15 +51,20 @@ function tick() {
     game.skills[skillId].bonus.multiplier = 1;
   }
   for (const attr in game.attributes) {
-    applyEffect(game, { type: "setAttribute", attribute:attr, flat:1, percent:1, multiplier:1})
+    applyEffect(game, { type: "setAttribute", attribute:attr, flat:0, percent:1, multiplier:1})
   }
   for (const conditionId in game.activeConditions) {
+    game.activeConditions[conditionId].bonus = {};
+    game.activeConditions[conditionId].bonus.flat       = 1;
+    game.activeConditions[conditionId].bonus.percent    = 1;
+    game.activeConditions[conditionId].bonus.multiplier = 1;
     game.activeConditions[conditionId].strength = 1;
   }
 
   processConditions(game);
+  applyEffect(game, { type: "tick" });
 
-  for (const skillId in game.skills) {
+  for (const skillId in game.skills) {  
     const skill = game.skills[skillId];
     game.skills[skillId].level =
       (skill.base + skill.bonus.flat) * skill.bonus.multiplier;
