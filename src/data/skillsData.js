@@ -1,4 +1,5 @@
-import { eff } from "../structures/effectDefs.js";
+import { eff } from "../structures/structures.js";
+
 
 
 export const SKILLS = {

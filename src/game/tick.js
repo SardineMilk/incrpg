@@ -11,7 +11,8 @@ import {
 import { processConditions } from "./conditions.js";
 import { LogType, EventLog } from "./log.js";
 import { setIntervalFix, clearIntervalFix } from "../utils/throttleFix.js";
-import { eff } from "../structures/effectDefs.js";
+import {eff, req, evt, sel, fml } from "../structures/structures.js";
+
 const TICK_RATE = 1000 / 20;
 
 let intervalId = null;

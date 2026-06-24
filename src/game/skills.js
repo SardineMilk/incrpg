@@ -1,7 +1,7 @@
 import { SKILLS } from "../data/skillsData.js";
 import { LogType } from "./log.js";
 import { applyEffect } from "./effects.js";
-import { eff } from "../structures/effectDefs.js";
+import { eff } from "../structures/structures.js";
 
 export function xpToNext(level) {
   // xpToNext = Math.floor(scalingFactor * Math.pow(2, level/5));
