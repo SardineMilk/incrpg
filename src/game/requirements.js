@@ -12,11 +12,13 @@ function expandLevel(game, arr) {
 
 function meetsRequirement(game, requirement) {
   const r = resolveFormulas(game, requirement);
+
   const def = REQUIREMENT_DEFS[r.type];
   if (!def) {
     console.warn("Unknown requirement type:", r.type);
     return false;
   }
+
   return def.check(game, r);
 }
 

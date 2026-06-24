@@ -4,13 +4,36 @@ import { applyEffect, applyScaledEffect } from "./effects.js";
 import { meetsRequirements } from "./requirements.js";
 import { withContext, resolveFormulas } from "../structures/formulaDefs.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
+import { resolveStatLayer } from "../utils/statLayer.js";
 
 // Called by applyEffect after each effect is applied.
 // Walks all active conditions and fires any whose triggers match.
 export function processTrigger(game, triggerType, context) {
-  for (const [id, state] of Object.entries(game.activeConditions)) {
-    const def = CONDITIONS[id];
+  for (const conditionId in game.conditionStates) {
+    const def = CONDITIONS[conditionId];
+    const state = game.conditionStates[conditionId];
+
+    if (!state.active) continue;
+
     if (!def.triggers) continue;
+
+    for (const i in def.triggers) {
+      const t = def.triggers[i];
+      const event = t.event;
+
+      // TODO remove once all conditions converted. Should be in validator
+      if (!t.event) return;  
+
+      if (t.event.type !== triggerType) continue;
+      if (!checkTrigger(t.event, context)) continue;
+      if (!meetsRequirements(game, t)) continue;
+      withContext(context, () => {
+        for (const effect of t.effects) {
+          applyScaledEffect(game, effect, resolveStatLayer(state.strength));
+        }
+      });
+
+    }
 
     const matching = def.triggers.filter((t) => t.type === triggerType);
     if (!matching.length) continue;

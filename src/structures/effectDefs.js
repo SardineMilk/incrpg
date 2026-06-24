@@ -56,20 +56,18 @@ export const EFFECT_DEFS = {
   },
 
   skillLevelBonus: {
-    create: (skill, flat = 0, percent=0, multiplier = 1) => ({
+    create: (skill, flat = 0, multiplier = 1) => ({
       type: "skillLevelBonus",
       skill,
       flat,
-      percent,
       multiplier,
     }),
     apply(game, e) {
       if (e.skill == null) return null;
       const s = game.skills[e.skill]; 
       s.bonus.flat += e.flat;
-      s.bonus.percent += e.percent;
       s.bonus.multiplier *= e.multiplier;
-      s.level = (s.base + s.bonus.flat) * s.bonus.percent * s.bonus.multiplier;
+      s.level = (s.base + s.bonus.flat) * s.bonus.multiplier;
     },
   },
 
@@ -83,30 +81,35 @@ export const EFFECT_DEFS = {
       amount,
     }),
     apply(game, e) {
-      game.activeConditions[e.condition] ??= { strength: 1 };
-      if (e.amount == null || e.condition == null) return null;
-      const cond = game.activeConditions[e.condition];
-      cond.duration = (cond.duration ?? 0) + e.amount;
+      const state = game.conditionStates[e.condition];
+      //if (state.active && (e.amount == null)) return;
+      if (!state.active) state.new = true;  // If new, whileActive effects are applied
+
+      state.active = true;
+      if (e.amount == null) state.duration = null;
+      else state.duration += e.amount;
+        
       return "conditionApplied";
     },
   },
 
   changeConditionStrength: {
-    create: (condition, flat, percent, multiplier) => ({
+    create: ( condition, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
       type: "changeConditionStrength",
       condition,
       flat,
       percent,
-      multiplier
+      multiplier,
     }),
+
     apply(game, e) {
-      if (!game.activeConditions[e.condition]) return null;
-      const c = game.activeConditions[e.condition];
-      c.bonus.flat += e.flat;
-      c.bonus.percent += e.percent;
-      c.bonus.multiplier *= e.multiplier;
-      c.strength = c.bonus.flat * c.bonus.percent * c.bonus.multiplier;
+      const c = game.conditionStates[e.condition];
+
+      c.strength.flat += e.flat;
+      c.strength.percent += e.percent;
+      c.strength.multiplier *= e.multiplier;
     },
+
     scale: scaleAmount,
   },
 

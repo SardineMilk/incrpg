@@ -1,12 +1,12 @@
 export function renderHero(game) {
   document.getElementById("health-bar").innerText =
-    `HP ${Math.floor(game.values.health)}/${game.attributes.healthMax.value}`;
+    `HP ${Math.floor(game.values.health)}/${game.values.healthMax}`;
 
   document.getElementById("stamina-bar").innerText =
-    `SP ${Math.floor(game.values.stamina)}/${game.attributes.staminaMax.value}`;
+    `SP ${Math.floor(game.values.stamina)}/${game.values.staminaMax}`;
 
   document.getElementById("mental-bar").innerText =
-    `MP ${Math.floor(game.values.mental)}/${game.attributes.mentalMax.value}`;
+    `MP ${Math.floor(game.values.mental)}/${game.values.mentalMax}`;
 
   /*
   document.getElementById("money-box").innerText =

@@ -3,8 +3,8 @@ export function makeStatLayer() {
   return { flat: 0, percent: 1, multiplier: 1 };
 }
 
-export function resolveStatLayer(base, layer) {
-  return (base + layer.flat) * layer.percent * layer.multiplier;
+export function resolveStatLayer(layer) {
+  return layer.flat * layer.percent * layer.multiplier;
 }
 
 export function resetStatLayer(layer) {

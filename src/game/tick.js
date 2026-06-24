@@ -1,6 +1,5 @@
 import { ACTIONS } from "../data/actionsData.js";
-import { CONDITIONS } from "../data/conditionsData.js";
-import { applyEffect } from "./effects.js";
+import { INHERENT_EFFECTS, CONDITIONS } from "../data/conditionsData.js";
 import { applySkillEffects } from "./skills.js";
 import { game } from "./state.js";
 import { initialiseState } from "../utils/state_creator.js";
@@ -8,10 +7,14 @@ import {
   calculateActionCompetency,
   calculateActionsCompetency,
 } from "./actions.js";
-import { processConditions } from "./conditions.js";
+import { applyCondition, decrementConditionDuration } from "./conditions.js";
 import { LogType, EventLog } from "./log.js";
 import { setIntervalFix, clearIntervalFix } from "../utils/throttleFix.js";
 import {eff, req, evt, sel, fml } from "../structures/structures.js";
+import { processTrigger } from "./events.js";
+import { applyEffect } from "./effects.js";
+import { applyScaledEffect } from "./effects.js";
+import { resolveStatLayer } from "../utils/statLayer.js";
 
 const TICK_RATE = 1000 / 20;
 
@@ -23,6 +26,11 @@ export function startTicking(render) {
   game.log = new EventLog({ container: document.getElementById("log-box") });
   game.log.container.scrollTop = game.log.container.scrollHeight;
   game.log.followTail = true;
+
+  for (const conditionId in INHERENT_EFFECTS) {
+    applyCondition(conditionId);
+  }
+
 
   if (intervalId !== null) {
     clearIntervalFix(intervalId);
@@ -42,36 +50,23 @@ export function startTicking(render) {
 }
 
 function tick() {
+  decrementConditionDuration(game);
+  processTrigger(game, "tick");
 
-
-  // TODO proper state wipe system
-  for (const skillId in game.skills) {
-    game.skills[skillId].xpMultiplier = 1;
-    game.skills[skillId].bonus.flat = 0;
-    game.skills[skillId].bonus.percent = 0;
-    game.skills[skillId].bonus.multiplier = 1;
-  }
-  for (const attr in game.attributes) {
-    applyEffect(game, { type: "setAttribute", attribute:attr, flat:0, percent:1, multiplier:1})
-  }
-  for (const conditionId in game.activeConditions) {
-    game.activeConditions[conditionId].bonus = {};
-    game.activeConditions[conditionId].bonus.flat       = 1;
-    game.activeConditions[conditionId].bonus.percent    = 1;
-    game.activeConditions[conditionId].bonus.multiplier = 1;
-    game.activeConditions[conditionId].strength = 1;
+  // TODO remove effects
+  for (const conditionId in game.conditionStates) {
+    const c = game.conditionStates[conditionId];
+    if (!c.new) continue;
+    c.new = false;
+    const def = CONDITIONS[conditionId];
+    if (!def.effects) return;
+    for (const effect of def.effects) {
+      console.log(effect)
+      applyScaledEffect(game, effect, resolveStatLayer(c.strength));
+    }
   }
 
-  processConditions(game);
-  applyEffect(game, { type: "tick" });
-
-  for (const skillId in game.skills) {  
-    const skill = game.skills[skillId];
-    game.skills[skillId].level =
-      (skill.base + skill.bonus.flat) * skill.bonus.multiplier;
-  }
-
-  applySkillEffects(game);
+  //applySkillEffects(game);
 
   // TODO limit this to only visible actions
   calculateActionsCompetency(game);

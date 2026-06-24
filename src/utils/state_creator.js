@@ -1,7 +1,11 @@
 import { SKILLS } from "../data/skillsData.js";
 import { ACTIONS } from "../data/actionsData.js";
+import { CONDITIONS } from "../data/conditionsData.js";
+import { makeStatLayer } from "./statLayer.js";
 
 export function initialiseState(game) {
+  game.log = 
+
   game.skills = game.skills || {};
   for (const skillId in SKILLS) {
     game.skills[skillId] = game.skills[skillId] || {
@@ -9,6 +13,7 @@ export function initialiseState(game) {
       base: 0,
       multiplier: 1,
       bonus: { flat: 0, multiplier: 1 },
+      level: 0,
     };
   }
 
@@ -19,5 +24,15 @@ export function initialiseState(game) {
       completions: 0,
       competency: 1,
     };
+  }
+
+  for (const conditionId in CONDITIONS) {
+    game.conditionStates[conditionId] = {
+      active: false, 
+      duration: null, 
+      strength: makeStatLayer(),
+      new: false,
+    };
+    game.conditionStates[conditionId].strength.flat = 1;
   }
 }

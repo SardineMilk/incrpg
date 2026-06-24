@@ -1,53 +1,41 @@
 import { CONDITIONS } from "../data/conditionsData.js";
 import { applyScaledEffect, applyEffect } from "./effects.js";
 import { meetsRequirements } from "./requirements.js";
+import { resolveStatLayer } from "../utils/statLayer.js";
 
-export function processConditions(game) {
-  decrementConditionDuration(game);
-  applyConditionStrengthEffects(game);
 
-  // Apply all other effects
-  for (const [id, state] of Object.entries(game.activeConditions)) {
-    const conditionDef = CONDITIONS[id];
-
-    if (conditionDef.triggers) continue;  // Dont apply conditions with triggers
-    
-    if (!meetsRequirements(game, conditionDef)) continue;  // Only apply if condition meets requitements
-    
-    for (const effect of conditionDef.effects) {
-
-      if (effect.type === "changeConditionStrength") continue; // already handled
-
-      if (state.strength != 1) applyScaledEffect(game, effect, state.strength);
-      else applyEffect(game, effect);
-    }
-  }
-}
-
-function decrementConditionDuration(game) {
+export function decrementConditionDuration(game) {
   // Tick down durations, remove expired conditions
-  for (const [id, state] of Object.entries(game.activeConditions)) {
-    if (state.duration !== undefined) {
-      if (state.duration <= 0) {
-        delete game.activeConditions[id];
-        continue;
-      }
-      state.duration -= 1;
+  for (const conditionId in game.conditionStates) {
+    const state = game.conditionStates[conditionId];
+    if (!state.active)          continue;
+    if (state.duration == null) continue; 
+    
+    if (state.duration <= 0) {
+      state.active = false;
+      state.duration = 0;
+      removeCondition(conditionId);
+      continue;
     }
+    
+    state.duration -= 1;
   }
 }
 
-function applyConditionStrengthEffects(game) {
-  // Apply all strength modifiers
-  for (const [id, state] of Object.entries(game.activeConditions)) {
-    const conditionDef = CONDITIONS[id];
+// What should be this and what should  be in effectDefs.applyCondition
+export function applyCondition(conditionId, duration=null) {
+  const state = game.conditionStates[conditionId];
 
-    if (conditionDef.triggers) continue;  // Dont apply conditions with triggers
-    if (!meetsRequirements(game, conditionDef)) continue;  // Only apply if condition meets requitements
+  state.active = true;
+  state.duration = duration  // If null, indefinite duration
 
-    for (const effect of conditionDef.effects) {
-      if (effect.type !== "changeConditionStrength") continue; // only strength modifiers
-      applyEffect(game, effect);
-    }
+  const def = CONDITIONS[conditionId];
+  if (!def.effects) return;
+  for (const effect of def.effects) {
+    applyScaledEffect(game, effect, resolveStatLayer(state.strength));
   }
+}
+
+function removeCondition(conditionId) {
+
 }

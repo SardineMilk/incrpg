@@ -22,6 +22,7 @@ export function applyEffect(game, effect) {
       return;
     }
 
+    if (e.type === "changeConditionStrength") console.log(e);
     const result = def.apply(game, e);
 
     if (result) {

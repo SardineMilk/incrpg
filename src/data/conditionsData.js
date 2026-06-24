@@ -3,78 +3,68 @@ import {eff, req, evt, sel, fml } from "../structures/structures.js";
 
 // Need to special-case these. Apply all at start of game
 // Inherent Effects are always active, and may have strict requirements or triggers
-const INHERENT_EFFECTS = {
+export const INHERENT_EFFECTS = {
   human: {
     effects: [
-      eff.changeAttribute("healthMax", 100, 0, 0),
-      eff.changeAttribute("staminaMax", 100, 0, 0),
-      eff.changeAttribute("mentalMax", 100, 0, 0),
+      eff.changeValue("healthMax", 100),
+      eff.changeValue("staminaMax", 100),
+      eff.changeValue("mentalMax", 100),
     ],
   },
   // Will need to clamp max/min health
   health_regen: {
     tags: ["passive_regen"],
-    triggers: [evt.tick()],
-    requirements: [
-      req.geq(fml.attribute("healthMax"), fml.value("health"))
-    ],
-    effects: [
-      eff.setValue(
-        "healthRegenAmount",
-        fml.min(fml.sub(fml.attribute("healthMax"), fml.value("health")), fml.conditionStrength("health_regen"))
-      ),
-      eff.changeValue("health", fml.value("healthRegenAmount")),
-      eff.grantSkillXp("regeneration", fml.value("healthRegenAmount")),
+    triggers: [
+      {
+        event: evt.tick(),
+        requirements: [req.lessThan(fml.value("health"), fml.value("healthMax"))],
+        effects: [
+          eff.changeValue("health", 1),
+          eff.grantSkillXp("regeneration", 0.1),
+        ]
+      },
     ],
   },
   stamina_regen: {
     tags: ["passive_regen"],
-    triggers: [evt.tick()],
-    requirements: [
-      req.leq(fml.value("stamina"), fml.attribute("staminaMax"))
-    ],
-    effects: [
-      eff.setValue(
-        "staminaRegenAmount",
-        fml.sub(fml.attribute("staminaMax"), fml.value("stamina"))
-      ),
-      eff.setValue(
-        "staminaRegenAmount",
-        fml.clamp(fml.value("staminaRegenAmount"), 0, fml.conditionStrength("stamina_regen"))
-      ),
-
-      eff.changeValue("stamina", fml.value("staminaRegenAmount")),
-      eff.grantSkillXp("breathing", fml.value("staminaRegenAmount")),
+    triggers: [
+      {
+        event: evt.tick(),
+        requirements: [req.lessThan(fml.value("stamina"), fml.value("staminaMax"))],
+        effects: [
+          eff.changeValue("stamina", 1),
+          eff.grantSkillXp("breathing", 0.1),
+        ]
+      },
     ],
   },
   mental_regen: {
     tags: ["passive_regen"],
-    triggers: [evt.tick()],
-    requirements: [
-      req.geq(fml.attribute("mentalMax"), fml.value("mental"))
-    ],
-    effects: [
-      eff.setValue(
-        "mentalRegenAmount",
-        fml.min(fml.sub(fml.attribute("mentalMax"), fml.value("mental")), fml.conditionStrength("mental_regen"))
-      ),
-      eff.changeValue("mental", fml.value("mentalRegenAmount")),
-      eff.grantSkillXp("mindfulness", fml.value("mentalRegenAmount")),
+    triggers: [
+      {
+        event: evt.tick(),
+        requirements: [req.lessThan(fml.value("mental"), fml.value("mentalMax"))],
+        effects: [
+          eff.changeValue("mental", 1),
+          eff.grantSkillXp("mindfulness", 0.1),
+        ]
+      },
     ],
   },
 
   death: {
     triggers: [
-      evt.valueLoss(sel.ids(["health", "stamina", "mental"])),
-    ],
-    requirements: [
-      [req.valueLessThan(sel.ids(["health", "stamina", "mental"]), 0),],
-    ],
-    effects: [
-      eff.setActiveAction("sleep"),
-      eff.sendMessage("SYSTEM", "You pass out"),
+      {
+        event: evt.valueLoss(sel.ids(["health", "stamina", "mental"])),
+        requirements: [[req.valueLessThan(sel.ids(["health", "stamina", "mental"]), 0)]],
+        effects: [
+          eff.setActiveAction("sleep"),
+          eff.sendMessage("SYSTEM", "You pass out"),
+        ],
+      }
     ],
   },
+
 
   parent_xp: {
     triggers: [evt.gainSkillXp()],
@@ -614,7 +604,9 @@ const TEMP_CONDITIONS = {
     name: "Sleeping",
     description: "You are asleep, greatly boosting your natural recovery",
     effects: [
-      eff.changeConditionStrength(sel.conditionsByTag("passive_regen"), 10, 0, 1),
+      //eff.changeConditionStrength(sel.conditionsByTag("passive_regen"), {flat: 10}),
+      eff.changeConditionStrength("stamina_regen", {flat: 10}),
+      
     ],
   },
 
@@ -636,12 +628,22 @@ const TEMP_CONDITIONS = {
       eff.changeConditionStrength("stamina_regen", -0.1),
     ],
   },
+  
 
   cold: {
     name: "Cold",
     description:
       "You feel cold. You move and regenerate stamina slower. You have a slight mental drain.",
     effects: [eff.skillLevelBonus("agility", 0, -0.2)],
+  },
+
+
+  injury: {
+    name: "Injury",
+    description: "Lorem ipsum dolor sit amet.",
+    effects: [
+ 
+    ],
   },
 
   combat_fatigue: {
