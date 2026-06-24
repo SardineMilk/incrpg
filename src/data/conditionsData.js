@@ -7,6 +7,13 @@ import { sel } from "../structures/selectorDefs.js";
 // Need to special-case these. Apply all at start of game
 // Inherent Effects are always active, and may have strict requirements or triggers
 const INHERENT_EFFECTS = {
+  human: {
+    effects: [
+      eff.changeAttribute("healthMax", 100, 0, 0),
+      eff.changeAttribute("staminaMax", 100, 0, 0),
+      eff.changeAttribute("mentalMax", 100, 0, 0),
+    ],
+  },
   // Will need to clamp max/min health
   health_regen: {
     tags: ["passive_regen"],
@@ -82,13 +89,7 @@ const INHERENT_EFFECTS = {
     ],
   },
 
-  human: {
-    effects: [
-      eff.changeAttribute("healthMax", 100, 0, 0),
-      eff.changeAttribute("staminaMax", 100, 0, 0),
-      eff.changeAttribute("mentalMax", 100, 0, 0),
-    ],
-  },
+
 
   /* Attribute Imbalance - apply effects if attribute x is more than attribute y, named as x_y
   * Should have a large effect on gameplay, and be thematic
@@ -617,8 +618,6 @@ const TEMP_CONDITIONS = {
     description: "You are asleep, greatly boosting your natural recovery",
     effects: [
       eff.changeConditionStrength(sel.conditionsByTag("passive_regen"), 10, 0, 1),
-      eff.changeConditionStrength("stamina_regen", 5, 0, 1),
-
     ],
   },
 
