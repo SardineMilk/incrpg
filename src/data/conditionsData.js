@@ -604,8 +604,8 @@ const TEMP_CONDITIONS = {
     name: "Sleeping",
     description: "You are asleep, greatly boosting your natural recovery",
     effects: [
-      //eff.changeConditionStrength(sel.conditionsByTag("passive_regen"), {flat: 10}),
-      eff.changeConditionStrength("stamina_regen", {flat: 10}),
+      eff.changeConditionStrength(sel.conditionsByTag("passive_regen"), {flat: 10}),
+      //eff.changeConditionStrength("stamina_regen", {flat: 10}),
       
     ],
   },

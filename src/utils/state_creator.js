@@ -1,10 +1,16 @@
 import { SKILLS } from "../data/skillsData.js";
 import { ACTIONS } from "../data/actionsData.js";
 import { CONDITIONS } from "../data/conditionsData.js";
+import { LOCATIONS } from "../data/locationsData.js";
 import { makeStatLayer } from "./statLayer.js";
+import { generateTagIndex } from "./tagIndex.js";
+
 
 export function initialiseState(game) {
-  game.log = 
+
+  generateTagIndex("conditions", CONDITIONS);
+  generateTagIndex("skills", SKILLS);
+  generateTagIndex("locations", LOCATIONS);
 
   game.skills = game.skills || {};
   for (const skillId in SKILLS) {

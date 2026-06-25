@@ -87,7 +87,7 @@ export const REQUIREMENT_DEFS = {
   }, 
   geq: {
     create: (x, y) => ({ type: "geq", x, y}),
-    check: (game, r) => {r.x >= r.y},
+    check: (game, r) => r.x >= r.y,
   },
   leq: {
     create: (x, y) => ({ type: "leq", x, y}),

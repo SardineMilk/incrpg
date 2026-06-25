@@ -47,14 +47,7 @@ export const sel = {
 
   // ── Conditions ────────────────────────────────────────────────────────────
 
-  /** Ids from the CONDITIONS dataset that carry `tag` AND are currently active. */
   conditionsByTag: (tag) =>
-    makeSelector((game) =>
-      byTag("conditions", tag).filter((id) => id in game.activeConditions)
-    ),
-
-  /** All ids from the CONDITIONS dataset that carry `tag` (active or not). */
-  allConditionsByTag: (tag) =>
     makeSelector(() => byTag("conditions", tag)),
 
   // ── Skills ────────────────────────────────────────────────────────────────
