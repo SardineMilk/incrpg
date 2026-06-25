@@ -77,7 +77,69 @@ export const INHERENT_EFFECTS = {
   },
 
 
+};
 
+const TEMP_CONDITIONS = {
+  sleeping: {
+    name: "Sleeping",
+    description: "You are asleep, greatly boosting your natural recovery",
+    effects: [
+      eff.changeConditionStrength(sel.conditionsByTag("passive_regen"), {flat: 10}),
+    ],
+  },
+
+  combat_fatigue: {
+    name: "Combat Fatigue",
+    description:
+      "The chaos of battle is getting to you. You're getting stressed and fatigued",
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [
+          eff.changeValue("stamina", -1),
+          eff.changeValue("mental", -1),
+        ],
+      },
+    ],
+  },
+
+  wet: {
+    name: "Wet",
+    description:
+      "You're soaked. Lowers cold resistance, increases fire resistance",
+    effects: [
+
+    ],
+  },
+
+  chilly: {
+    name: "Chilly",
+    description:
+      "You feel chilly. You move and regenerate stamina slightly slower",
+    effects: [
+      eff.skillLevelBonus("agility", 0, -0.1),
+      eff.changeConditionStrength("stamina_regen", -0.1),
+    ],
+  },
+  
+  cold: {
+    name: "Cold",
+    description:
+      "You feel cold. You move and regenerate stamina slower. You have a slight mental drain.",
+    effects: [eff.skillLevelBonus("agility", 0, -0.2)],
+  },
+
+  injury: {
+    name: "Injury",
+    description: "Lorem ipsum dolor sit amet.",
+    effects: [
+ 
+    ],
+  },
+};
+
+
+const IMBALANCES = {
   /* Attribute Imbalance - apply effects if attribute x is more than attribute y, named as x_y
   * Should have a large effect on gameplay, and be thematic
   * Generally negative but with benefits to niche playstyles
@@ -597,64 +659,7 @@ export const INHERENT_EFFECTS = {
 
     ], 
   },
-};
-
-const TEMP_CONDITIONS = {
-  sleeping: {
-    name: "Sleeping",
-    description: "You are asleep, greatly boosting your natural recovery",
-    effects: [
-      eff.changeConditionStrength(sel.conditionsByTag("passive_regen"), {flat: 10}),
-      //eff.changeConditionStrength("stamina_regen", {flat: 10}),
-      
-    ],
-  },
-
-  wet: {
-    name: "Wet",
-    description:
-      "You're soaked. Lowers cold resistance, increases fire resistance",
-    effects: [
-
-    ],
-  },
-
-  chilly: {
-    name: "Chilly",
-    description:
-      "You feel chilly. You move and regenerate stamina slightly slower",
-    effects: [
-      eff.skillLevelBonus("agility", 0, -0.1),
-      eff.changeConditionStrength("stamina_regen", -0.1),
-    ],
-  },
-  
-
-  cold: {
-    name: "Cold",
-    description:
-      "You feel cold. You move and regenerate stamina slower. You have a slight mental drain.",
-    effects: [eff.skillLevelBonus("agility", 0, -0.2)],
-  },
+}
 
 
-  injury: {
-    name: "Injury",
-    description: "Lorem ipsum dolor sit amet.",
-    effects: [
- 
-    ],
-  },
-
-  combat_fatigue: {
-    name: "Combat Fatigue",
-    description:
-      "The chaos of battle is getting to you. You're getting stressed and fatigued",
-    effects: [
-      eff.changeValue("stamina", -1),
-      eff.changeValue("mental", -1),
-    ],
-  },
-};
-
-export const CONDITIONS = Object.assign({}, TEMP_CONDITIONS, INHERENT_EFFECTS);
+export const CONDITIONS = Object.assign({}, TEMP_CONDITIONS, INHERENT_EFFECTS, IMBALANCES);

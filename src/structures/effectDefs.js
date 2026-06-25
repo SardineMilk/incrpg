@@ -72,7 +72,7 @@ export const EFFECT_DEFS = {
   },
 
   skillLevelBonus: {
-    create: (skill, flat = 0, multiplier = 1) => ({
+    create: (skill, { flat = 0, multiplier = 1 } = {}) => ({
       type: "skillLevelBonus",
       skill,
       flat,
@@ -175,7 +175,7 @@ export const EFFECT_DEFS = {
 
   // ── Attribute ─────────────────────────────────────────────────────────────
   changeAttribute: {
-    create: (attribute, flat=0, percent=0, multiplier=1) => ({
+    create: (attribute, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
       type: "changeAttribute",
       attribute,
       flat,
@@ -194,7 +194,7 @@ export const EFFECT_DEFS = {
   },
 
   setAttribute: {
-    create: (attribute, flat, percent, multiplier) => ({
+    create: (attribute, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
       type: "setAttribute",
       attribute,
       flat,

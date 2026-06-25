@@ -21,6 +21,16 @@ export const TRIGGER_DEFS = {
     check: () => true, // TODO specific action or group by tag, like LocationChanges
   },
 
+  onApply: {
+    create: () => ({ type: "onApply" }),
+    check: () => true,
+  },
+
+  onRemove: {
+    create: () => ({ type: "onRemove" }),
+    check: () => true,
+  },
+
   valueGain: {
     create: (value, min = 1) => ({ type: "valueGain", value, min }),
     check: (trigger, ctx) =>

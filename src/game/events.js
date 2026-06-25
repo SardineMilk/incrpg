@@ -34,19 +34,6 @@ export function processTrigger(game, triggerType, context) {
       });
 
     }
-
-    const matching = def.triggers.filter((t) => t.type === triggerType);
-    if (!matching.length) continue;
-    if (!matching.some((t) => checkTrigger(t, context))) continue;
-    if (!meetsRequirements(game, def)) continue;
-
-    withContext(context, () => {
-      for (const effect of def.effects) {
-        if (state.strength !== 1)
-          applyScaledEffect(game, effect, state.strength);
-        else applyEffect(game, effect);
-      }
-    });
   }
 }
 
