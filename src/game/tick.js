@@ -69,8 +69,7 @@ function tick() {
     }
   }
 
-  // TODO apply skill effects properly
-  //applySkillEffects(game);
+  applySkillEffects(game);
 
   // TODO limit this to only visible actions
   calculateActionsCompetency(game);
@@ -93,7 +92,7 @@ function processAction() {
   // Grant attribute xp
   if (action.attributes) {
     for (const attribute in action.attributes) {
-      const xpForSkill = action.attributes[attribute] * game.skills[attribute].multiplier;
+      const xpForSkill = action.attributes[attribute] * game.skills[attribute].xpMultiplier;
       game.skills[attribute].xp += xpForSkill;
     }
   }

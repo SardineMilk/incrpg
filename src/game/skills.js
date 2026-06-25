@@ -20,20 +20,22 @@ export function applySkillEffects(game) {
     while (skill.xp >= xpToNext(skill.base)) {
       skill.xp -= xpToNext(skill.base);
       skill.base++;
+      skill.level = (skill.base + skill.bonus.flat) * skill.bonus.multiplier
+
+      // Skill level effects
+      for (const effect of skillData.level || []) applyEffect(game, effect);
+
+      // Milestone effects
+      // TODO this is slow
+      for (const milestoneLevel in skillData.milestones) {
+        if (milestoneLevel != skill.level) continue;
+        const milestoneEffects = skillData.milestones[milestoneLevel];
+        for (const effect of milestoneEffects) applyEffect(game, effect);
+      }
 
       const skillMessage = `${SKILLS[skillId].name} leveled to ${skill.base}`;
       game.log.append(LogType.SKILL, skillMessage);
     }
 
-    // Apply per-level effects
-    for (let i = 1; i <= skill.level; i++) {
-      for (const effect of skillData.level || []) applyEffect(game, effect);
-    }
-    // Apply milestone effects
-    for (const milestoneLevel in skillData.milestones) {
-      if (milestoneLevel > skill.level) break;
-      const milestoneEffects = skillData.milestones[milestoneLevel];
-      for (const effect of milestoneEffects) applyEffect(game, effect);
-    }
   }
 }
