@@ -11,7 +11,7 @@ export function initialiseState(game) {
     game.skills[skillId] = game.skills[skillId] || {
       xp: 0,
       base: 0,
-      multiplier: 1,
+      xpMultiplier: 1,
       bonus: { flat: 0, multiplier: 1 },
       level: 0,
     };
@@ -32,6 +32,7 @@ export function initialiseState(game) {
       duration: null, 
       strength: makeStatLayer(),
       new: false,
+      strengthOnApply: 1,
     };
     game.conditionStates[conditionId].strength.flat = 1;
   }

@@ -31,6 +31,22 @@ function scaleAmount(game, effect, mul) {
   };
 }
 
+// TODO fix this so it makes intuitive sense
+// 3 scalars maybe?
+// Multiplier is default 1, maybe calculate it at an offset
+function scaleStatLayer(game, effect, mul) {
+  const prevFlat        = effect.flat;
+  const prevPercent     = effect.percent;
+  const prevMultiplier  = effect.multiplier;
+
+  return {
+    ...effect,
+    flat: (g) => (typeof prevFlat === "function" ? prevFlat(g) : prevFlat) * mul,
+    //percent: (g) => (typeof prevPercent === "function" ? prevPercent(g) : prevPercent) * mul,
+    //multiplier: (g) => (typeof prevMultiplier === "function" ? prevMultiplier(g) : prevMultiplier) * mul,
+  };
+}
+
 export const EFFECT_DEFS = {
   // ── Skills ────────────────────────────────────────────────────────────────
 
@@ -110,7 +126,7 @@ export const EFFECT_DEFS = {
       c.strength.multiplier *= e.multiplier;
     },
 
-    scale: scaleAmount,
+    scale: scaleStatLayer,
   },
 
   // ── Values ─────────────────────────────────────────────────────────────
@@ -174,7 +190,7 @@ export const EFFECT_DEFS = {
       s.multiplier *= e.multiplier || 1;
       s.value = s.flat * s.percent * s.multiplier;
     },
-    scale: scaleAmount,  // TODO this is wrong
+    scale: scaleStatLayer, 
   },
 
   setAttribute: {
@@ -189,7 +205,7 @@ export const EFFECT_DEFS = {
       game.attributes[e.attribute] = {flat:e.flat, percent:e.percent, multiplier:e.multiplier};
       game.attributes[e.attribute].value = e.flat * e.percent * e.multiplier;
     },
-    scale: scaleAmount,  // TODO this is wrong
+    scale: scaleStatLayer, 
   },
 
   // Used to clean up state

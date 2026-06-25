@@ -12,8 +12,6 @@ export function decrementConditionDuration(game) {
     if (state.duration == null) continue; 
     
     if (state.duration <= 0) {
-      state.active = false;
-      state.duration = 0;
       removeCondition(conditionId);
       continue;
     }
@@ -25,17 +23,32 @@ export function decrementConditionDuration(game) {
 // What should be this and what should  be in effectDefs.applyCondition
 export function applyCondition(conditionId, duration=null) {
   const state = game.conditionStates[conditionId];
+  const def = CONDITIONS[conditionId];
 
   state.active = true;
   state.duration = duration  // If null, indefinite duration
 
-  const def = CONDITIONS[conditionId];
+  const conditionStrength = resolveStatLayer(state.strength);
+
   if (!def.effects) return;
   for (const effect of def.effects) {
-    applyScaledEffect(game, effect, resolveStatLayer(state.strength));
+    applyScaledEffect(game, effect, conditionStrength);
   }
 }
 
 function removeCondition(conditionId) {
+  const state = game.conditionStates[conditionId];
+  const def = CONDITIONS[conditionId];
+
+  state.active = false;
+  state.duration = null;
+
+  console.log(state.strengthOnApply)
+  const removeStrength = -1 * state.strengthOnApply
+
+  if (!def.effects) return;
+  for (const effect of def.effects) {
+    applyScaledEffect(game, effect, removeStrength);
+  }
 
 }

@@ -56,16 +56,20 @@ function tick() {
   // TODO remove effects
   for (const conditionId in game.conditionStates) {
     const c = game.conditionStates[conditionId];
+    if (!c.active) continue;
     if (!c.new) continue;
     c.new = false;
     const def = CONDITIONS[conditionId];
     if (!def.effects) return;
+    const conditionStrength = resolveStatLayer(c.strength);
+    c.strengthOnApply = conditionStrength;  // Used to invert effects with correct strength
     for (const effect of def.effects) {
-      console.log(effect)
-      applyScaledEffect(game, effect, resolveStatLayer(c.strength));
+      // Should be applyEffect()? Harder to remove
+      applyScaledEffect(game, effect, conditionStrength);
     }
   }
 
+  // TODO apply skill effects properly
   //applySkillEffects(game);
 
   // TODO limit this to only visible actions
