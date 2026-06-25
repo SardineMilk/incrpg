@@ -43,7 +43,6 @@ function removeCondition(conditionId) {
   state.active = false;
   state.duration = null;
 
-  console.log(state.strengthOnApply)
   const removeStrength = -1 * state.strengthOnApply
 
   if (!def.effects) return;
