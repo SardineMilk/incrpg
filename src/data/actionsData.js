@@ -123,7 +123,7 @@ export const ACTIONS = {
 
     result: [eff.grantSkillXp("sleeping", 20)],
   },
-
+  
 };
 
 

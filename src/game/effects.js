@@ -23,14 +23,12 @@ export function applyEffect(game, effect) {
     }
 
     const result = def.apply(game, e);
+    if (!result) continue;
 
-    if (result) {
-      const type = typeof result === "string" ? result : result.type;
-      const context = typeof result === "string" ? e : (result.context ?? e);
-      processTrigger(game, type, context);
+    const type = typeof result === "string" ? result : result.type;
+    const context = typeof result === "string" ? e : (result.context ?? e);
+    processTrigger(game, type, context);
   }
-  }
-
 }
 
 

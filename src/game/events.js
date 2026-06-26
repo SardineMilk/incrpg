@@ -14,17 +14,19 @@ export function processTrigger(game, triggerType, context) {
     const state = game.conditionStates[conditionId];
 
     if (!state.active) continue;
-
     if (!def.triggers) continue;
 
     for (const i in def.triggers) {
       const t = def.triggers[i];
       const event = t.event;
 
+      // Hacky fix so old content doesnt crash game
       // TODO remove once all conditions converted. Should be in validator
       if (!t.event) return;  
 
+      // TODO allow multiple triggers in array
       if (t.event.type !== triggerType) continue;
+
       if (!checkTrigger(t.event, context)) continue;
       if (!meetsRequirements(game, t)) continue;
       withContext(context, () => {

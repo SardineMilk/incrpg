@@ -67,12 +67,16 @@ export const INHERENT_EFFECTS = {
 
 
   parent_xp: {
-    triggers: [evt.gainSkillXp()],
-    effects: [
-      eff.grantSkillXp(
-        fml.skillParent(fml.contextSkill()),
-        fml.contextAmount(),
-      ),
+    triggers: [
+      {
+        event: evt.gainSkillXp(),
+        effects: [
+          eff.grantSkillXp(
+            fml.skillParent(fml.contextSkill()),
+            fml.contextAmount(),
+           ),
+        ]
+      }
     ],
   },
 

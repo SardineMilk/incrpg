@@ -124,6 +124,8 @@ export const EFFECT_DEFS = {
       c.strength.flat += e.flat;
       c.strength.percent += e.percent;
       c.strength.multiplier *= e.multiplier;
+
+      return "conditionStrengthChanged"
     },
 
     scale: scaleStatLayer,
@@ -286,6 +288,13 @@ export const EFFECT_DEFS = {
     apply(game) {
       game.tick++;
       return "tick";
+    },
+  },
+
+  forceTrigger: {
+    create: (trigger) => ({ type: "forceTrigger", trigger }),
+    apply(game, e) {
+      return e.trigger;
     },
   },
 
