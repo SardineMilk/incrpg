@@ -4,33 +4,55 @@ import { resolveTargets } from "../structures/selectorDefs.js";
 import { resolveFormulas } from "../structures/formulaDefs.js";
 
 
-function resolve(game, val) {
-  return typeof val === "function" ? val(game) : val;
+// Internal: apply one pre-resolved effect object and fire its trigger.
+function applyResolved(game, resolved) {
+  const def = EFFECT_DEFS[resolved.type];
+  if (!def) {
+    console.warn("Unknown effect type:", resolved.type);
+    return;
+  }
+  const result = def.apply(game, resolved);
+  if (!result) return;
+  const type    = typeof result === "string" ? result           : result.type;
+  const context = typeof result === "string" ? resolved : (result.context ?? resolved);
+  processTrigger(game, type, context);
 }
 
-
+// Apply an effect — resolves targets + formulas, fires triggers. Fire-and-forget.
 export function applyEffect(game, effect) {
-
   const targets = resolveTargets(game, effect);
-
   for (const target of targets) {
-    const e = resolveFormulas(game, target);
-    const def = EFFECT_DEFS[e.type];
-
-    if (!def) {
-      console.warn("Unknown effect type:", e.type);
-      return;
-    }
-
-    const result = def.apply(game, e);
-    if (!result) continue;
-
-    const type = typeof result === "string" ? result : result.type;
-    const context = typeof result === "string" ? e : (result.context ?? e);
-    processTrigger(game, type, context);
+    applyResolved(game, resolveFormulas(game, target));
   }
 }
 
+// Like applyEffect, but returns every resolved effect object that was applied.
+// Store the returned array on the owning state; pass each element to removeEffect later.
+export function applyEffectTracked(game, effect) {
+  const targets = resolveTargets(game, effect);
+  const applied = [];
+  for (const target of targets) {
+    const resolved = resolveFormulas(game, target);
+    applyResolved(game, resolved);
+    applied.push(resolved);
+  }
+  return applied;
+}
+
+// Undo a previously-tracked resolved effect using its def.remove method.
+// Must be called with the exact object returned by applyEffectTracked.
+export function removeEffect(game, resolved) {
+  const def = EFFECT_DEFS[resolved.type];
+  if (!def) {
+    console.warn("Unknown effect type:", resolved.type);
+    return;
+  }
+  if (!def.remove) {
+    console.warn(`Effect '${resolved.type}' has no remove() — cannot undo.`);
+    return;
+  }
+  def.remove(game, resolved);
+}
 
 export function changeEffectStrength(game, effect, multiplier) {
   const def = EFFECT_DEFS[effect.type];

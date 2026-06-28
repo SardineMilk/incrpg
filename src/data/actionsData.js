@@ -22,8 +22,11 @@ export const ACTIONS = {
       walking: 1,
     },
 
-    tick: [
+    effects: [
       eff.changeValue("check_difficulty", -10),
+    ],
+
+    tick: [
       eff.changeValue("stamina", -1)
     ],
 
@@ -86,8 +89,12 @@ export const ACTIONS = {
       exercise: 1,
     },
 
-    tick: [
+    effects: [
       eff.changeValue("check_difficulty", 10),
+    ],
+
+
+    tick: [
       eff.changeValue("stamina", -5),
       eff.changeValue("health", -2),
     ],
@@ -118,6 +125,10 @@ export const ACTIONS = {
     skills: {
       sleeping: 1,
     },
+
+    effects: [
+      eff.applyCondition("sleeping"),
+    ],
 
     tick: [eff.applyCondition("sleeping", 1)],
 

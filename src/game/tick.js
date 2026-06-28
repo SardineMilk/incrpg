@@ -1,20 +1,20 @@
-import { ACTIONS } from "../data/actionsData.js";
-import { INHERENT_EFFECTS, CONDITIONS } from "../data/conditionsData.js";
-import { applySkillEffects } from "./skills.js";
-import { game } from "./state.js";
-import { initialiseState } from "../utils/state_creator.js";
+import { ACTIONS }                              from "../data/actionsData.js";
+import { INHERENT_EFFECTS, CONDITIONS }         from "../data/conditionsData.js";
+import { applySkillEffects }                    from "./skills.js";
+import { game }                                 from "./state.js";
+import { initialiseState }                      from "../utils/state_creator.js";
+import { calculateActionsCompetency }           from "./actions.js";
+import { applyActionEffects, removeActionEffects } from "./actions.js";
 import {
-  calculateActionCompetency,
-  calculateActionsCompetency,
-} from "./actions.js";
-import { applyCondition, decrementConditionDuration } from "./conditions.js";
-import { LogType, EventLog } from "./log.js";
-import { setIntervalFix, clearIntervalFix } from "../utils/throttleFix.js";
-import {eff, req, evt, sel, fml } from "../structures/structures.js";
-import { processTrigger } from "./events.js";
-import { applyEffect } from "./effects.js";
-import { applyScaledEffect } from "./effects.js";
-import { resolveStatLayer } from "../utils/statLayer.js";
+  decrementConditionDuration,
+  applyConditionEffects,
+  reapplyConditionEffects,
+} from "./conditions.js";
+import { LogType, EventLog }                    from "./log.js";
+import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
+import { processTrigger }                       from "./events.js";
+import { applyEffect }                          from "./effects.js";
+import { applyScaledEffect }                    from "./effects.js";
 
 const TICK_RATE = 1000 / 20;
 
@@ -22,19 +22,16 @@ let intervalId = null;
 export function startTicking(render) {
   initialiseState(game);
 
-  // TODO factor this out
   game.log = new EventLog({ container: document.getElementById("log-box") });
   game.log.container.scrollTop = game.log.container.scrollHeight;
   game.log.followTail = true;
 
+  // Bootstrap inherent effects (always-active pseudo-conditions)
   for (const conditionId in INHERENT_EFFECTS) {
-    applyEffect(game, {type: "applyCondition", condition:conditionId})
+    applyEffect(game, { type: "applyCondition", condition: conditionId });
   }
 
-
-  if (intervalId !== null) {
-    clearIntervalFix(intervalId);
-  }
+  if (intervalId !== null) clearIntervalFix(intervalId);
 
   intervalId = setIntervalFix(() => {
     tick();
@@ -53,27 +50,37 @@ function tick() {
   decrementConditionDuration(game);
   processTrigger(game, "tick");
 
-  // TODO remove effects
+  // Apply effects for newly added conditions
   for (const conditionId in game.conditionStates) {
     const c = game.conditionStates[conditionId];
-    if (!c.active) continue;
-    if (!c.new) continue;
+    if (!c.active || !c.new) continue;
     c.new = false;
-    const def = CONDITIONS[conditionId];
-    if (!def.effects) return;
-    const conditionStrength = resolveStatLayer(c.strength);
-    c.strengthOnApply = conditionStrength;  // Used to invert effects with correct strength
-    for (const effect of def.effects) {
-      // Should be applyEffect()? Harder to remove
-      applyScaledEffect(game, effect, conditionStrength);
-    }
+    applyConditionEffects(game, conditionId);
+  }
+
+  // If condition strength has been changed by eff.changeConditionStrength,
+  // reapply the effects with new strength
+  for (const conditionId in game.conditionStates) {
+    const c = game.conditionStates[conditionId];
+    if (!c.active || !c.needsReapply) continue;
+    c.needsReapply = false;
+    reapplyConditionEffects(game, conditionId);
   }
 
   applySkillEffects(game);
 
-  // TODO limit this to only visible actions
+  // If action has been changed by eff.setActiveAction, apply the effects 
+  if (game.activeAction !== game.actionWithAppliedEffects) {
+    if (game.actionWithAppliedEffects) {
+      removeActionEffects(game, game.actionWithAppliedEffects);
+    }
+    if (game.activeAction) {
+      applyActionEffects(game, game.activeAction);
+    }
+    game.actionWithAppliedEffects = game.activeAction;
+  }
+
   calculateActionsCompetency(game);
-  // calculateActionCompetency(game, game.activeAction);
 
   if (game.activeAction) {
     processAction();
@@ -83,13 +90,12 @@ function tick() {
 function processAction() {
   const current_id = game.activeAction;
   const action = ACTIONS[current_id];
-  if (action == undefined) console.warn("Current action not in ACTIONS: ", current_id);
-  let duration = Math.ceil(
-    action.duration / game.actions[current_id].competency,
-  );
+  if (action == undefined) console.warn("Current action not in ACTIONS:", current_id);
+
+  let duration = Math.ceil(action.duration / game.actions[current_id].competency);
   game.actions[current_id].progress += 1;
 
-  // Grant attribute xp
+  // Grant attribute XP
   if (action.attributes) {
     for (const attribute in action.attributes) {
       const xpForSkill = action.attributes[attribute] * game.skills[attribute].xpMultiplier;
@@ -97,20 +103,20 @@ function processAction() {
     }
   }
 
-  // Apply tick effects
+  // Apply per-tick effects
   if (action.tick) {
     for (const effect of action.tick) {
-      if (game.activeAction !== current_id) break; // If effect causes action to be changed. Maybe remove?
+      if (game.activeAction !== current_id) break; // action swapped mid-tick
       applyEffect(game, effect);
     }
   }
 
-  // Completion
+  // On completion
   if (game.actions[current_id].progress >= duration) {
     for (const effect of action.result) {
       applyEffect(game, effect);
     }
     game.actions[current_id].completions += 1;
-    game.actions[current_id].progress = 0;
+    game.actions[current_id].progress    = 0;
   }
 }

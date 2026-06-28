@@ -4,8 +4,9 @@ import { LOCATIONS } from "../data/locationsData.js";
 /*
  * Each entry defines one effect type:
  *
- *   create(...args) -> effect plain-object  (becomes eff.X in structure.js)
- *   apply(game, resolvedEffect, ctx) -> triggerDescriptor | null
+ *   create(...args) -> effect plain-object  (used as eff.fooBar() in data files)
+ *   apply(game, resolvedEffect) -> triggerDescriptor | null
+ *   remove?(game, resolvedEffect) -> void
  *   scale?(game, effect, multiplier) -> scaled copy of effect
  *
  * triggerDescriptor:
@@ -13,16 +14,10 @@ import { LOCATIONS } from "../data/locationsData.js";
  *   - { type, context } -> fire with a custom context object
  *   - null / undefined  -> no trigger
  *
- * ctx is injected by effects.js to break circular init-time deps:
- *   { grantSkillXp, CONDITIONS }
- * Effects that don't need external deps can ignore it.
- * 
- * Most effects have their outcomes reset each tick
- * E.g. skillXpMultiplier for each skill starts at 1 each tick, and is built from active condition effects
- * Some effects are PERSISTENT. These have a lasting effect on the state. It should be fairly obvious which is which 
+ * Effects with a `remove` method are reversible.
+ * Effects without `remove` are fire-and-forget (tick effects, one-time rewards).
  */
 
-// TODO - actually work out what should be scaled
 function scaleAmount(game, effect, mul) {
   const prev = effect.amount;
   return {
@@ -31,26 +26,17 @@ function scaleAmount(game, effect, mul) {
   };
 }
 
-// TODO fix this so it makes intuitive sense
-// 3 scalars maybe?
-// Multiplier is default 1, maybe calculate it at an offset
 function scaleStatLayer(game, effect, mul) {
-  const prevFlat        = effect.flat;
-  const prevPercent     = effect.percent;
-  const prevMultiplier  = effect.multiplier;
-
+  const prevFlat = effect.flat;
   return {
     ...effect,
     flat: (g) => (typeof prevFlat === "function" ? prevFlat(g) : prevFlat) * mul,
-    //percent: (g) => (typeof prevPercent === "function" ? prevPercent(g) : prevPercent) * mul,
-    //multiplier: (g) => (typeof prevMultiplier === "function" ? prevMultiplier(g) : prevMultiplier) * mul,
   };
 }
 
 export const EFFECT_DEFS = {
   // ── Skills ────────────────────────────────────────────────────────────────
 
-  // PERSISTENT
   grantSkillXp: {
     create: (skill, amount) => ({ type: "grantSkillXp", skill, amount }),
     apply(game, e) {
@@ -68,11 +54,15 @@ export const EFFECT_DEFS = {
       if (e.skill == null) return null;
       game.skills[e.skill].xpMultiplier *= e.amount;
     },
+    remove(game, e) {
+      if (e.skill == null) return;
+      game.skills[e.skill].xpMultiplier /= e.amount;
+    },
     scale: scaleAmount,
   },
 
   skillLevelBonus: {
-    create: (skill, { flat = 0, multiplier = 1 } = {}) => ({
+    create: (skill, flat = 0, multiplier = 1) => ({
       type: "skillLevelBonus",
       skill,
       flat,
@@ -80,16 +70,22 @@ export const EFFECT_DEFS = {
     }),
     apply(game, e) {
       if (e.skill == null) return null;
-      const s = game.skills[e.skill]; 
-      s.bonus.flat += e.flat;
+      const s = game.skills[e.skill];
+      s.bonus.flat       += e.flat;
       s.bonus.multiplier *= e.multiplier;
+      s.level = (s.base + s.bonus.flat) * s.bonus.multiplier;
+    },
+    remove(game, e) {
+      if (e.skill == null) return;
+      const s = game.skills[e.skill];
+      s.bonus.flat       -= e.flat;
+      s.bonus.multiplier /= e.multiplier;
       s.level = (s.base + s.bonus.flat) * s.bonus.multiplier;
     },
   },
 
   // ── Conditions ────────────────────────────────────────────────────────────
 
-  // PERSISTENT
   applyCondition: {
     create: (condition, amount = null) => ({
       type: "applyCondition",
@@ -98,84 +94,82 @@ export const EFFECT_DEFS = {
     }),
     apply(game, e) {
       const state = game.conditionStates[e.condition];
-      //if (state.active && (e.amount == null)) return;
-      if (!state.active) state.new = true;  // If new, whileActive effects are applied
+      if (!state.active) state.new = true;
 
       state.active = true;
       if (e.amount == null) state.duration = null;
       else state.duration += e.amount;
-        
+
       return "conditionApplied";
     },
   },
 
+
   changeConditionStrength: {
-    create: ( condition, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
+    create: (condition, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
       type: "changeConditionStrength",
       condition,
       flat,
       percent,
       multiplier,
     }),
-
     apply(game, e) {
       const c = game.conditionStates[e.condition];
-
-      c.strength.flat += e.flat;
-      c.strength.percent += e.percent;
+      c.strength.flat       += e.flat;
+      c.strength.percent    += e.percent;
       c.strength.multiplier *= e.multiplier;
 
-      return "conditionStrengthChanged"
-    },
+      // If the condition is active, its passive effects must be reapplied
+      if (c.active) c.needsReapply = true;
 
+      return "conditionStrengthChanged";
+    },
+    remove(game, e) {
+      const c = game.conditionStates[e.condition];
+      if (!c) return;
+      c.strength.flat       -= e.flat;
+      c.strength.percent    -= e.percent;
+      c.strength.multiplier /= e.multiplier;
+    },
     scale: scaleStatLayer,
   },
 
-  // ── Values ─────────────────────────────────────────────────────────────
+  // ── Values ────────────────────────────────────────────────────────────────
 
-  // PERSISTENT
+  // Reversible — subtracts the same amount on remove
   changeValue: {
-    create: (value, amount) => ({
-      type: "changeValue",
-      value,
-      amount,
-    }),
+    create: (value, amount) => ({ type: "changeValue", value, amount }),
     apply(game, e) {
       game.values[e.value] = game.values[e.value] || 0;
       game.values[e.value] += e.amount;
-
       if (e.amount > 0) return "valueGain";
       if (e.amount < 0) return "valueLoss";
       return null;
     },
+    remove(game, e) {
+      game.values[e.value] -= e.amount;
+    },
     scale: scaleAmount,
   },
 
+  // fire-and-forget setters — no remove (would need prior-value snapshot)
   setValue: {
-    create: (value, amount) => ({ 
-      type: "setValue", 
-      value, 
-      amount ,
-    }),
+    create: (value, amount) => ({ type: "setValue", value, amount }),
     apply(game, e) {
       game.values[e.value] = e.amount;
     },
   },
 
-
-  // Used to clean up state
   removeValue: {
-    create: (value) => ({ 
-      type: "removeValue", 
-      value, 
-    }),
+    create: (value) => ({ type: "removeValue", value }),
     apply(game, e) {
-      // TODO undefined value behaviour
       delete game.values[e.value];
     },
   },
 
-  // ── Attribute ─────────────────────────────────────────────────────────────
+  // ── Attributes ────────────────────────────────────────────────────────────
+
+  // Reversible — flat/percent subtract back, multiplier divides back
   changeAttribute: {
     create: (attribute, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
       type: "changeAttribute",
@@ -185,16 +179,25 @@ export const EFFECT_DEFS = {
       multiplier,
     }),
     apply(game, e) {
-      game.attributes[e.attribute] = game.attributes[e.attribute] || {flat:0, percent:1, multiplier:1};
+      game.attributes[e.attribute] = game.attributes[e.attribute] || { flat: 0, percent: 1, multiplier: 1 };
       const s = game.attributes[e.attribute];
-      s.flat += e.flat || 0;
-      s.percent += e.percent || 0;
+      s.flat       += e.flat       || 0;
+      s.percent    += e.percent    || 0;
       s.multiplier *= e.multiplier || 1;
       s.value = s.flat * s.percent * s.multiplier;
     },
-    scale: scaleStatLayer, 
+    remove(game, e) {
+      const s = game.attributes[e.attribute];
+      if (!s) return;
+      s.flat       -= e.flat       || 0;
+      s.percent    -= e.percent    || 0;
+      s.multiplier /= e.multiplier || 1;
+      s.value = s.flat * s.percent * s.multiplier;
+    },
+    scale: scaleStatLayer,
   },
 
+  // fire-and-forget setter
   setAttribute: {
     create: (attribute, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
       type: "setAttribute",
@@ -204,37 +207,29 @@ export const EFFECT_DEFS = {
       multiplier,
     }),
     apply(game, e) {
-      game.attributes[e.attribute] = {flat:e.flat, percent:e.percent, multiplier:e.multiplier};
+      game.attributes[e.attribute] = { flat: e.flat, percent: e.percent, multiplier: e.multiplier };
       game.attributes[e.attribute].value = e.flat * e.percent * e.multiplier;
     },
-    scale: scaleStatLayer, 
+    scale: scaleStatLayer,
   },
 
-  // Used to clean up state
   removeAttribute: {
-    create: (attribute) => ({ 
-      type: "removeAttribute", 
-      attribute, 
-    }),
+    create: (attribute) => ({ type: "removeAttribute", attribute }),
     apply(game, e) {
-      // TODO undefined attribute behaviour
       delete game.attributes[e.attribute];
     },
   },
 
   // ── Activity ──────────────────────────────────────────────────────────────
+
   activityProgress: {
-    create: (amount) => ({
-      type: "activityProgress",
-      amount,
-    }),
+    create: (amount) => ({ type: "activityProgress", amount }),
     apply(game, e) {
       game.values.activityProgress += e.amount;
       return null;
     },
     scale: scaleAmount,
   },
-
 
   // ── World ─────────────────────────────────────────────────────────────────
 
@@ -243,8 +238,6 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       game.location = e.location;
       const tags = LOCATIONS[e.location]?.tags ?? [];
-      // Trigger needs the location's tags, not just the effect fields
-      // TODO refactor this to be trigger's problem
       return { type: "locationChanges", context: { ...e, tags } };
     },
   },
@@ -269,7 +262,6 @@ export const EFFECT_DEFS = {
   presentChoice: {
     create: (options) => ({ type: "presentChoice", options }),
     apply(game, e) {
-      // TODO hook into UI properly
       game.log.append(LogType.ACTION, e.options);
     },
   },
