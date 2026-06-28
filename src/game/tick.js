@@ -28,7 +28,7 @@ export function startTicking(render) {
   game.log.followTail = true;
 
   for (const conditionId in INHERENT_EFFECTS) {
-    applyCondition(conditionId);
+    applyEffect(game, {type: "applyCondition", condition:conditionId})
   }
 
 
