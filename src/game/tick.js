@@ -6,9 +6,7 @@ import { initialiseState }                      from "../utils/state_creator.js"
 import { calculateActionsCompetency }           from "./actions.js";
 import { applyActionEffects, removeActionEffects } from "./actions.js";
 import {
-  decrementConditionDuration,
-  applyConditionEffects,
-  reapplyConditionEffects,
+  processConditions
 } from "./conditions.js";
 import { LogType, EventLog }                    from "./log.js";
 import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
@@ -47,36 +45,16 @@ export function startTicking(render) {
 }
 
 function tick() {
-  decrementConditionDuration(game);
   processTrigger(game, "tick");
 
-  // Apply effects for newly added conditions
-  for (const conditionId in game.conditionStates) {
-    const c = game.conditionStates[conditionId];
-    if (!c.active || !c.new) continue;
-    c.new = false;
-    applyConditionEffects(game, conditionId);
-  }
-
-  // If condition strength has been changed by eff.changeConditionStrength,
-  // reapply the effects with new strength
-  for (const conditionId in game.conditionStates) {
-    const c = game.conditionStates[conditionId];
-    if (!c.active || !c.needsReapply) continue;
-    c.needsReapply = false;
-    reapplyConditionEffects(game, conditionId);
-  }
+  processConditions(game);
 
   applySkillEffects(game);
 
   // If action has been changed by eff.setActiveAction, apply the effects 
   if (game.activeAction !== game.actionWithAppliedEffects) {
-    if (game.actionWithAppliedEffects) {
-      removeActionEffects(game, game.actionWithAppliedEffects);
-    }
-    if (game.activeAction) {
-      applyActionEffects(game, game.activeAction);
-    }
+    if (game.actionWithAppliedEffects) removeActionEffects(game, game.actionWithAppliedEffects);
+    if (game.activeAction) applyActionEffects(game, game.activeAction);
     game.actionWithAppliedEffects = game.activeAction;
   }
 

@@ -2,24 +2,7 @@ import { CONDITIONS } from "../data/conditionsData.js";
 import { applyEffectTracked, removeEffect, changeEffectStrength } from "./effects.js";
 import { resolveStatLayer } from "../utils/statLayer.js";
 
-// ── Duration management ───────────────────────────────────────────────────────
 
-export function decrementConditionDuration(game) {
-  for (const conditionId in game.conditionStates) {
-    const state = game.conditionStates[conditionId];
-    if (!state.active)          continue;
-    if (state.duration == null) continue;
-
-    if (state.duration <= 0) {
-      removeConditionEffects(game, conditionId);
-      state.active   = false;
-      state.duration = null;
-      continue;
-    }
-
-    state.duration -= 1;
-  }
-}
 
 
 // Conditions can declare an effects array of passive modifiers 
@@ -34,7 +17,17 @@ export function decrementConditionDuration(game) {
 // Each resolved effect object is stored in state.appliedEffects so that
 // state mutations have no impact on effect removal
 
-export function applyConditionEffects(game, conditionId) {
+function decrementConditionDuration(game) {
+  for (const conditionId in game.conditionStates) {
+    const state = game.conditionStates[conditionId];
+    if (!state.active)          continue;
+    if (state.duration == null) continue;
+
+    state.duration -= 1;
+  }
+}
+
+function applyConditionEffects(game, conditionId) {
   const state = game.conditionStates[conditionId];
   const def   = CONDITIONS[conditionId];
   if (!def?.effects?.length) return;
@@ -51,7 +44,7 @@ export function applyConditionEffects(game, conditionId) {
   state.appliedEffects = applied;
 }
 
-export function removeConditionEffects(game, conditionId) {
+function removeConditionEffects(game, conditionId) {
   const state = game.conditionStates[conditionId];
   if (!state.appliedEffects?.length) return;
 
@@ -63,7 +56,40 @@ export function removeConditionEffects(game, conditionId) {
   state.appliedEffects = [];
 }
 
-export function reapplyConditionEffects(game, conditionId) {
+function reapplyConditionEffects(game, conditionId) {
   removeConditionEffects(game, conditionId);
   applyConditionEffects(game, conditionId);
+}
+
+
+export function processConditions(game) {
+  decrementConditionDuration(game);
+
+  // Apply effects for newly added conditions
+  for (const conditionId in game.conditionStates) {
+    const c = game.conditionStates[conditionId];
+    if (!c.active || !c.new) continue;
+    c.new = false;
+    applyConditionEffects(game, conditionId);
+  }
+
+  // If condition strength has been changed by eff.changeConditionStrength,
+  // reapply the effects with new strength
+  for (const conditionId in game.conditionStates) {
+    const c = game.conditionStates[conditionId];
+    if (!c.active || !c.needsReapply) continue;
+    c.needsReapply = false;
+    reapplyConditionEffects(game, conditionId);
+  }
+
+  // Remove effects for stale conditions
+  for (const conditionId in game.conditionStates) {
+    const c = game.conditionStates[conditionId];
+    if (c.duration == null || c.duration > 0) continue;
+    if (!c.active) continue;
+
+    removeConditionEffects(game, conditionId);
+    c.active   = false;
+    c.duration = null;
+  }
 }

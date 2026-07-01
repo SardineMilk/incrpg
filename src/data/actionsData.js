@@ -130,7 +130,6 @@ export const ACTIONS = {
       eff.applyCondition("sleeping"),
     ],
 
-    tick: [eff.applyCondition("sleeping", 1)],
 
     result: [eff.grantSkillXp("sleeping", 20)],
   },

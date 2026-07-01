@@ -1,0 +1,525 @@
+:root {
+  /* ─────────────────────────────────────────────
+     PALETTE — "Terminal Relic"
+     Somewhere between an old oscilloscope,
+     brutalist software and a forgotten RPG.
+     ───────────────────────────────────────────── */
+
+  --colour-background: #080909;
+  --colour-surface: #121414;
+  --colour-primary: #8aff6c;
+  --colour-select: #ffe45e;
+  --colour-border: #2e3532;
+  --colour-text: #d7e4d3;
+
+  --colour-panel-glow: rgba(138, 255, 108, 0.05);
+  --colour-warning: #ff6565;
+
+  /* Layout */
+
+  --radius: 0px;
+  --radius-sm: 0px;
+
+  --spacing-xs: .35rem;
+  --spacing-sm: .7rem;
+  --spacing-md: 1.2rem;
+
+  /* Effects */
+
+  --shadow:
+      0 0 0 1px rgba(138,255,108,.04),
+      0 0 40px rgba(0,0,0,.45);
+
+  --transition: .18s cubic-bezier(.3,.7,.2,1);
+}
+
+/* ------------------------------------------------ */
+/* Base */
+/* ------------------------------------------------ */
+
+*,
+*::before,
+*::after{
+    box-sizing:border-box;
+}
+
+html{
+    scrollbar-color:var(--colour-primary) var(--colour-background);
+}
+
+body{
+    margin:0;
+
+    font-family:
+        "IBM Plex Mono",
+        "JetBrains Mono",
+        "Consolas",
+        monospace;
+
+    background:
+        radial-gradient(circle at top,#151818 0%,#080909 60%),
+        var(--colour-background);
+
+    color:var(--colour-text);
+
+    letter-spacing:.03em;
+
+    position:relative;
+}
+
+/* faint scanlines */
+
+body::before{
+    content:"";
+
+    position:fixed;
+    inset:0;
+
+    pointer-events:none;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(255,255,255,.018) 0px,
+            rgba(255,255,255,.018) 1px,
+            transparent 2px,
+            transparent 4px
+        );
+
+    opacity:.25;
+}
+
+/* corner markers */
+
+body::after{
+    content:"";
+
+    position:fixed;
+    inset:14px;
+
+    pointer-events:none;
+
+    border:1px solid rgba(138,255,108,.08);
+}
+
+/* ------------------------------------------------ */
+/* Layout */
+/* ------------------------------------------------ */
+
+.game-container{
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+header,
+footer{
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(138,255,108,.05),
+            transparent
+        ),
+        var(--colour-surface);
+
+    padding:var(--spacing-md);
+
+    border:none;
+
+    position:relative;
+}
+
+header::after,
+footer::before{
+
+    content:"";
+
+    position:absolute;
+    left:0;
+    right:0;
+    height:1px;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        var(--colour-primary),
+        transparent
+    );
+
+    opacity:.35;
+}
+
+header::after{
+    bottom:0;
+}
+
+footer::before{
+    top:0;
+}
+
+footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.game-screen{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr
+        1fr
+        340px;
+
+    gap:10px;
+
+    flex:1;
+
+    padding:10px;
+
+    overflow:hidden;
+    min-height:0;
+}
+
+/* ------------------------------------------------ */
+/* Panels */
+/* ------------------------------------------------ */
+
+.hero-box,
+#skills-box,
+#actions-box,
+#tasks-box,
+#log-box{
+
+    position:relative;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.02),
+            transparent 70%
+        ),
+        var(--colour-surface);
+
+    border:1px solid var(--colour-border);
+
+    box-shadow:var(--shadow);
+
+    overflow:hidden;
+}
+
+/* decorative corners */
+
+.hero-box::before,
+#skills-box::before,
+#actions-box::before,
+#tasks-box::before,
+#log-box::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:8px;
+
+    border:1px dashed rgba(138,255,108,.08);
+
+    pointer-events:none;
+}
+
+.hero-box,
+#skills-box,
+#actions-box,
+#tasks-box{
+    padding:var(--spacing-sm);
+}
+
+#log-box{
+
+    padding:var(--spacing-sm);
+
+    overflow-y:auto;
+
+    display:flex;
+    flex-direction:column;
+    gap:.5rem;
+}
+
+/* ------------------------------------------------ */
+/* Cards */
+/* ------------------------------------------------ */
+
+.name-box,
+.health-bar,
+.stamina-bar,
+.mental-bar,
+.money-box,
+.attribute-box{
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(138,255,108,.15),
+            transparent
+        );
+
+    border-left:4px solid var(--colour-primary);
+
+    border-top:1px solid rgba(255,255,255,.04);
+
+    margin-bottom:10px;
+
+    padding:.7rem;
+}
+
+/* each card feels like a terminal readout */
+
+.name-box{
+    text-transform:uppercase;
+    letter-spacing:.18em;
+}
+
+.money-box::before{
+    content:"¤ ";
+    color:var(--colour-select);
+}
+
+/* ------------------------------------------------ */
+/* Status */
+/* ------------------------------------------------ */
+
+.status-box{
+    display:flex;
+    gap:.7rem;
+}
+
+/* ------------------------------------------------ */
+/* Actions */
+/* ------------------------------------------------ */
+
+.action-entry{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:1rem;
+
+    margin-bottom:.65rem;
+
+    padding:.9rem;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(138,255,108,.02),
+            transparent
+        );
+
+    border-left:3px solid transparent;
+    border-right:1px solid var(--colour-border);
+
+    transition:
+        transform var(--transition),
+        border-color var(--transition),
+        background var(--transition);
+}
+
+.action-entry:hover{
+
+    transform:translateX(6px);
+
+    border-left-color:var(--colour-primary);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(138,255,108,.08),
+            transparent
+        );
+}
+
+.active-action{
+
+    border-left-color:var(--colour-select);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,228,94,.12),
+            transparent
+        );
+}
+
+.action-info{
+
+    opacity:.72;
+
+    font-size:.82rem;
+}
+
+.action-button{
+
+    border:1px solid var(--colour-primary);
+
+    background:transparent;
+
+    color:var(--colour-primary);
+
+    padding:.55rem .9rem;
+
+    text-transform:uppercase;
+
+    font:inherit;
+
+    letter-spacing:.12em;
+
+    cursor:pointer;
+
+    transition:all var(--transition);
+}
+
+.action-button:hover{
+
+    background:var(--colour-primary);
+
+    color:#050505;
+
+    box-shadow:
+        0 0 12px rgba(138,255,108,.35);
+}
+
+.action-button:active{
+
+    transform:translateY(1px);
+}
+
+/* ------------------------------------------------ */
+/* Skills */
+/* ------------------------------------------------ */
+
+.skill-bar{
+
+    margin-top:.45rem;
+
+    width:100%;
+    height:8px;
+
+    background:#050505;
+
+    border:1px solid var(--colour-border);
+
+    overflow:hidden;
+}
+
+.skill-bar-fill{
+
+    height:100%;
+
+    width:0;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            var(--colour-primary) 0 10px,
+            #6cd94f 10px 20px
+        );
+
+    transition:width var(--transition);
+}
+
+/* ------------------------------------------------ */
+/* Log */
+/* ------------------------------------------------ */
+
+.log-element{
+
+    padding:.7rem;
+
+    background:#0a0c0b;
+
+    border-left:3px solid var(--colour-primary);
+
+    border-top:1px solid rgba(255,255,255,.05);
+
+    font-size:.9rem;
+
+    line-height:1.45;
+}
+
+.log-element::before{
+
+    content:"> ";
+
+    color:var(--colour-select);
+}
+
+/* custom scrollbar */
+
+#log-box::-webkit-scrollbar{
+    width:8px;
+}
+
+#log-box::-webkit-scrollbar-track{
+    background:#080909;
+}
+
+#log-box::-webkit-scrollbar-thumb{
+
+    background:var(--colour-primary);
+}
+
+/* ------------------------------------------------ */
+/* Logo */
+/* ------------------------------------------------ */
+
+.logo{
+
+    width:42px;
+    height:42px;
+
+    image-rendering:pixelated;
+
+    filter:
+        grayscale(1)
+        contrast(2)
+        brightness(1.4);
+}
+
+/* ------------------------------------------------ */
+/* Selection */
+/* ------------------------------------------------ */
+
+::selection{
+
+    background:var(--colour-primary);
+
+    color:#050505;
+}
+
+/* ------------------------------------------------ */
+/* Small screens */
+/* ------------------------------------------------ */
+
+@media (max-width:1100px){
+
+    .game-screen{
+
+        grid-template-columns:1fr;
+    }
+
+    #log-box{
+
+        height:260px;
+    }
+
+    footer{
+
+        flex-direction:column;
+        gap:.5rem;
+    }
+}

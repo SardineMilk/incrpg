@@ -102,6 +102,17 @@ export const EFFECT_DEFS = {
 
       return "conditionApplied";
     },
+    remove(game, e) {
+      const state = game.conditionStates[e.condition];
+      if (!state.active) return;
+      if (state.duration == null && e.duration == null) {
+        state.duration = -1;
+      };
+      if (state.duration == null || e.duration == null) {
+        return;
+      }
+      state.duration -= e.duration;
+    }
   },
 
 
