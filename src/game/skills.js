@@ -11,7 +11,11 @@ export function xpToNext(level) {
 }
 
 
-export function applySkillEffects(game) {
+export function processSkills(game) {
+  /*
+  * Loops through skills, checking if they need to level up
+  * Also applies any new effects gained by leveling up
+  */
   for (const skillId in game.skills) {
     const skill = game.skills[skillId];
     const skillData = SKILLS[skillId];

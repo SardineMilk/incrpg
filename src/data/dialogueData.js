@@ -11,8 +11,7 @@ export const DIALOGUES = {
   title: {
     result: [
       eff.sendMessage("", ""),
-      eff,
-      presentChoice([{ text: "", action: "" }]),
+      eff.presentChoice([{ text: "", action: "" }]),
     ],
   },
 

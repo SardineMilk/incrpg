@@ -27,7 +27,7 @@ export function processTrigger(game, triggerType, context) {
       // TODO allow multiple triggers in array
       if (t.event.type !== triggerType) continue;
 
-      if (!checkTrigger(t.event, context)) continue;
+      if (!checkTrigger(game, t.event, context)) continue;
       if (!meetsRequirements(game, t)) continue;
       withContext(context, () => {
         for (const effect of t.effects) {
@@ -39,7 +39,7 @@ export function processTrigger(game, triggerType, context) {
   }
 }
 
-function checkTrigger(trigger, context) {
+function checkTrigger(game, trigger, context) {
   const expanded = resolveTargets(game, trigger);
   return expanded.some((t) => {
     const r = resolveFormulas(game, t);
