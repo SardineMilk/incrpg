@@ -27,11 +27,11 @@ function decrementConditionDuration(game) {
   }
 }
 
+// TODO - generalise this
 export function applyConditionEffects(game, conditionId) {
   const state = game.conditionStates[conditionId];
   if (!state?.effectHolder) return;
-  const strength = resolveStatLayer(state.strength);
-  state.effectHolder.apply(game, strength);
+  state.effectHolder.apply(game, resolveStatLayer(state.strength));
 }
 
 export function removeConditionEffects(game, conditionId) {
@@ -41,8 +41,7 @@ export function removeConditionEffects(game, conditionId) {
 
 export function reapplyConditionEffects(game, conditionId) {
   const state = game.conditionStates[conditionId];
-  const strength = resolveStatLayer(state.strength);
-  state.effectHolder?.reapply(game, strength);
+  state.effectHolder?.reapply(game, resolveStatLayer(state.strength));
 }
 
 export function processConditions(game) {

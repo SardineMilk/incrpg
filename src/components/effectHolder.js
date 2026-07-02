@@ -1,11 +1,6 @@
 // Anything that needs "apply a list of effects, track what was applied,
 // undo it later, optionally scaled by strength" can own one of these —
 // actions, conditions, and (later) items, quests, equipped gear, etc.
-//
-// It deliberately knows nothing about actions or conditions. It only
-// knows how to apply/remove/reapply a static list of effect definitions
-// against `game`. Where that list comes from, and what triggers apply()
-// vs remove(), is the caller's problem — that's the category-specific part.
 
 import { applyEffectTracked, removeEffect, changeEffectStrength } from "../game/effects.js";
 

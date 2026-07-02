@@ -44,6 +44,7 @@ export function calculateActionCompetency(game, actionId) {
 // applyActionEffects   — call when an action becomes active
 // removeActionEffects  — call when the active action changes or is cleared
 
+// TODO - generalise this 
 export function applyActionEffects(game, actionId) {
   const state = game.actions[actionId];
   if (!state?.effectHolder) return;
