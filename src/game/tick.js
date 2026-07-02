@@ -1,9 +1,8 @@
-import { ACTIONS }                              from "../data/actionsData.js";
-import { INHERENT_EFFECTS, CONDITIONS }         from "../data/conditionsData.js";
+import { INHERENT_EFFECTS }         from "../data/conditionsData.js";
 import { processSkills }                    from "./skills.js";
 import { game }                                 from "./state.js";
 import { initialiseState }                      from "../utils/state_creator.js";
-import { calculateActionsCompetency }           from "./actions.js";
+import { calculateActionsCompetency, processAction }           from "./actions.js";
 import { applyActionEffects, removeActionEffects } from "./actions.js";
 import {
   processConditions
@@ -13,6 +12,7 @@ import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
 import { processTrigger }                       from "./events.js";
 import { applyEffect }                          from "./effects.js";
 import { applyScaledEffect }                    from "./effects.js";
+
 
 const TICK_RATE = 1000 / 20;
 
@@ -30,7 +30,6 @@ export function startTicking(render) {
   }
 
   if (intervalId !== null) clearIntervalFix(intervalId);
-
   intervalId = setIntervalFix(() => {
     tick();
     render(game);
@@ -59,42 +58,6 @@ function tick() {
   }
 
   calculateActionsCompetency(game);
-
-  if (game.activeAction) {
-    processAction();
-  }
+  processAction();
 }
 
-function processAction() {
-  const current_id = game.activeAction;
-  const action = ACTIONS[current_id];
-  if (action == undefined) console.warn("Current action not in ACTIONS:", current_id);
-
-  let duration = Math.ceil(action.duration / game.actions[current_id].competency);
-  game.actions[current_id].progress += 1;
-
-  // Grant attribute XP
-  if (action.attributes) {
-    for (const attribute in action.attributes) {
-      const xpForSkill = action.attributes[attribute] * game.skills[attribute].xpMultiplier;
-      game.skills[attribute].xp += xpForSkill;
-    }
-  }
-
-  // Apply per-tick effects
-  if (action.tick) {
-    for (const effect of action.tick) {
-      if (game.activeAction !== current_id) break; // action swapped mid-tick
-      applyEffect(game, effect);
-    }
-  }
-
-  // On completion
-  if (game.actions[current_id].progress >= duration) {
-    for (const effect of action.result) {
-      applyEffect(game, effect);
-    }
-    game.actions[current_id].completions += 1;
-    game.actions[current_id].progress    = 0;
-  }
-}

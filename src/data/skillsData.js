@@ -59,7 +59,7 @@ export const SKILLS = {
   recovery: {
     name: "Recovery",
     description:
-      "Restore yourself to peak condition. Should you be proud of this skill?",
+      "Restore yourself to peak condition. What almost kills you makes you stronger.",
     level: [],
   },
   regeneration: {
@@ -102,7 +102,7 @@ export const SKILLS = {
   club: {
     name: "Club Fighting",
     description:
-      "A stick. A hammer. The closest rock. The first weapon ever used, and it holds up today.",
+      "A hammer. A stick. The closest rock. The first weapon ever used, and it holds up today.",
     level: [],
     parent: "weapon_proficiency",
   },

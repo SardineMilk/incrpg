@@ -288,14 +288,6 @@ export const EFFECT_DEFS = {
     },
   },
 
-  tick: {
-    create: () => ({ type: "tick" }),
-    apply(game) {
-      game.tick++;
-      return "tick";
-    },
-  },
-
   forceTrigger: {
     create: (trigger) => ({ type: "forceTrigger", trigger }),
     apply(game, e) {

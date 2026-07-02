@@ -1,5 +1,6 @@
 import { ACTIONS } from "../data/actionsData.js";
-import { applyEffectTracked, removeEffect } from "./effects.js";
+import { applyEffect, applyEffectTracked, removeEffect } from "./effects.js";
+import { game } from "./state.js";
 
 
 function calculateActionSkillFactor(game, action) {
@@ -55,4 +56,41 @@ export function removeActionEffects(game, actionId) {
   const state = game.actions[actionId];
   if (!state?.effectHolder) return;
   state.effectHolder.remove(game);
+}
+
+
+export function processAction() {
+  const current_id = game.activeAction;
+
+  const action = ACTIONS[current_id];
+  if (action == undefined) console.warn("Current action not in ACTIONS:", current_id);
+  if (!action) return;
+
+  let duration = Math.ceil(action.duration / game.actions[current_id].competency);
+  game.actions[current_id].progress += 1;
+
+  // Grant attribute XP
+  if (action.attributes) {
+    for (const attribute in action.attributes) {
+      const xpForSkill = action.attributes[attribute] * game.skills[attribute].xpMultiplier;
+      game.skills[attribute].xp += xpForSkill;
+    }
+  }
+
+  // Apply per-tick effects
+  if (action.tick) {
+    for (const effect of action.tick) {
+      if (game.activeAction !== current_id) break; // action swapped mid-tick
+      applyEffect(game, effect);
+    }
+  }
+
+  // On completion
+  if (game.actions[current_id].progress >= duration) {
+    for (const effect of action.result) {
+      applyEffect(game, effect);
+    }
+    game.actions[current_id].completions += 1;
+    game.actions[current_id].progress = 0;
+  }
 }
