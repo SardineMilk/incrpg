@@ -27,7 +27,7 @@ export function applyEffect(game, effect) {
 }
 
 // Like applyEffect, but returns every resolved effect object that was applied.
-// Store the returned array on the owning state; pass each element to removeEffect later.
+// This is used to store resolved effects for removal later
 export function applyEffectTracked(game, effect) {
   const targets = resolveTargets(game, effect);
   const applied = [];

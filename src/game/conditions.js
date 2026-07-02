@@ -27,40 +27,23 @@ function decrementConditionDuration(game) {
   }
 }
 
-function applyConditionEffects(game, conditionId) {
+export function applyConditionEffects(game, conditionId) {
   const state = game.conditionStates[conditionId];
-  const def   = CONDITIONS[conditionId];
-  if (!def?.effects?.length) return;
-
+  if (!state?.effectHolder) return;
   const strength = resolveStatLayer(state.strength);
-  const applied  = [];
-
-  for (const effect of def.effects) {
-    const scaled   = changeEffectStrength(game, effect, strength);
-    const resolved = applyEffectTracked(game, scaled);
-    applied.push(...resolved);
-  }
-
-  state.appliedEffects = applied;
+  state.effectHolder.apply(game, strength);
 }
 
-function removeConditionEffects(game, conditionId) {
+export function removeConditionEffects(game, conditionId) {
   const state = game.conditionStates[conditionId];
-  if (!state.appliedEffects?.length) return;
-
-  // Reverse order so stacked multipliers unwind correctly
-  // Probably not necessary, but tracking down this bug would be horrible
-  for (let i = state.appliedEffects.length - 1; i >= 0; i--) {
-    removeEffect(game, state.appliedEffects[i]);
-  }
-  state.appliedEffects = [];
+  state.effectHolder?.remove(game);
 }
 
-function reapplyConditionEffects(game, conditionId) {
-  removeConditionEffects(game, conditionId);
-  applyConditionEffects(game, conditionId);
+export function reapplyConditionEffects(game, conditionId) {
+  const state = game.conditionStates[conditionId];
+  const strength = resolveStatLayer(state.strength);
+  state.effectHolder?.reapply(game, strength);
 }
-
 
 export function processConditions(game) {
   decrementConditionDuration(game);

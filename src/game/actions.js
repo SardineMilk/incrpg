@@ -47,28 +47,14 @@ export function calculateActionCompetency(game, actionId) {
 // applyActionEffects   — call when an action becomes active
 // removeActionEffects  — call when the active action changes or is cleared
 
-// TODO sleep doesnt properly remove sleeping when action changes
 export function applyActionEffects(game, actionId) {
-  const action = ACTIONS[actionId];
-  if (!action?.effects?.length) return;
-
-  const state    = game.actions[actionId];
-  const applied  = [];
-
-  for (const effect of action.effects) {
-    const resolved = applyEffectTracked(game, effect);
-    applied.push(...resolved);
-  }
-
-  state.appliedEffects = applied;
+  const state = game.actions[actionId];
+  if (!state?.effectHolder) return;
+  state.effectHolder.apply(game);
 }
 
 export function removeActionEffects(game, actionId) {
   const state = game.actions[actionId];
-  if (!state?.appliedEffects?.length) return;
-
-  for (let i = state.appliedEffects.length - 1; i >= 0; i--) {
-    removeEffect(game, state.appliedEffects[i]);
-  }
-  state.appliedEffects = [];
+  if (!state?.effectHolder) return;
+  state.effectHolder.remove(game);
 }

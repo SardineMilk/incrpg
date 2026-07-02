@@ -4,7 +4,7 @@ import { CONDITIONS } from "../data/conditionsData.js";
 import { LOCATIONS }  from "../data/locationsData.js";
 import { makeStatLayer }    from "./statLayer.js";
 import { generateTagIndex } from "./tagIndex.js";
-
+import { EffectHolder } from "../components/effectHolder.js";
 
 export function initialiseState(game) {
 
@@ -31,7 +31,7 @@ export function initialiseState(game) {
       progress:       0,
       completions:    0,
       competency:     1,
-      appliedEffects: [],   // resolved effects currently active
+      effectHolder: new EffectHolder(ACTIONS[action].effects ?? []),
     };
   }
 
@@ -41,8 +41,8 @@ export function initialiseState(game) {
       duration:       null,
       strength:       makeStatLayer(),
       new:            false,   // true for one tick after first activation
-      appliedEffects: [],      // resolved effects currently applied
       needsReapply:   false,   // did strength change this tick: reapply at tick end
+      effectHolder: new EffectHolder(CONDITIONS[conditionId].effects ?? []),
     };
     game.conditionStates[conditionId].strength.flat = 1;
   }
