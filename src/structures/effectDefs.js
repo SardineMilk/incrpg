@@ -62,7 +62,7 @@ export const EFFECT_DEFS = {
   },
 
   skillLevelBonus: {
-    create: (skill, flat = 0, multiplier = 1) => ({
+    create: (skill, {flat = 0, percent = 0, multiplier = 1 } = {}) => ({
       type: "skillLevelBonus",
       skill,
       flat,
@@ -72,15 +72,17 @@ export const EFFECT_DEFS = {
       if (e.skill == null) return null;
       const s = game.skills[e.skill];
       s.bonus.flat       += e.flat;
+      s.bonus.percent    += e.percent;
       s.bonus.multiplier *= e.multiplier;
-      s.level = (s.base + s.bonus.flat) * s.bonus.multiplier;
+      s.level = (s.base + s.bonus.flat) * s.bonus.percent * s.bonus.multiplier;
     },
     remove(game, e) {
       if (e.skill == null) return;
       const s = game.skills[e.skill];
       s.bonus.flat       -= e.flat;
+      s.bonus.percent    -= e.percent;
       s.bonus.multiplier /= e.multiplier;
-      s.level = (s.base + s.bonus.flat) * s.bonus.multiplier;
+      s.level = (s.base + s.bonus.flat) * s.bonus.percent * s.bonus.multiplier;
     },
   },
 

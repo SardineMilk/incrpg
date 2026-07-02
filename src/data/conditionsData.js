@@ -121,8 +121,8 @@ const TEMP_CONDITIONS = {
     description:
       "You feel chilly. You move and regenerate stamina slightly slower",
     effects: [
-      eff.skillLevelBonus("agility", 0, -0.1),
-      eff.changeConditionStrength("stamina_regen", -0.1),
+      eff.skillLevelBonus("agility", {multiplier: 0.9}),
+      eff.changeConditionStrength("stamina_regen", {multiplier: 0.7}),
     ],
   },
   
@@ -130,7 +130,7 @@ const TEMP_CONDITIONS = {
     name: "Cold",
     description:
       "You feel cold. You move and regenerate stamina slower. You have a slight mental drain.",
-    effects: [eff.skillLevelBonus("agility", 0, -0.2)],
+    effects: [eff.skillLevelBonus("agility", {multiplier: 0.7})]
   },
 
   injury: {

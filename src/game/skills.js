@@ -24,7 +24,7 @@ export function processSkills(game) {
     while (skill.xp >= xpToNext(skill.base)) {
       skill.xp -= xpToNext(skill.base);
       skill.base++;
-      skill.level = (skill.base + skill.bonus.flat) * skill.bonus.multiplier
+      skill.level = (skill.base + skill.bonus.flat) * skill.bonus.percent * skill.bonus.multiplier
 
       // Skill level effects
       for (const effect of skillData.level || []) applyEffect(game, effect);

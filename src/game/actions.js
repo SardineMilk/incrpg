@@ -21,9 +21,6 @@ function calculateActionAttributeFactor(game, action) {
 
 export function calculateActionsCompetency(game) {
   for (const action in ACTIONS) {
-    game.actions[action] = game.actions[action] || {
-      progress: 0, completions: 0, competency: 1, appliedEffects: [],
-    };
     const skillFactor     = calculateActionSkillFactor(game, ACTIONS[action]);
     const attributeFactor = calculateActionAttributeFactor(game, ACTIONS[action]);
     game.actions[action].competency = 1 + skillFactor + attributeFactor;

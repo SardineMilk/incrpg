@@ -19,7 +19,7 @@ export function initialiseState(game) {
       xp:           0,
       base:         0,
       xpMultiplier: 1,
-      bonus:        { flat: 0, multiplier: 1 },
+      bonus:        makeStatLayer(),
       level:        0,
     };
   }
