@@ -23,10 +23,15 @@ export const LOCATIONS = {
   /* 
   * Undead Farm
   *
-  * The undead farm used to be a thriving necromancy-powered social enterprise
+  * The undead farm used to be a thriving necromancy-powered social commune
   * Increases in life-based agriculture caused the community to collapse
   * The workers were left to keep farming, but the farm slowly decayed over years
   * Undead went feral
+  * 
+  * Get to the centre, meet an undead middle manager
+  * - boss fight fakeout
+  * Restart the farm by clearing a lot of feral undead 
+  * Unlock gathering spots as you progress
   * 
   * Zombie Labourer
   * - still-rotting corpse
@@ -35,7 +40,7 @@ export const LOCATIONS = {
   * - unarmed, unarmoured
   * 
   * Skeletal Reaper
-  * - Once a zombie labourer fully decomposes, it is cleaned and repurposed
+  * - Once a zombie labourer fully decomposes, it is cleaned and repurposed to harvest crops
   * - Shaped bone blades for arms
   * - Fast, dangerous but fragile
   * 
@@ -49,15 +54,14 @@ export const LOCATIONS = {
   * - Modern heavy farm machinery + Fantasy undead bonemass
   * - Very dangerous, boss enemy
   * 
-  * Get to the centre, meet an undead middle manager
-  * Restart the farm by clearing a lot of feral undead 
-  * Unlock gathering spots as you progress
+
   * 
   */
 
-  undead_farmland_outskirts: {},
-  undead_fields: {},
-  undead_farm: {},
+  undead_farm_outskirts: {},
+  undead_farm_fields: {},
+  undead_farm_compound: {},
+  undead_farm_office: {}, // there must be a better name for this
 
   /*
   * Walled City

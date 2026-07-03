@@ -1,4 +1,4 @@
-import { byTag } from "../utils/tagIndex.js";
+  import { byTag } from "../utils/tagIndex.js";
 
 // Tag selectors so resolveTargets can find them in arbitrary fields
 // New effect structures have unkown field names, so hardcoding won't work

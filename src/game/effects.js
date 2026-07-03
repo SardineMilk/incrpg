@@ -13,7 +13,7 @@ function applyResolved(game, resolved) {
   }
   const result = def.apply(game, resolved);
   if (!result) return;
-  const type    = typeof result === "string" ? result           : result.type;
+  const type    = typeof result === "string" ? result   : result.type;
   const context = typeof result === "string" ? resolved : (result.context ?? resolved);
   processTrigger(game, type, context);
 }

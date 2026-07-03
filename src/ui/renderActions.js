@@ -1,4 +1,5 @@
 import { ACTIONS } from "../data/actionsData.js";
+import { applyEffect } from "../game/effects.js";
 
 export function renderActions(game) {
   const container = document.getElementById("actions-box");
@@ -26,7 +27,7 @@ export function renderActions(game) {
       button.type = "button";
       button.className = "action-button";
       button.addEventListener("click", () => {
-        game.activeAction = actionId;
+        applyEffect(game, {type:"setActiveAction", action:actionId});
       });
 
       info = document.createElement("div");

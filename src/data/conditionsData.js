@@ -136,6 +136,17 @@ export const INHERENT_EFFECTS = {
   },
 
 
+  test: {
+    triggers: [
+      {
+        event: evt.actionChanges(),
+        effects: [
+          eff.sendMessage("SYSTEM", "TEST - action changed"),
+        ]
+      }
+    ],
+  },
+
 };
 
 const TEMP_CONDITIONS = {
