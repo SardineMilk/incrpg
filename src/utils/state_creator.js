@@ -5,6 +5,7 @@ import { LOCATIONS }  from "../data/locationsData.js";
 import { makeStatLayer }    from "./statLayer.js";
 import { generateTagIndex } from "./tagIndex.js";
 import { EffectHolder } from "../components/effectHolder.js";
+import { TriggerHolder } from "../components/triggerHolder.js";
 
 export function initialiseState(game) {
 
@@ -35,6 +36,7 @@ export function initialiseState(game) {
     };
   }
 
+  game.conditionStates = game.conditionStates || {};
   for (const conditionId in CONDITIONS) {
     game.conditionStates[conditionId] = {
       active:         false,
@@ -43,6 +45,7 @@ export function initialiseState(game) {
       new:            false,   // true for one tick after first activation
       needsReapply:   false,   // did strength change this tick: reapply at tick end
       effectHolder: new EffectHolder(CONDITIONS[conditionId].effects ?? []),
+      triggerHolder: new TriggerHolder(CONDITIONS[conditionId].triggers ?? []),
     };
     game.conditionStates[conditionId].strength.flat = 1;
   }

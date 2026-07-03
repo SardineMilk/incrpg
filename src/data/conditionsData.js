@@ -4,14 +4,17 @@ import {eff, req, evt, sel, fml } from "../structures/structures.js";
 // Need to special-case these. Apply all at start of game
 // Inherent Effects are always active, and may have strict requirements or triggers
 export const INHERENT_EFFECTS = {
+  // Other forms can have different effects
+  // TODO - add a way to make tagged conditions mutually exclusive
   human: {
+    tags: ["form"],
     effects: [
       eff.changeValue("healthMax", 100),
       eff.changeValue("staminaMax", 100),
       eff.changeValue("mentalMax", 100),
     ],
   },
-  // Will need to clamp max/min health
+
   health_regen: {
     tags: ["passive_regen"],
     triggers: [
@@ -50,6 +53,58 @@ export const INHERENT_EFFECTS = {
         ]
       },
     ],
+  },
+
+  /* Slowly drain resources over max, exponentially scaling with amount over
+  *
+  * This could be interacted with later?
+  * Deal more damage depending on amount over
+  * Lower amount drained per tick with skill
+  * Temp disable drain with a spell
+  * Enemy deals more damage based on amount drained
+  * Enemy overhealer, turning you into a tumurous mass
+  */
+  overHealth: {
+    triggers: [
+      {
+        event: evt.tick(),
+        requirements: [req.moreThan(fml.value("health"), fml.value("healthMax"))],
+        effects: [
+          eff.changeValue(
+            "health", 
+            fml.div(fml.sub(fml.value("healthMax"), fml.value("health")), 10)
+          ),
+        ]
+      },
+    ]
+  },
+  overStamina: {
+    triggers: [
+      {
+        event: evt.tick(),
+        requirements: [req.moreThan(fml.value("stamina"), fml.value("staminaMax"))],
+        effects: [
+          eff.changeValue(
+            "stamina", 
+            fml.div(fml.sub(fml.value("staminaMax"), fml.value("stamina")), 10)
+          ),
+        ]
+      },
+    ]
+  },
+  overMental: {
+    triggers: [
+      {
+        event: evt.tick(),
+        requirements: [req.moreThan(fml.value("mental"), fml.value("mentalMax"))],
+        effects: [
+          eff.changeValue(
+            "mental", 
+            fml.div(fml.sub(fml.value("mentalMax"), fml.value("mental")), 10)
+          ),
+        ]
+      },
+    ]
   },
 
   death: {

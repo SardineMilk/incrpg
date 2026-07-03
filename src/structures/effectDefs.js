@@ -149,7 +149,6 @@ export const EFFECT_DEFS = {
 
   // ── Values ────────────────────────────────────────────────────────────────
 
-  // Reversible — subtracts the same amount on remove
   changeValue: {
     create: (value, amount) => ({ type: "changeValue", value, amount }),
     apply(game, e) {
@@ -165,7 +164,6 @@ export const EFFECT_DEFS = {
     scale: scaleAmount,
   },
 
-  // fire-and-forget setters — no remove (would need prior-value snapshot)
   setValue: {
     create: (value, amount) => ({ type: "setValue", value, amount }),
     apply(game, e) {
@@ -182,7 +180,6 @@ export const EFFECT_DEFS = {
 
   // ── Attributes ────────────────────────────────────────────────────────────
 
-  // Reversible — flat/percent subtract back, multiplier divides back
   changeAttribute: {
     create: (attribute, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
       type: "changeAttribute",
@@ -210,7 +207,6 @@ export const EFFECT_DEFS = {
     scale: scaleStatLayer,
   },
 
-  // fire-and-forget setter
   setAttribute: {
     create: (attribute, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
       type: "setAttribute",
