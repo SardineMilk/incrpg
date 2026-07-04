@@ -1,4 +1,5 @@
 export function renderHero(game) {
+  // TODO use effects
   document.getElementById("health-bar").innerText =
     `HP ${Math.floor(game.values.health)}/${game.values.healthMax}`;
 
@@ -8,10 +9,6 @@ export function renderHero(game) {
   document.getElementById("mental-bar").innerText =
     `MP ${Math.floor(game.values.mental)}/${game.values.mentalMax}`;
 
-  /*
-  document.getElementById("money-box").innerText =
-    `${game.resources.gold} gold`;
-  */
   renderStats(game);
 }
 
