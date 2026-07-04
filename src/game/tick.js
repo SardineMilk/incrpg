@@ -45,6 +45,8 @@ export function startTicking(render) {
 function tick() {
   processTrigger(game, "tick");
 
+  // Everything beyond this point is ugly temp code
+
   processConditions(game);
 
 
