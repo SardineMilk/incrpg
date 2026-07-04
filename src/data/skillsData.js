@@ -9,20 +9,20 @@ export const SKILLS = {
   strength: { 
     name: "Strength",
     level: [
-      eff.changeValue("healthMax", 0.5),
-      eff.changeValue("staminaMax", 0.5),
+      eff.changeValue("healthMax", 1),
+      eff.changeValue("staminaMax", 1),
     ], 
   },
   constitution: { 
     name: "Constitution",
     level: [
-      eff.changeValue("healthMax", 1),
+      eff.changeValue("healthMax", 2),
     ], 
   },
   agility: { 
     name: "Agility",
     level: [
-      eff.changeValue("staminaMax", 1),
+      eff.changeValue("staminaMax", 2),
     ], 
   },
   dexterity: { 
@@ -33,21 +33,21 @@ export const SKILLS = {
   intelligence: { 
     name: "Intelligence",
     level: [
-      eff.changeValue("mentalMax", 1),
+      eff.changeValue("mentalMax", 2),
     ], 
   },
   willpower: { 
     name: "Willpower",
     level: [
-      eff.changeValue("healthMax", 0.5),
-      eff.changeValue("mentalMax", 0.5),
+      eff.changeValue("healthMax", 1),
+      eff.changeValue("mentalMax", 1),
     ], 
   },
   wit: { 
     name: "Wit",
     level: [
-      eff.changeValue("staminaMax", 0.5),
-      eff.changeValue("mentalMax", 0.5),
+      eff.changeValue("staminaMax", 1),
+      eff.changeValue("mentalMax", 1),
     ], 
   },
   perception: { 
