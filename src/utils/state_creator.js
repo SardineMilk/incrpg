@@ -17,7 +17,7 @@ export function initialiseState(game) {
   generateTagIndex("locations",  LOCATIONS);
 
   // Skills
-  game.skills = game.skills || {};
+  game.skills = {};
   for (const skillId in SKILLS) {
     const def = SKILLS[skillId];
     game.skills[skillId] = game.skills[skillId] || {
@@ -26,7 +26,7 @@ export function initialiseState(game) {
   }
 
   // Actions
-  game.actions = game.actions || {};
+  game.actions = {};
   for (const id in ACTIONS) {
     const def = ACTIONS[id];
     game.actions[id] = game.actions[id] || {
@@ -36,7 +36,7 @@ export function initialiseState(game) {
     };
   }
 
-  game.conditionStates = game.conditionStates || {};
+  game.conditionStates = {};
   for (const conditionId in CONDITIONS) {
     game.conditionStates[conditionId] = {
       active:         false,

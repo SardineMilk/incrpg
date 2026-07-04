@@ -54,6 +54,4 @@ export class ProgressionHolder {
         const milestoneEffects = this.milestones[this.baseLevel] || [];
         for (const effect of milestoneEffects) applyEffect(game, effect);
     }
-
-
 }

@@ -1,17 +1,9 @@
 // This should be constructed from save data
 export const game = {
   tick: 0,
-  conditionStates: {},
 
-  quests: {},
-
-  location: "village_1",
-
+  location: "new_meldrum",
   activeAction: "sleep",
-
-  actions: {},
-
-
 
   values: {
     health: 0,
