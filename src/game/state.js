@@ -7,7 +7,7 @@ export const game = {
 
   location: "village_1",
 
-  activeAction: "jog",
+  activeAction: "sleep",
 
   actions: {
     jogging: {
@@ -20,9 +20,9 @@ export const game = {
 
 
   values: {
-    health: 100,
-    stamina: 100,
-    mental: 100,
+    health: 0,
+    stamina: 0,
+    mental: 0,
     healthMax: 0,
     staminaMax: 0,
     mentalMax: 0,
