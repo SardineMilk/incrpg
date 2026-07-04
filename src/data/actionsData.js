@@ -53,7 +53,7 @@ export const ACTIONS = {
     },
 
     skills: {
-      running: 1,
+      running: 0.5,
       exercise: 0.5,
     },
 
@@ -63,7 +63,6 @@ export const ACTIONS = {
 
     result: [
       eff.grantSkillXp("running", 20),
-      eff.grantSkillXp("exercise", 10),
       eff.activityProgress(2),
     ],
   },
@@ -101,7 +100,6 @@ export const ACTIONS = {
 
     result: [
       eff.grantSkillXp("running", 50),
-      eff.grantSkillXp("exercise", 30),
       eff.activityProgress(5),
     ],
   },
