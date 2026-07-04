@@ -12,7 +12,6 @@ export function renderActions(game) {
       completions: 0,
       competency: 1,
     };
-    const actionDuration = Math.ceil(action.duration / state.competency);
 
     let entry = container.querySelector(`[data-action="${actionId}"]`);
     let button;
@@ -42,7 +41,7 @@ export function renderActions(game) {
     }
 
     button.textContent = `${action.name} (${Math.round(state.competency * 100)}%)`;
-    info.innerText = `${Math.round(state.completableHolder.progress)}/${actionDuration} (${action.duration})`;
+    info.innerText = `${Math.round(state.completableHolder.progress)}/${action.duration}`;
     entry.classList.toggle("active-action", game.activeAction === actionId);
   }
 }
