@@ -6,12 +6,6 @@ IncRPG (Incredible Rat Punching Game) is a semi-idle text-based rpg inspired by 
 
 It features a robust data-driven config system that allows new content to be rapidly created without increasing backend complexity and tech-debt (much. hopefully.).
 
-## Features
-
-Actions,
-Skills,
-Traits,
-Conditions
 
 ## Running
 
