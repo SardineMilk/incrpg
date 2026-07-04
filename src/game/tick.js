@@ -1,5 +1,4 @@
 import { INHERENT_EFFECTS }         from "../data/conditionsData.js";
-import { processSkills }                    from "./skills.js";
 import { game }                                 from "./state.js";
 import { initialiseState }                      from "../utils/state_creator.js";
 import { calculateActionsCompetency, processAction }           from "./actions.js";
@@ -48,7 +47,6 @@ function tick() {
 
   processConditions(game);
 
-  processSkills(game);
 
   // If action has been changed by eff.setActiveAction, apply the effects 
   if (game.activeAction !== game.actionWithAppliedEffects) {

@@ -7,6 +7,7 @@ import { generateTagIndex } from "./tagIndex.js";
 import { EffectHolder } from "../components/effectHolder.js";
 import { TriggerHolder } from "../components/triggerHolder.js";
 import { Completable } from "../components/completable.js";
+import { ProgressionHolder } from "../components/progressionHolder.js";
 
 export function initialiseState(game) {
 
@@ -17,12 +18,9 @@ export function initialiseState(game) {
   // Skills
   game.skills = game.skills || {};
   for (const skillId in SKILLS) {
+    const def = SKILLS[skillId];
     game.skills[skillId] = game.skills[skillId] || {
-      xp:           0,
-      base:         0,
-      xpMultiplier: 1,
-      bonus:        makeStatLayer(),
-      level:        0,
+      progressionHolder: new ProgressionHolder(def.level, def.milestones, def.name),
     };
   }
 

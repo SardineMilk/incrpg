@@ -1,5 +1,10 @@
 import { SKILLS } from "../data/skillsData.js";
-import { xpToNext } from "../game/skills.js";
+
+function xpToNext(level) {
+  const scalingFactor = 100;
+  return Math.floor(scalingFactor * Math.pow(2, level / 5));
+}
+
 
 export function renderSkills(game) {
   const container = document.getElementById("skills-box");
@@ -11,9 +16,11 @@ export function renderSkills(game) {
 
   for (const skillId in SKILLS) {
     const skill = SKILLS[skillId];
-    const state = game.skills[skillId] || { level: 0, xp: 0 };
+    const state = game.skills[skillId];
+    const level = state.progressionHolder.getLevel();
+    const curXp = state.progressionHolder.xp;
 
-    if (state.level < 1 && state.xp < xpToNext(state.level) / 2) continue;
+    if (level < 1 && curXp < xpToNext(level) / 2) continue;
 
     if (
       [
@@ -57,10 +64,10 @@ export function renderSkills(game) {
       fill = entry.querySelector(".skill-bar-fill");
     }
 
-    const max = xpToNext(state.level);
-    const pct = max > 0 ? Math.min(100, (state.xp / max) * 100) : 0;
+    const max = xpToNext(level);
+    const pct = max > 0 ? Math.min(100, (curXp / max) * 100) : 0;
 
-    info.innerText = `${skill.name}: ${state.level}`;
+    info.innerText = `${skill.name}: ${level}`;
     //info.innerText = `${skill.name}: ${state.level}, ${Math.round(state.xp)}/${max}`;
     fill.style.width = `${pct}%`;
   }

@@ -41,15 +41,12 @@ export const EFFECT_DEFS = {
     create: (skill, amount) => ({ type: "grantSkillXp", skill, amount }),
     apply(game, e) {
       if (e.skill == null) return null;
-      const xpForSkill = e.amount * game.skills[e.skill].xpMultiplier;
-      game.skills[e.skill].xp += xpForSkill;
+      game.skills[e.skill].progressionHolder.grantXp(game, e.amount)
       return "gainSkillXp";
     },
     scale: scaleAmount,
     display(game, e) {
-      const xpMultiplier = game.skills[e.skill].xpMultiplier
-      const xpForSkill = e.amount * xpMultiplier;
-      return `gain ${e.amount}*${xpMultiplier}=${xpForSkill} xp in ${e.skill}`
+      // TODO
     }
   },
 
