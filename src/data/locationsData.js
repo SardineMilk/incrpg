@@ -28,7 +28,7 @@ export const LOCATIONS = {
   * The workers were left to keep farming, but the farm slowly decayed over years
   * Undead went feral
   * 
-  * Get to the centre, meet an undead middle manager
+  * Get to the centre, meet a lich middle manager
   * - boss fight fakeout
   * Restart the farm by clearing a lot of feral undead 
   * Unlock gathering spots as you progress
@@ -54,14 +54,18 @@ export const LOCATIONS = {
   * - Modern heavy farm machinery + Fantasy undead bonemass
   * - Very dangerous, boss enemy
   * 
-
+  * 
+  * Gathering
+  * - Harvest oats from the fields
+  * - Dodge/pick fruits from the treants
+  * - Dig for bones 
   * 
   */
 
   undead_farm_outskirts: {},
   undead_farm_fields: {},
   undead_farm_compound: {},
-  undead_farm_office: {}, // there must be a better name for this
+
 
   /*
   * Walled City
@@ -81,6 +85,16 @@ export const LOCATIONS = {
   * as you descend, it gets more flooded and the constructs become stronger
   * Discover how the city fell to the horrors of bureaucracy 
   * 
+  * Gathering
+  * - Mine the walls to strip strange copper channels
+  * - Fish
+  * - Gather aquatic herbs, algae etc
+  * 
+  * 
   */
 
+  walled_city_bulwark: {},
+  walled_city_promenade: {},
+  walled_city_streets: {},
+  walled_city_chambers: {},
 };

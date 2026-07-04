@@ -219,512 +219,344 @@ const IMBALANCES = {
   * Con > Wil makes you take ~10% less damage, but when you lose health lose mental ~20% of the amount 
   */ 
   imbalance_str_con: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("constitution")),
-      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("constitution")), 10),
-    ],
+    requirements: [req.skillsImbalanced("strength", "constitution")],
     effects: [
 
     ],
   },
   imbalance_str_agi: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("agility")),
-      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("agility")), 10),
-    ],
+    requirements: [req.skillsImbalanced("strength", "agility")],
     effects: [
 
     ],
   },
   imbalance_str_dex: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("dexterity")),
-      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("dexterity")), 10),
-    ],
+    requirements: [req.skillsImbalanced("strength", "dexterity")],
     effects: [
 
     ],
   },
   imbalance_str_int: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("intelligence")),
-      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("intelligence")), 10),
-    ],
+    requirements: [req.skillsImbalanced("strength", "intelligence")],
     effects: [
 
     ],
   },
   imbalance_str_wil: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("willpower")),
-      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("willpower")), 10),
-    ],
+    requirements: [req.skillsImbalanced("strength", "willpower")],
     effects: [
 
     ],
   }, 
   imbalance_str_wit: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("wit")),
-      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("wit")), 10),
-    ],
+    requirements: [req.skillsImbalanced("strength", "wit")],
     effects: [
 
     ],
   }, 
   imbalance_str_per: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("strength"), 2),  fml.skillLevel("perception")),
-      req.moreThan(fml.sub(fml.skillLevel("strength"), fml.skillLevel("perception")), 10),
-    ],
+    requirements: [req.skillsImbalanced("strength", "perception")],
     effects: [
 
     ],
   }, 
 
   imbalance_con_str: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("constitution"), 2), fml.skillLevel("strength")),
-      req.moreThan(fml.sub(fml.skillLevel("constitution"), fml.skillLevel("strength")), 10),
-    ],
+    requirements: [req.skillsImbalanced("constitution", "strength")],
     effects: [
 
     ],
   },
   imbalance_con_agi: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("constitution"), 2), fml.skillLevel("agility")),
-      req.moreThan(fml.sub(fml.skillLevel("constitution"), fml.skillLevel("agility")), 10),
-    ],
+    requirements: [req.skillsImbalanced("constitution", "agility")],
     effects: [
 
     ],
   },
   imbalance_con_dex: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("constitution"), 2), fml.skillLevel("dexterity")),
-      req.moreThan(fml.sub(fml.skillLevel("constitution"), fml.skillLevel("dexterity")), 10),
-    ],
+    requirements: [req.skillsImbalanced("constitution", "dexterity")],
     effects: [
 
     ],
   },
   imbalance_con_int: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("constitution"), 2), fml.skillLevel("intelligence")),
-      req.moreThan(fml.sub(fml.skillLevel("constitution"), fml.skillLevel("intelligence")), 10),
-    ],
+    requirements: [req.skillsImbalanced("constitution", "intelligence")],
     effects: [
 
     ],
   },
   imbalance_con_wil: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("constitution"), 2), fml.skillLevel("willpower")),
-      req.moreThan(fml.sub(fml.skillLevel("constitution"), fml.skillLevel("willpower")), 10),
-    ],
+    requirements: [req.skillsImbalanced("constitution", "willpower")],
     effects: [
 
     ],
   },
   imbalance_con_wit: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("constitution"), 2), fml.skillLevel("wit")),
-      req.moreThan(fml.sub(fml.skillLevel("constitution"), fml.skillLevel("wit")), 10),
-    ],
+    requirements: [req.skillsImbalanced("constitution", "wit")],
     effects: [
 
     ],
   },
   imbalance_con_per: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("constitution"), 2), fml.skillLevel("perception")),
-      req.moreThan(fml.sub(fml.skillLevel("constitution"), fml.skillLevel("perception")), 10),
-    ],
+    requirements: [req.skillsImbalanced("constitution", "perception")],
     effects: [
 
     ],
   },
 
   imbalance_agi_str: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("agility"), 2), fml.skillLevel("strength")),
-      req.moreThan(fml.sub(fml.skillLevel("agility"), fml.skillLevel("strength")), 10),
-    ],
+    requirements: [req.skillsImbalanced("agility", "strength")],
     effects: [
 
     ],
   },
   imbalance_agi_con: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("agility"), 2), fml.skillLevel("constitution")),
-      req.moreThan(fml.sub(fml.skillLevel("agility"), fml.skillLevel("constitution")), 10),
-    ],
+    requirements: [req.skillsImbalanced("agility", "constitution")],
     effects: [
 
     ],
   },
   imbalance_agi_dex: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("agility"), 2), fml.skillLevel("dexterity")),
-      req.moreThan(fml.sub(fml.skillLevel("agility"), fml.skillLevel("dexterity")), 10),
-    ],
+    requirements: [req.skillsImbalanced("agility", "dexterity")],
     effects: [
 
     ],
   },
   imbalance_agi_int: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("agility"), 2), fml.skillLevel("intelligence")),
-      req.moreThan(fml.sub(fml.skillLevel("agility"), fml.skillLevel("intelligence")), 10),
-    ],
+    requirements: [req.skillsImbalanced("agility", "intelligence")],
     effects: [
 
     ],
   },
   imbalance_agi_wil: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("agility"), 2), fml.skillLevel("willpower")),
-      req.moreThan(fml.sub(fml.skillLevel("agility"), fml.skillLevel("willpower")), 10),
-    ],
+    requirements: [req.skillsImbalanced("agility", "willpower")],
     effects: [
 
     ],
   },
   imbalance_agi_wit: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("agility"), 2), fml.skillLevel("wit")),
-      req.moreThan(fml.sub(fml.skillLevel("agility"), fml.skillLevel("wit")), 10),
-    ],
+    requirements: [req.skillsImbalanced("agility", "wit")],
     effects: [
 
     ],
   },
   imbalance_agi_per: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("agility"), 2), fml.skillLevel("perception")),
-      req.moreThan(fml.sub(fml.skillLevel("agility"), fml.skillLevel("perception")), 10),
-    ],
+    requirements: [req.skillsImbalanced("agility", "perception")],
     effects: [
 
     ],
   },
 
   imbalance_dex_str: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("dexterity"), 2), fml.skillLevel("strength")),
-      req.moreThan(fml.sub(fml.skillLevel("dexterity"), fml.skillLevel("strength")), 10),
-    ],
+    requirements: [req.skillsImbalanced("dexterity", "strength")],
     effects: [
 
     ],
   },
   imbalance_dex_con: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("dexterity"), 2), fml.skillLevel("constitution")),
-      req.moreThan(fml.sub(fml.skillLevel("dexterity"), fml.skillLevel("constitution")), 10),
-    ],
+    requirements: [req.skillsImbalanced("dexterity", "constitution")],
     effects: [
 
     ],
   },
   imbalance_dex_agi: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("dexterity"), 2), fml.skillLevel("agility")),
-      req.moreThan(fml.sub(fml.skillLevel("dexterity"), fml.skillLevel("agility")), 10),
-    ],
+    requirements: [req.skillsImbalanced("dexterity", "agility")],
     effects: [
 
     ],
   },
   imbalance_dex_int: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("dexterity"), 2), fml.skillLevel("intelligence")),
-      req.moreThan(fml.sub(fml.skillLevel("dexterity"), fml.skillLevel("intelligence")), 10),
-    ],
+    requirements: [req.skillsImbalanced("dexterity", "intelligence")],
     effects: [
 
     ],
   },
   imbalance_dex_wil: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("dexterity"), 2), fml.skillLevel("willpower")),
-      req.moreThan(fml.sub(fml.skillLevel("dexterity"), fml.skillLevel("willpower")), 10),
-    ],
+    requirements: [req.skillsImbalanced("dexterity", "willpower")],
     effects: [
 
     ],
   },
   imbalance_dex_wit: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("dexterity"), 2), fml.skillLevel("wit")),
-      req.moreThan(fml.sub(fml.skillLevel("dexterity"), fml.skillLevel("wit")), 10),
-    ],
+    requirements: [req.skillsImbalanced("dexterity", "wit")],
     effects: [
 
     ],
   },
   imbalance_dex_per: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("dexterity"), 2), fml.skillLevel("perception")),
-      req.moreThan(fml.sub(fml.skillLevel("dexterity"), fml.skillLevel("perception")), 10),
-    ],
+    requirements: [req.skillsImbalanced("dexterity", "perception")],
     effects: [
 
     ],
   },
 
   imbalance_int_str: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("intelligence"), 2), fml.skillLevel("strength")),
-      req.moreThan(fml.sub(fml.skillLevel("intelligence"), fml.skillLevel("strength")), 10),
-    ],
+    requirements: [req.skillsImbalanced("intelligence", "strength")],
     effects: [
 
     ],
   },
   imbalance_int_con: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("intelligence"), 2), fml.skillLevel("constitution")),
-      req.moreThan(fml.sub(fml.skillLevel("intelligence"), fml.skillLevel("constitution")), 10),
-    ],
+    requirements: [req.skillsImbalanced("intelligence", "constitution")],
     effects: [
 
     ],
   },
   imbalance_int_agi: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("intelligence"), 2), fml.skillLevel("agility")),
-      req.moreThan(fml.sub(fml.skillLevel("intelligence"), fml.skillLevel("agility")), 10),
-    ],
+    requirements: [req.skillsImbalanced("intelligence", "agility")],
     effects: [
 
     ],
   },
   imbalance_int_dex: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("intelligence"), 2), fml.skillLevel("dexterity")),
-      req.moreThan(fml.sub(fml.skillLevel("intelligence"), fml.skillLevel("dexterity")), 10),
-    ],
+    requirements: [req.skillsImbalanced("intelligence", "dexterity")],
     effects: [
 
     ],
   },
   imbalance_int_wil: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("intelligence"), 2), fml.skillLevel("willpower")),
-      req.moreThan(fml.sub(fml.skillLevel("intelligence"), fml.skillLevel("willpower")), 10),
-    ],
+    requirements: [req.skillsImbalanced("intelligence", "willpower")],
     effects: [
 
     ],
   },
   imbalance_int_wit: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("intelligence"), 2), fml.skillLevel("wit")),
-      req.moreThan(fml.sub(fml.skillLevel("intelligence"), fml.skillLevel("wit")), 10),
-    ],
+    requirements: [req.skillsImbalanced("intelligence", "wit")],
     effects: [
 
     ],
   },
   imbalance_int_per: {
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("intelligence"), 2), fml.skillLevel("perception")),
-      req.moreThan(fml.sub(fml.skillLevel("intelligence"), fml.skillLevel("perception")), 10),
-    ],
+    requirements: [req.skillsImbalanced("intelligence", "perception")],
     effects: [
 
     ],
   },
 
   imbalance_wil_str: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("willpower"), 2), fml.skillLevel("strength")), 
-      req.moreThan(fml.sub(fml.skillLevel("willpower"), fml.skillLevel("strength")), 10)
-    ],
+    requirements: [req.skillsImbalanced("willpower", "strength")], 
     effects: [
 
     ], 
   },
   imbalance_wil_con: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("willpower"), 2), fml.skillLevel("constitution")), 
-      req.moreThan(fml.sub(fml.skillLevel("willpower"), fml.skillLevel("constitution")), 10)
-    ],
+    requirements: [req.skillsImbalanced("willpower", "constitution")], 
     effects: [
 
     ], 
   },
   imbalance_wil_agi: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("willpower"), 2), fml.skillLevel("agility")), 
-      req.moreThan(fml.sub(fml.skillLevel("willpower"), fml.skillLevel("agility")), 10)
-    ],
+    requirements: [req.skillsImbalanced("willpower", "agility")], 
     effects: [
 
     ], 
   },
   imbalance_wil_dex: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("willpower"), 2), fml.skillLevel("dexterity")), 
-      req.moreThan(fml.sub(fml.skillLevel("willpower"), fml.skillLevel("dexterity")), 10)
-    ],
+    requirements: [req.skillsImbalanced("willpower", "dexterity")], 
     effects: [
 
     ], 
   },
   imbalance_wil_int: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("willpower"), 2), fml.skillLevel("intelligence")), 
-      req.moreThan(fml.sub(fml.skillLevel("willpower"), fml.skillLevel("intelligence")), 10)
-    ],
+    requirements: [req.skillsImbalanced("willpower", "intelligence")], 
     effects: [
 
     ], 
   },
   imbalance_wil_wit: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("willpower"), 2), fml.skillLevel("wit")), 
-      req.moreThan(fml.sub(fml.skillLevel("willpower"), fml.skillLevel("wit")), 10)
-    ],
+    requirements: [req.skillsImbalanced("willpower", "wit")], 
     effects: [
 
     ], 
   },
   imbalance_wil_per: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("willpower"), 2), fml.skillLevel("perception")), 
-      req.moreThan(fml.sub(fml.skillLevel("willpower"), fml.skillLevel("perception")), 10)
-    ],
+    requirements: [req.skillsImbalanced("willpower", "perception")], 
     effects: [
 
     ], 
   },
 
   imbalance_wit_str: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("wit"), 2), fml.skillLevel("strength")),
-      req.moreThan(fml.sub(fml.skillLevel("wit"), fml.skillLevel("strength")), 10)
-    ],
+    requirements: [req.skillsImbalanced("wit", "strength")],
     effects: [
 
     ], 
   },
   imbalance_wit_con: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("wit"), 2), fml.skillLevel("constitution")),
-      req.moreThan(fml.sub(fml.skillLevel("wit"), fml.skillLevel("constitution")), 10)
-    ],
+    requirements: [req.skillsImbalanced("wit", "constitution")],
     effects: [
 
     ], 
   },
   imbalance_wit_agi: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("wit"), 2), fml.skillLevel("agility")),
-      req.moreThan(fml.sub(fml.skillLevel("wit"), fml.skillLevel("agility")), 10)
-    ],
+    requirements: [req.skillsImbalanced("wit", "agility")],
     effects: [
 
     ], 
   },
   imbalance_wit_dex: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("wit"), 2), fml.skillLevel("dexterity")),
-      req.moreThan(fml.sub(fml.skillLevel("wit"), fml.skillLevel("dexterity")), 10)
-    ],
+    requirements: [req.skillsImbalanced("wit", "dexterity")],
     effects: [
 
     ], 
   },
   imbalance_wit_int: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("wit"), 2), fml.skillLevel("intelligence")),
-      req.moreThan(fml.sub(fml.skillLevel("wit"), fml.skillLevel("intelligence")), 10)
-    ],
+    requirements: [req.skillsImbalanced("wit", "intelligence")],
     effects: [
 
     ], 
   },
   imbalance_wit_wil: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("wit"), 2), fml.skillLevel("willpower")),
-      req.moreThan(fml.sub(fml.skillLevel("wit"), fml.skillLevel("willpower")), 10)
-    ],
+    requirements: [req.skillsImbalanced("wit", "willpower")],
     effects: [
 
     ], 
   },
   imbalance_wit_per: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("wit"), 2), fml.skillLevel("perception")),
-      req.moreThan(fml.sub(fml.skillLevel("wit"), fml.skillLevel("perception")), 10)
-    ],
+    requirements: [req.skillsImbalanced("wit", "perception")],
     effects: [
 
     ], 
   },
 
   imbalance_per_str: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("perception"), 2), fml.skillLevel("strength")),
-      req.moreThan(fml.sub(fml.skillLevel("perception"), fml.skillLevel("strength")), 10)
-    ],
+    requirements: [req.skillsImbalanced("perception", "strength")],
     effects: [
 
     ], 
   },
   imbalance_per_con: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("perception"), 2), fml.skillLevel("constitution")),
-      req.moreThan(fml.sub(fml.skillLevel("perception"), fml.skillLevel("constitution")), 10)
-    ],
+    requirements: [req.skillsImbalanced("perception", "constitution")],
     effects: [
 
     ], 
   },
   imbalance_per_agi: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("perception"), 2), fml.skillLevel("agility")),
-      req.moreThan(fml.sub(fml.skillLevel("perception"), fml.skillLevel("agility")), 10)
-    ],
+    requirements: [req.skillsImbalanced("perception", "agility")],
     effects: [
 
     ], 
   },
   imbalance_per_dex: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("perception"), 2), fml.skillLevel("dexterity")),
-      req.moreThan(fml.sub(fml.skillLevel("perception"), fml.skillLevel("dexterity")), 10)
-    ],
+    requirements: [req.skillsImbalanced("perception", "dexterity")],
     effects: [
 
     ], 
   },
   imbalance_per_int: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("perception"), 2), fml.skillLevel("intelligence")),
-      req.moreThan(fml.sub(fml.skillLevel("perception"), fml.skillLevel("intelligence")), 10)
-    ],
+    requirements: [req.skillsImbalanced("perception", "intelligence")],
     effects: [
 
     ], 
   },
   imbalance_per_wil: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("perception"), 2), fml.skillLevel("willpower")),
-      req.moreThan(fml.sub(fml.skillLevel("perception"), fml.skillLevel("willpower")), 10)
-    ],
+    requirements: [req.skillsImbalanced("perception", "willpower")],
     effects: [
 
     ], 
   },
   imbalance_per_wit: { 
-    requirements: [
-      req.moreThan(fml.div(fml.skillLevel("perception"), 2), fml.skillLevel("wit")),
-      req.moreThan(fml.sub(fml.skillLevel("perception"), fml.skillLevel("wit")), 10)
-    ],
+    requirements: [req.skillsImbalanced("perception", "wit")],
     effects: [
 
     ], 

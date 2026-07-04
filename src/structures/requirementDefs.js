@@ -93,6 +93,17 @@ export const REQUIREMENT_DEFS = {
     create: (x, y) => ({ type: "leq", x, y}),
     check: (game, r) => r.x <= r.y,
   },
+
+
+  /* 
+  * Custom Requirements 
+  * Not required for API, but handy for repeated code patterns
+  * Be careful with these, they're an escape hatch not a normal feature
+  */
+  skillsImbalanced: {
+    create: (a, b) => ({ type: "skillsImbalanced", a, b}),
+    check: (game, r) => ((game.skills[r.a].level/2) > game.skills[r.a].level)&&((game.skills[r.a].level - game.skills[r.a].level) > 10)
+  }
 };
 
 export const req = Object.fromEntries(
