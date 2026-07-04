@@ -6,6 +6,7 @@ import { makeStatLayer }    from "./statLayer.js";
 import { generateTagIndex } from "./tagIndex.js";
 import { EffectHolder } from "../components/effectHolder.js";
 import { TriggerHolder } from "../components/triggerHolder.js";
+import { Completable } from "../components/completable.js";
 
 export function initialiseState(game) {
 
@@ -27,12 +28,12 @@ export function initialiseState(game) {
 
   // Actions
   game.actions = game.actions || {};
-  for (const action in ACTIONS) {
-    game.actions[action] = game.actions[action] || {
-      progress:       0,
-      completions:    0,
+  for (const id in ACTIONS) {
+    const def = ACTIONS[id];
+    game.actions[id] = game.actions[id] || {
+      completableHolder: new Completable(def.duration, def.result),
       competency:     1,
-      effectHolder: new EffectHolder(ACTIONS[action].effects ?? []),
+      effectHolder: new EffectHolder(def.effects ?? []),
     };
   }
 

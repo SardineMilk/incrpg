@@ -1,4 +1,4 @@
-import { applyEffect } from "../game/effects";
+import { applyEffect } from "../game/effects.js";
 
 
 export class Completable {
@@ -10,7 +10,7 @@ export class Completable {
     }
 
     advanceProgress(game, amount = 1) {
-        this.progress += amount;
+        this.progress += +(amount).toFixed(2);
         this._checkCompletion(game);
     }
 

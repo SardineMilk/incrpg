@@ -66,8 +66,12 @@ export function processAction() {
   if (action == undefined) console.warn("Current action not in ACTIONS:", current_id);
   if (!action) return;
 
-  let duration = Math.ceil(action.duration / game.actions[current_id].competency);
-  game.actions[current_id].progress += 1;
+  const state = game.actions[current_id];
+
+
+  const progress = 1 * state.competency;
+  state.completableHolder.advanceProgress(game, progress);
+
 
   // Grant attribute XP
   if (action.attributes) {
@@ -85,12 +89,4 @@ export function processAction() {
     }
   }
 
-  // On completion
-  if (game.actions[current_id].progress >= duration) {
-    for (const effect of action.result) {
-      applyEffect(game, effect);
-    }
-    game.actions[current_id].completions += 1;
-    game.actions[current_id].progress = 0;
-  }
 }

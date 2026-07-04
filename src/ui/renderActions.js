@@ -42,7 +42,7 @@ export function renderActions(game) {
     }
 
     button.textContent = `${action.name} (${Math.round(state.competency * 100)}%)`;
-    info.innerText = `${state.progress}/${actionDuration} (${action.duration})`;
+    info.innerText = `${Math.round(state.completableHolder.progress)}/${actionDuration} (${action.duration})`;
     entry.classList.toggle("active-action", game.activeAction === actionId);
   }
 }
