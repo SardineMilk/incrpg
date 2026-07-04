@@ -308,8 +308,9 @@ export const EFFECT_DEFS = {
   setActiveAction: {
     create: (action) => ({ type: "setActiveAction", action }),
     apply(game, e) {
+      const didChange = (game.activeAction !== e.action);
       game.activeAction = e.action;
-      return "actionChanges";
+      return didChange ? "actionChanges" : null;
     },
     display(game, e) {
       return `start action ${e.action}`;
