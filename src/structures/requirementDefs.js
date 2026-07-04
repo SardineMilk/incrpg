@@ -50,18 +50,18 @@ export const REQUIREMENT_DEFS = {
       min_duration,
     }),
     check(game, r) {
-      if (!(r.condition in game.activeConditions)) return false;
+      if (!game.conditionStates[r.condition].active) return false;
       if (r.min_duration == null) return true;
       return (
         r.min_duration <=
-        game.activeConditions[r.condition].duration
+        game.conditionStates[r.condition].duration
       );
     },
   },
 
   hasNotCondition: {
     create: (condition) => ({ type: "hasNotCondition", condition }),
-    check: (game, r) => !(r.condition in game.activeConditions),
+    check: (game, r) => !game.conditionStates[r.condition].active,
   },
 
   flagSet: {

@@ -1,7 +1,15 @@
 import { applyEffect } from "../game/effects.js";
 
+/*
+* CompletionHolder gives the entity a duration
+* advanceProgress() increases the progress variable
+* When it reaches the duration, progress is reset
+* And resultEffects are triggered
+*
+* This pattern is used for Actions and Activities
+*/
 
-export class Completable {
+export class CompletionHolder {
     constructor(duration, resultEffects = []) {
         this.resultEffects = resultEffects;  // Static eff.* definitions, never mutated
         this.duration = duration;

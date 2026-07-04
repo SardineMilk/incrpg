@@ -31,7 +31,7 @@ const definitions = {
 
   // TODO - when this is undefined, it makes nasty bugs. Make sure this doesnt happen again
   conditionStrength: (game, condition) =>
-    game.activeConditions[condition]?.strength,
+    game.conditionStates[condition]?.strength,
   attribute: (game, attribute) => game.attributes[attribute]?.value,
   value: (game, value) => game.values[value],
   skillLevel: (game, skill) => game.skills[skill]?.level,

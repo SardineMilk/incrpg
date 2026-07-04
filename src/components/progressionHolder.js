@@ -9,24 +9,31 @@ function xpToNext(level) {
 
 export class ProgressionHolder {
     constructor(levelEffects = [], milestones = {}, name) {
-        this.levelEffects = levelEffects || [];  // Static eff.* definitions, never mutated
+        this.levelEffects = levelEffects || [];
         this.milestones = milestones || {};
-        this.baseLevel = 0;  // Without levelBonus effects, used for level up requirements
+        this.baseLevel = 0;  // Level without levelBonus, used for level up requirements
         this.xp = 0;
         this.xpBonus = makeStatLayer();
-        this.xpBonus.flat = 1;
         this.levelBonus = makeStatLayer();
+
+        // TODO this should be part of StatLayer construction
+        this.xpBonus.flat = 1;
 
         // TODO this is ugly
         this.name = name;
     }
 
-    grantXp(game, amount) {
-        this.xp += amount * resolveStatLayer(this.xpBonus);
-        this.checkLevelProgress(game);
+    getLevel() {
+        // TODO this really should use StatLayer logic, not custom
+        return (this.baseLevel + this.levelBonus.flat) * this.levelBonus.percent * this.levelBonus.multiplier; 
     }
 
-    checkLevelProgress(game) {
+    grantXp(game, amount) {
+        this.xp += amount * resolveStatLayer(this.xpBonus);
+        this._checkLevelProgress(game);
+    }
+
+    _checkLevelProgress(game) {
         while (this.xp >= xpToNext(this.baseLevel)) {
             this._levelUp(game);
 
@@ -44,12 +51,9 @@ export class ProgressionHolder {
 
         for (const effect of this.levelEffects) applyEffect(game, effect);
 
-        const milestoneEffects = this.milestones[this.level] || [];
+        const milestoneEffects = this.milestones[this.baseLevel] || [];
         for (const effect of milestoneEffects) applyEffect(game, effect);
     }
 
-    getLevel() {
-        // TODO this really should use StatLayer logic, not custom
-        return (this.baseLevel + this.levelBonus.flat) * this.levelBonus.percent * this.levelBonus.multiplier; 
-    }
+
 }

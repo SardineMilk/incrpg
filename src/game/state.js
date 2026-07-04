@@ -9,13 +9,7 @@ export const game = {
 
   activeAction: "sleep",
 
-  actions: {
-    jogging: {
-      progress: 0,
-      completions: 0,
-      competency: 1,
-    },
-  },
+  actions: {},
 
 
 
