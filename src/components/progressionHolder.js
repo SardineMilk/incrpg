@@ -1,8 +1,6 @@
 import { applyEffect } from "../game/effects.js";
 import { makeStatLayer, resolveStatLayer } from "../utils/statLayer.js";
 
-// TODO stupid way to do this 
-import { LogType } from "../game/log.js";
 
 function xpToNext(level) {
   const scalingFactor = 100;
@@ -32,9 +30,11 @@ export class ProgressionHolder {
         while (this.xp >= xpToNext(this.baseLevel)) {
             this._levelUp(game);
 
-            // TODO use effect log
-            const skillMessage = `${this.name} leveled to ${this.baseLevel}`;
-            game.log.append(LogType.SKILL, skillMessage);
+            applyEffect(game, {
+                type:"sendMessage", 
+                category:"LEVEL", 
+                message:`${this.name} leveled to ${this.baseLevel}`
+            })
         }
     }
 
