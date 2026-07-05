@@ -50,7 +50,6 @@ export const EFFECT_DEFS = {
     }
   },
 
-  // TODO - convert this to statLayer
   skillXpMultiplier: {
     create: (skill, {flat = 0, percent = 0, multiplier = 1 } = {}) => ({ 
       type: "skillXpMultiplier", 

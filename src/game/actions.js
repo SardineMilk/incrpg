@@ -40,13 +40,13 @@ export function calculateActionCompetency(game, actionId) {
 
 // TODO - generalise this 
 export function applyActionEffects(game, actionId) {
-  const state = game.actions[actionId];
+  const state = game.actionStates[actionId];
   if (!state?.effectHolder) return;
   state.effectHolder.apply(game);
 }
 
 export function removeActionEffects(game, actionId) {
-  const state = game.actions[actionId];
+  const state = game.actionStates[actionId];
   if (!state?.effectHolder) return;
   state.effectHolder.remove(game);
 }
@@ -56,15 +56,13 @@ export function processAction() {
   const current_id = game.activeAction;
 
   const action = ACTIONS[current_id];
+  const state = game.actionStates[current_id];
+
   if (action == undefined) console.warn("Current action not in ACTIONS:", current_id);
   if (!action) return;
 
-  const state = game.actions[current_id];
-
-
   const progress = 1 * calculateActionCompetency(game, current_id);
   state.completableHolder.advanceProgress(game, progress);
-
 
   // Grant attribute XP
   if (action.attributes) {
@@ -72,14 +70,6 @@ export function processAction() {
       const amount = action.attributes[id];
       if (amount == 0) continue;
       game.skills[id].progressionHolder.grantXp(game, action.attributes[id])
-    }
-  }
-
-  // Apply per-tick effects
-  if (action.tick) {
-    for (const effect of action.tick) {
-      if (game.activeAction !== current_id) break; // action swapped mid-tick
-      applyEffect(game, effect);
     }
   }
 

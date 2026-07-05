@@ -29,9 +29,7 @@ const definitions = {
   contextSkill: (_game) => currentContext().skill,
   contextCondition: (_game) => currentContext().condition,
 
-  // TODO - when this is undefined, it makes nasty bugs. Make sure this doesnt happen again
-  conditionStrength: (game, condition) =>
-    game.conditionStates[condition]?.strength,
+  conditionStrength: (game, condition) => game.conditionStates[condition]?.strength,
   attribute: (game, attribute) => game.attributes[attribute]?.value,
   value: (game, value) => game.values[value],
   skillLevel: (game, skill) => game.skills[skill]?.level,
@@ -46,6 +44,7 @@ const definitions = {
   clamp: (_game, x, min, max) => Math.max(min, Math.min(max, x)),
   ternary: (_game, cond, t, f) => (cond ? t : f),
 };
+
 
 export const fml = Object.fromEntries(
   Object.entries(definitions).map(([name, fn]) => [name, lift(fn)]),

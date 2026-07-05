@@ -1,4 +1,4 @@
-import {eff, req } from "../structures/structures.js";
+import {eff, evt, req } from "../structures/structures.js";
 
 
 export const ACTIONS = {
@@ -26,8 +26,11 @@ export const ACTIONS = {
       eff.changeValue("check_difficulty", -10),
     ],
 
-    tick: [
-      eff.changeValue("stamina", -1)
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [eff.changeValue("stamina", -1)],
+      },
     ],
 
     result: [
@@ -57,8 +60,11 @@ export const ACTIONS = {
       exercise: 0.5,
     },
 
-    tick: [
-      eff.changeValue("stamina", -2)
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [eff.changeValue("stamina", -2)],
+      },
     ],
 
     result: [
@@ -93,9 +99,11 @@ export const ACTIONS = {
     ],
 
 
-    tick: [
-      eff.changeValue("stamina", -5),
-      eff.changeValue("health", -2),
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [eff.changeValue("stamina", -5),eff.changeValue("health", -2)],
+      },
     ],
 
     result: [

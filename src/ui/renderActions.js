@@ -8,7 +8,7 @@ export function renderActions(game) {
 
   for (const actionId in ACTIONS) {
     const action = ACTIONS[actionId];
-    const state = game.actions[actionId] || {
+    const state = game.actionStates[actionId] || {
       progress: 0,
       completions: 0,
       competency: 1,

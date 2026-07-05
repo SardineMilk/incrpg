@@ -8,17 +8,18 @@ import { resolveTargets } from "../structures/selectorDefs.js";
 // Called by applyEffect after each effect is applied.
 // Walks all active conditions and fires any who's triggers match.
 export function processTrigger(game, triggerType, context) {
-  for (const conditionId in game.conditionStates) {
-    const state = game.conditionStates[conditionId];
+  for (const id in game.conditionStates) {
+    const state = game.conditionStates[id];
+    if (!state.active || !state.triggerHolder) continue;
+    const strength = state.strengthHolder ? state.strengthHolder.value : 1;
+    state.triggerHolder.fire(game, triggerType, context, strength);
+  }
 
-    if (!state.active) continue;
-    if (!state.triggerHolder) continue;
+  for (const id in game.actionStates) {
+    const state = game.actionStates[id];
 
-    let strength = 1;
-    if (state.strengthHolder) {
-      strength = state.strengthHolder.value;
-    }
-
+    if (!(game.activeAction === id) || !state.triggerHolder) continue;
+    const strength = state.strengthHolder ? state.strengthHolder.value : 1;
     state.triggerHolder.fire(game, triggerType, context, strength);
   }
 }

@@ -18,29 +18,33 @@ export function initialiseState(game) {
 
   // Skills
   game.skills = {};
-  for (const skillId in SKILLS) {
-    const def = SKILLS[skillId];
-    game.skills[skillId] = game.skills[skillId] || {
+  for (const id in SKILLS) {
+    const def = SKILLS[id];
+    game.skills[id] = {
       progressionHolder: new ProgressionHolder(def.level, def.milestones, def.name),
     };
   }
 
   // Actions
-  game.actions = {};
+  game.actionStates = {};
   for (const id in ACTIONS) {
     const def = ACTIONS[id];
-    game.actions[id] = game.actions[id] || {
-      completableHolder:  new CompletionHolder(def.duration, def.result),
+    game.actionStates[id] = {
       effectHolder:       new EffectHolder(def.effects ?? []),
+      triggerHolder:  new TriggerHolder(ACTIONS[id].triggers ?? []),
+      completableHolder:  new CompletionHolder(def.duration, def.result),
+
       competency:         1,
+
+      // TODO Active component, replacing game.activeAction
     };
   }
 
   game.conditionStates = {};
-  for (const conditionId in CONDITIONS) {
-    game.conditionStates[conditionId] = {
-      effectHolder:   new EffectHolder(CONDITIONS[conditionId].effects ?? []),
-      triggerHolder:  new TriggerHolder(CONDITIONS[conditionId].triggers ?? []),
+  for (const id in CONDITIONS) {
+    game.conditionStates[id] = {
+      effectHolder:   new EffectHolder(CONDITIONS[id].effects ?? []),
+      triggerHolder:  new TriggerHolder(CONDITIONS[id].triggers ?? []),
       strengthHolder: new StatLayer({flat:1}),
 
       // TODO Duration component
