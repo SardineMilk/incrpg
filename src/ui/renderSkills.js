@@ -17,7 +17,7 @@ export function renderSkills(game) {
   for (const skillId in SKILLS) {
     const skill = SKILLS[skillId];
     const state = game.skills[skillId];
-    const level = state.progressionHolder.getLevel();
+    const level = state.progressionHolder.level;
     const curXp = state.progressionHolder.xp;
 
     if (level < 1 && curXp < xpToNext(level) / 2) continue;

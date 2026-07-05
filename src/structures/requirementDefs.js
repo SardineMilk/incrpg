@@ -24,12 +24,12 @@ export const REQUIREMENT_DEFS = {
 
   skillMoreThan: {
     create: (skill, value) => ({ type: "skillMoreThan", skill, value }),
-    check: (game, r) => game.skills[r.skill].level >= r.value,
+    check: (game, r) => game.skills[r.skill].progressionHolder.level >= r.value
   },
 
   skillBaseMoreThan: {
     create: (skill, value) => ({ type: "skillBaseMoreThan", skill, value }),
-    check: (game, r) => game.skills[r.skill].base >= r.value,
+    check: (game, r) => game.skills[r.skill].progressionHolder.baseLevel >= r.value
   },
 
   valueLessThan: {

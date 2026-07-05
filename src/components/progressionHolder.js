@@ -1,6 +1,5 @@
 import { applyEffect } from "../game/effects.js";
-import { makeStatLayer, resolveStatLayer } from "../utils/statLayer.js";
-
+import { StatLayer } from "./statLayer.js";
 
 function xpToNext(level) {
   const scalingFactor = 100;
@@ -13,8 +12,8 @@ export class ProgressionHolder {
         this.milestones = milestones || {};
         this.baseLevel = 0;  // Level without levelBonus, used for level up requirements
         this.xp = 0;
-        this.xpBonus = makeStatLayer();
-        this.levelBonus = makeStatLayer();
+        this.xpBonus    = new StatLayer();
+        this.levelBonus = new StatLayer();
 
         // TODO this should be part of StatLayer construction
         this.xpBonus.flat = 1;
@@ -23,13 +22,13 @@ export class ProgressionHolder {
         this.name = name;
     }
 
-    getLevel() {
+    get level() {
         // TODO this really should use StatLayer logic, not custom
         return (this.baseLevel + this.levelBonus.flat) * this.levelBonus.percent * this.levelBonus.multiplier; 
     }
 
     grantXp(game, amount) {
-        this.xp += amount * resolveStatLayer(this.xpBonus);
+        this.xp += amount * this.xpBonus.value;
         this._checkLevelProgress(game);
     }
 

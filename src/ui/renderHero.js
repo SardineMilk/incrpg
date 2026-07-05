@@ -32,7 +32,7 @@ function renderStats(game) {
 
     div.className = "attribute-box";
 
-    div.innerText = `${capitalize(attrId)}: ${game.skills[attrId].progressionHolder.getLevel()}`;
+    div.innerText = `${capitalize(attrId)}: ${game.skills[attrId].progressionHolder.level}`;
 
     box.appendChild(div);
   }

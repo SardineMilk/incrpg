@@ -1,6 +1,5 @@
 import { CONDITIONS } from "../data/conditionsData.js";
 import { applyEffectTracked, removeEffect, changeEffectStrength } from "./effects.js";
-import { resolveStatLayer } from "../utils/statLayer.js";
 
 
 
@@ -31,7 +30,7 @@ function decrementConditionDuration(game) {
 export function applyConditionEffects(game, conditionId) {
   const state = game.conditionStates[conditionId];
   if (!state?.effectHolder) return;
-  state.effectHolder.apply(game, resolveStatLayer(state.strength));
+  state.effectHolder.apply(game, state.strengthHolder.value);
 }
 
 export function removeConditionEffects(game, conditionId) {
@@ -41,7 +40,7 @@ export function removeConditionEffects(game, conditionId) {
 
 export function reapplyConditionEffects(game, conditionId) {
   const state = game.conditionStates[conditionId];
-  state.effectHolder?.reapply(game, resolveStatLayer(state.strength));
+  state.effectHolder?.reapply(game, state.strengthHolder.value);
 }
 
 export function processConditions(game) {
@@ -59,8 +58,8 @@ export function processConditions(game) {
   // reapply the effects with new strength
   for (const conditionId in game.conditionStates) {
     const c = game.conditionStates[conditionId];
-    if (!c.active || !c.needsReapply) continue;
-    c.needsReapply = false;
+    if (!c.active) continue;
+    if (!c.strengthHolder.consumeDirty()) continue;
     reapplyConditionEffects(game, conditionId);
   }
 

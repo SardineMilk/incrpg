@@ -7,7 +7,7 @@ function calculateActionSkillFactor(game, action) {
   let factor = 0;
   for (const [skillId, skillFactor] of Object.entries(action.skills)) {
     const state = game.skills[skillId];
-    const level = state.progressionHolder.getLevel();
+    const level = state.progressionHolder.level;
     factor += level * skillFactor * 0.01;
   }
   return factor;
@@ -17,7 +17,7 @@ function calculateActionAttributeFactor(game, action) {
   let factor = 0;
   for (const [attributeId, attributeFactor] of Object.entries(action.attributes)) {
     const state = game.skills[attributeId];
-    const level = state.progressionHolder.getLevel();
+    const level = state.progressionHolder.level;
     factor += level * attributeFactor * 0.01;
   }
   return factor;

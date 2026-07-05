@@ -52,18 +52,28 @@ export const EFFECT_DEFS = {
 
   // TODO - convert this to statLayer
   skillXpMultiplier: {
-    create: (skill, amount) => ({ type: "skillXpMultiplier", skill, amount }),
+    create: (skill, {flat = 0, percent = 0, multiplier = 1 } = {}) => ({ 
+      type: "skillXpMultiplier", 
+      skill, 
+      flat,
+      percent,
+      multiplier,
+    }),
     apply(game, e) {
       if (e.skill == null) return null;
-      game.skills[e.skill].xpMultiplier *= e.amount;
+      game.skills[e.skill].progressionHolder.xpBonus.change(e);
     },
     remove(game, e) {
       if (e.skill == null) return;
-      game.skills[e.skill].xpMultiplier /= e.amount;
+      game.skills[e.skill].progressionHolder.xpBonus.changeReverse(e);
     },
     scale: scaleAmount,
     display(game, e) {
-      return `multiply ${e.skill} xp gain by ${e.amount}`
+      let m = `increase ${e.skill} xp gain multiplier by: `
+      if (e.flat != 0) m += `+${e.flat} `;
+      if (e.percent != 0) m += `${e.percent}% `;
+      if (e.multiplier != 1) m += `x${e.multiplier} `;
+      return m;
     }
   },
 
@@ -72,23 +82,14 @@ export const EFFECT_DEFS = {
       type: "skillLevelBonus",
       skill,
       flat,
+      percent,
       multiplier,
     }),
     apply(game, e) {
-      if (e.skill == null) return null;
-      const s = game.skills[e.skill];
-      s.bonus.flat       += e.flat;
-      s.bonus.percent    += e.percent;
-      s.bonus.multiplier *= e.multiplier;
-      s.level = (s.base + s.bonus.flat) * s.bonus.percent * s.bonus.multiplier;
+      game.skills[e.skill].progressionHolder.levelBonus.change(e);
     },
     remove(game, e) {
-      if (e.skill == null) return;
-      const s = game.skills[e.skill];
-      s.bonus.flat       -= e.flat;
-      s.bonus.percent    -= e.percent;
-      s.bonus.multiplier /= e.multiplier;
-      s.level = (s.base + s.bonus.flat) * s.bonus.percent * s.bonus.multiplier;
+      game.skills[e.skill].progressionHolder.levelBonus.changeReverse(e);
     },
     display(game, e) {
       let m = `increase ${e.skill} level by: `
@@ -144,21 +145,18 @@ export const EFFECT_DEFS = {
     }),
     apply(game, e) {
       const c = game.conditionStates[e.condition];
-      c.strength.flat       += e.flat;
-      c.strength.percent    += e.percent;
-      c.strength.multiplier *= e.multiplier;
+      if (!c) return null;
 
-      // If the condition is active, its passive effects must be reapplied
-      if (c.active) c.needsReapply = true;
+      c.strengthHolder.change(e);
 
       return "conditionStrengthChanged";
     },
     remove(game, e) {
       const c = game.conditionStates[e.condition];
       if (!c) return;
-      c.strength.flat       -= e.flat;
-      c.strength.percent    -= e.percent;
-      c.strength.multiplier /= e.multiplier;
+
+      c.strengthHolder.changeReverse(e);
+
     },
     scale: scaleStatLayer,
     display(game, e) {
@@ -221,20 +219,11 @@ export const EFFECT_DEFS = {
       multiplier,
     }),
     apply(game, e) {
-      game.attributes[e.attribute] = game.attributes[e.attribute] || { flat: 0, percent: 1, multiplier: 1 };
-      const s = game.attributes[e.attribute];
-      s.flat       += e.flat       || 0;
-      s.percent    += e.percent    || 0;
-      s.multiplier *= e.multiplier || 1;
-      s.value = s.flat * s.percent * s.multiplier;
+      game.attributes[e.attribute] ??= new StatLayer();
+      game.attributes[e.attribute].change(e);
     },
     remove(game, e) {
-      const s = game.attributes[e.attribute];
-      if (!s) return;
-      s.flat       -= e.flat       || 0;
-      s.percent    -= e.percent    || 0;
-      s.multiplier /= e.multiplier || 1;
-      s.value = s.flat * s.percent * s.multiplier;
+      game.attributes[e.attribute].changeReverse(e);
     },
     scale: scaleStatLayer,
     display(game, e) {
@@ -255,8 +244,8 @@ export const EFFECT_DEFS = {
       multiplier,
     }),
     apply(game, e) {
-      game.attributes[e.attribute] = { flat: e.flat, percent: e.percent, multiplier: e.multiplier };
-      game.attributes[e.attribute].value = e.flat * e.percent * e.multiplier;
+      game.attributes[e.attribute] ??= new StatLayer();
+      game.attributes[e.attribute].set(e);
     },
     scale: scaleStatLayer,
     display(game, e) {

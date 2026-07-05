@@ -2,7 +2,7 @@ import { SKILLS }     from "../data/skillsData.js";
 import { ACTIONS }    from "../data/actionsData.js";
 import { CONDITIONS } from "../data/conditionsData.js";
 import { LOCATIONS }  from "../data/locationsData.js";
-import { makeStatLayer }    from "./statLayer.js";
+import { StatLayer }    from "../components/statLayer.js";
 import { generateTagIndex } from "./tagIndex.js";
 import { EffectHolder } from "../components/effectHolder.js";
 import { TriggerHolder } from "../components/triggerHolder.js";
@@ -41,13 +41,13 @@ export function initialiseState(game) {
     game.conditionStates[conditionId] = {
       active:         false,
       duration:       null,
-      strength:       makeStatLayer(),
+      strengthHolder:       new StatLayer(),
       new:            false,   // true for one tick after first activation
       needsReapply:   false,   // did strength change this tick: reapply at tick end
       effectHolder: new EffectHolder(CONDITIONS[conditionId].effects ?? []),
       triggerHolder: new TriggerHolder(CONDITIONS[conditionId].triggers ?? []),
     };
-    game.conditionStates[conditionId].strength.flat = 1;
+    game.conditionStates[conditionId].strengthHolder.set({flat:1});
   }
 
   // Track which action currently has its passive effects applied
