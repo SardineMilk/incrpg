@@ -1,7 +1,7 @@
 import { INHERENT_EFFECTS }         from "../data/conditionsData.js";
 import { game }                                 from "./state.js";
 import { initialiseState }                      from "../utils/state_creator.js";
-import { calculateActionsCompetency, processAction }           from "./actions.js";
+import { processAction }           from "./actions.js";
 import { applyActionEffects, removeActionEffects } from "./actions.js";
 import {
   processConditions
@@ -45,9 +45,7 @@ function tick() {
   processTrigger(game, "tick");
 
   // Everything beyond this point is ugly temp code
-
   processConditions(game);
-
 
   // If action has been changed by eff.setActiveAction, apply the effects 
   if (game.activeAction !== game.actionWithAppliedEffects) {
@@ -56,7 +54,6 @@ function tick() {
     game.actionWithAppliedEffects = game.activeAction;
   }
 
-  calculateActionsCompetency(game);
   processAction();
 }
 

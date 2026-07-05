@@ -1,4 +1,5 @@
 import { ACTIONS } from "../data/actionsData.js";
+import { calculateActionCompetency } from "../game/actions.js";
 import { applyEffect } from "../game/effects.js";
 
 export function renderActions(game) {
@@ -40,7 +41,8 @@ export function renderActions(game) {
       info = entry.querySelector(".action-info");
     }
 
-    button.textContent = `${action.name} (${Math.round(state.competency * 100)}%)`;
+    const competency = calculateActionCompetency(game, actionId);
+    button.textContent = `${action.name} (${Math.round(competency * 100)}%)`;
     info.innerText = `${Math.round(state.completableHolder.progress)}/${action.duration}`;
     entry.classList.toggle("active-action", game.activeAction === actionId);
   }

@@ -12,11 +12,8 @@ export class ProgressionHolder {
         this.milestones = milestones || {};
         this.baseLevel = 0;  // Level without levelBonus, used for level up requirements
         this.xp = 0;
-        this.xpBonus    = new StatLayer();
+        this.xpBonus    = new StatLayer({flat:1});
         this.levelBonus = new StatLayer();
-
-        // TODO this should be part of StatLayer construction
-        this.xpBonus.flat = 1;
 
         // TODO this is ugly
         this.name = name;

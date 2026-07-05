@@ -23,19 +23,12 @@ function calculateActionAttributeFactor(game, action) {
   return factor;
 }
 
-export function calculateActionsCompetency(game) {
-  for (const action in ACTIONS) {
-    const skillFactor     = calculateActionSkillFactor(game, ACTIONS[action]);
-    const attributeFactor = calculateActionAttributeFactor(game, ACTIONS[action]);
-    game.actions[action].competency = 1 + skillFactor + attributeFactor;
-  }
-}
 
 export function calculateActionCompetency(game, actionId) {
   const action = ACTIONS[actionId];
   const skillFactor     = calculateActionSkillFactor(game, action);
   const attributeFactor = calculateActionAttributeFactor(game, action);
-  game.actions[actionId].competency = 1 + skillFactor + attributeFactor;
+  return 1 + skillFactor + attributeFactor;
 }
 
 
@@ -69,7 +62,7 @@ export function processAction() {
   const state = game.actions[current_id];
 
 
-  const progress = 1 * state.competency;
+  const progress = 1 * calculateActionCompetency(game, current_id);
   state.completableHolder.advanceProgress(game, progress);
 
 
