@@ -41,6 +41,8 @@ export class ProgressionHolder {
         }
     }
 
+    // TODO - this only works for baseLevel increasing. 
+    // It should use the resolved levelBonus, and work for decreases too
     _levelUp(game) {
         this.xp -= xpToNext(this.baseLevel);
         this.baseLevel++;

@@ -47,7 +47,7 @@ export const EFFECT_DEFS = {
     },
     scale: scaleAmount,
     display(game, e) {
-      // TODO
+      return `gain ${e.amount} xp in ${e.skill}`
     }
   },
 

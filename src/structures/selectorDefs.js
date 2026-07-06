@@ -43,6 +43,8 @@ export function resolveTargets(game, structure) {
  *   eff.setLocation(sel.locationsByTag("town"))  
  */
 
+// TODO - allow xor operations on nested selectors
+
 export const sel = {
 
   // ── Conditions ────────────────────────────────────────────────────────────
