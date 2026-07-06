@@ -20,7 +20,7 @@
 }
 
 /*
-   Base
+  Base
 */
 
 * {
@@ -36,7 +36,7 @@ body {
 }
 
 /*
-   Layout
+  Layout
 */
 
 .game-container {
@@ -72,7 +72,7 @@ footer {
 }
 
 /*
-   Shared Panels
+  Shared Panels
 */
 
 .hero-box,
@@ -115,7 +115,7 @@ footer {
 }
 
 /* 
-    Stat / info cards 
+  Stat / info cards 
 */
 
 .name-box,
@@ -129,18 +129,20 @@ footer {
 }
 
 /* 
-    Log entries 
+  Log entries 
 */
 
 .log-element {
+  display: flex;
+  align-items: center;
+
   padding: var(--spacing-sm);
   background: var(--colour-background);
   border: 1px solid var(--colour-border);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
-
 /*
-   Status
+  Status
 */
 
 .status-box {
@@ -149,7 +151,7 @@ footer {
 }
 
 /*
-    Actions
+  Actions
 */
 
 .action-entry {
@@ -198,7 +200,7 @@ footer {
 }
 
 /* 
-    Skills
+  Skills
 */
 
 .skill-bar {
@@ -221,7 +223,7 @@ footer {
 }
 
 /*
-    Misc
+  Misc
 */
 
 .logo {
