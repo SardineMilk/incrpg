@@ -1,16 +1,12 @@
 import { INHERENT_EFFECTS }         from "../data/conditionsData.js";
+import { ACTIONS } from "../data/actionsData.js";
 import { game }                                 from "./state.js";
 import { initialiseState }                      from "../utils/state_creator.js";
-import { processAction }           from "./actions.js";
-import { applyActionEffects, removeActionEffects } from "./actions.js";
-import {
-  processConditions
-} from "./conditions.js";
 import { EventLog }                    from "./log.js";
 import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
 import { processTrigger }                       from "./events.js";
 import { applyEffect }                          from "./effects.js";
-
+import { processConditions } from "./conditions.js";
 
 const TICK_RATE = 1000 / 20;
 
@@ -44,16 +40,33 @@ export function startTicking(render) {
 function tick() {
   processTrigger(game, "tick");
 
+  // TODO - refactor
   // Everything beyond this point is ugly temp code
   processConditions(game);
 
   // If action has been changed by eff.setActiveAction, apply the effects 
   if (game.activeAction !== game.actionWithAppliedEffects) {
-    if (game.actionWithAppliedEffects) removeActionEffects(game, game.actionWithAppliedEffects);
-    if (game.activeAction) applyActionEffects(game, game.activeAction);
+    if (game.actionWithAppliedEffects) {
+      const state = game.actionStates[game.actionWithAppliedEffects];
+      if (!state?.effectHolder) return;
+      state.effectHolder.remove(game);
+    }
+    if (game.activeAction) {
+      const state = game.actionStates[game.activeAction];
+      if (!state?.effectHolder) return;
+      state.effectHolder.apply(game);
+    }
     game.actionWithAppliedEffects = game.activeAction;
   }
 
-  processAction();
+  // Grant attribute XP
+  const action = ACTIONS[game.activeAction];
+  if (action.attributes) {
+    for (const id in action.attributes) {
+      const amount = action.attributes[id];
+      if (amount == 0) continue;
+      applyEffect(game, {type:"grantSkillXp", skill:id, amount:amount});
+    }
+  }
 }
 

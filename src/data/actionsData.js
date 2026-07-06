@@ -18,10 +18,6 @@ export const ACTIONS = {
       perception: 0.2,
     },
 
-    skills: {
-      walking: 1,
-    },
-
     effects: [
       eff.changeValue("check_difficulty", -10),
     ],
@@ -55,11 +51,6 @@ export const ACTIONS = {
       perception: 0.2,
     },
 
-    skills: {
-      running: 0.5,
-      exercise: 0.5,
-    },
-
     triggers: [
       {
         event: evt.tick(),
@@ -87,11 +78,6 @@ export const ACTIONS = {
       willpower: 0.5,
       wit: 0,
       perception: 0,
-    },
-
-    skills: {
-      running: 1,
-      exercise: 1,
     },
 
     effects: [

@@ -10,7 +10,6 @@ export class StatLayer {
     return this.flat * this.percent * this.multiplier;
   }
 
-
   set({ flat = 0, percent = 1, multiplier = 1 } = {}) {
     this.flat       = flat;
     this.percent    = percent;
@@ -18,7 +17,6 @@ export class StatLayer {
     this.dirty = true;
     return this;
   }
-
 
   change({ flat = 0, percent = 0, multiplier = 1 } = {}) {
     this.flat       += flat;
