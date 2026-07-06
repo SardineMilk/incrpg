@@ -41,6 +41,7 @@ export const EFFECT_DEFS = {
     create: (skill, amount) => ({ type: "grantSkillXp", skill, amount }),
     apply(game, e) {
       if (e.skill == null) return null;
+      if (e.amount == 0) return;
       game.skills[e.skill].progressionHolder.grantXp(game, e.amount)
       return "gainSkillXp";
     },
@@ -273,6 +274,19 @@ export const EFFECT_DEFS = {
     scale: scaleAmount,
     display(game, e) {
       return `add ${e.amount} activity progress`;
+    }
+  },
+
+  actionProgress: {
+    create: (amount) => ({ type: "actionProgress", amount }),
+    apply(game, e) {
+      const state = game.actionStates[game.activeAction];
+      state.completableHolder.advanceProgress(e.amount);
+      return null;
+    },
+    scale: scaleAmount,
+    display(game, e) {
+      return `add ${e.amount} progress to the current action`;
     }
   },
 

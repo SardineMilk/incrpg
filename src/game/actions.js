@@ -60,8 +60,6 @@ export function processAction() {
   if (action == undefined) console.warn("Current action not in ACTIONS:", current_id);
   if (!action) return;
 
-  state.completableHolder.advanceProgress(game, 1);
-
   // Grant attribute XP
   if (action.attributes) {
     for (const id in action.attributes) {

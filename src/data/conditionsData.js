@@ -122,6 +122,7 @@ export const INHERENT_EFFECTS = {
 
 
   parent_xp: {
+    tags: ["system"],
     triggers: [
       {
         event: evt.gainSkillXp(),
@@ -135,6 +136,17 @@ export const INHERENT_EFFECTS = {
     ],
   },
 
+  action_progress: {
+    tags: ["system"],
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [
+          eff.actionProgress(1),
+        ]
+      }
+    ]
+  },
 
   test: {
     triggers: [
