@@ -23,7 +23,6 @@ function calculateActionAttributeFactor(game, action) {
   return factor;
 }
 
-
 export function calculateActionCompetency(game, actionId) {
   const action = ACTIONS[actionId];
   const skillFactor     = calculateActionSkillFactor(game, action);
@@ -61,8 +60,7 @@ export function processAction() {
   if (action == undefined) console.warn("Current action not in ACTIONS:", current_id);
   if (!action) return;
 
-  const progress = 1 * calculateActionCompetency(game, current_id);
-  state.completableHolder.advanceProgress(game, progress);
+  state.completableHolder.advanceProgress(game, 1);
 
   // Grant attribute XP
   if (action.attributes) {

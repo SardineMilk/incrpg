@@ -41,8 +41,7 @@ export function renderActions(game) {
       info = entry.querySelector(".action-info");
     }
 
-    const competency = calculateActionCompetency(game, actionId);
-    button.textContent = `${action.name} (${Math.round(competency * 100)}%)`;
+    button.textContent = `${action.name}`;
     info.innerText = `${Math.round(state.completableHolder.progress)}/${action.duration}`;
     entry.classList.toggle("active-action", game.activeAction === actionId);
   }
