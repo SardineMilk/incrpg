@@ -43,10 +43,6 @@ export function applyEffectTracked(game, effect) {
 // Must be called with the exact object returned by applyEffectTracked.
 export function removeEffect(game, resolved) {
   const def = EFFECT_DEFS[resolved.type];
-  if (!def) {
-    console.warn("Unknown effect type:", resolved.type);
-    return;
-  }
   if (!def.remove) {
     console.warn(`Effect '${resolved.type}' has no remove() — cannot undo.`);
     return;

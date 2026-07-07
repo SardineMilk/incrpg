@@ -41,13 +41,29 @@ function tick() {
 
   // TODO - refactor
   // Everything beyond this point is ugly temp code
+
+  /* 
+  * Could be a system INHERENT_EFFECT
+  * Only affecting conditions with durations could be a problem
+  * The entire duration/indefinite system needs to be pinned down
+  * Its very messy right now
+  */
   for (const conditionId in game.conditionStates) {
     const state = game.conditionStates[conditionId];
     if (!state.active)          continue;
     if (state.duration == null) continue;
-
     state.duration -= 1;
   }
+
+  /*
+  * This needs to use the ActiveHolder component
+  *
+  * Exclusivity should be a generalised mechanic
+  * It should be elegantly accessible when defining data
+  * - "form"s are a good test case
+  * But also system level rules without boilerplate
+  * - actions, locations 
+  */
 
   // If action has been changed by eff.setActiveAction, apply the effects 
   if (game.activeAction !== game.actionWithAppliedEffects) {
@@ -63,6 +79,13 @@ function tick() {
     }
     game.actionWithAppliedEffects = game.activeAction;
   }
+
+  /*
+  * This will probably not continue to exist in the current form
+  * It's clunky, brittle and breaks seperation of systems
+  * But I do like the outcome, 
+  * attributes being a kind of glue to link progress in disconnected areas
+  */
 
   // Grant attribute XP
   const action = ACTIONS[game.activeAction];
