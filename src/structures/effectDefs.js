@@ -34,6 +34,27 @@ function scaleStatLayer(game, effect, mul) {
   };
 }
 
+
+// Condition helper functions
+
+function conditionStrength(c) {
+  return c.strengthHolder ? c.strengthHolder.value : 1;
+}
+
+function activateCondition(game, c, duration = null) {
+  if (!c.activeHolder.active) {
+    if (c.effectHolder) c.effectHolder.apply(game, conditionStrength(c));
+    c.activeHolder.activate(duration);
+  }
+}
+ 
+function deactivateCondition(game, c) {
+  if (!c.activeHolder.active) return;
+  if (c.effectHolder) c.effectHolder.remove(game, conditionStrength(c));
+  c.activeHolder.deactivate();
+}
+
+
 export const EFFECT_DEFS = {
   // ── Skills ────────────────────────────────────────────────────────────────
 
@@ -101,40 +122,80 @@ export const EFFECT_DEFS = {
   },
 
   // ── Conditions ────────────────────────────────────────────────────────────
-
-  applyCondition: {
-    create: (condition, amount = null) => ({
-      type: "applyCondition",
+  // ── Conditions ────────────────────────────────────────────────────────────
+ 
+  applyConditionInfinite: {
+    create: (condition) => ({
+      type: "applyConditionInfinite",
+      condition,
+    }),
+    apply(game, e) {
+      const c = game.conditionStates[e.condition];
+      activateCondition(game, c, null);
+      return "conditionApplied";
+    },
+    remove(game, e) {
+      const c = game.conditionStates[e.condition];
+      deactivateCondition(game, c);
+    },
+    display(game, e) {
+      return `gain ${e.condition} permanently`;
+    }
+  },
+ 
+  applyConditionDuration: {
+    create: (condition, amount) => ({
+      type: "applyConditionDuration",
       condition,
       amount,
     }),
     apply(game, e) {
-      const state = game.conditionStates[e.condition];
-      if (!state.active) state.new = true;
+      const c = game.conditionStates[e.condition];
 
-      state.active = true;
-      if (e.amount == null) state.duration = null;
-      else state.duration += e.amount;
-
+      // This activates condition if deactivated, does nothing if already active
+      activateCondition(game, c, 0);
+ 
+      const expired = c.activeHolder.changeDuration(e.amount);
+      if (expired) deactivateCondition(game, c);
+ 
       return "conditionApplied";
     },
     remove(game, e) {
-      const state = game.conditionStates[e.condition];
-      if (!state.active) return;
-      if (state.duration == null && e.duration == null) {
-        state.duration = -1;
-      };
-      if (state.duration == null || e.duration == null) {
-        return;
-      }
-      state.duration -= e.duration;
+      const c = game.conditionStates[e.condition];
+      if (!c.activeHolder.active) return;
+ 
+      const expired = c.activeHolder.changeDuration(-e.amount);
+      if (expired) deactivateCondition(game, c);
     },
     display(game, e) {
-      if (e.amount == null) return `gain ${e.condition} permanently`;
       return `gain ${e.condition} for ${e.amount} turns`;
     }
   },
-
+ 
+  // System effect: ticks down every currently active, timed condition by 1.
+  // Fired once per game tick via the `condition_duration_decay` inherent
+  // condition (see conditionsData.js). This replaces the old hardcoded
+  // decrementConditionDuration() loop in conditions.js - decay now goes
+  // through the exact same activate/deactivate path as any other duration
+  // change (e.g. an item topping up a buff), so expiry always removes the
+  // condition's effects instead of only doing so when re-applied.
+  decayConditionDurations: {
+    create: () => ({ type: "decayConditionDurations" }),
+    apply(game, e) {
+      for (const id in game.conditionStates) {
+        const c = game.conditionStates[id];
+        if (!c.activeHolder.isTimed) continue;
+ 
+        const expired = c.activeHolder.changeDuration(-1);
+        if (expired) deactivateCondition(game, c);
+      }
+      return null;
+    },
+    display(game, e) {
+      return `tick down active condition durations`;
+    }
+  },
+ 
   changeConditionStrength: {
     create: (condition, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
       type: "changeConditionStrength",
@@ -146,17 +207,20 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       const c = game.conditionStates[e.condition];
       if (!c) return null;
-
+ 
       c.strengthHolder.change(e);
-
+      if (c.effectHolder) {
+        c.effectHolder.reapply(game, c.strengthHolder.value);
+      }
+ 
       return "conditionStrengthChanged";
     },
     remove(game, e) {
       const c = game.conditionStates[e.condition];
       if (!c) return;
-
+ 
       c.strengthHolder.changeReverse(e);
-
+ 
     },
     scale: scaleStatLayer,
     display(game, e) {

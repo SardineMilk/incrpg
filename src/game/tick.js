@@ -6,7 +6,6 @@ import { EventLog }                    from "./log.js";
 import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
 import { processTrigger }                       from "./events.js";
 import { applyEffect }                          from "./effects.js";
-import { processConditions } from "./conditions.js";
 
 const TICK_RATE = 1000 / 20;
 
@@ -20,7 +19,7 @@ export function startTicking(render) {
 
   // Bootstrap inherent effects (always-active pseudo-conditions)
   for (const conditionId in INHERENT_EFFECTS) {
-    applyEffect(game, { type: "applyCondition", condition: conditionId });
+    applyEffect(game, { type: "applyConditionInfinite", condition: conditionId });
   }
 
   if (intervalId !== null) clearIntervalFix(intervalId);
@@ -42,7 +41,13 @@ function tick() {
 
   // TODO - refactor
   // Everything beyond this point is ugly temp code
-  processConditions(game);
+  for (const conditionId in game.conditionStates) {
+    const state = game.conditionStates[conditionId];
+    if (!state.active)          continue;
+    if (state.duration == null) continue;
+
+    state.duration -= 1;
+  }
 
   // If action has been changed by eff.setActiveAction, apply the effects 
   if (game.activeAction !== game.actionWithAppliedEffects) {

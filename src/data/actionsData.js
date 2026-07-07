@@ -119,7 +119,7 @@ export const ACTIONS = {
     },
 
     effects: [
-      eff.applyCondition("sleeping"),
+      eff.applyConditionInfinite("sleeping"),
     ],
 
 

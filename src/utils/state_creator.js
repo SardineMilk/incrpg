@@ -8,7 +8,7 @@ import { EffectHolder } from "../components/effectHolder.js";
 import { TriggerHolder } from "../components/triggerHolder.js";
 import { CompletionHolder } from "../components/completionHolder.js";
 import { ProgressionHolder } from "../components/progressionHolder.js";
-
+import { ActiveHolder } from "../components/activeHolder.js";
 
 export function initialiseState(game) {
 
@@ -46,15 +46,7 @@ export function initialiseState(game) {
       effectHolder:   new EffectHolder(CONDITIONS[id].effects ?? []),
       triggerHolder:  new TriggerHolder(CONDITIONS[id].triggers ?? []),
       strengthHolder: new StatLayer({flat:1}),
-
-      // TODO Duration component
-      // Roll new, reuse progressionHolder or inherit Active component?
-      duration:       null,
-      // TODO Active component
-      active:         false,
-      new:            false,   // true for one tick after first activation
-      needsReapply:   false,   // did strength change this tick: reapply at tick end
-
+      activeHolder:   new ActiveHolder(),
     };
   }
 
