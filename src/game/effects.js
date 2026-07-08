@@ -25,8 +25,13 @@ function changeEffectStrength(game, effect, multiplier) {
   return effect;
 }
 
-// Apply an effect — resolves targets + formulas, scales it if requested,
-// fires triggers, and returns every resolved effect object that was applied.
+/* 
+* Apply an effect: 
+* Resolves targets + formulas, scales if required,
+* fires any triggers,
+* returns the resolved effects
+* - this can be tracked and used to remove later
+*/
 export function applyEffect(game, effect, strength = 1) {
   const scaledEffect = strength === 1
     ? effect
