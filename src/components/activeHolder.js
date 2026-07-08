@@ -29,7 +29,7 @@ export class ActiveHolder {
 
   // Adjust duration by `amount`. Returns true if this pushed duration <= 0
   // (i.e. the caller should treat it as expired now).
-  // No-op (never expires) if inactive or indefinite.
+  // Always returns false if inactive or indefinite.
   changeDuration(amount) {
     if (!this.active || this.duration === null) return false;
     this.duration += amount;

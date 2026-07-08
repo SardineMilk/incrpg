@@ -7,17 +7,20 @@ import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
 import { processTrigger }                       from "./events.js";
 import { applyEffect }                          from "./effects.js";
 
+// TODO - figure out if this can easily be made dynamic
+// I want chronomancy
 const TICK_RATE = 1000 / 20;
 
 let intervalId = null;
 export function startTicking(render) {
   initialiseState(game);
 
+  // TODO - refactor this somewhere else
   game.log = new EventLog({ container: document.getElementById("log-box") });
   game.log.container.scrollTop = game.log.container.scrollHeight;
   game.log.followTail = true;
 
-  // Bootstrap inherent effects (always-active pseudo-conditions)
+  // TODO - make an elegant system for this
   for (const conditionId in INHERENT_EFFECTS) {
     applyEffect(game, { type: "applyConditionInfinite", condition: conditionId });
   }
