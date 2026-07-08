@@ -9,10 +9,8 @@ import { LOCATIONS } from "../data/locationsData.js";
  *   remove?(game, resolvedEffect) -> void
  *   scale?(game, effect, multiplier) -> scaled copy of effect
  *
- * triggerDescriptor:
- *   - a string          -> fire that trigger type, using the effect as context
- *   - { type, context } -> fire with a custom context object
- *   - null / undefined  -> no trigger
+ * If the apply() method returns a string,
+ * It fires that event, using the effect as context 
  *
  * Effects with a `remove` method are reversible.
  * Effects without `remove` are fire-and-forget (tick effects, one-time rewards).
@@ -58,12 +56,12 @@ function deactivateCondition(game, c) {
 export const EFFECT_DEFS = {
   // ── Skills ────────────────────────────────────────────────────────────────
 
-  grantSkillXp: {
-    create: (skill, amount) => ({ type: "grantSkillXp", skill, amount }),
+  gainSkillXp: {
+    create: (skill, amount) => ({ type: "gainSkillXp", skill, amount }),
     apply(game, e) {
       if (e.skill == null) return null;
       if (e.amount == 0) return;
-      game.skills[e.skill].progressionHolder.grantXp(game, e.amount);
+      game.skills[e.skill].progressionHolder.gainXp(game, e.amount);
       return "gainSkillXp";
     },
     scale: scaleAmount,

@@ -2,7 +2,7 @@
 // undo it later, optionally scaled by strength" can own one of these —
 // actions, conditions, and (later) items, quests, equipped gear, etc.
 
-import { applyEffectTracked, removeEffect, changeEffectStrength } from "../game/effects.js";
+import { applyEffect, removeEffect } from "../game/effects.js";
 
 export class EffectHolder {
   constructor(effectDefs = []) {
@@ -15,7 +15,7 @@ export class EffectHolder {
   }
 
   // Apply every effectDef against `game`, optionally scaled by `strength`
-  apply(game, strength = null) {
+  apply(game, strength = 1) {
     if (!this.effectDefs.length) return;
     if (this.isApplied) {
       console.warn("EffectHolder.apply() called while already applied — call remove() first");
@@ -24,8 +24,8 @@ export class EffectHolder {
 
     const applied = [];
     for (const effect of this.effectDefs) {
-      const scaled = strength != null ? changeEffectStrength(game, effect, strength) : effect;
-      applied.push(...applyEffectTracked(game, scaled));
+
+      applied.push(...applyEffect(game, effect, strength));
     }
     this.appliedEffects = applied;
   }
@@ -40,7 +40,7 @@ export class EffectHolder {
     this.appliedEffects = [];
   }
 
-  reapply(game, strength = null) {
+  reapply(game, strength = 1) {
     // Remove the static resolved effects
     // Reapply them using the current strength
     this.remove(game);

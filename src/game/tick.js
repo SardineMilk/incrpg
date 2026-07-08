@@ -91,7 +91,7 @@ function tick() {
     for (const id in action.attributes) {
       const amount = action.attributes[id];
       if (amount == 0) continue;
-      applyEffect(game, {type:"grantSkillXp", skill:id, amount:amount});
+      applyEffect(game, {type:"gainSkillXp", skill:id, amount:amount});
     }
   }
 }

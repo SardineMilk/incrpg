@@ -1,6 +1,4 @@
 import { ACTIONS } from "../data/actionsData.js";
-import { applyEffect, applyEffectTracked, removeEffect } from "./effects.js";
-import { game } from "./state.js";
 
 
 function calculateActionSkillFactor(game, action) {

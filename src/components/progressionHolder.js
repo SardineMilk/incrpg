@@ -24,7 +24,7 @@ export class ProgressionHolder {
         return (this.baseLevel + this.levelBonus.flat) * this.levelBonus.percent * this.levelBonus.multiplier; 
     }
 
-    grantXp(game, amount) {
+    gainXp(game, amount) {
         this.xp += amount * this.xpBonus.value;
         this._checkLevelProgress(game);
     }

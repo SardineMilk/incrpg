@@ -11,6 +11,12 @@
  */
 
 export const TRIGGER_DEFS = {
+    
+  ctx: {
+    create: () => ({ type: "ctx", type }),
+    check: (trigger, ctx) => trigger.type === ctx.type,
+  },
+
   tick: {
     create: () => ({ type: "tick" }),
     check: () => true,

@@ -30,7 +30,7 @@ export const ACTIONS = {
     ],
 
     result: [
-      eff.grantSkillXp("walking", 20),
+      eff.gainSkillXp("walking", 20),
       eff.activityProgress(1),
     ],
   },
@@ -59,7 +59,7 @@ export const ACTIONS = {
     ],
 
     result: [
-      eff.grantSkillXp("running", 20),
+      eff.gainSkillXp("running", 20),
       eff.activityProgress(2),
     ],
   },
@@ -93,7 +93,7 @@ export const ACTIONS = {
     ],
 
     result: [
-      eff.grantSkillXp("running", 50),
+      eff.gainSkillXp("running", 50),
       eff.activityProgress(5),
     ],
   },
@@ -120,7 +120,7 @@ export const ACTIONS = {
     ],
 
 
-    result: [eff.grantSkillXp("sleeping", 20)],
+    result: [eff.gainSkillXp("sleeping", 20)],
   },
   
   become_rat: {

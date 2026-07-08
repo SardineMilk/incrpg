@@ -13,7 +13,7 @@ export const INHERENT_EFFECTS = {
         requirements: [req.lessThan(fml.value("health"), fml.value("healthMax"))],
         effects: [
           eff.changeValue("health", 1),
-          eff.grantSkillXp("regeneration", 0.5),
+          eff.gainSkillXp("regeneration", 0.5),
         ]
       },
     ],
@@ -26,7 +26,7 @@ export const INHERENT_EFFECTS = {
         requirements: [req.lessThan(fml.value("stamina"), fml.value("staminaMax"))],
         effects: [
           eff.changeValue("stamina", 1),
-          eff.grantSkillXp("breathing", 0.5),
+          eff.gainSkillXp("breathing", 0.5),
         ]
       },
     ],
@@ -39,7 +39,7 @@ export const INHERENT_EFFECTS = {
         requirements: [req.lessThan(fml.value("mental"), fml.value("mentalMax"))],
         effects: [
           eff.changeValue("mental", 1),
-          eff.grantSkillXp("mindfulness", 0.5),
+          eff.gainSkillXp("mindfulness", 0.5),
         ]
       },
     ],
@@ -117,7 +117,7 @@ export const INHERENT_EFFECTS = {
       {
         event: evt.gainSkillXp(),
         effects: [
-          eff.grantSkillXp(
+          eff.gainSkillXp(
             fml.skillParent(fml.contextSkill()),
             fml.contextAmount(),
            ),

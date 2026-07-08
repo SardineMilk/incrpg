@@ -1,5 +1,5 @@
 import { meetsRequirements } from "../game/requirements.js";
-import { applyEffect, applyScaledEffect } from "../game/effects.js";
+import { applyEffect } from "../game/effects.js";
 import { withContext, resolveFormulas } from "../structures/formulaDefs.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
 import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
@@ -13,7 +13,7 @@ export class TriggerHolder {
     return this.triggerDefs.length > 0;
   }
 
-  fire(game, triggerType, context, strength = null) {
+  fire(game, triggerType, context, strength = 1) {
     if (!this.triggerDefs.length) return;
 
     for (const t of this.triggerDefs) {
@@ -24,11 +24,7 @@ export class TriggerHolder {
 
       withContext(context, () => {
         for (const effect of t.effects) {
-          if (strength != null) {
-            applyScaledEffect(game, effect, strength);
-          } else {
-            applyEffect(game, effect);
-          }
+          applyEffect(game, effect, strength);
         }
       });
     }
