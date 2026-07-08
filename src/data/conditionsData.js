@@ -4,16 +4,6 @@ import {eff, req, evt, sel, fml } from "../structures/structures.js";
 // Need to special-case these. Apply all at start of game
 // Inherent Effects are always active, and may have strict requirements or triggers
 export const INHERENT_EFFECTS = {
-  // Other forms can have different effects
-  // TODO - add a way to make tagged conditions mutually exclusive
-  human: {
-    tags: ["form"],
-    effects: [
-      eff.changeValue("healthMax", 100),
-      eff.changeValue("staminaMax", 100),
-      eff.changeValue("mentalMax", 100),
-    ],
-  },
 
   health_regen: {
     tags: ["passive_regen"],
@@ -229,6 +219,30 @@ const TEMP_CONDITIONS = {
     ],
   },
 };
+
+
+const TRAITS = {
+  // Other forms can have different effects
+  // TODO - add a way to make tagged conditions mutually exclusive
+  human: {
+    tags: ["form"],
+    effects: [
+      eff.changeValue("healthMax", 100),
+      eff.changeValue("staminaMax", 100),
+      eff.changeValue("mentalMax", 100),
+    ],
+  },
+
+  rat_king: {
+    tags: ["form", "beast", "rat"],
+    effects: [
+      eff.changeValue("healthMax", 80),
+      eff.changeValue("staminaMax", 150),
+      eff.changeValue("mentalMax", 70),
+    ],
+  },
+
+}
 
 
 const IMBALANCES = {
@@ -586,4 +600,4 @@ const IMBALANCES = {
 }
 
 
-export const CONDITIONS = Object.assign({}, TEMP_CONDITIONS, INHERENT_EFFECTS, IMBALANCES);
+export const CONDITIONS = Object.assign({}, TEMP_CONDITIONS, TRAITS, INHERENT_EFFECTS, IMBALANCES);

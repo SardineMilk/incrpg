@@ -114,18 +114,27 @@ export const ACTIONS = {
       perception: 0,
     },
 
-    skills: {
-      sleeping: 1,
-    },
 
     effects: [
-      eff.applyConditionInfinite("sleeping"),
+      eff.activateCondition("sleeping"),
     ],
 
 
     result: [eff.grantSkillXp("sleeping", 20)],
   },
   
+  become_rat: {
+    name: "Become Rat King",
+    tags: ["transform"],
+    duration: 100,
+
+    result: [
+      eff.deactivateCondition("human"),
+      eff.activateCondition("rat_king"),
+    ]
+
+  }
+
 };
 
 

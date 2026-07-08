@@ -122,11 +122,10 @@ export const EFFECT_DEFS = {
   },
 
   // ── Conditions ────────────────────────────────────────────────────────────
-  // ── Conditions ────────────────────────────────────────────────────────────
- 
-  applyConditionInfinite: {
+
+  activateCondition: {
     create: (condition) => ({
-      type: "applyConditionInfinite",
+      type: "activateCondition",
       condition,
     }),
     apply(game, e) {
@@ -142,7 +141,25 @@ export const EFFECT_DEFS = {
       return `gain ${e.condition} permanently`;
     }
   },
- 
+
+  deactivateCondition: {
+    create: (condition) => ({
+      type: "deactivateCondition",
+      condition,
+    }),
+    apply(game, e) {
+      const c = game.conditionStates[e.condition];
+      deactivateCondition(game, c);
+    },
+    remove(game, e) {
+      const c = game.conditionStates[e.condition];
+      activateCondition(game, c, null);
+    },
+    display(game, e) {
+      return `remove ${e.condition}`;
+    }
+  },
+
   applyConditionDuration: {
     create: (condition, amount) => ({
       type: "applyConditionDuration",

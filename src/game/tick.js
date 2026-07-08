@@ -22,8 +22,10 @@ export function startTicking(render) {
 
   // TODO - make an elegant system for this
   for (const conditionId in INHERENT_EFFECTS) {
-    applyEffect(game, { type: "applyConditionInfinite", condition: conditionId });
+    applyEffect(game, { type: "activateCondition", condition: conditionId });
   }
+  applyEffect(game, { type: "activateCondition", condition: "human" });
+
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {
@@ -41,6 +43,12 @@ export function startTicking(render) {
 
 function tick() {
   processTrigger(game, "tick");
+
+  /* TODO
+  * - pre-apply event hooks, modifiers
+  * - recalculation of passive effects on formula change
+  *   - preproccess of data, subscribing to values, events etc
+  */
 
   // TODO - refactor
   // Everything beyond this point is ugly temp code
