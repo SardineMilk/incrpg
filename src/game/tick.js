@@ -45,19 +45,6 @@ function tick() {
   // TODO - refactor
   // Everything beyond this point is ugly temp code
 
-  /* 
-  * Could be a system INHERENT_EFFECT
-  * Only affecting conditions with durations could be a problem
-  * The entire duration/indefinite system needs to be pinned down
-  * Its very messy right now
-  */
-  for (const conditionId in game.conditionStates) {
-    const state = game.conditionStates[conditionId];
-    if (!state.active)          continue;
-    if (state.duration == null) continue;
-    state.duration -= 1;
-  }
-
   /*
   * This needs to use the ActiveHolder component
   *
