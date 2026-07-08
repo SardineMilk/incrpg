@@ -6,11 +6,6 @@ import { resolveFormulas } from "../structures/formulaDefs.js";
 // Internal: apply one pre-resolved effect object and fire its trigger.
 function applyResolved(game, resolved) {
   const def = EFFECT_DEFS[resolved.type];
-  if (!def) {
-    console.warn("Unknown effect type:", resolved.type);
-    return;
-  }
-
   const result = def.apply(game, resolved);
   if (!result) return;
 

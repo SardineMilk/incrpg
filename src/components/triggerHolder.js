@@ -14,10 +14,7 @@ export class TriggerHolder {
   }
 
   fire(game, triggerType, context, strength = 1) {
-    if (!this.triggerDefs.length) return;
-
     for (const t of this.triggerDefs) {
-      if (!t?.event) continue;
       if (t.event.type !== triggerType) continue;
       if (!this._matches(game, t.event, context)) continue;
       if (!meetsRequirements(game, t)) continue;
@@ -37,10 +34,6 @@ export class TriggerHolder {
     return expanded.some((e) => {
       const resolved = resolveFormulas(game, e);
       const def = TRIGGER_DEFS[resolved.type];
-      if (!def) {
-        console.warn("Unknown trigger type:", resolved.type);
-        return false;
-      }
       return def.check(resolved, context);
     });
   }
