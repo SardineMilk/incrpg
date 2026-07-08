@@ -173,12 +173,7 @@ export const EFFECT_DEFS = {
   },
  
   // System effect: ticks down every currently active, timed condition by 1.
-  // Fired once per game tick via the `condition_duration_decay` inherent
-  // condition (see conditionsData.js). This replaces the old hardcoded
-  // decrementConditionDuration() loop in conditions.js - decay now goes
-  // through the exact same activate/deactivate path as any other duration
-  // change (e.g. an item topping up a buff), so expiry always removes the
-  // condition's effects instead of only doing so when re-applied.
+  // TODO - this shouldnt need a custom effect
   decayConditionDurations: {
     create: () => ({ type: "decayConditionDurations" }),
     apply(game, e) {
