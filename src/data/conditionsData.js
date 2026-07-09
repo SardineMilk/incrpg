@@ -302,6 +302,10 @@ const TRAITS = {
     ],
   },
 
+  /* Elf 
+  * All equipment must be natural
+  */
+
 }
 
 

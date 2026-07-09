@@ -27,11 +27,12 @@ export const LOCATIONS = {
   * Increases in life-based agriculture caused the community to collapse
   * The workers were left to keep farming, but the farm slowly decayed over years
   * Undead went feral
+  * Tongue-in-cheek social commentary
   * 
   * Get to the centre, meet a lich middle manager
   * - boss fight fakeout
-  * Restart the farm by clearing a lot of feral undead 
-  * Unlock gathering spots as you progress
+  * Restart the farm by killing a lot of undead and bringing resources to the lich
+  * Unlock gathering spots as you clear undead
   * 
   * Zombie Labourer
   * - still-rotting corpse
@@ -44,10 +45,24 @@ export const LOCATIONS = {
   * - Shaped bone blades for arms
   * - Fast, dangerous but fragile
   * 
+  * Mummified Scarecrow
+  * - Dessicated undead with no legs, attached to a pole
+  * - Used for pest control, worker upkeep etc
+  * - Mage+healer+buffer
+  * - Fear attack
+  * 
   * Undead Fruit Treant
   * - Frankensteined undead fruit tree
   * - Buildup of mana due to low harvest makes fruit into elemental grenades
   * - Unable to dodge, high blunt damage limbs, random elemental damage fruit
+  * - At night, they become partially dormant
+  *   - Less dangerous, slower, less fruit thrown
+  * 
+  * Shambling Compost Heap
+  * - Animated heap of decay
+  * - Low defence, high health, slow but strong blunt attacks
+  * - Poison-based attacks, regeneration
+  * - Killing unlocks compost warrens
   * 
   * Combine Harvester
   * - A complex mass of bone from uncountable skeletons
@@ -64,6 +79,7 @@ export const LOCATIONS = {
 
   undead_farm_outskirts: {},
   undead_farm_fields: {},
+  undead_farm_warrens: {},
   undead_farm_compound: {},
 
 
