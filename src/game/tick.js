@@ -44,7 +44,6 @@ export function startTicking(render) {
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {
     processTrigger(game, "tick");
-    tick();
     render(game);
   }, TICK_RATE);
 
@@ -54,24 +53,5 @@ export function startTicking(render) {
       intervalId = null;
     }
   };
-}
-
-function tick() {
-  /*
-  * This will probably not continue to exist in the current form
-  * It's clunky, brittle and breaks seperation of systems
-  * But I do like the outcome, 
-  * attributes being a kind of glue to link progress in disconnected areas
-  */
-
-  // Grant attribute XP
-  const action = ACTIONS[getActiveAction()];
-  if (action.attributes) {
-    for (const id in action.attributes) {
-      const amount = action.attributes[id];
-      if (amount == 0) continue;
-      applyEffect(game, {type:"gainSkillXp", skill:id, amount:amount});
-    }
-  }
 }
 

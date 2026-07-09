@@ -7,17 +7,6 @@ export const ACTIONS = {
     tags: ["traversal"],
     duration: 100,
 
-    attributes: {
-      strength: 0,
-      constitution: 0.5,
-      agility: 0.5,
-      dexterity: 0.2,
-      intelligence: 0,
-      willpower: 0,
-      wit: 0,
-      perception: 0.2,
-    },
-
     effects: [
       eff.changeValue("check_difficulty", -10),
     ],
@@ -25,7 +14,14 @@ export const ACTIONS = {
     triggers: [
       {
         event: evt.tick(),
-        effects: [eff.changeValue("stamina", -1)],
+        effects: [
+          eff.gainSkillXp("constitution", 0.5),
+          eff.gainSkillXp("agility", 0.5),
+          eff.gainSkillXp("dexterity", 0.2),
+          eff.gainSkillXp("perception", 0.2),
+
+          eff.changeValue("stamina", -1),
+        ],
       },
     ],
 
@@ -40,21 +36,18 @@ export const ACTIONS = {
     tags: ["traversal"],
     duration: 50,
 
-    attributes: {
-      strength: 0,
-      constitution: 0.5,
-      agility: 0.5,
-      dexterity: 0.2,
-      intelligence: 0,
-      willpower: 0.2,
-      wit: 0,
-      perception: 0.2,
-    },
-
     triggers: [
       {
         event: evt.tick(),
-        effects: [eff.changeValue("stamina", -2)],
+        effects: [
+          eff.gainSkillXp("constitution", 0.5),
+          eff.gainSkillXp("agility", 0.5),
+          eff.gainSkillXp("dexterity", 0.2),
+          eff.gainSkillXp("willpower", 0.2),
+          eff.gainSkillXp("perception", 0.5),
+
+          eff.changeValue("stamina", -2),
+        ],
       },
     ],
 
@@ -69,26 +62,23 @@ export const ACTIONS = {
     tags: ["traversal"],
     duration: 20,
 
-    attributes: {
-      strength: 0.2,
-      constitution: 0.5,
-      agility: 1,
-      dexterity: 0,
-      intelligence: 0,
-      willpower: 0.5,
-      wit: 0,
-      perception: 0,
-    },
-
     effects: [
       eff.changeValue("check_difficulty", 10),
     ],
 
-
     triggers: [
       {
         event: evt.tick(),
-        effects: [eff.changeValue("stamina", -5),eff.changeValue("health", -2)],
+        effects: [
+          eff.gainSkillXp("strength", 0.2),
+          eff.gainSkillXp("constitution", 0.5),
+          eff.gainSkillXp("agility", 1),
+          eff.gainSkillXp("willpower", 0.5),
+          eff.gainSkillXp("perception", 1),
+
+          eff.changeValue("stamina", -5),
+          eff.changeValue("health", -2),
+        ],
       },
     ],
 
