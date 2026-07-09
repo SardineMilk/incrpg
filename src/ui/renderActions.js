@@ -1,6 +1,7 @@
 import { ACTIONS } from "../data/actionsData.js";
 import { calculateActionCompetency } from "../game/actions.js";
 import { applyEffect } from "../game/effects.js";
+import { getActiveAction } from "../utils/getActiveAction.js";
 
 export function renderActions(game) {
   const container = document.getElementById("actions-box");
@@ -27,7 +28,7 @@ export function renderActions(game) {
       button.type = "button";
       button.className = "action-button";
       button.addEventListener("click", () => {
-        applyEffect(game, {type:"setActiveAction", action:actionId});
+        applyEffect(game, {type:"activateAction", action:actionId});
       });
 
       info = document.createElement("div");
@@ -43,6 +44,6 @@ export function renderActions(game) {
 
     button.textContent = `${action.name}`;
     info.innerText = `${Math.round(state.completableHolder.progress)}/${action.duration}`;
-    entry.classList.toggle("active-action", game.activeAction === actionId);
+    entry.classList.toggle("active-action", getActiveAction() === actionId);
   }
 }

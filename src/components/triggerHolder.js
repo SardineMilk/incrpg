@@ -1,6 +1,7 @@
 import { meetsRequirements } from "../game/requirements.js";
 import { applyEffect } from "../game/effects.js";
-import { withContext, resolveFormulas } from "../structures/formulaDefs.js";
+import { resolveFormulas } from "../structures/formulaDefs.js";
+import { withContext } from "../utils/context.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
 import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
 
@@ -20,9 +21,7 @@ export class TriggerHolder {
       if (!meetsRequirements(game, t)) continue;
 
       withContext(context, () => {
-        for (const effect of t.effects) {
-          applyEffect(game, effect, strength);
-        }
+        for (const effect of t.effects) applyEffect(game, effect, strength);
       });
     }
   }

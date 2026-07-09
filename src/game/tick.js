@@ -6,6 +6,17 @@ import { EventLog }                    from "./log.js";
 import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
 import { processTrigger }                       from "./events.js";
 import { applyEffect }                          from "./effects.js";
+import { getActiveAction } from "../utils/getActiveAction.js";
+
+/*
+* Validation
+* - foo.effects must be array
+*/
+
+/* TODO
+* - recalculation of passive effects on formula change
+*   - preproccess of data, subscribing to values, events etc
+*/
 
 // TODO - figure out if this can easily be made dynamic
 // I want chronomancy
@@ -25,10 +36,13 @@ export function startTicking(render) {
     applyEffect(game, { type: "activateCondition", condition: conditionId });
   }
   applyEffect(game, { type: "activateCondition", condition: "human" });
+  applyEffect(game, { type: "activateAction", action: "sleep" });
+
 
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {
+    processTrigger(game, "tick");
     tick();
     render(game);
   }, TICK_RATE);
@@ -42,42 +56,6 @@ export function startTicking(render) {
 }
 
 function tick() {
-  processTrigger(game, "tick");
-
-  /* TODO
-  * - pre-apply event hooks, modifiers
-  * - recalculation of passive effects on formula change
-  *   - preproccess of data, subscribing to values, events etc
-  */
-
-  // TODO - refactor
-  // Everything beyond this point is ugly temp code
-
-  /*
-  * This needs to use the ActiveHolder component
-  *
-  * Exclusivity should be a generalised mechanic
-  * It should be elegantly accessible when defining data
-  * - "form"s are a good test case
-  * But also system level rules without boilerplate
-  * - actions, locations 
-  */
-
-  // If action has been changed by eff.setActiveAction, apply the effects 
-  if (game.activeAction !== game.actionWithAppliedEffects) {
-    if (game.actionWithAppliedEffects) {
-      const state = game.actionStates[game.actionWithAppliedEffects];
-      if (!state?.effectHolder) return;
-      state.effectHolder.remove(game);
-    }
-    if (game.activeAction) {
-      const state = game.actionStates[game.activeAction];
-      if (!state?.effectHolder) return;
-      state.effectHolder.apply(game);
-    }
-    game.actionWithAppliedEffects = game.activeAction;
-  }
-
   /*
   * This will probably not continue to exist in the current form
   * It's clunky, brittle and breaks seperation of systems
@@ -86,7 +64,7 @@ function tick() {
   */
 
   // Grant attribute XP
-  const action = ACTIONS[game.activeAction];
+  const action = ACTIONS[getActiveAction()];
   if (action.attributes) {
     for (const id in action.attributes) {
       const amount = action.attributes[id];

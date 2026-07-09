@@ -1,17 +1,18 @@
 import { EFFECT_DEFS } from "../structures/effectDefs.js";
-import { processTrigger } from "./events.js";
+import { processModifier, processTrigger } from "./events.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
 import { resolveFormulas } from "../structures/formulaDefs.js";
 
 // Internal: apply one pre-resolved effect object and fire its trigger.
-function applyResolved(game, resolved) {
-  const def = EFFECT_DEFS[resolved.type];
-  const result = def.apply(game, resolved);
-  if (!result) return;
+function applyResolved(game, e) {
+  const def = EFFECT_DEFS[e.type];
 
-  const type = result || resolved.type;
-  const context = resolved;
-  processTrigger(game, type, context);
+  processModifier(game, e.type, e);
+
+  const result = def.apply(game, e);
+
+  const type = result || e.type;
+  processTrigger(game, type, e);
 }
 
 function changeEffectStrength(game, effect, multiplier) {

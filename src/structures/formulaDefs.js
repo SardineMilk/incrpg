@@ -1,5 +1,7 @@
 import { SKILLS } from "../data/skillsData.js";
 import { game } from "../game/state.js";
+import { currentContext } from "../utils/context.js";
+import { getActiveAction } from "../utils/getActiveAction.js";
 import { isSelector } from "./selectorDefs.js";
 
 const res = (val) => (typeof val === "function" ? val() : val);
@@ -9,19 +11,6 @@ export const lift =
   () =>
     fn(game, ...args.map(res));
 
-const _contextStack = [];
-export function withContext(ctx, fn) {
-  _contextStack.push(ctx);
-  try {
-    return fn();
-  } finally {
-    _contextStack.pop();
-  }
-}
-function currentContext() {
-  return _contextStack[_contextStack.length - 1] ?? {};
-}
-
 // When adding a new formula it takes `game` as a parameter,
 // but you don't need to pass game at point of use.
 const definitions = {
@@ -29,6 +18,7 @@ const definitions = {
   contextSkill: (_game) => currentContext().skill,
   contextCondition: (_game) => currentContext().condition,
 
+  activeAction: (game) => getActiveAction(),
   conditionStrength: (game, condition) => game.conditionStates[condition]?.strength,
   attribute: (game, attribute) => game.attributes[attribute]?.value,
   value: (game, value) => game.values[value],

@@ -1,6 +1,7 @@
 import { LogType } from "../game/log.js";
 import { LOCATIONS } from "../data/locationsData.js";
-
+import { currentContext } from "../utils/context.js";
+import { getActiveAction } from "../utils/getActiveAction.js";
 /*
  * Each entry defines one effect type:
  *
@@ -35,25 +36,38 @@ function scaleStatLayer(game, effect, mul) {
 
 // Condition helper functions
 
-function conditionStrength(c) {
+function getStrength(c) {
   return c.strengthHolder ? c.strengthHolder.value : 1;
 }
 
 function activateCondition(game, c, duration = null) {
-  if (!c.activeHolder.active) {
-    if (c.effectHolder) c.effectHolder.apply(game, conditionStrength(c));
-    c.activeHolder.activate(duration);
-  }
+  if (!c) return;
+  if (c.activeHolder.active) return;
+  if (c.effectHolder) c.effectHolder.apply(game, getStrength(c));
+  c.activeHolder.activate(duration);
+  
 }
  
 function deactivateCondition(game, c) {
+  if (!c) return;
   if (!c.activeHolder.active) return;
-  if (c.effectHolder) c.effectHolder.remove(game, conditionStrength(c));
+  if (c.effectHolder) c.effectHolder.remove(game, getStrength(c));
   c.activeHolder.deactivate();
 }
 
 
 export const EFFECT_DEFS = {
+  // Modifiers
+  // TODO - static validator check these aren't used in trigger, only modifier block
+  modifyAmount: {
+    create: (amount) => ({type:"modifyAmount", amount}),
+    apply(game, e) {
+      currentContext().amount += e.amount; 
+    }
+  },
+
+
+
   // ── Skills ────────────────────────────────────────────────────────────────
 
   gainSkillXp: {
@@ -354,7 +368,7 @@ export const EFFECT_DEFS = {
   actionProgress: {
     create: (amount) => ({ type: "actionProgress", amount }),
     apply(game, e) {
-      const state = game.actionStates[game.activeAction];
+      const state = game.actionStates[getActiveAction()];
       state.completableHolder.advanceProgress(game, e.amount);
       return null;
     },
@@ -378,17 +392,26 @@ export const EFFECT_DEFS = {
     }
   },
 
-  setActiveAction: {
-    create: (action) => ({ type: "setActiveAction", action }),
+  activateAction: {
+    create: (action) => ({ type: "activateAction", action }),
     apply(game, e) {
-      const didChange = (game.activeAction !== e.action);
-      game.activeAction = e.action;
-      return didChange ? "actionChanges" : null;
+      const a = game.actionStates[e.action];
+      activateCondition(game, a, null);
+      return "actionChanged";
     },
     display(game, e) {
       return `start action ${e.action}`;
     }
   },
+
+  deactivateAction: {
+    create: (action) => ({ type: "deactivateAction", action }),
+    apply(game, e) {
+      const a = game.actionStates[e.action];
+      deactivateCondition(game, a);
+    },
+  },
+
 
   // ── UI / Log ──────────────────────────────────────────────────────────────
 

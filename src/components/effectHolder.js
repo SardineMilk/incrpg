@@ -24,7 +24,6 @@ export class EffectHolder {
 
     const applied = [];
     for (const effect of this.effectDefs) {
-
       applied.push(...applyEffect(game, effect, strength));
     }
     this.appliedEffects = applied;

@@ -31,22 +31,24 @@ export function initialiseState(game) {
     const def = ACTIONS[id];
     game.actionStates[id] = {
       effectHolder:       new EffectHolder(def.effects ?? []),
-      triggerHolder:  new TriggerHolder(ACTIONS[id].triggers ?? []),
+      triggerHolder:      new TriggerHolder(ACTIONS[id].triggers ?? []),
+      modifierHolder:     new TriggerHolder(ACTIONS[id].modifiers ?? []),
       completableHolder:  new CompletionHolder(def.duration, def.result),
+      activeHolder:       new ActiveHolder(),
 
       competency:         1,
 
-      // TODO Active component, replacing game.activeAction
     };
   }
 
   game.conditionStates = {};
   for (const id in CONDITIONS) {
     game.conditionStates[id] = {
-      effectHolder:   new EffectHolder(CONDITIONS[id].effects ?? []),
-      triggerHolder:  new TriggerHolder(CONDITIONS[id].triggers ?? []),
-      strengthHolder: new StatLayer({flat:1}),
-      activeHolder:   new ActiveHolder(),
+      effectHolder:     new EffectHolder(CONDITIONS[id].effects ?? []),
+      triggerHolder:    new TriggerHolder(CONDITIONS[id].triggers ?? []),
+      modifierHolder:   new TriggerHolder(CONDITIONS[id].modifiers ?? []),
+      strengthHolder:   new StatLayer({flat:1}),
+      activeHolder:     new ActiveHolder(),
     };
   }
 

@@ -3,7 +3,6 @@ export const game = {
   tick: 0,
 
   location: "new_meldrum",
-  activeAction: "sleep",
 
   values: {
     health: 0,

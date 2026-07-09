@@ -103,7 +103,7 @@ export const INHERENT_EFFECTS = {
         event: evt.valueLoss(sel.ids(["health", "stamina", "mental"])),
         requirements: [[req.valueLessThan(sel.ids(["health", "stamina", "mental"]), 0)]],
         effects: [
-          eff.setActiveAction("sleep"),
+          eff.activateAction("sleep"),
           eff.sendMessage("SYSTEM", "You pass out"),
         ],
       }
@@ -148,7 +148,17 @@ export const INHERENT_EFFECTS = {
     ],
   },
 
-  test: {
+  action_exclusivity: {
+    tags: ["system"],
+    modifiers: [
+      {
+        event: evt.activateAction(),
+        effects: [eff.deactivateAction(fml.activeAction())],
+      }
+    ]
+  },
+
+  action_test: {
     triggers: [
       {
         event: evt.actionChanges(),
@@ -158,6 +168,17 @@ export const INHERENT_EFFECTS = {
       }
     ],
   },
+
+  modifier_test: {
+    modifiers: [
+      {
+        event: evt.changeValue("stamina"),
+        effects: [
+          eff.modifyAmount(0)
+        ]
+      }
+    ]
+  }
 
 };
 
