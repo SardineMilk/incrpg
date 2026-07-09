@@ -298,6 +298,7 @@ const TRAITS = {
       eff.changeValue("healthMax", 80),
       eff.changeValue("staminaMax", 150),
       eff.changeValue("mentalMax", 70),
+      eff.deactivateCondition("stamina_death"),
     ],
   },
 
