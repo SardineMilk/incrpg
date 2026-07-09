@@ -1,12 +1,10 @@
 import { INHERENT_EFFECTS }         from "../data/conditionsData.js";
-import { ACTIONS } from "../data/actionsData.js";
 import { game }                                 from "./state.js";
 import { initialiseState }                      from "../utils/state_creator.js";
 import { EventLog }                    from "./log.js";
 import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
 import { processTrigger }                       from "./events.js";
 import { applyEffect }                          from "./effects.js";
-import { getActiveAction } from "../utils/getActiveAction.js";
 
 /*
 * Validation
@@ -16,6 +14,8 @@ import { getActiveAction } from "../utils/getActiveAction.js";
 /* TODO
 * - recalculation of passive effects on formula change
 *   - preproccess of data, subscribing to values, events etc
+* - Elegant attribute xp system. Maybe related to skills? 
+*   - Each skill gives xp in some attributes, agility+con for running, etc 
 */
 
 // TODO - figure out if this can easily be made dynamic

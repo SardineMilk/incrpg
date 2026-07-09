@@ -97,6 +97,7 @@ export const INHERENT_EFFECTS = {
     ]
   },
 
+  /*
   death: {
     triggers: [
       {
@@ -105,6 +106,43 @@ export const INHERENT_EFFECTS = {
         effects: [
           eff.activateAction("sleep"),
           eff.sendMessage("SYSTEM", "You pass out"),
+        ],
+      }
+    ],
+  },
+  */
+  health_death: {
+    triggers: [
+      {
+        event: evt.valueLoss("health"),
+        requirements: [req.valueLessThan("health", 0)],
+        effects: [
+          eff.activateAction("sleep"),
+          eff.sendMessage("SYSTEM", "You pass out from your injuries"),
+        ],
+      }
+    ],
+  },
+  stamina_death: {
+    triggers: [
+      {
+        event: evt.valueLoss("stamina"),
+        requirements: [req.valueLessThan("stamina", 0)],
+        effects: [
+          eff.activateAction("sleep"),
+          eff.sendMessage("SYSTEM", "You pass out"),
+        ],
+      }
+    ],
+  },
+  mental_death: {
+    triggers: [
+      {
+        event: evt.valueLoss("mental"),
+        requirements: [req.valueLessThan("mental", 0)],
+        effects: [
+          eff.activateAction("sleep"),
+          eff.sendMessage("SYSTEM", "You pass out from stress"),
         ],
       }
     ],

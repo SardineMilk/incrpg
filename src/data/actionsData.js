@@ -104,6 +104,15 @@ export const ACTIONS = {
       perception: 0,
     },
 
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [
+          eff.gainSkillXp("constitution", 0.5),
+          eff.gainSkillXp("willpower", 0.2),
+        ],
+      },
+    ],
 
     effects: [
       eff.activateCondition("sleeping"),
