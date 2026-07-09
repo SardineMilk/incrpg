@@ -36,6 +36,7 @@ export function startTicking(render) {
     applyEffect(game, { type: "activateCondition", condition: conditionId });
   }
   applyEffect(game, { type: "activateCondition", condition: "human" });
+  applyEffect(game, { type: "setLocation", location: "new_meldrum"});
   applyEffect(game, { type: "activateAction", action: "sleep" });
 
 

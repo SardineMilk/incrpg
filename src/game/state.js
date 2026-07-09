@@ -2,7 +2,6 @@
 export const game = {
   tick: 0,
 
-  location: "new_meldrum",
 
   values: {
     health: 0,
