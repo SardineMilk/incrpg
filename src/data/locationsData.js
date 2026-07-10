@@ -88,18 +88,16 @@ export const LOCATIONS = {
   *
   * Surrounded by ancient floodplains, 
   * a massive, boxy walled city like pallas+liscor from twi.
-  * Similar vibes to dwemer ruins but less steampunk
-  * Inside is an inverted pyramid of tiers
-  * 
-  * Inside, it's an abandoned advanced golem-punk city
+  * Turn of 18-1900s Edinburgh vibes. Gas lamps, primitive electricity
+  * Stacked warren of streets
   * Partially flooded and decayed from years of flood cycle
-  * Bulky stone constructs used for most of societal labour
+  * Bronze construct police patrol streets
+  * Frankenstein-style boss
   * 
   * Climbing into the city is a skill gate
   * 
   * Inside, descend the tiers towards the centre
   * as you descend, it gets more flooded and the constructs become stronger
-  * Discover how the city fell to the horrors of bureaucracy 
   * 
   * Gathering
   * - Mine the walls to strip strange copper channels

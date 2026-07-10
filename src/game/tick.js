@@ -26,6 +26,7 @@ let intervalId = null;
 export function startTicking(render) {
   initialiseState(game);
 
+
   // TODO - refactor this somewhere else
   game.log = new EventLog({ container: document.getElementById("log-box") });
   game.log.container.scrollTop = game.log.container.scrollHeight;
@@ -38,8 +39,6 @@ export function startTicking(render) {
   applyEffect(game, { type: "activateCondition", condition: "human" });
   applyEffect(game, { type: "setLocation", location: "new_meldrum"});
   applyEffect(game, { type: "activateAction", action: "sleep" });
-
-
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {

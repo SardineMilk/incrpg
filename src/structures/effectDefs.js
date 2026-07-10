@@ -385,7 +385,7 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       game.location = e.location;
       const tags = LOCATIONS[e.location]?.tags ?? [];
-      return { type: "locationChanges", context: { ...e, tags } };
+      return "locationChanges";
     },
     display(game, e) {
       return `move to ${e.location}`;
