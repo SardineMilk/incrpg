@@ -12,10 +12,12 @@ import { applyEffect }                          from "./effects.js";
 */
 
 /* TODO
-* - recalculation of passive effects on formula change
+* - Recalculation of passive effects on formula change
 *   - preproccess of data, subscribing to values, events etc
 * - Elegant attribute xp system. Maybe related to skills? 
 *   - Each skill gives xp in some attributes, agility+con for running, etc 
+*   - Each skill has parent of attribute
+* - Fix selectors
 */
 
 // TODO - figure out if this can easily be made dynamic

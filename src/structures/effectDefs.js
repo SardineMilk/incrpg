@@ -450,6 +450,7 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       game.location = e.location;
       const tags = LOCATIONS[e.location]?.tags ?? [];
+      e.tags = tags; // Modify the effect (not ideal)
       return "locationChanges";
     },
     display(game, e) {

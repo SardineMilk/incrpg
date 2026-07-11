@@ -27,18 +27,18 @@ export function initialiseState(game) {
   ]);
 
   registerEntities(game.registry, ACTIONS, [
-      EffectHolder,
-      TriggerHolder,
-      ModifierHolder,
-      CompletionHolder,
-      ActiveHolder,
+    EffectHolder,
+    TriggerHolder,
+    ModifierHolder,
+    CompletionHolder,
+    ActiveHolder,
   ]);
 
   registerEntities(game.registry, CONDITIONS, [
-      EffectHolder,
-      TriggerHolder,
-      ModifierHolder,
-      StatLayer,
-      ActiveHolder,
+    EffectHolder,
+    TriggerHolder,
+    ModifierHolder,
+    StatLayer,
+    ActiveHolder,
   ]);
 }

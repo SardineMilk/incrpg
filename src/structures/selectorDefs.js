@@ -17,6 +17,7 @@ export function isSelector(val) {
 }
 
 // Resolve single target or by-tag selections
+// TODO - support multipler selectors in one structure
 export function resolveTargets(game, structure) {
   for (const [key, val] of Object.entries(structure)) {
     if (key === "type") continue;
