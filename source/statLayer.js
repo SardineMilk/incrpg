@@ -7,7 +7,7 @@ export class StatLayer {
   }
 
   static fromDefinition(def) {
-    return new StatLayer({ flat: 1});
+    return new StatLayer(def);
   }
 
   get value() {
