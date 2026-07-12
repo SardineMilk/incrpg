@@ -34,36 +34,30 @@ function scaleStatLayer(game, effect, mul) {
 }
 
 
-// Condition helper functions
-function getComponent(game, entity, component) {
-  return game.registry.get(entity, component);
-}
-
-
 function getStrength(game, entity) {
   return (
-    getComponent(game, entity, "StatLayer")?.value ?? 1
+    game.registry.get(entity, "StatLayer")?.value ?? 1
   );
 }
 
 
 function activateEntity(game, entity, duration = null) {
-  const active = getComponent(game, entity, "ActiveHolder");
+  const active = game.registry.get(entity, "ActiveHolder");
   if (!active) return;
   if (active.active) return;
 
-  const effects = getComponent(game, entity, "EffectHolder");
+  const effects = game.registry.get(entity, "PassiveHolder");
   if (effects) effects.apply(game, getStrength(game, entity));
   active.activate(duration);
 }
 
 
 function deactivateEntity(game, entity) {
-  const active = getComponent(game, entity, "ActiveHolder");
+  const active = game.registry.get(entity, "ActiveHolder");
   if (!active) return;
   if (!active.active) return;
 
-  const effects = getComponent(game, entity, "EffectHolder");
+  const effects = game.registry.get(entity, "PassiveHolder");
   if (effects) effects.remove(game, getStrength(game, entity));
   active.deactivate();
 }
@@ -154,6 +148,7 @@ export const EFFECT_DEFS = {
         .levelBonus
         .changeReverse(e);
     },
+    scale: scaleStatLayer,
     display(game, e) {
       let m = `increase ${e.skill} level by: `;
       if (e.flat != 0) m += `+${e.flat} `;
@@ -286,7 +281,7 @@ export const EFFECT_DEFS = {
 
       const effects = game.registry.get(
         e.condition,
-        "EffectHolder"
+        "PassiveHolder"
       );
 
       if (effects) {

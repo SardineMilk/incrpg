@@ -4,7 +4,7 @@ import { CONDITIONS } from "../data/conditionsData.js";
 import { LOCATIONS }  from "../data/locationsData.js";
 
 import { StatLayer }          from "../components/statLayer.js";
-import { EffectHolder }       from "../components/effectHolder.js";
+import { PassiveHolder }       from "../components/passiveHolder.js";
 import { TriggerHolder }      from "../components/triggerHolder.js";
 import { ModifierHolder }      from "../components/modifierHolder.js";
 import { CompletionHolder }   from "../components/completionHolder.js";
@@ -27,7 +27,7 @@ export function initialiseState(game) {
   ]);
 
   registerEntities(game.registry, ACTIONS, [
-    EffectHolder,
+    PassiveHolder,
     TriggerHolder,
     ModifierHolder,
     CompletionHolder,
@@ -35,7 +35,7 @@ export function initialiseState(game) {
   ]);
 
   registerEntities(game.registry, CONDITIONS, [
-    EffectHolder,
+    PassiveHolder,
     TriggerHolder,
     ModifierHolder,
     StatLayer,

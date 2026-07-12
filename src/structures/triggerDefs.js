@@ -74,7 +74,8 @@ export const TRIGGER_DEFS = {
     create: (skill) => ({ type: "gainSkillXp", skill }),
     check: (trigger, ctx) => {
       if (!ctx.skill) return false;
-      return trigger.skill == null || ctx.skill === trigger.skill;
+      const skillMatches = trigger.skill == null || ctx.skill === trigger.skill
+      return skillMatches && ctx.amount >= 0;
     },
   },
 

@@ -4,15 +4,14 @@
 
 import { applyEffect, removeEffect } from "../game/effects.js";
 
-export class EffectHolder {
+export class PassiveHolder {
   constructor(effectDefs = []) {
     this.effectDefs = effectDefs;  // Static eff.* definitions, never mutated
     this.appliedEffects = []; // resolved effect objects, needed to undo later
   }
 
-  static type = "EffectHolder"
   static fromDefinition(def) {
-    return new EffectHolder(def.effects ?? []);
+    return new PassiveHolder(def.effects ?? []);
   }
 
   get isApplied() {
@@ -23,7 +22,7 @@ export class EffectHolder {
   apply(game, strength = 1) {
     if (!this.effectDefs.length) return;
     if (this.isApplied) {
-      console.warn("EffectHolder.apply() called while already applied — call remove() first");
+      console.warn("PassiveHolder.apply() called while already applied — call remove() first");
       return;
     }
 
