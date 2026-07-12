@@ -156,8 +156,8 @@ export const INHERENT_EFFECTS = {
         event: evt.gainSkillXp(),
         effects: [
           eff.gainSkillXp(
-            fml.skillParent(fml.contextSkill()),
-            fml.contextAmount(),
+            fml.skillParent(fml.context("skill")),
+            fml.context("amount"),
            ),
         ]
       }
@@ -285,12 +285,12 @@ const TEMP_CONDITIONS = {
       {
         event: evt.changeValue("health"),                       // When health changes
         requirements: [
-          req.lessThan(fml.contextAmount(), 0),                 // If it is decreasing
+          req.lessThan(fml.context("amount"), 0),                 // If it is decreasing
           req.hasCondition("adrenaline_surge", 100),            // And this condtion has 100+ stacks
         ], 
         effects: [
-          eff.modifyAmount(fml.mul(fml.contextAmount(), 0.5)),  // Half the health loss
-          eff.changeValue("stamina", fml.mul(fml.contextAmount(), 0.5)), // Lose the same amount of stamina
+          eff.modifyAmount(fml.mul(fml.context("amount"), 0.5)),  // Half the health loss
+          eff.changeValue("stamina", fml.mul(fml.context("amount"), 0.5)), // Lose the same amount of stamina
         ],
       },
     ],

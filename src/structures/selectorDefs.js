@@ -90,7 +90,7 @@ export const sel = {
   where: (selector, requirements) =>
     makeSelector((game) =>
       resolveIds(game, selector).filter((id) =>
-        withContext({ id: id }, () =>
+        withContext({ id:id }, () =>
           meetsRequirements(game, { requirements })
         )
       )

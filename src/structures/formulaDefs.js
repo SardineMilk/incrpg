@@ -14,10 +14,7 @@ export const lift =
 // When adding a new formula it takes `game` as a parameter,
 // but you don't need to pass game at point of use.
 const definitions = {
-  contextAmount: (_game) => currentContext().amount,
-  contextSkill: (_game) => currentContext().skill,
-  contextCondition: (_game) => currentContext().condition,
-  contextId: (_game) => currentContext().id,
+  context: (_game, key) => currentContext()[key],
 
   activeAction:       (game) => getActiveAction(),
   conditionStrength:  (game, condition) => game.registry.get(condition, "StatLayer")?.value,
