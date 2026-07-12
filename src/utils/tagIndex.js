@@ -7,8 +7,13 @@
 // namespace → tag → id[]
 const _index = {};
 
+// namespace → id[]  (every id registered for that namespace, tagged or not)
+const _allIds = {};
+
 export function generateTagIndex(namespace, dataset) {
   const ns = (_index[namespace] = {});
+  _allIds[namespace] = Object.keys(dataset);
+
   for (const [id, def] of Object.entries(dataset)) {
     for (const tag of def.tags ?? []) {
       (ns[tag] ??= []).push(id);
@@ -19,6 +24,11 @@ export function generateTagIndex(namespace, dataset) {
 // Return all Ids in namespace that have tag
 export function byTag(namespace, tag) {
   return _index[namespace]?.[tag] ?? [];
+}
+
+// Return every id registered for a namespace (SKILLS, CONDITIONS, LOCATIONS, ...)
+export function allIds(namespace) {
+  return _allIds[namespace] ?? [];
 }
 
 // Returns every tag for given Id in namespace

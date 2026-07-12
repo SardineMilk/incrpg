@@ -17,6 +17,7 @@ const definitions = {
   contextAmount: (_game) => currentContext().amount,
   contextSkill: (_game) => currentContext().skill,
   contextCondition: (_game) => currentContext().condition,
+  contextId: (_game) => currentContext().id,
 
   activeAction:       (game) => getActiveAction(),
   conditionStrength:  (game, condition) => game.registry.get(condition, "StatLayer")?.value,
