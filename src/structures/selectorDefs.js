@@ -1,4 +1,5 @@
 import { byTag, allIds } from "../utils/tagIndex.js";
+import { meetsRequirements } from "../game/requirements.js";
 
 // Tag selectors so resolveTargets can find them in arbitrary fields.
 const SELECTOR = Symbol("selector");
@@ -85,17 +86,6 @@ export const sel = {
       const sets = selectors.map((s) => new Set(resolveIds(game, s)));
       return [...intersectSets(sets)];
     }),
-
-  // Escape hatch, used for dynamic runtime selections 
-  where: (selector, requirements) =>
-    makeSelector((game) =>
-      resolveIds(game, selector).filter((id) =>
-        withContext({ id:id }, () =>
-          meetsRequirements(game, { requirements })
-        )
-      )
-    ),
-
 };
 
 // Namespace sugar to make selectors more readable
@@ -115,19 +105,28 @@ for (const namespace of ["conditions", "skills", "locations", "actions"]) {
  * - this returns the cartesian product. Should this be different?
  * With zero selector fields the structure is returned unchanged.
  */
+
 export function resolveTargets(game, structure) {
-  const selectorFields = Object.entries(structure).filter(
+  const { requirements, ...base } = structure;
+ 
+  const selectorFields = Object.entries(base).filter(
     ([key, val]) => key !== "type" && isSelector(val)
   );
-
-  if (selectorFields.length === 0) return [structure];
-
-  let results = [structure];
+ 
+  let results = [base];
   for (const [key, val] of selectorFields) {
     const values = val(game);
-    results = results.flatMap((base) =>
-      values.map((v) => ({ ...base, [key]: v }))
+    results = results.flatMap((partial) =>
+      values.map((v) => ({ ...partial, [key]: v }))
     );
   }
+ 
+  // This lets you use requirements per expanded target of the selector
+  if (requirements) {
+    results = results.filter((candidate) =>
+      withContext(candidate, () => meetsRequirements(game, { requirements }))
+    );
+  }
+ 
   return results;
 }

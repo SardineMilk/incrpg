@@ -1,4 +1,4 @@
-import { LOCATIONS } from "../data/locationsData.js";
+import { tagsOf } from "../utils/tagIndex.js";
 
 /*
  * Each entry defines one requirement type:
@@ -17,9 +17,9 @@ export const REQUIREMENT_DEFS = {
     check: (game, r) => (game.inventory[r.item] ?? 0) > 0,
   },
 
-  locationHasTag: {
-    create: (tag) => ({ type: "locationHasTag", tag }),
-    check: (game, r) => LOCATIONS[game.location]?.tags.includes(r.tag) ?? false,
+  hasTag: {
+    create: (id, tag) => ({ type: "hasTag", id, tag }),
+    check: (game, r) => tagsOf(r.id).includes(r.tag),
   },
 
   skillMoreThan: {

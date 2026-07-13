@@ -34,13 +34,7 @@ export function startTicking(render) {
   game.log.container.scrollTop = game.log.container.scrollHeight;
   game.log.followTail = true;
 
-  // TODO - make an elegant system for this
-  for (const conditionId in INHERENT_EFFECTS) {
-    applyEffect(game, { type: "activateCondition", condition: conditionId });
-  }
-  applyEffect(game, { type: "activateCondition", condition: "human" });
-  applyEffect(game, { type: "setLocation", location: "new_meldrum"});
-  applyEffect(game, { type: "activateAction", action: "sleep" });
+  applyEffect(game, { type: "activateCondition", condition: "startup" });
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {

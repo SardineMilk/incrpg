@@ -128,10 +128,8 @@ export const ACTIONS = {
     duration: 100,
 
     result: [
-      eff.deactivateCondition("human"),
       eff.activateCondition("rat_king"),
     ]
-
   }
 
 };

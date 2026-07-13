@@ -5,8 +5,17 @@ import {eff, req, evt, sel, fml } from "../structures/structures.js";
 // Inherent Effects are always active, and may have strict requirements or triggers
 export const INHERENT_EFFECTS = {
 
+  startup: {
+    effects: [
+      eff.activateCondition(sel.conditions.tags("system")),
+      eff.activateCondition("human"),
+      eff.setLocation("new_meldrum"),
+      eff.activateAction("sleep"),
+    ]
+  },
+
   health_regen: {
-    tags: ["passive_regen"],
+    tags: ["passive_regen", "mortal"],
     triggers: [
       {
         event: evt.tick(),
@@ -19,7 +28,7 @@ export const INHERENT_EFFECTS = {
     ],
   },
   stamina_regen: {
-    tags: ["passive_regen"],
+    tags: ["passive_regen", "mortal"],
     triggers: [
       {
         event: evt.tick(),
@@ -32,7 +41,7 @@ export const INHERENT_EFFECTS = {
     ],
   },
   mental_regen: {
-    tags: ["passive_regen"],
+    tags: ["passive_regen", "mortal"],
     triggers: [
       {
         event: evt.tick(),
@@ -55,6 +64,7 @@ export const INHERENT_EFFECTS = {
   * Enemy overhealer, turning you into a tumurous mass
   */
   overHealth: {
+    tags: ["mortal"],
     triggers: [
       {
         event: evt.tick(),
@@ -69,6 +79,7 @@ export const INHERENT_EFFECTS = {
     ]
   },
   overStamina: {
+    tags: ["mortal"],
     triggers: [
       {
         event: evt.tick(),
@@ -83,6 +94,7 @@ export const INHERENT_EFFECTS = {
     ]
   },
   overMental: {
+    tags: ["mortal"],
     triggers: [
       {
         event: evt.tick(),
@@ -112,6 +124,7 @@ export const INHERENT_EFFECTS = {
   },
   */
   health_death: {
+    tags: ["mortal"],
     triggers: [
       {
         event: evt.valueLoss("health"),
@@ -124,6 +137,7 @@ export const INHERENT_EFFECTS = {
     ],
   },
   stamina_death: {
+    tags: ["mortal"],
     triggers: [
       {
         event: evt.valueLoss("stamina"),
@@ -136,6 +150,7 @@ export const INHERENT_EFFECTS = {
     ],
   },
   mental_death: {
+    tags: ["mortal"],
     triggers: [
       {
         event: evt.valueLoss("mental"),
@@ -191,34 +206,53 @@ export const INHERENT_EFFECTS = {
     modifiers: [
       {
         event: evt.activateAction(),
-        effects: [eff.deactivateAction(fml.activeAction())],
+        effects: [eff.deactivateAction(fml.activeAction()),],
       }
     ]
   },
 
-  action_test: {
-    triggers: [
+  form_exclusivity: {
+    tags: ["system"],
+    modifiers: [
       {
-        event: evt.actionChanges(),
-        effects: [
-          eff.sendMessage("SYSTEM", "TEST - action changed"),
-        ]
-      }
+        event: evt.activateCondition(),
+        requirements: [req.hasTag(fml.context("condition"), "form")],
+        effects: [eff.deactivateCondition(sel.conditions.tags("form"))],
+      },
+    ],
+  },
+};
+
+
+const TRAITS = {
+  // Other forms can have different effects
+  human: {
+    tags: ["form"],
+    effects: [
+      eff.activateCondition(sel.conditions.tags("mortal")),
+      eff.changeValue("healthMax", 100),
+      eff.changeValue("staminaMax", 100),
+      eff.changeValue("mentalMax", 100),
     ],
   },
 
-  modifier_test: {
-    modifiers: [
-      {
-        event: evt.changeValue("stamina"),
-        effects: [
-          eff.modifyAmount(0)
-        ]
-      }
-    ]
-  }
+  rat_king: {
+    tags: ["form", "beast", "rat"],
+    effects: [
+      eff.activateCondition(sel.conditions.tags("mortal")),
+      eff.changeValue("healthMax", 80),
+      eff.changeValue("staminaMax", 150),
+      eff.changeValue("mentalMax", 70),
+      eff.deactivateCondition("stamina_death"),
+    ],
+  },
 
-};
+  /* Elf 
+  * All equipment must be natural
+  */
+
+}
+
 
 const TEMP_CONDITIONS = {
   sleeping: {
@@ -304,33 +338,7 @@ const TEMP_CONDITIONS = {
 };
 
 
-const TRAITS = {
-  // Other forms can have different effects
-  // TODO - add a way to make tagged conditions mutually exclusive
-  human: {
-    tags: ["form"],
-    effects: [
-      eff.changeValue("healthMax", 100),
-      eff.changeValue("staminaMax", 100),
-      eff.changeValue("mentalMax", 100),
-    ],
-  },
 
-  rat_king: {
-    tags: ["form", "beast", "rat"],
-    effects: [
-      eff.changeValue("healthMax", 80),
-      eff.changeValue("staminaMax", 150),
-      eff.changeValue("mentalMax", 70),
-      eff.deactivateCondition("stamina_death"),
-    ],
-  },
-
-  /* Elf 
-  * All equipment must be natural
-  */
-
-}
 
 
 const IMBALANCES = {

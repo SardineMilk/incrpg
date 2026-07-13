@@ -6,20 +6,25 @@
 
 // namespace → tag → id[]
 const _index = {};
-
 // namespace → id[]  (every id registered for that namespace, tagged or not)
 const _allIds = {};
+// id → tag[] (namespace-agnostic. EntityRegistry already requires uniwue id's)
+const _tagsById = {};
 
 export function generateTagIndex(namespace, dataset) {
   const ns = (_index[namespace] = {});
   _allIds[namespace] = Object.keys(dataset);
-
+ 
   for (const [id, def] of Object.entries(dataset)) {
-    for (const tag of def.tags ?? []) {
+    const tags = def.tags ?? [];
+    _tagsById[id] = tags;
+ 
+    for (const tag of tags) {
       (ns[tag] ??= []).push(id);
     }
   }
 }
+ 
 
 // Return all Ids in namespace that have tag
 export function byTag(namespace, tag) {
@@ -31,7 +36,11 @@ export function allIds(namespace) {
   return _allIds[namespace] ?? [];
 }
 
-// Returns every tag for given Id in namespace
-export function tagsOf(namespace, id, dataset) {
-  return dataset[id]?.tags ?? [];
+// Return every tag on a given id, namespace-agnostic
+export function tagsOf(id) {
+  return _tagsById[id] ?? [];
 }
+ 
+
+
+

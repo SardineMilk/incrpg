@@ -20,18 +20,17 @@ export class TriggerHolder {
     return this.triggerDefs.length > 0;
   }
 
-  fire(game, triggerType, context, strength = 1) {
-    for (const t of this.triggerDefs) {
-      if (t.event.type !== triggerType) continue;
-      if (!this._matches(game, t.event, context)) continue;
-      if (!meetsRequirements(game, t)) continue;
+fire(game, triggerType, context, strength = 1) {
+  for (const t of this.triggerDefs) {
+    if (t.event.type !== triggerType) continue;
 
-      withContext(context, () => {
-        for (const effect of t.effects) applyEffect(game, effect, strength);
-      });
-    }
+    withContext(context, () => {
+      if (!this._matches(game, t.event, context)) return;
+      if (!meetsRequirements(game, t)) return;
+      for (const effect of t.effects) applyEffect(game, effect, strength);
+    });
   }
-
+}
   // Resolves any selector on the trigger's event object
   // and checks it against the fired context via the trigger's def.check().
   _matches(game, event, context) {
