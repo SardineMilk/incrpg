@@ -6,51 +6,59 @@ export const SKILLS = {
   // Attribute skills to allow them to level up and apply effects based on level.
   // Don't add milestones
   // The rendering code treats them as a special case
-  strength: { 
+  strength: {
+    tags: ["characteristic"],
     name: "Strength",
     level: [
       eff.changeValue("healthMax", 1),
       eff.changeValue("staminaMax", 1),
     ], 
   },
-  constitution: { 
+  constitution: {
+    tags: ["characteristic"],
     name: "Constitution",
     level: [
       eff.changeValue("healthMax", 2),
     ], 
   },
-  agility: { 
+  agility: {
+    tags: ["characteristic"],
     name: "Agility",
     level: [
       eff.changeValue("staminaMax", 2),
     ], 
   },
-  dexterity: { 
+  dexterity: {
+    tags: ["characteristic"],
     name: "Dexterity",
     level: [
     ], 
   },
-  intelligence: { 
+  intelligence: {
+    tags: ["characteristic"],
     name: "Intelligence",
     level: [
       eff.changeValue("mentalMax", 2),
     ], 
   },
-  willpower: { 
+  willpower: {
+    tags: ["characteristic"],
     name: "Willpower",
     level: [
       eff.changeValue("healthMax", 1),
       eff.changeValue("mentalMax", 1),
     ], 
   },
-  wit: { 
+  wit: {
+    tags: ["characteristic"],
     name: "Wit",
     level: [
       eff.changeValue("staminaMax", 1),
       eff.changeValue("mentalMax", 1),
     ], 
   },
-  perception: { 
+  perception: {
+    tags: ["characteristic"],
     name: "Perception",
     level: [
     ], 
