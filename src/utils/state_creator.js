@@ -8,7 +8,7 @@ import { PassiveHolder }       from "../components/passiveHolder.js";
 import { TriggerHolder }      from "../components/triggerHolder.js";
 import { ModifierHolder }      from "../components/modifierHolder.js";
 import { CompletionHolder }   from "../components/completionHolder.js";
-import { ProgressionHolder }  from "../components/progressionHolder.js";
+import { LevelHolder }  from "../components/levelHolder.js";
 import { ActiveHolder }       from "../components/activeHolder.js";
 
 import { generateTagIndex } from "./tagIndex.js";
@@ -23,7 +23,7 @@ export function initialiseState(game) {
 
   // Skills
   registerEntities(game.registry, SKILLS, [
-    ProgressionHolder
+    LevelHolder
   ]);
 
   registerEntities(game.registry, ACTIONS, [

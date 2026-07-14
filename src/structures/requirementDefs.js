@@ -24,12 +24,12 @@ export const REQUIREMENT_DEFS = {
 
   skillMoreThan: {
     create: (skill, value) => ({ type: "skillMoreThan", skill, value }),
-    check: (game, r) => game.registry.get(r.skill, "ProgressionHolder").level >= r.value
+    check: (game, r) => game.registry.get(r.skill, "LevelHolder").level >= r.value
   },
 
   skillBaseMoreThan: {
     create: (skill, value) => ({ type: "skillBaseMoreThan", skill, value }),
-    check: (game, r) => game.registry.get(r.skill, "ProgressionHolder").baseLevel >= r.value
+    check: (game, r) => game.registry.get(r.skill, "LevelHolder").baseLevel >= r.value
   },
 
   valueLessThan: {

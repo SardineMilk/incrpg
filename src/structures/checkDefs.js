@@ -4,7 +4,7 @@ export const CHECK_DEFS = {
     resolve(game, c) {
       const power = Object.entries(c.skills).reduce(
         (sum, [skill, weight]) =>
-          sum + (game.registry.get(skill, "ProgressionHolder")?.level ?? 0) * weight,
+          sum + (game.registry.get(skill, "LevelHolder")?.level ?? 0) * weight,
         0
       );
       // Placeholder balancing: skill power vs a difficulty-scaled roll.

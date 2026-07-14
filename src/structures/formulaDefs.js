@@ -18,7 +18,7 @@ const definitions = {
 
   activeAction:       (game) => getActiveAction(),
   conditionStrength:  (game, condition) => game.registry.get(condition, "StatLayer")?.value,
-  level:              (game, skill) => game.registry.get(skill, "ProgressionHolder")?.level,
+  level:              (game, skill) => game.registry.get(skill, "LevelHolder")?.level,
   value:              (game, value) => game.values[value],
   skillParent:        (_game, skill) => SKILLS[skill]?.parent,
 

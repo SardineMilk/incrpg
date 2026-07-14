@@ -6,7 +6,7 @@ function xpToNext(level) {
   return Math.floor(scalingFactor * Math.pow(2, level / 5));
 }
 
-export class ProgressionHolder {
+export class LevelHolder {
     constructor(levelEffects = [], milestones = {}, name) {
         this.levelEffects = levelEffects || [];
         this.milestones = milestones || {};
@@ -20,7 +20,7 @@ export class ProgressionHolder {
     }
 
     static fromDefinition(def) {
-        return new ProgressionHolder(
+        return new LevelHolder(
             def.level,
             def.milestones,
             def.name

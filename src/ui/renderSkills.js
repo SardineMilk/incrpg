@@ -17,7 +17,7 @@ export function renderSkills(game) {
 
     const progression = game.registry.get(
       skillId,
-      "ProgressionHolder"
+      "LevelHolder"
     );
 
     const level = progression.level;

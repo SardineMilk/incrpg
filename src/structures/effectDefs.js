@@ -83,7 +83,7 @@ export const EFFECT_DEFS = {
       if (e.amount == 0) return;
 
       game.registry
-        .get(e.skill, "ProgressionHolder")
+        .get(e.skill, "LevelHolder")
         .gainXp(game, e.amount);
 
       return "gainSkillXp";
@@ -106,7 +106,7 @@ export const EFFECT_DEFS = {
       if (e.skill == null) return;
 
       game.registry
-        .get(e.skill, "ProgressionHolder")
+        .get(e.skill, "LevelHolder")
         .xpBonus
         .change(e);
     },
@@ -114,7 +114,7 @@ export const EFFECT_DEFS = {
       if (e.skill == null) return;
 
       game.registry
-        .get(e.skill, "ProgressionHolder")
+        .get(e.skill, "LevelHolder")
         .xpBonus
         .changeReverse(e);
     },
@@ -138,13 +138,13 @@ export const EFFECT_DEFS = {
     }),
     apply(game, e) {
       game.registry
-        .get(e.skill, "ProgressionHolder")
+        .get(e.skill, "LevelHolder")
         .levelBonus
         .change(e);
     },
     remove(game, e) {
       game.registry
-        .get(e.skill, "ProgressionHolder")
+        .get(e.skill, "LevelHolder")
         .levelBonus
         .changeReverse(e);
     },
