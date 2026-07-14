@@ -255,8 +255,8 @@ const TRAITS = {
 
 
 const TEMP_CONDITIONS = {
-  sleeping: {
-    name: "Sleeping",
+  asleep: {
+    name: "Asleep",
     description: "You are asleep, greatly boosting your natural recovery",
     effects: [
       eff.changeConditionStrength(sel.conditions.tags("passive_regen"), {flat: 10}),

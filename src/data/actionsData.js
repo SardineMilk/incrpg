@@ -115,7 +115,7 @@ export const ACTIONS = {
     ],
 
     effects: [
-      eff.activateCondition("sleeping"),
+      eff.activateCondition("asleep"),
     ],
 
 

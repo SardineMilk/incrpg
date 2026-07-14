@@ -38,7 +38,7 @@ export function startTicking(render) {
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {
-    processTrigger(game, "tick");
+    processTrigger(game, "tick", {});
     render(game);
   }, TICK_RATE);
 
