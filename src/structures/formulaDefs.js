@@ -7,8 +7,8 @@ const res = (val, game) => (typeof val === "function" ? val(game) : val);
 export const lift =
   (fn) =>
   (...args) =>
-  (game, ) =>
-    fn(game, ...args.map(res));
+  (game) =>
+    fn(game, ...args.map((arg) => res(arg, game)));
 
 // When adding a new formula it takes `game` as a parameter,
 // but you don't need to pass game at point of use.
