@@ -423,7 +423,7 @@ export const EFFECT_DEFS = {
   actionProgress: {
     create: (amount) => ({ type: "actionProgress", amount }),
     apply(game, e) {
-      const action = getActiveAction();
+      const action = getActiveAction(game);
       if (!action) return;
 
       game.registry

@@ -95,11 +95,10 @@ footer {
 
 #log-box {
   flex: 0 0 300px;
-  height: 400px;
+  height: 90vh;
   padding: var(--spacing-sm);
   overflow-y: auto;
 }
-
 /*
    Shared Cards
 */

@@ -1,14 +1,13 @@
 import { SKILLS } from "../data/skillsData.js";
-import { game } from "../game/state.js";
 import { currentContext } from "../utils/context.js";
 import { getActiveAction } from "../utils/getActiveAction.js";
 import { isSelector } from "./selectorDefs.js";
 
-const res = (val) => (typeof val === "function" ? val() : val);
+const res = (val, game) => (typeof val === "function" ? val(game) : val);
 export const lift =
   (fn) =>
   (...args) =>
-  () =>
+  (game, ) =>
     fn(game, ...args.map(res));
 
 // When adding a new formula it takes `game` as a parameter,
@@ -16,7 +15,7 @@ export const lift =
 const definitions = {
   context: (_game, key) => currentContext()[key],
 
-  activeAction:       (game) => getActiveAction(),
+  activeAction:       (game) => getActiveAction(game),
   conditionStrength:  (game, condition) => game.registry.get(condition, "StatLayer")?.value,
   level:              (game, skill) => game.registry.get(skill, "LevelHolder")?.level,
   value:              (game, value) => game.values[value],
