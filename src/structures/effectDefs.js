@@ -350,62 +350,7 @@ export const EFFECT_DEFS = {
       return `remove value ${e.value}`;
     }
   },
-  // ── Attributes ────────────────────────────────────────────────────────────
-
-  changeAttribute: {
-    create: (attribute, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
-      type: "changeAttribute",
-      attribute,
-      flat,
-      percent,
-      multiplier,
-    }),
-    apply(game, e) {
-      game.attributes[e.attribute] ??= new StatLayer();
-      game.attributes[e.attribute].change(e);
-    },
-    remove(game, e) {
-      game.attributes[e.attribute].changeReverse(e);
-    },
-    scale: scaleStatLayer,
-    display(game, e) {
-      let m = `modify ${e.attribute} by: `;
-      if (e.flat != 0) m += `+${e.flat} `;
-      if (e.percent != 0) m += `${e.percent}% `;
-      if (e.multiplier != 1) m += `x${e.multiplier} `;
-      return m;
-    }
-  },
-
-  setAttribute: {
-    create: (attribute, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
-      type: "setAttribute",
-      attribute,
-      flat,
-      percent,
-      multiplier,
-    }),
-    apply(game, e) {
-      game.attributes[e.attribute] ??= new StatLayer();
-      game.attributes[e.attribute].set(e);
-    },
-    scale: scaleStatLayer,
-    display(game, e) {
-      return `set ${e.attribute} to flat=${e.flat}, percent=${e.percent}, multiplier=${e.multiplier}`;
-    }
-  },
-
-  removeAttribute: {
-    create: (attribute) => ({ type: "removeAttribute", attribute }),
-    apply(game, e) {
-      delete game.attributes[e.attribute];
-    },
-    display(game, e) {
-      return `remove attribute ${e.attribute}`;
-    }
-  },
-
-
+ 
   // ── Activity ──────────────────────────────────────────────────────────────
 
   activityProgress: {
@@ -419,6 +364,8 @@ export const EFFECT_DEFS = {
       return `add ${e.amount} activity progress`;
     }
   },
+
+  // ── Action ────────────────────────────────────────────────────────────────
 
   actionProgress: {
     create: (amount) => ({ type: "actionProgress", amount }),
@@ -434,22 +381,6 @@ export const EFFECT_DEFS = {
     scale: scaleAmount,
     display(game, e) {
       return `add ${e.amount} progress to the current action`;
-    }
-  },
-
-
-  // ── World ─────────────────────────────────────────────────────────────────
-
-  setLocation: {
-    create: (location) => ({ type: "setLocation", location }),
-    apply(game, e) {
-      game.location = e.location;
-      const tags = LOCATIONS[e.location]?.tags ?? [];
-      e.tags = tags; // Modify the effect (not ideal)
-      return "locationChanges";
-    },
-    display(game, e) {
-      return `move to ${e.location}`;
     }
   },
 
@@ -471,6 +402,20 @@ export const EFFECT_DEFS = {
     },
   },
 
+  // ── World ─────────────────────────────────────────────────────────────────
+
+  setLocation: {
+    create: (location) => ({ type: "setLocation", location }),
+    apply(game, e) {
+      game.location = e.location;
+      const tags = LOCATIONS[e.location]?.tags ?? [];
+      e.tags = tags; // Modify the effect (not ideal)
+      return "locationChanges";
+    },
+    display(game, e) {
+      return `move to ${e.location}`;
+    }
+  },
 
   // ── UI / Log ──────────────────────────────────────────────────────────────
 
@@ -484,6 +429,7 @@ export const EFFECT_DEFS = {
     }
   },
 
+  // TODO
   presentChoice: {
     create: (options) => ({ type: "presentChoice", options }),
     apply(game, e) {
@@ -495,16 +441,6 @@ export const EFFECT_DEFS = {
   },
 
   // ── Misc ──────────────────────────────────────────────────────────────────
-
-  setFlag: {
-    create: (flag, value) => ({ type: "setFlag", flag, value }),
-    apply(game, e) {
-      game.flags[e.flag] = e.value;
-    },
-    display(game, e) {
-      return `set flag ${e.flag} to ${e.value}`;
-    }
-  },
 
   forceTrigger: {
     create: (trigger) => ({ type: "forceTrigger", trigger }),

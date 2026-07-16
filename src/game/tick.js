@@ -36,6 +36,7 @@ I see several ways this can be implemented
    maxHealth = 150
    maxHealth = {human:100, manaShield:fml.value("maxMana")}
    The getter would resolve these combinations when accessing the value
+   When a condition is deactivated, it simply removes it's properties from all combinations 
    This is a very elegant solution, but would it be practical? Survey says 'maybe'
 I believe 1. is the most practical option to start with
 */

@@ -165,7 +165,7 @@ export const INHERENT_EFFECTS = {
 
 
   parent_xp: {
-    tags: ["system"],
+    tags: ["system", "causality"],
     triggers: [
       {
         event: evt.gainSkillXp(),
@@ -180,7 +180,7 @@ export const INHERENT_EFFECTS = {
   },
 
   action_progress: {
-    tags: ["system"],
+    tags: ["system", "entropy"],
     triggers: [
       {
         event: evt.tick(),
@@ -192,7 +192,7 @@ export const INHERENT_EFFECTS = {
   },
 
   condition_decay: {
-    tags: ["system"],
+    tags: ["system", "entropy"],
     triggers: [
       {
         event: evt.tick(),
@@ -202,7 +202,7 @@ export const INHERENT_EFFECTS = {
   },
 
   action_exclusivity: {
-    tags: ["system"],
+    tags: ["system", "singularity"],
     modifiers: [
       {
         event: evt.activateAction(),
@@ -212,7 +212,7 @@ export const INHERENT_EFFECTS = {
   },
 
   form_exclusivity: {
-    tags: ["system"],
+    tags: ["system", "singularity"],
     modifiers: [
       {
         event: evt.activateCondition(),
