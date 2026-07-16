@@ -13,9 +13,13 @@ import { ActiveHolder }       from "../components/activeHolder.js";
 
 import { generateTagIndex } from "./tagIndex.js";
 import { EntityRegistry, registerEntities } from "../components/entityRegistry.js";
+import { validate } from "./validator.js";
 
 export function initialiseState(game) {
   game.registry = new EntityRegistry();
+
+  
+  validate(CONDITIONS, SKILLS, ACTIONS);
 
   generateTagIndex("conditions", CONDITIONS);
   generateTagIndex("skills", SKILLS);

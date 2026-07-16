@@ -20,6 +20,27 @@ import { applyEffect }                          from "./effects.js";
 * - Fix selectors
 */
 
+/*
+Recalculation of passive effects on formula change
+I see several ways this can be implemented
+1. When creating PassiveHolder, determine a "dynamic/static" bool.
+   Every tick, a system condition reapplies (removes+applies) every
+   active dynamic condition. 
+   The exisiting reapply-on-strength-change is required by static conditions
+   This loses sub-tick accuracy, but is easy to implement and performant
+2. Create an event registry at runtime, where dynamic conditions 'hook' onto
+   specific changes, being recalculated every time the change triggers.
+   e.g. "increase maxHealth by maxMana" would hook onto evt.changeValue("maxMana")
+3. Don't store values as literals. 
+   Instead, store them as combinations of everything that influences them
+   maxHealth = 150
+   maxHealth = {human:100, manaShield:fml.value("maxMana")}
+   The getter would resolve these combinations when accessing the value
+   This is a very elegant solution, but would it be practical? Survey says 'maybe'
+I believe 1. is the most practical option to start with
+*/
+
+
 // TODO - figure out if this can easily be made dynamic
 // I want chronomancy
 const TICK_RATE = 1000 / 20;
@@ -27,7 +48,6 @@ const TICK_RATE = 1000 / 20;
 let intervalId = null;
 export function startTicking(render) {
   initialiseState(game);
-
 
   // TODO - refactor this somewhere else
   game.log = new EventLog({ container: document.getElementById("log-box") });
