@@ -6,18 +6,14 @@ import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
 import { processTrigger }                       from "./events.js";
 import { applyEffect }                          from "./effects.js";
 
-/*
-* Validation
-* - foo.effects must be array
-*/
 
 /* TODO
-* - Recalculation of passive effects on formula change
-*   - preproccess of data, subscribing to values, events etc
 * - Elegant attribute xp system. Maybe related to skills? 
 *   - Each skill gives xp in some attributes, agility+con for running, etc 
 *   - Each skill has parent of attribute
-* - Fix selectors
+* - Proper skill level/milestone effects
+*   - using modified level, not base
+*   - supports decreases
 */
 
 /*

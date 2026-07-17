@@ -27,9 +27,13 @@ function scaleAmount(game, effect, mul) {
 
 function scaleStatLayer(game, effect, mul) {
   const prevFlat = effect.flat;
+  const prevPerc = effect.percent;
+  const prevMult = effect.multiplier;
   return {
     ...effect,
-    flat: (g) => (typeof prevFlat === "function" ? prevFlat(g) : prevFlat) * mul,
+    flat: (g)       => (typeof prevFlat === "function" ? prevFlat(g) : prevFlat) * mul,
+    percent: (g)    => (((typeof prevFlat === "function" ? prevPerc(g) : prevPerc)-1) * mul) + 1,
+    multiplier: (g) => (((typeof prevFlat === "function" ? prevMult(g) : prevMult)-1) * mul) + 1,
   };
 }
 
@@ -74,53 +78,53 @@ export const EFFECT_DEFS = {
   },
 
 
-  // ── Skills ────────────────────────────────────────────────────────────────
+  // ── LevelHolder ────────────────────────────────────────────────────────────────
 
-  gainSkillXp: {
-    create: (skill, amount) => ({ type: "gainSkillXp", skill, amount }),
+  gainXp: {
+    create: (id, amount) => ({ type: "gainXp", id, amount }),
     apply(game, e) {
-      if (e.skill == null) return null;
+      if (e.id == null) return null;
       if (e.amount == 0) return;
 
       game.registry
-        .get(e.skill, "LevelHolder")
+        .get(e.id, "LevelHolder")
         .gainXp(game, e.amount);
 
-      return "gainSkillXp";
+      return "gainXp";
     },
     scale: scaleAmount,
     display(game, e) {
-      return `gain ${e.amount} xp in ${e.skill}`;
+      return `gain ${e.amount} xp in ${e.id}`;
     }
   },
 
-  skillXpMultiplier: {
-    create: (skill, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
-      type: "skillXpMultiplier",
-      skill,
+  xpMultiplier: {
+    create: (id, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
+      type: "xpMultiplier",
+      id,
       flat,
       percent,
       multiplier,
     }),
     apply(game, e) {
-      if (e.skill == null) return;
+      if (e.idl == null) return;
 
       game.registry
-        .get(e.skill, "LevelHolder")
+        .get(e.id, "LevelHolder")
         .xpBonus
         .change(e);
     },
     remove(game, e) {
-      if (e.skill == null) return;
+      if (e.id == null) return;
 
       game.registry
-        .get(e.skill, "LevelHolder")
+        .get(e.id, "LevelHolder")
         .xpBonus
         .changeReverse(e);
     },
     scale: scaleAmount,
     display(game, e) {
-      let m = `increase ${e.skill} xp gain multiplier by: `;
+      let m = `increase ${e.id} xp gain multiplier by: `;
       if (e.flat != 0) m += `+${e.flat} `;
       if (e.percent != 0) m += `${e.percent}% `;
       if (e.multiplier != 1) m += `x${e.multiplier} `;
@@ -128,29 +132,29 @@ export const EFFECT_DEFS = {
     }
   },
 
-  skillLevelBonus: {
-    create: (skill, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
-      type: "skillLevelBonus",
-      skill,
+  levelBonus: {
+    create: (id, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
+      type: "levelBonus",
+      id,
       flat,
       percent,
       multiplier,
     }),
     apply(game, e) {
       game.registry
-        .get(e.skill, "LevelHolder")
+        .get(e.id, "LevelHolder")
         .levelBonus
         .change(e);
     },
     remove(game, e) {
       game.registry
-        .get(e.skill, "LevelHolder")
+        .get(e.id, "LevelHolder")
         .levelBonus
         .changeReverse(e);
     },
     scale: scaleStatLayer,
     display(game, e) {
-      let m = `increase ${e.skill} level by: `;
+      let m = `increase ${e.id} level by: `;
       if (e.flat != 0) m += `+${e.flat} `;
       if (e.percent != 0) m += `${e.percent}% `;
       if (e.multiplier != 1) m += `x${e.multiplier} `;

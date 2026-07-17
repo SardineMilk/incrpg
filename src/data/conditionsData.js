@@ -4,7 +4,6 @@ import {eff, req, evt, sel, fml } from "../structures/structures.js";
 // Need to special-case these. Apply all at start of game
 // Inherent Effects are always active, and may have strict requirements or triggers
 export const INHERENT_EFFECTS = {
-
   startup: {
     effects: [
       eff.activateCondition(sel.conditions.tags("system")),
@@ -22,7 +21,7 @@ export const INHERENT_EFFECTS = {
         requirements: [req.lessThan(fml.value("health"), fml.value("healthMax"))],
         effects: [
           eff.changeValue("health", 1),
-          eff.gainSkillXp("regeneration", 0.5),
+          eff.gainXp("regeneration", 0.5),
         ]
       },
     ],
@@ -35,7 +34,7 @@ export const INHERENT_EFFECTS = {
         requirements: [req.lessThan(fml.value("stamina"), fml.value("staminaMax"))],
         effects: [
           eff.changeValue("stamina", 1),
-          eff.gainSkillXp("breathing", 0.5),
+          eff.gainXp("breathing", 0.5),
         ]
       },
     ],
@@ -48,7 +47,7 @@ export const INHERENT_EFFECTS = {
         requirements: [req.lessThan(fml.value("mental"), fml.value("mentalMax"))],
         effects: [
           eff.changeValue("mental", 1),
-          eff.gainSkillXp("mindfulness", 0.5),
+          eff.gainXp("mindfulness", 0.5),
         ]
       },
     ],
@@ -168,10 +167,10 @@ export const INHERENT_EFFECTS = {
     tags: ["system", "causality"],
     triggers: [
       {
-        event: evt.gainSkillXp(),
+        event: evt.gainXp(),
         effects: [
-          eff.gainSkillXp(
-            fml.skillParent(fml.context("skill")),
+          eff.gainXp(
+            fml.skillParent(fml.context("id")),
             fml.context("amount"),
            ),
         ]
@@ -310,7 +309,7 @@ const TEMP_CONDITIONS = {
     description:
       "You feel chilly. You move and regenerate stamina slightly slower",
     effects: [
-      eff.skillLevelBonus("agility", {multiplier: 0.9}),
+      eff.levelBonus("agility", {multiplier: 0.9}),
       eff.changeConditionStrength("stamina_regen", {multiplier: 0.7}),
     ],
   },
@@ -319,7 +318,7 @@ const TEMP_CONDITIONS = {
     name: "Cold",
     description:
       "You feel cold. You move and regenerate stamina slower. You have a slight mental drain.",
-    effects: [eff.skillLevelBonus("agility", {multiplier: 0.7})]
+    effects: [eff.levelBonus("agility", {multiplier: 0.7})]
   },
 
   injury: {

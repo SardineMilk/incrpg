@@ -15,10 +15,10 @@ export const ACTIONS = {
       {
         event: evt.tick(),
         effects: [
-          eff.gainSkillXp("constitution", 0.5),
-          eff.gainSkillXp("agility", 0.5),
-          eff.gainSkillXp("dexterity", 0.2),
-          eff.gainSkillXp("perception", 0.2),
+          eff.gainXp("constitution", 0.5),
+          eff.gainXp("agility", 0.5),
+          eff.gainXp("dexterity", 0.2),
+          eff.gainXp("perception", 0.2),
 
           eff.changeValue("stamina", -1),
         ],
@@ -26,7 +26,7 @@ export const ACTIONS = {
     ],
 
     result: [
-      eff.gainSkillXp("walking", 20),
+      eff.gainXp("walking", 20),
       eff.activityProgress(1),
     ],
   },
@@ -40,11 +40,11 @@ export const ACTIONS = {
       {
         event: evt.tick(),
         effects: [
-          eff.gainSkillXp("constitution", 0.5),
-          eff.gainSkillXp("agility", 0.5),
-          eff.gainSkillXp("dexterity", 0.2),
-          eff.gainSkillXp("willpower", 0.2),
-          eff.gainSkillXp("perception", 0.5),
+          eff.gainXp("constitution", 0.5),
+          eff.gainXp("agility", 0.5),
+          eff.gainXp("dexterity", 0.2),
+          eff.gainXp("willpower", 0.2),
+          eff.gainXp("perception", 0.5),
 
           eff.changeValue("stamina", -2),
         ],
@@ -52,7 +52,7 @@ export const ACTIONS = {
     ],
 
     result: [
-      eff.gainSkillXp("running", 20),
+      eff.gainXp("running", 20),
       eff.activityProgress(2),
     ],
   },
@@ -70,11 +70,11 @@ export const ACTIONS = {
       {
         event: evt.tick(),
         effects: [
-          eff.gainSkillXp("strength", 0.2),
-          eff.gainSkillXp("constitution", 0.5),
-          eff.gainSkillXp("agility", 1),
-          eff.gainSkillXp("willpower", 0.5),
-          eff.gainSkillXp("perception", 1),
+          eff.gainXp("strength", 0.2),
+          eff.gainXp("constitution", 0.5),
+          eff.gainXp("agility", 1),
+          eff.gainXp("willpower", 0.5),
+          eff.gainXp("perception", 1),
 
           eff.changeValue("stamina", -5),
           eff.changeValue("health", -2),
@@ -83,7 +83,7 @@ export const ACTIONS = {
     ],
 
     result: [
-      eff.gainSkillXp("running", 50),
+      eff.gainXp("running", 50),
       eff.activityProgress(5),
     ],
   },
@@ -108,8 +108,8 @@ export const ACTIONS = {
       {
         event: evt.tick(),
         effects: [
-          eff.gainSkillXp("constitution", 0.5),
-          eff.gainSkillXp("willpower", 0.2),
+          eff.gainXp("constitution", 0.5),
+          eff.gainXp("willpower", 0.2),
         ],
       },
     ],
@@ -119,7 +119,7 @@ export const ACTIONS = {
     ],
 
 
-    result: [eff.gainSkillXp("sleeping", 20)],
+    result: [eff.gainXp("sleeping", 20)],
   },
   
   become_rat: {

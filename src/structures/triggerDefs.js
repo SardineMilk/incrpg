@@ -74,13 +74,13 @@ export const TRIGGER_DEFS = {
       ctx.resource === trigger.resource && ctx.current < trigger.threshold,
   },
 
-  gainSkillXp: {
+  gainXp: {
     // skill is optional - none fires on any skill gaining xp
-    create: (skill) => ({ type: "gainSkillXp", skill }),
+    create: (id) => ({ type: "gainXp", id }),
     check: (trigger, ctx) => {
-      if (!ctx.skill) return false;
-      const skillMatches = trigger.skill == null || ctx.skill === trigger.skill
-      return skillMatches && ctx.amount >= 0;
+      if (!ctx.id) return false;
+      const matches = trigger.id == null || ctx.id === trigger.id
+      return matches && ctx.amount >= 0;
     },
   },
 
