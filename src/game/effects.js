@@ -50,7 +50,7 @@ export function applyEffect(game, effect, strength = 1) {
 export function removeEffect(game, resolved) {
   const def = EFFECT_DEFS[resolved.type];
   if (!def.remove) {
-    console.warn(`Effect '${resolved.type}' has no remove(), this shouldn't be a passive effect`);
+    console.warn(`Effect '${resolved}' has no remove(), this shouldn't be a passive effect`);
     return;
   }
 

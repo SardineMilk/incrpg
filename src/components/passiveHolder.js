@@ -43,6 +43,15 @@ export class PassiveHolder {
     this.appliedEffects = [];
   }
 
+  /* 
+  * TODO
+  * This isn't an ideal way to reapply
+  * If there is no change in resolved effects, nothing should happen
+  * Instead, this causes massive events to be thrown around
+  * Because it removes the entire effect then applies again
+  * Fix - compute the difference and apply that
+  * It might need a rewrite of the way resolved effects are tracked though
+  */
   reapply(game, strength = 1) {
     // Remove the static resolved effects
     // Reapply them using the current strength

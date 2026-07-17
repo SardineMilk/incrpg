@@ -58,6 +58,7 @@ export const sel = {
 
   tags: (namespace, ...clauses) =>
     makeSelector(() => {
+      // No tags means return everything
       if (clauses.length === 0) return allIds(namespace);
       return [...intersectSets(clauses.map((c) => tagClause(namespace, c)))];
     }),

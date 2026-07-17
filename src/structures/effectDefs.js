@@ -270,32 +270,18 @@ export const EFFECT_DEFS = {
       multiplier,
     }),
     apply(game, e) {
-      const strength = game.registry.get(
-        e.condition,
-        "StatLayer"
-      );
-
+      const strength = game.registry.get(e.condition, "StatLayer");
       if (!strength) return null;
 
       strength.change(e);
 
-      const effects = game.registry.get(
-        e.condition,
-        "PassiveHolder"
-      );
-
-      if (effects) {
-        effects.reapply(game, strength.value);
-      }
+      const effects = game.registry.get(e.condition, "PassiveHolder");
+      if (effects) { effects.reapply(game, strength.value);}
 
       return "conditionStrengthChanged";
     },
     remove(game, e) {
-      const strength = game.registry.get(
-        e.condition,
-        "StatLayer"
-      );
-
+      const strength = game.registry.get(e.condition, "StatLayer");
       if (!strength) return;
 
       strength.changeReverse(e);
@@ -307,6 +293,21 @@ export const EFFECT_DEFS = {
       if (e.percent != 0) m += `${e.percent}% `;
       if (e.multiplier != 1) m += `x${e.multiplier} `;
       return m;
+    }
+  },
+
+  reapplyCondition: {
+    create: (condition) => ({
+      type: "reapplyCondition",
+      condition
+    }),
+    apply(game, e) {
+      const active = game.registry.get(e.condition, "ActiveHolder").active;
+      if (!active) return;
+      const effects = game.registry.get(e.condition, "PassiveHolder");
+      if (!effects) return;
+      const strength = game.registry.get(e.condition, "StatLayer") || 1;
+      effects.reapply(game, strength.value);
     }
   },
 

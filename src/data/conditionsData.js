@@ -179,6 +179,24 @@ export const INHERENT_EFFECTS = {
     ],
   },
 
+  // Utterly idiotic way to do this
+  // Condition passive effects can contain formulas, 
+  // which need reapplied whenever the formula resolved value changes
+  // Solution - manually tag them with "dynamic", then reapply every tick
+  // Simple!
+  // lmfao.
+  condition_update: {
+    tags: ["system", "causality"],
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [
+          eff.reapplyCondition(sel.conditions.tags("dynamic"))
+        ]
+      }
+    ]
+  },
+
   action_progress: {
     tags: ["system", "entropy"],
     triggers: [
