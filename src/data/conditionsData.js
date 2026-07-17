@@ -222,8 +222,8 @@ export const INHERENT_EFFECTS = {
     tags: ["system", "singularity"],
     modifiers: [
       {
-        event: evt.activate("action"),
-        effects: [eff.deactivate(fml.activeAction()),],
+        event: evt.activate(["actions"]),
+        effects: [eff.deactivate(fml.activeAction()),eff.sendMessage("SYSTEM", "Action changed")],
       }
     ]
   },
@@ -233,7 +233,7 @@ export const INHERENT_EFFECTS = {
     modifiers: [
       {
         event: evt.activate(),
-        requirements: [req.hasTag(fml.context("condition"), "form")],
+        requirements: [req.hasTag(fml.context("id"), "form")],
         effects: [eff.deactivate(sel.conditions.tags("form"))],
       },
     ],

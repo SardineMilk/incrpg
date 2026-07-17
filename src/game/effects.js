@@ -2,10 +2,14 @@ import { EFFECT_DEFS } from "../structures/effectDefs.js";
 import { processModifier, processTrigger } from "./events.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
 import { resolveFormulas } from "../structures/formulaDefs.js";
+import { tagsOf } from "../utils/tagIndex.js";
 
 // Internal: apply one pre-resolved effect object and fire its trigger.
 function applyResolved(game, e) {
   const def = EFFECT_DEFS[e.type];
+
+  // TODO this is hardcoded, not ideal
+  if (e.id != null && e.tags === undefined) e.tags = tagsOf(e.id);
 
   processModifier(game, e.type, e);
 

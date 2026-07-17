@@ -31,7 +31,7 @@ export function byTag(namespace, tag) {
   return _index[namespace]?.[tag] ?? [];
 }
 
-// Return every id registered for a namespace (SKILLS, CONDITIONS, LOCATIONS, ...)
+// Return every id registered for a namespace
 export function allIds(namespace) {
   return _allIds[namespace] ?? [];
 }
@@ -42,5 +42,11 @@ export function tagsOf(id) {
 }
  
 
-
-
+export function matchesTagQuery(query, tags = []) {
+  if (!query || query.length === 0) return true;
+  return query.every((clause) =>
+    Array.isArray(clause)
+      ? clause.some((tag) => tags.includes(tag))
+      : tags.includes(clause)
+  );
+}

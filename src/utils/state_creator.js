@@ -15,15 +15,30 @@ import { generateTagIndex } from "./tagIndex.js";
 import { EntityRegistry, registerEntities } from "../components/entityRegistry.js";
 import { validate } from "./validator.js";
 
+
+const NAMESPACES = {
+  skills: SKILLS,
+  actions: ACTIONS,
+  conditions: CONDITIONS,
+  locations: LOCATIONS,
+};
+
 export function initialiseState(game) {
   game.registry = new EntityRegistry();
 
-  
-  validate(CONDITIONS, SKILLS, ACTIONS);
+  // Tag every entity with its own namespace name
+  // This means namespaces must be distinct from any tag used in data
+  for (const [namespace, dataset] of Object.entries(NAMESPACES)) {
+    for (const id in dataset) {
+      dataset[id].tags = [...(dataset[id].tags ?? []), namespace];
+    }
+  }
 
-  generateTagIndex("conditions", CONDITIONS);
-  generateTagIndex("skills", SKILLS);
-  generateTagIndex("locations", LOCATIONS);
+  validate(...Object.values(NAMESPACES));
+
+  for (const namespace of Object.keys(NAMESPACES)) {
+    generateTagIndex(namespace, NAMESPACES[namespace]);
+  }
 
   // Skills
   registerEntities(game.registry, SKILLS, [
