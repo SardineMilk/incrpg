@@ -6,10 +6,10 @@ import {eff, req, evt, sel, fml } from "../structures/structures.js";
 export const INHERENT_EFFECTS = {
   startup: {
     effects: [
-      eff.activateCondition(sel.conditions.tags("system")),
-      eff.activateCondition("human"),
+      eff.activate(sel.conditions.tags("system")),
+      eff.activate("human"),
       eff.setLocation("new_meldrum"),
-      eff.activateAction("sleep"),
+      eff.activate("sleep"),
     ]
   },
 
@@ -115,7 +115,7 @@ export const INHERENT_EFFECTS = {
         event: evt.valueLoss(sel.ids(["health", "stamina", "mental"])),
         requirements: [[req.valueLessThan(sel.ids(["health", "stamina", "mental"]), 0)]],
         effects: [
-          eff.activateAction("sleep"),
+          eff.activate("sleep"),
           eff.sendMessage("SYSTEM", "You pass out"),
         ],
       }
@@ -129,7 +129,7 @@ export const INHERENT_EFFECTS = {
         event: evt.valueLoss("health"),
         requirements: [req.valueLessThan("health", 0)],
         effects: [
-          eff.activateAction("sleep"),
+          eff.activate("sleep"),
           eff.sendMessage("SYSTEM", "You pass out from your injuries"),
         ],
       }
@@ -142,7 +142,7 @@ export const INHERENT_EFFECTS = {
         event: evt.valueLoss("stamina"),
         requirements: [req.valueLessThan("stamina", 0)],
         effects: [
-          eff.activateAction("sleep"),
+          eff.activate("sleep"),
           eff.sendMessage("SYSTEM", "You pass out"),
         ],
       }
@@ -155,7 +155,7 @@ export const INHERENT_EFFECTS = {
         event: evt.valueLoss("mental"),
         requirements: [req.valueLessThan("mental", 0)],
         effects: [
-          eff.activateAction("sleep"),
+          eff.activate("sleep"),
           eff.sendMessage("SYSTEM", "You pass out from stress"),
         ],
       }
@@ -222,8 +222,8 @@ export const INHERENT_EFFECTS = {
     tags: ["system", "singularity"],
     modifiers: [
       {
-        event: evt.activateAction(),
-        effects: [eff.deactivateAction(fml.activeAction()),],
+        event: evt.activate("action"),
+        effects: [eff.deactivate(fml.activeAction()),],
       }
     ]
   },
@@ -232,9 +232,9 @@ export const INHERENT_EFFECTS = {
     tags: ["system", "singularity"],
     modifiers: [
       {
-        event: evt.activateCondition(),
+        event: evt.activate(),
         requirements: [req.hasTag(fml.context("condition"), "form")],
-        effects: [eff.deactivateCondition(sel.conditions.tags("form"))],
+        effects: [eff.deactivate(sel.conditions.tags("form"))],
       },
     ],
   },
@@ -246,7 +246,7 @@ const TRAITS = {
   human: {
     tags: ["form"],
     effects: [
-      eff.activateCondition(sel.conditions.tags("mortal")),
+      eff.activate(sel.conditions.tags("mortal")),
       eff.changeValue("healthMax", 100),
       eff.changeValue("staminaMax", 100),
       eff.changeValue("mentalMax", 100),
@@ -256,11 +256,11 @@ const TRAITS = {
   rat_king: {
     tags: ["form", "beast", "rat"],
     effects: [
-      eff.activateCondition(sel.conditions.tags("mortal")),
+      eff.activate(sel.conditions.tags("mortal")),
       eff.changeValue("healthMax", 80),
       eff.changeValue("staminaMax", 150),
       eff.changeValue("mentalMax", 70),
-      eff.deactivateCondition("stamina_death"),
+      eff.deactivate("stamina_death"),
     ],
   },
 
@@ -348,7 +348,7 @@ const TEMP_CONDITIONS = {
     triggers: [
       {
         event: evt.valueLoss("health", 10), // If the modified effect made you lose >10 health
-        effects: [eff.applyConditionDuration("adrenaline_surge", 5)], // Gain 5 stacks of this condition
+        effects: [eff.applyDuration("adrenaline_surge", 5)], // Gain 5 stacks of this condition
       },
     ],
   },

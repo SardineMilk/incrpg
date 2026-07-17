@@ -32,8 +32,8 @@ export function renderActions(game) {
 
       button.addEventListener("click", () => {
         applyEffect(game, {
-          type: "activateAction",
-          action: actionId
+          type: "activate",
+          id: actionId
         });
       });
 

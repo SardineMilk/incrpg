@@ -17,13 +17,8 @@ export const TRIGGER_DEFS = {
     check: (trigger, ctx) => trigger.value === ctx.value,
   },
 
-  activateAction: {
-    create: () => ({ type: "activateAction" }),
-    check: () => true,
-  },
-
-  activateCondition: {
-    create: () => ({ type: "activateCondition" }),
+  activate: {
+    create: () => ({ type: "activate" }),
     check: () => true,
   },
 

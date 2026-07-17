@@ -51,7 +51,7 @@ export function startTicking(render) {
   game.log.container.scrollTop = game.log.container.scrollHeight;
   game.log.followTail = true;
 
-  applyEffect(game, { type: "activateCondition", condition: "startup" });
+  applyEffect(game, { type: "activate", id: "startup" });
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {

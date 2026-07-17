@@ -115,7 +115,7 @@ export const ACTIONS = {
     ],
 
     effects: [
-      eff.activateCondition("asleep"),
+      eff.activate("asleep"),
     ],
 
 
@@ -128,7 +128,7 @@ export const ACTIONS = {
     duration: 100,
 
     result: [
-      eff.activateCondition("rat_king"),
+      eff.activate("rat_king"),
     ]
   }
 

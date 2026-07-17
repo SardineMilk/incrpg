@@ -163,79 +163,72 @@ export const EFFECT_DEFS = {
   },
 
 
-  // ── Conditions ────────────────────────────────────────────────────────────
+  // ── ActiveHolder ────────────────────────────────────────────────────────────
 
-  activateCondition: {
-    create: (condition) => ({
-      type: "activateCondition",
-      condition,
+  activate: {
+    create: (id) => ({
+      type: "activate",
+      id,
     }),
     apply(game, e) {
-      activateEntity(game, e.condition, null);
-      return "conditionApplied";
+      activateEntity(game, e.id, null);
+      return "activated";
     },
     remove(game, e) {
-      deactivateEntity(game, e.condition);
+      deactivateEntity(game, e.id);
     },
     display(game, e) {
-      return `gain ${e.condition} permanently`;
+      return `gain ${e.id} permanently`;
     }
   },
 
-  deactivateCondition: {
-    create: (condition) => ({
-      type: "deactivateCondition",
-      condition,
+  deactivate: {
+    create: (id) => ({
+      type: "deactivate",
+      id,
     }),
     apply(game, e) {
-      deactivateEntity(game, e.condition);
+      deactivateEntity(game, e.id);
     },
     remove(game, e) {
-      activateEntity(game, e.condition, null);
+      activateEntity(game, e.id, null);
     },
     display(game, e) {
-      return `remove ${e.condition}`;
+      return `remove ${e.id}`;
     }
   },
 
-  applyConditionDuration: {
-    create: (condition, amount) => ({
-      type: "applyConditionDuration",
-      condition,
+  applyDuration: {
+    create: (id, amount) => ({
+      type: "applyDuration",
+      id,
       amount,
     }),
     apply(game, e) {
-      const active = game.registry.get(
-        e.condition,
-        "ActiveHolder"
-      );
+      const active = game.registry.get(e.id, "ActiveHolder");
 
-      activateEntity(game, e.condition, 0);
+      activateEntity(game, e.id, 0);
 
       const expired = active.changeDuration(e.amount);
 
       if (expired) {
-        deactivateEntity(game, e.condition);
+        deactivateEntity(game, e.id);
       }
 
-      return "conditionApplied";
+      return "applied";
     },
     remove(game, e) {
-      const active = game.registry.get(
-        e.condition,
-        "ActiveHolder"
-      );
-
+      const active = game.registry.get(e.id, "ActiveHolder");
       if (!active.active) return;
 
       const expired = active.changeDuration(-e.amount);
 
       if (expired) {
-        deactivateEntity(game, e.condition);
+        deactivateEntity(game, e.id);
       }
     },
     display(game, e) {
-      return `gain ${e.condition} for ${e.amount} turns`;
+      return `gain ${e.id} for ${e.amount} turns`;
     }
   },
 
@@ -387,24 +380,6 @@ export const EFFECT_DEFS = {
     display(game, e) {
       return `add ${e.amount} progress to the current action`;
     }
-  },
-
-  activateAction: {
-    create: (action) => ({ type: "activateAction", action }),
-    apply(game, e) {
-      activateEntity(game, e.action, null);
-      return "actionChanged";
-    },
-    display(game, e) {
-      return `start action ${e.action}`;
-    }
-  },
-
-  deactivateAction: {
-    create: (action) => ({ type: "deactivateAction", action }),
-    apply(game, e) {
-      deactivateEntity(game, e.action);
-    },
   },
 
   // ── World ─────────────────────────────────────────────────────────────────
