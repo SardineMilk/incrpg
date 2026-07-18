@@ -49,8 +49,7 @@ export function applyEffect(game, effect, strength = 1) {
   return applied;
 }
 
-// Undo a previously-tracked resolved effect using its def.remove method.
-// Must be called with the exact object returned by applyEffect.
+// Must be called with a resolved effect (returned by applyEffect)
 export function removeEffect(game, resolved) {
   const def = EFFECT_DEFS[resolved.type];
   if (!def.remove) {
@@ -59,4 +58,12 @@ export function removeEffect(game, resolved) {
   }
 
   def.remove(game, resolved);
+}
+
+export function negateEffect(game, effect) {
+  const targets = resolveTargets(game, effect);
+  for (const target of targets) {
+    const resolved = resolveFormulas(game, target);
+    removeEffect(game, resolved);
+  }
 }

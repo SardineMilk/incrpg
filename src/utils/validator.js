@@ -12,5 +12,8 @@ export function validate(...entity_collections) {
         }
     }
 
+    // Confirm no dynamic, game-state dependent formulas in skill level/milestones
+    // if you need this behaviour, activate a dynamic condition and change it's strength from level
+
 }
 
