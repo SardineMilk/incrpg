@@ -238,6 +238,30 @@ export const INHERENT_EFFECTS = {
       },
     ],
   },
+
+  tick_counter: {
+    tags: ["system"],
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [eff.changeValue("current_tick", 1)]
+      }
+    ]
+  },
+
+  // onko342 easter egg, put this somewhere funy
+  memory_leek: {
+    tags: ["item"],
+    name: "Memory Leek",
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [eff.setValue(fml.value("current_tick"), 1)]
+      }
+    ]
+  },
+
+
 };
 
 

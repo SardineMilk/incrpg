@@ -3,7 +3,7 @@ export function validate(...entity_collections) {
 
     // Find duplicated entries 
     // Any shared properties between the entities in entity_collections
-    // TODO - fix this
+    // TODO - fix/test this
     const seen = new Set()
     for (const collection of entity_collections) {
         for (const id in collection) {
@@ -11,6 +11,10 @@ export function validate(...entity_collections) {
             seen.add(id);
         }
     }
+
+    // Confirm everything that should be an array is one
+    // e.g. requirements, passive effects, *not* events
+    
 
     // Confirm no dynamic, game-state dependent formulas in skill level/milestones
     // if you need this behaviour, activate a dynamic condition and change it's strength from level
