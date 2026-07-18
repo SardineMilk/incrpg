@@ -93,6 +93,7 @@ export const LOCATIONS = {
   * Partially flooded and decayed from years of flood cycle
   * Bronze construct police patrol streets
   * Frankenstein-style boss
+  * Furnace golem - uses heat resource system for stronger attacks
   * 
   * Climbing into the city is a skill gate
   * 
