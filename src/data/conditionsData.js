@@ -256,7 +256,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        effects: [eff.setValue(fml.value("current_tick"), 1)]
+        effects: [eff.setValue(fml.value("current_tick"), "leek")]
       }
     ]
   },
