@@ -241,7 +241,7 @@ export const INHERENT_EFFECTS = {
 
   tick_counter: {
     tags: ["system"],
-    modifiers: [
+    modifiersc: [
       {
         event: evt.tick(),
         effects: [eff.changeValue("current_tick", 1)]

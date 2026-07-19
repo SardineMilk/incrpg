@@ -1,5 +1,5 @@
 export function renderHero(game) {
-  // TODO use effects
+  // TODO use formulas
   document.getElementById("health-bar").innerText =
     `HP ${Math.floor(game.values.health)}/${game.values.healthMax}`;
 

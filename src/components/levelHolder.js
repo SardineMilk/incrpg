@@ -1,4 +1,4 @@
-import { applyEffect, negateEffect } from "../game/effects.js";
+import { applyEffect, removeEffect } from "../game/effects.js";
 import { StatLayer } from "./statLayer.js";
 
 function xpToNext(level) {
@@ -6,16 +6,20 @@ function xpToNext(level) {
   return Math.floor(scalingFactor * Math.pow(2, level / 5));
 }
 
-
 export class LevelHolder {
     constructor(levelEffects = [], milestones = {}, name) {
         this.levelEffects = levelEffects || [];
         this.milestones = milestones || {};
-        this.baseLevel = 0;  // Level without levelBonus, used for level up requirements
+
+        // baseLevel, used for xp curve and not much else
+        this.baseLevel = 0;
+
         this.xp = 0;
         this.xpBonus    = new StatLayer({flat:1});
         this.levelBonus = new StatLayer();
-        this.name = name; // TODO this is ugly
+        this.appliedLevel = 0;
+
+        this.name = name;
     }
 
     static fromDefinition(def) {
@@ -27,70 +31,66 @@ export class LevelHolder {
     }
 
     get level() {
-        // TODO this really should use StatLayer logic, not custom
-        return (this.baseLevel + this.levelBonus.flat) * this.levelBonus.percent * this.levelBonus.multiplier; 
+        return (this.baseLevel + this.levelBonus.flat) * this.levelBonus.percent * this.levelBonus.multiplier;
     }
 
     gainXp(game, amount) {
         this.xp += amount * this.xpBonus.value;
-        this._checkLevelProgress(game);
+        this._checkXpProgress(game);
     }
 
-    _checkLevelProgress(game) {
+    _checkXpProgress(game) {
         while (this.xp >= xpToNext(this.baseLevel)) {
-            this._levelUp(game);
+            this.xp -= xpToNext(this.baseLevel);
+            this.baseLevel++;
+            applyEffect(game, {
+                type: "sendMessage",
+                category: "LEVEL",
+                message: `${this.name} leveled to ${this.baseLevel}`
+            });
+        }
+        this._syncLevel(game);
+    }
+
+    // Any changes to levelBonus must go through here
+    changeLevelBonus(game, statChange) {
+        this.levelBonus.change(statChange);
+        this._syncLevel(game);
+    }
+
+    changeLevelBonusReverse(game, statChange) {
+        this.levelBonus.changeReverse(statChange);
+        this._syncLevel(game);
+    }
+
+    // Diffs appliedLevel against the current modified level and applies/removes level+milestone effects
+    _syncLevel(game) {
+        const target = Math.floor(this.level);
+
+        while (this.appliedLevel < target) {
+            this.appliedLevel++;
+            this._applyLevelEffects(game, this.appliedLevel);
         }
 
-        while (this.baseLevel > 0 && this.xp < 0) {
-            this._levelDown(game);
-        }
-
-        // Should Xp debt be a feature? 
-        // Probably, if not it should be condition instead of baked in
-        // TODO - edge case testing for negative level and xp debt
-        if (this.baseLevel === 0 && this.xp < 0) {
-            this.xp = 0;
+        while (this.appliedLevel > target) {
+            this._removeLevelEffects(game, this.appliedLevel);
+            this.appliedLevel--;
         }
     }
 
-    // TODO - this only applies to baseLevel, not bonusLevel
-    // Temporary bonuses should apply level effects and milestones
-    // But they *shouldn't* affect current xp or the xp curve
-    _levelUp(game) {
-        this.xp -= xpToNext(this.baseLevel);
-        this.baseLevel++;
+    _applyLevelEffects(game, level) {
+        for (const effect of this.levelEffects) applyEffect(game, effect);
 
-        for (const effect of this._effectsForLevel(this.baseLevel)) {
-            applyEffect(game, effect);
-        }
-
-        applyEffect(game, {
-            type:"sendMessage", 
-            category:"LEVEL", 
-            message:`${this.name} leveled to ${this.baseLevel}`
-        });
-    }
-
-    _levelDown(game) {
-        const effects = this._effectsForLevel(this.baseLevel);
-
-        for (let i = effects.length - 1; i >= 0; i--) {
-            negateEffect(game, effects[i]);
-        }
-
-        this.baseLevel--;
-        this.xp += xpToNext(this.baseLevel);
-
-        applyEffect(game, {
-            type:"sendMessage", 
-            category:"LEVEL", 
-            message:`${this.name} lost a level, now ${this.baseLevel}`
-        });
-    }
-
-
-    _effectsForLevel(level) {
         const milestoneEffects = this.milestones[level] || [];
-        return [...this.levelEffects, ...milestoneEffects];
+        for (const effect of milestoneEffects) applyEffect(game, effect);
+
+
+    }
+
+    _negateLevelEffects(game, level) {
+        const milestoneEffects = this.milestones[level] || [];
+        for (const effect of milestoneEffects) negateEffect(game, effect);
+
+        for (const effect of this.levelEffects) negateEffect(game, effect);
     }
 }

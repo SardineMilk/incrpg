@@ -11,13 +11,11 @@ import { applyEffect }                          from "./effects.js";
 * - Elegant attribute xp system. Maybe related to skills? 
 *   - Each skill gives xp in some attributes, agility+con for running, etc 
 *   - Each skill has parent of attribute
-* - Proper skill level/milestone effects
-*   - using modified level, not base
-*   - supports decreases
 */
 
 /*
 Recalculation of passive effects on formula change
+
 I see several ways this can be implemented
 1. When creating PassiveHolder, determine a "dynamic/static" bool.
    Every tick, a system condition reapplies (removes+applies) every

@@ -21,9 +21,9 @@ export const LOCATIONS = {
 
 
   /* 
-  * Undead Farm
+  * Festering Fields
   *
-  * The undead farm used to be a thriving necromancy-powered social commune
+  * The festering fields used to be a thriving necromancy-powered social commune
   * Increases in life-based agriculture caused the community to collapse
   * The workers were left to keep farming, but the farm slowly decayed over years
   * Undead went feral
@@ -34,7 +34,7 @@ export const LOCATIONS = {
   * Restart the farm by killing a lot of undead and bringing resources to the lich
   * Unlock gathering spots as you clear undead
   * 
-  * Zombie Labourer
+  * Festering Labourer
   * - still-rotting corpse
   * - given menial labour to keep food sanitary
   * - racks attached to their back, sometimes holding crates
