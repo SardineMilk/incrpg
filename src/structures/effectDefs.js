@@ -213,6 +213,7 @@ export const EFFECT_DEFS = {
 
       if (expired) {
         deactivateEntity(game, e.id);
+        return "conditionRemoved"
       }
 
       return "applied";
@@ -225,6 +226,7 @@ export const EFFECT_DEFS = {
 
       if (expired) {
         deactivateEntity(game, e.id);
+        return "conditionRemoved"
       }
     },
     display(game, e) {
@@ -232,29 +234,26 @@ export const EFFECT_DEFS = {
     }
   },
 
-  // System effect: ticks down every currently active, timed condition by 1.
-  decayConditionDurations: {
-    create: () => ({ type: "decayConditionDurations" }),
+  changeDuration: {
+    create: (id, amount) => ({
+      type: "changeDuration",
+      id,
+      amount,
+    }),
     apply(game, e) {
-      for (const id of game.registry.view("ActiveHolder")) {
-        const active = game.registry.get(
-          id,
-          "ActiveHolder"
-        );
+      const active = game.registry.get(e.id, "ActiveHolder");
+      if (!active.isTimed) return;
 
-        if (!active.isTimed) continue;
+      const expired = active.changeDuration(e.amount);
 
-        const expired = active.changeDuration(-1);
-
-        if (expired) {
-          deactivateEntity(game, id);
-        }
+      if (expired) {
+        deactivateEntity(game, e.id);
+        return "conditionRemoved"
       }
 
-      return null;
     },
     display(game, e) {
-      return `tick down active condition durations`;
+      return `change the duration of ${e.id} by ${e.amount}`;
     }
   },
 

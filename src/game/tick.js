@@ -3,7 +3,7 @@ import { game }                                 from "./state.js";
 import { initialiseState }                      from "../utils/state_creator.js";
 import { EventLog }                    from "./log.js";
 import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
-import { processTrigger }                       from "./events.js";
+import { processModifier, processTrigger }                       from "./events.js";
 import { applyEffect }                          from "./effects.js";
 
 
@@ -53,6 +53,7 @@ export function startTicking(render) {
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {
+    processModifier(game, "tick", {})
     processTrigger(game, "tick", {});
     render(game);
   }, TICK_RATE);

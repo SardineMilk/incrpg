@@ -6,7 +6,7 @@ import {eff, req, evt, sel, fml } from "../structures/structures.js";
 export const INHERENT_EFFECTS = {
   startup: {
     effects: [
-      eff.activate(sel.conditions.tags("system")),
+      eff.activate(sel.tags("conditions", "system")),
       eff.activate("human"),
       eff.setLocation("new_meldrum"),
       eff.activate("sleep"),
@@ -190,7 +190,7 @@ export const INHERENT_EFFECTS = {
       {
         event: evt.tick(),
         effects: [
-          eff.reapplyCondition(sel.conditions.tags("dynamic"))
+          eff.reapplyCondition(sel.tags("conditions", "dynamic"))
         ]
       }
     ]
@@ -213,7 +213,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        effects: [eff.decayConditionDurations()],
+        effects: [eff.changeDuration(sel.tags("conditions"), 1)],
       },
     ],
   },
@@ -234,14 +234,14 @@ export const INHERENT_EFFECTS = {
       {
         event: evt.activate(),
         requirements: [req.hasTag(fml.context("id"), "form")],
-        effects: [eff.deactivate(sel.conditions.tags("form"))],
+        effects: [eff.deactivate(sel.tags("conditions", "form"))],
       },
     ],
   },
 
   tick_counter: {
     tags: ["system"],
-    modifiersc: [
+    modifiers: [
       {
         event: evt.tick(),
         effects: [eff.changeValue("current_tick", 1)]
@@ -270,7 +270,7 @@ const TRAITS = {
   human: {
     tags: ["form"],
     effects: [
-      eff.activate(sel.conditions.tags("mortal")),
+      eff.activate(sel.tags("conditions", "mortal")),
       eff.changeValue("healthMax", 100),
       eff.changeValue("staminaMax", 100),
       eff.changeValue("mentalMax", 100),
@@ -280,7 +280,7 @@ const TRAITS = {
   rat_king: {
     tags: ["form", "beast", "rat"],
     effects: [
-      eff.activate(sel.conditions.tags("mortal")),
+      eff.activate(sel.tags("conditions", "mortal")),
       eff.changeValue("healthMax", 80),
       eff.changeValue("staminaMax", 150),
       eff.changeValue("mentalMax", 70),
@@ -300,7 +300,7 @@ const TEMP_CONDITIONS = {
     name: "Asleep",
     description: "You are asleep, greatly boosting your natural recovery",
     effects: [
-      eff.changeConditionStrength(sel.conditions.tags("passive_regen"), {flat: 10}),
+      eff.changeConditionStrength(sel.tags("conditions", "passive_regen"), {flat: 10}),
     ],
   },
 

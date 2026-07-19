@@ -89,16 +89,6 @@ export const sel = {
     }),
 };
 
-// Namespace sugar to make selectors more readable
-// sel.conditions.tags(...) is just sel.tags("conditions", ...).
-for (const namespace of ["conditions", "skills", "locations", "actions"]) {
-  sel[namespace] = {
-    tags: (...clauses) => sel.tags(namespace, ...clauses),
-    all: () => sel.all(namespace),
-    not: (selector) => sel.not(namespace, selector),
-  };
-}
-
 /*
  * Expand every selector field on a structure into concrete structures.
  *
