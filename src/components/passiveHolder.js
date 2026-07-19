@@ -7,6 +7,13 @@ import { applyEffect, removeEffect } from "../game/effects.js";
 export class PassiveHolder {
   constructor(effectDefs = []) {
     this.effectDefs = effectDefs;  // Static eff.* definitions, never mutated
+    /* 
+    * TODO - isDynamic bool
+    * used to allow PassiveHolder to hook onto changes in state
+    * - use event structure?
+    * Whenever the subscribed value changes, recalculate passive effects
+    * 
+    */
     this.appliedEffects = []; // resolved effect objects, needed to undo later
   }
 

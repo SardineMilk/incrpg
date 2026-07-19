@@ -34,7 +34,7 @@ export function initialiseState(game) {
     }
   }
 
-  validate(...Object.values(NAMESPACES));
+  validate(CONDITIONS, SKILLS, ACTIONS);
 
   for (const namespace of Object.keys(NAMESPACES)) {
     generateTagIndex(namespace, NAMESPACES[namespace]);
