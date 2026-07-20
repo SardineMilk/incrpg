@@ -8,15 +8,12 @@ import { tagsOf } from "../utils/tagIndex.js";
 function applyResolved(game, e) {
   const def = EFFECT_DEFS[e.type];
 
-  // TODO this is hardcoded, not ideal
-  if (e.id != null && e.tags === undefined) e.tags = tagsOf(e.id);
-
   processModifier(game, e.type, e);
 
   const result = def.apply(game, e);
 
-  const type = result || e.type;
-  processTrigger(game, type, e);
+  const resultType = result || e.type;
+  processTrigger(game, resultType, e);
 }
 
 function changeEffectStrength(game, effect, multiplier) {

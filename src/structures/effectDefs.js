@@ -383,12 +383,11 @@ export const EFFECT_DEFS = {
 
   // ── World ─────────────────────────────────────────────────────────────────
 
+  // TODO - locations should use activate
   setLocation: {
     create: (location) => ({ type: "setLocation", location }),
     apply(game, e) {
       game.location = e.location;
-      const tags = LOCATIONS[e.location]?.tags ?? [];
-      e.tags = tags; // Modify the effect (not ideal)
       return "locationChanges";
     },
     display(game, e) {

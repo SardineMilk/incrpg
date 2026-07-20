@@ -9,7 +9,8 @@
  * their effects applied. The context object is whatever the effect passes along
  * (usually the resolved effect itself, occasionally with extra fields added).
  */
-import { matchesTagQuery } from "../utils/tagIndex.js";
+import { tagsOf } from "../utils/tagIndex.js";
+
 
 
 export const TRIGGER_DEFS = {
@@ -20,8 +21,9 @@ export const TRIGGER_DEFS = {
   },
 
   activate: {
-    create: (tags=[]) => ({ type: "activate", tags }),
-    check: (trigger, ctx) => matchesTagQuery(trigger.tags, ctx.tags),
+    create: (tags = []) => ({ type: "activate", tags }),
+    check: (trigger, ctx) =>
+      trigger.tags.length === 0 || trigger.tags.every((tag) => tagsOf(ctx.id).includes(tag)),
   },
 
   ctx: {
@@ -87,9 +89,9 @@ export const TRIGGER_DEFS = {
   },
 
   locationChanges: {
-    // tags is optional - none fires on any location change
     create: (tags = []) => ({ type: "locationChanges", tags }),
-    check: (trigger, ctx) => matchesTagQuery(trigger.tags, ctx.tags),
+    check: (trigger, ctx) =>
+      trigger.tags.length === 0 || trigger.tags.every((tag) => tagsOf(ctx.location).includes(tag)),
   },
 
 };

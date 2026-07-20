@@ -20,6 +20,20 @@ export const LOCATIONS = {
   },
 
 
+  /*
+  * Realm Structure
+  * An internal shell, like a spherical ring-world
+  * Centre is a clockwork lighthouse
+  * - this causes day/night cycle
+  * - fight the clockwork to stop it rotating and fuck up the weather
+  * - it was created to replicate natural magic fluctuations
+  *   - so the realm doesn't become stagnant
+  *   - give it a good stir
+  * North+south poles have mountains attached to the core
+  *  
+  */
+
+
   /* 
   * Festering Fields
   *

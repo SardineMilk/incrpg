@@ -1,9 +1,39 @@
 import {eff, req, evt, sel, fml } from "../structures/structures.js";
 
+/*
+* Worldbuilding
+*
+Consider the system conditions, and their integration with the hardcoded engine functionality
+Consider how the player interacts with them
+The system is imposed upon the world, not a foundational part of it
+This means sufficiently advanced magic can interact with it, or disable it entirely
+The game should still technically function without the system
+However, the system exists for a reason
+Things can and will break horribly without extreme preparation
+- the tools provided to the player should allow some form of interation with the system
+- it doesn't have to be clean or exact, but something somewhere should give the player a chance 
+- no special-cased safeties or clean "remove this specific limitation on your character"
+- if you're messing with the system, you need a very smart plan
+- emergent complexity is key for this part of the game                                 
+- example of what a proccess might look like
+  - seclude self in an empty location, with as few external effects as possible
+  - cast huge combination of temporary debuff/suppression spells on self               
+  - this disables every permanent effect (e.g. regen), with a few exceptions (e.g. mortality)                                                                                                                                                                                                
+  - cast system-affecting spell:
+     - alter the system timer entropy to also affect permanent conditions for a tick
+  - suppression wears off, reactivating most permanent effects
+  - congratulations, you have become immortal
+This is just an example of what type of thing should be possible
+Think noita-style exploits, 
+Use the tools given inside the box to break out of it rather than circumventing the rules entirely
+Take a zoomed-out look at the engine structure, and how the conditions system interacts with it
+Design the structure to allow this type of sandbox exploration, with combinations the designers never considered
+This is how we make interacting with the game feel like real magic
+*/
 
-// Need to special-case these. Apply all at start of game
-// Inherent Effects are always active, and may have strict requirements or triggers
 export const INHERENT_EFFECTS = {
+
+
   startup: {
     effects: [
       eff.activate(sel.tags("conditions", "system")),
@@ -253,6 +283,7 @@ export const INHERENT_EFFECTS = {
   memory_leek: {
     tags: ["item"],
     name: "Memory Leek",
+    description: "Exposure to this accessory rapidly fills aspects of the user's reality with Leeks. Thought to have been wielded by the legendary Kitsune bard, Haku.",
     triggers: [
       {
         event: evt.tick(),
