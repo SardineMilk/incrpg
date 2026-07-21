@@ -43,25 +43,17 @@ export const REQUIREMENT_DEFS = {
     },
   },
 
-  hasCondition: {
-    create: (condition, min_duration = null) => ({
-      type: "hasCondition",
-      condition,
-      min_duration,
-    }),
-    check(game, r) {
-      if (!game.registry.get(r.condition, "ActiveHolder").active) return false;
-      if (r.min_duration == null) return true;
-      return (
-        r.min_duration <=
-        game.registry.get(r.condition, "ActiveHolder").duration
-      );
-    },
+  active: {
+    create: (id) => ({ type: "active", id }),
+    check: (game, r) => {
+      console.log(r)
+      return game.registry.get(r.id, "ActiveHolder").active;
+    }
   },
 
-  hasNotCondition: {
-    create: (condition) => ({ type: "hasNotCondition", condition }),
-    check: (game, r) => !game.registry.get(r.condition, "ActiveHolder").active,
+  inactive: {
+    create: (id) => ({ type: "inactive", id }),
+    check: (game, r) => !game.registry.get(r.id, "ActiveHolder").active,
   },
 
   flagSet: {

@@ -384,29 +384,6 @@ const TEMP_CONDITIONS = {
     ],
   },
 
-  adrenaline_surge: {
-    name: "Adrenaline Surge",
-    tags: ["buff", "combat", "berserker"],
-    modifiers: [
-      {
-        event: evt.changeValue("health"),                       // When health changes
-        requirements: [
-          req.lessThan(fml.context("amount"), 0),                 // If it is decreasing
-          req.hasCondition("adrenaline_surge", 100),            // And this condtion has 100+ stacks
-        ], 
-        effects: [
-          eff.modifyAmount(fml.mul(fml.context("amount"), 0.5)),  // Half the health loss
-          eff.changeValue("stamina", fml.mul(fml.context("amount"), 0.5)), // Lose the same amount of stamina
-        ],
-      },
-    ],
-    triggers: [
-      {
-        event: evt.valueLoss("health", 10), // If the modified effect made you lose >10 health
-        effects: [eff.applyDuration("adrenaline_surge", 5)], // Gain 5 stacks of this condition
-      },
-    ],
-  },
 };
 
 
