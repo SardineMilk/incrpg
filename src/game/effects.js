@@ -25,6 +25,7 @@ function applyResolved(game, e) {
   const def = EFFECT_DEFS[e.type];
 
   processModifier(game, e.type, e);
+  if (e.cancelled) return;
 
   const result = def.apply(game, e);
 

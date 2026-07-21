@@ -2,6 +2,7 @@ import { LogType } from "../game/log.js";
 import { LOCATIONS } from "../data/locationsData.js";
 import { currentContext } from "../utils/context.js";
 import { getActiveAction } from "../utils/getActiveAction.js";
+import { processTrigger } from "../game/events.js";
 /*
  * Each entry defines one effect type:
  *
@@ -53,6 +54,7 @@ function activateEntity(game, entity, duration = null) {
   const effects = game.registry.get(entity, "PassiveHolder");
   if (effects) effects.apply(game, getStrength(game, entity));
   active.activate(duration);
+  processTrigger(game, "onActivate", { id: entity });
 }
 
 
@@ -64,6 +66,7 @@ function deactivateEntity(game, entity) {
   const effects = game.registry.get(entity, "PassiveHolder");
   if (effects) effects.remove(game, getStrength(game, entity));
   active.deactivate();
+  processTrigger(game, "onDeactivate", { id: entity });
 }
 
 
@@ -77,6 +80,12 @@ export const EFFECT_DEFS = {
     }
   },
 
+  cancelEffect: {
+    create: () => ({ type: "cancelEffect" }),
+    apply(game, e) {
+      e.cancelled = true;
+    }
+  },
 
   // ── LevelHolder ────────────────────────────────────────────────────────────────
 
@@ -172,7 +181,6 @@ export const EFFECT_DEFS = {
     }),
     apply(game, e) {
       activateEntity(game, e.id, null);
-      return "activated";
     },
     remove(game, e) {
       deactivateEntity(game, e.id);
@@ -364,20 +372,16 @@ export const EFFECT_DEFS = {
 
   // ── Action ────────────────────────────────────────────────────────────────
 
-  actionProgress: {
-    create: (amount) => ({ type: "actionProgress", amount }),
+  progress: {
+    create: (id, amount) => ({ type: "progress", id, amount }),
     apply(game, e) {
-      const action = getActiveAction(game);
-      if (!action) return;
-
-      game.registry
-        .get(action, "CompletionHolder")
-        .advanceProgress(game, e.amount);
-      return null;
+      const holder = game.registry.get(e.id, "CompletionHolder");
+      if (!holder) return;
+      holder.advanceProgress(game, e.amount);
     },
     scale: scaleAmount,
     display(game, e) {
-      return `add ${e.amount} progress to the current action`;
+      return `add ${e.amount} progress to ${e.id}`;
     }
   },
 

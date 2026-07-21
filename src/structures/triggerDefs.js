@@ -41,13 +41,13 @@ export const TRIGGER_DEFS = {
     check: () => true, // TODO specific action or group by tag, like LocationChanges
   },
 
-  onApply: {
-    create: () => ({ type: "onApply" }),
+  onActivate: {
+    create: () => ({ type: "onActivate" }),
     check: () => true,
   },
 
-  onRemove: {
-    create: () => ({ type: "onRemove" }),
+  onDeactivate: {
+    create: () => ({ type: "onDeactivate" }),
     check: () => true,
   },
 

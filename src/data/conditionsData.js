@@ -232,7 +232,7 @@ export const INHERENT_EFFECTS = {
       {
         event: evt.tick(),
         effects: [
-          eff.actionProgress(1),
+          eff.progress(fml.activeAction(), 1),
         ]
       }
     ]
