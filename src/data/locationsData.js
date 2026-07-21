@@ -30,6 +30,10 @@ export const LOCATIONS = {
   *   - so the realm doesn't become stagnant
   *   - give it a good stir
   * North+south poles have mountains attached to the core
+  * 
+  * Core also controls the weather
+  * Damage causes unstable weather types
+  * Raining gems, fire storms etc
   *  
   */
 
