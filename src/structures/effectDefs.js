@@ -1,7 +1,6 @@
 import { LogType } from "../game/log.js";
 import { LOCATIONS } from "../data/locationsData.js";
 import { currentContext } from "../utils/context.js";
-import { getActiveAction } from "../utils/getActiveAction.js";
 import { processTrigger } from "../game/events.js";
 /*
  * Each entry defines one effect type:

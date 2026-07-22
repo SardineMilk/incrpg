@@ -1,7 +1,6 @@
 import { byTag } from "../utils/tagIndex.js";
 import { meetsRequirements } from "../game/requirements.js";
 import { withContext } from "../utils/context.js";
-import { getActiveAction } from "../utils/getActiveAction.js";
 
 // Tag selectors so resolveTargets can find them in arbitrary fields.
 const SELECTOR = Symbol("selector");

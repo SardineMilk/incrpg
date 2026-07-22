@@ -1,4 +1,3 @@
-import { getActiveAction } from "../utils/getActiveAction.js";
 
 export function processTrigger(game, triggerType, context) {
   for (const id of game.registry.view("TriggerHolder")) {

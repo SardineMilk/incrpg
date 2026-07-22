@@ -1,6 +1,5 @@
 import { ACTIONS } from "../data/actionsData.js";
 import { applyEffect } from "../game/effects.js";
-import { getActiveAction } from "../utils/getActiveAction.js";
 
 export function renderActions(game) {
   const container = document.getElementById("actions-box");
