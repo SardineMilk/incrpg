@@ -1,18 +1,20 @@
-import { SKILLS }     from "../data/skillsData.js";
-import { ACTIONS }    from "../data/actionsData.js";
+import { SKILLS } from "../data/skillsData.js";
+import { ACTIONS } from "../data/actionsData.js";
 import { CONDITIONS } from "../data/conditionsData.js";
-import { LOCATIONS }  from "../data/locationsData.js";
+import { LOCATIONS } from "../data/locationsData.js";
 
-import { StatLayer }          from "../components/statLayer.js";
-import { PassiveHolder }       from "../components/passiveHolder.js";
-import { TriggerHolder }      from "../components/triggerHolder.js";
-import { ModifierHolder }      from "../components/modifierHolder.js";
-import { CompletionHolder }   from "../components/completionHolder.js";
-import { LevelHolder }  from "../components/levelHolder.js";
-import { ActiveHolder }       from "../components/activeHolder.js";
+import { StatLayer } from "../components/statLayer.js";
+import { PassiveHolder } from "../components/passiveHolder.js";
+import { TriggerHolder } from "../components/triggerHolder.js";
+import { ModifierHolder } from "../components/modifierHolder.js";
+import { CompletionHolder } from "../components/completionHolder.js";
+import { LevelHolder } from "../components/levelHolder.js";
+import { DurationHolder } from "../components/durationHolder.js";
 
 import { generateTagIndex } from "./tagIndex.js";
 import { EntityRegistry, registerEntities } from "../components/entityRegistry.js";
+import { ActivationLayer } from "../components/activationLayer.js";
+
 import { validate } from "./validator.js";
 
 
@@ -25,6 +27,7 @@ const NAMESPACES = {
 
 export function initialiseState(game) {
   game.registry = new EntityRegistry();
+  game.activation = new ActivationLayer(game.registry);
 
   // Tag every entity with its own namespace name
   // This means namespaces must be distinct from any tag used in data
@@ -50,7 +53,7 @@ export function initialiseState(game) {
     TriggerHolder,
     ModifierHolder,
     CompletionHolder,
-    ActiveHolder,
+    DurationHolder,
   ]);
 
   registerEntities(game.registry, CONDITIONS, [
@@ -58,6 +61,6 @@ export function initialiseState(game) {
     TriggerHolder,
     ModifierHolder,
     StatLayer,
-    ActiveHolder,
+    DurationHolder,
   ]);
 }

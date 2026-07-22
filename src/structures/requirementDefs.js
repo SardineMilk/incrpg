@@ -47,13 +47,13 @@ export const REQUIREMENT_DEFS = {
     create: (id) => ({ type: "active", id }),
     check: (game, r) => {
       console.log(r)
-      return game.registry.get(r.id, "ActiveHolder").active;
+      return game.activation.active.has(r.id);
     }
   },
 
   inactive: {
     create: (id) => ({ type: "inactive", id }),
-    check: (game, r) => !game.registry.get(r.id, "ActiveHolder").active,
+    check: (game, r) => !game.activation.active.has(r.id),
   },
 
   flagSet: {

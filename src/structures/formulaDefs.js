@@ -19,7 +19,7 @@ const definitions = {
   // TODO - convert to selector
   active: (game, tag) => {
     for (const id of byTag(tag)) {
-      if (game.registry.active.has(id)) return id;
+      if (game.activation.active.has(id)) return id;
     }
     return null;
   },

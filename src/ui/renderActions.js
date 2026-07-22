@@ -55,7 +55,7 @@ export function renderActions(game) {
 
     entry.classList.toggle(
       "active-action",
-      getActiveAction(game) === actionId
+      game.activation.active.has(actionId)
     );
   }
 }

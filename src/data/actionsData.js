@@ -1,4 +1,4 @@
-import {eff, evt, req } from "../structures/structures.js";
+import { eff, evt, req, fml, sel } from "../structures/structures.js";
 
 
 export const ACTIONS = {
@@ -27,7 +27,7 @@ export const ACTIONS = {
 
     result: [
       eff.gainXp("walking", 20),
-      eff.activityProgress(1),
+      eff.progress(fml.active(sel.tags("activity")), 1),
     ],
   },
 
@@ -53,7 +53,7 @@ export const ACTIONS = {
 
     result: [
       eff.gainXp("running", 20),
-      eff.activityProgress(2),
+      eff.progress(fml.active(sel.tags("activity")), 2),
     ],
   },
 
@@ -85,7 +85,7 @@ export const ACTIONS = {
 
     result: [
       eff.gainXp("running", 50),
-      eff.activityProgress(5),
+      eff.progress(fml.active(sel.tags("activity")), 5),
     ],
   },
 
@@ -131,8 +131,17 @@ export const ACTIONS = {
     result: [
       eff.activate("rat_king"),
     ]
-  }
+  },
 
+
+  test_exclusivity: {
+    name: "Disable Action Exclusivity",
+    duration: 10,
+
+    result: [
+      eff.deactivate("action_exclusivity"),
+    ]
+  },
 };
 
 

@@ -246,6 +246,7 @@ export const INHERENT_EFFECTS = {
     ],
   },
 
+  
   action_exclusivity: {
     tags: ["system", "singularity"],
     modifiers: [
