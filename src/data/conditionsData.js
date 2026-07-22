@@ -32,6 +32,15 @@ This is how we make interacting with the game feel like real magic
 */
 
 export const INHERENT_EFFECTS = {
+  system_awakened: {
+    tags: ["developer"],
+    name: "System Awakened",
+    description: "Lorem Ipsum",
+    effects: [
+      eff.xpMultiplier(sel.tags("skill"), { multiplier: 10 }),
+    ],
+  },
+
   startup: {
     effects: [
       eff.activate(sel.tags("system", "conditions")),
