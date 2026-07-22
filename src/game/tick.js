@@ -11,6 +11,8 @@ import { applyEffect }                          from "./effects.js";
 * - Elegant attribute xp system. Maybe related to skills? 
 *   - Each skill gives xp in some attributes, agility+con for running, etc 
 *   - Each skill has parent of attribute
+* - Trigger on trigger of entity
+*   - evt.onTrigger(id)
 */
 
 /*

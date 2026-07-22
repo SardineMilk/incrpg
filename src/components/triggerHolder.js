@@ -21,15 +21,19 @@ export class TriggerHolder {
   }
 
 fire(game, triggerType, context, strength = 1) {
+  let result = false;
   for (const t of this.triggerDefs) {
     if (t.event.type !== triggerType) continue;
 
-    withContext(context, () => {
-      if (!this._matches(game, t.event, context)) return;
-      if (!meetsRequirements(game, t)) return;
+    const res = withContext(context, () => {
+      if (!this._matches(game, t.event, context)) return false;
+      if (!meetsRequirements(game, t)) return false;
       for (const effect of t.effects) applyEffect(game, effect, strength);
+      return true;
     });
+    if (res) result = true;
   }
+  return result;
 }
   // Resolves any selector on the trigger's event object
   // and checks it against the fired context via the trigger's def.check().

@@ -295,6 +295,15 @@ export const INHERENT_EFFECTS = {
     ]
   },
 
+  test: {
+    tags: ["system"],
+    triggers: [
+      {
+        event: evt.onTrigger("health_regen"),
+        effects: [eff.sendMessage("SYSTEM", "health regen triggers")]
+      }
+    ]
+  },
 
 };
 

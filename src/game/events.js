@@ -6,7 +6,11 @@ export function processTrigger(game, triggerType, context) {
     const strengthHolder = game.registry.get(id, "StatLayer");
     const strength = strengthHolder ? strengthHolder.value: 1;
 
-    triggerHolder.fire(game, triggerType, context, strength);
+    // TODO - allow modifiers to use onTrigger too
+    // This might require splitting .fire() into check and execute stages
+    // With processModifier(onTrigger) after check but before execute
+    const res = triggerHolder.fire(game, triggerType, context, strength);
+    if (res) processTrigger(game, "onTrigger", { id: id});
   }
 }
 

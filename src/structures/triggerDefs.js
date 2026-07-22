@@ -36,10 +36,11 @@ export const TRIGGER_DEFS = {
     check: () => true,
   },
 
-  actionChanges: {
-    create: () => ({ type: "actionChanges" }),
-    check: () => true, // TODO specific action or group by tag, like LocationChanges
+  onTrigger: {
+    create: (id) => ({ type: "onTrigger", id}),
+    check: (trigger, ctx) => trigger.id === ctx.id
   },
+
 
   onActivate: {
     create: () => ({ type: "onActivate" }),
