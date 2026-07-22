@@ -284,9 +284,9 @@ export const INHERENT_EFFECTS = {
 
   // onko342 easter egg, put this somewhere funy
   memory_leek: {
-    tags: ["item"],
+    tags: ["item", "eldritch"],
     name: "Memory Leek",
-    description: "Exposure to this accessory rapidly fills aspects of the user's reality with Leeks. Thought to have been wielded by the legendary Kitsune bard, Haku.",
+    description: "Exposure to this eldritch accessory rapidly fills aspects of the user's reality with Leeks. Thought to have been wielded by the legendary Kitsune bard, Haku.",
     triggers: [
       {
         event: evt.tick(),
