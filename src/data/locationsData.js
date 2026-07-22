@@ -36,8 +36,20 @@ export const LOCATIONS = {
   * Raining gems, fire storms etc
   *  
   */
+  core_surface: {
+    name: "Realm Core Surface",
+    tags: ["outside"],
+  },
+  
+  core_tunnels: {
+    name: "Realm Core Maintenance Tunnels",
+    tags: ["inside", "narrow", "hot"],
+  },
 
-
+  core_centre: {
+    name: "Realm Core Centre",
+    tags: ["inside", "construct", "genius_loci"],
+  },
   /* 
   * Festering Fields
   *
