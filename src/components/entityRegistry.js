@@ -2,6 +2,7 @@ export class EntityRegistry {
     constructor() {
         this.entities = new Set();
         this.components = new Map();
+        this.active = new Set();
     }
 
     create(id) {
@@ -37,6 +38,14 @@ export class EntityRegistry {
             if (componentMaps.every(map => map.has(id))) {
                 yield id;
             }
+        }
+    }
+
+    *viewActive(...typeNames) {
+        const componentMaps = typeNames.map(n => this.components.get(n));
+        if (componentMaps.some(m => !m)) return;
+        for (const id of this.active) {
+            if (componentMaps.every(m => m.has(id))) yield id;
         }
     }
 }

@@ -32,13 +32,11 @@ This is how we make interacting with the game feel like real magic
 */
 
 export const INHERENT_EFFECTS = {
-
-
   startup: {
     effects: [
-      eff.activate(sel.tags("conditions", "system")),
+      eff.activate(sel.tags("system", "conditions")),
       eff.activate("human"),
-      eff.setLocation("new_meldrum"),
+      eff.activate("new_meldrum"),
       eff.activate("sleep"),
     ]
   },
@@ -232,7 +230,7 @@ export const INHERENT_EFFECTS = {
       {
         event: evt.tick(),
         effects: [
-          eff.progress(fml.activeAction(), 1),
+          eff.progress(fml.active("actions"), 1),
         ]
       }
     ]
@@ -252,8 +250,12 @@ export const INHERENT_EFFECTS = {
     tags: ["system", "singularity"],
     modifiers: [
       {
-        event: evt.activate(["actions"]),
-        effects: [eff.deactivate(fml.activeAction()),eff.sendMessage("SYSTEM", "Action changed")],
+        event: evt.activate(),
+        requirements: [req.hasTag(fml.context("id"), "actions")],
+        effects: [
+          eff.deactivate(fml.active("actions")),
+          eff.sendMessage("SYSTEM", "Action changed")
+        ],
       }
     ]
   },
@@ -264,7 +266,7 @@ export const INHERENT_EFFECTS = {
       {
         event: evt.activate(),
         requirements: [req.hasTag(fml.context("id"), "form")],
-        effects: [eff.deactivate(sel.tags("conditions", "form"))],
+        effects: [eff.deactivate(fml.active("form"))],
       },
     ],
   },

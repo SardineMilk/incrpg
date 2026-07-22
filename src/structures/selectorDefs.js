@@ -89,6 +89,12 @@ export const sel = {
       return [...intersectSets(sets)];
     }),
 
+
+  // TODO - implement
+  active: (...selectors) =>
+    makeSelector((game) => {
+      
+    })
 };
 
 /*

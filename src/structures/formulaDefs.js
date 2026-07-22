@@ -2,6 +2,7 @@ import { SKILLS } from "../data/skillsData.js";
 import { currentContext } from "../utils/context.js";
 import { getActiveAction } from "../utils/getActiveAction.js";
 import { isSelector } from "./selectorDefs.js";
+import { byTag } from "../utils/tagIndex.js";
 
 const res = (val, game) => (typeof val === "function" ? val(game) : val);
 export const lift =
@@ -15,7 +16,13 @@ export const lift =
 const definitions = {
   context: (_game, key) => currentContext()[key],
 
-  activeAction:       (game) => getActiveAction(game),
+  // TODO - convert to selector
+  active: (game, tag) => {
+    for (const id of byTag(tag)) {
+      if (game.registry.active.has(id)) return id;
+    }
+    return null;
+  },
   conditionStrength:  (game, condition) => game.registry.get(condition, "StatLayer")?.value,
   level:              (game, skill) => game.registry.get(skill, "LevelHolder")?.level,
   value:              (game, value) => game.values[value],

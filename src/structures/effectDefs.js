@@ -48,24 +48,21 @@ function getStrength(game, entity) {
 
 function activateEntity(game, entity, duration = null) {
   const active = game.registry.get(entity, "ActiveHolder");
-  if (!active) return;
-  if (active.active) return;
-
+  if (!active || active.active) return;
   const effects = game.registry.get(entity, "PassiveHolder");
   if (effects) effects.apply(game, getStrength(game, entity));
   active.activate(duration);
+  game.registry.active.add(entity);
   processTrigger(game, "onActivate", { id: entity });
 }
 
-
 function deactivateEntity(game, entity) {
   const active = game.registry.get(entity, "ActiveHolder");
-  if (!active) return;
-  if (!active.active) return;
-
+  if (!active || !active.active) return;
   const effects = game.registry.get(entity, "PassiveHolder");
   if (effects) effects.remove(game, getStrength(game, entity));
   active.deactivate();
+  game.registry.active.delete(entity);
   processTrigger(game, "onDeactivate", { id: entity });
 }
 
@@ -382,20 +379,6 @@ export const EFFECT_DEFS = {
     scale: scaleAmount,
     display(game, e) {
       return `add ${e.amount} progress to ${e.id}`;
-    }
-  },
-
-  // ── World ─────────────────────────────────────────────────────────────────
-
-  // TODO - locations should use activate
-  setLocation: {
-    create: (location) => ({ type: "setLocation", location }),
-    apply(game, e) {
-      game.location = e.location;
-      return "locationChanges";
-    },
-    display(game, e) {
-      return `move to ${e.location}`;
     }
   },
 
