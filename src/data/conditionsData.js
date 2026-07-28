@@ -239,7 +239,7 @@ export const INHERENT_EFFECTS = {
       {
         event: evt.tick(),
         effects: [
-          eff.progress(fml.active("actions"), 1),
+          eff.progress(sel.active(sel.tags("actions")), 1),
         ]
       }
     ]
@@ -250,7 +250,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        effects: [eff.changeDuration(sel.tags("conditions"), 1)],
+        effects: [eff.changeDuration(sel.active(sel.tags("conditions")), -1)],
       },
     ],
   },
@@ -263,7 +263,7 @@ export const INHERENT_EFFECTS = {
         event: evt.activate(),
         requirements: [req.hasTag(fml.context("id"), "actions")],
         effects: [
-          eff.deactivate(fml.active("actions")),
+          eff.deactivate(sel.active(sel.tags("actions"))),
           eff.sendMessage("SYSTEM", "Action changed")
         ],
       }
@@ -276,7 +276,7 @@ export const INHERENT_EFFECTS = {
       {
         event: evt.activate(),
         requirements: [req.hasTag(fml.context("id"), "form")],
-        effects: [eff.deactivate(fml.active("form"))],
+        effects: [eff.deactivate(sel.active(sel.tags("form")))],
       },
     ],
   },

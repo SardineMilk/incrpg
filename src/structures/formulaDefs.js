@@ -15,13 +15,6 @@ export const lift =
 const definitions = {
   context: (_game, key) => currentContext()[key],
 
-  // TODO - convert to selector
-  active: (game, tag) => {
-    for (const id of byTag(tag)) {
-      if (game.activation.active.has(id)) return id;
-    }
-    return null;
-  },
   conditionStrength:  (game, condition) => game.registry.get(condition, "StatLayer")?.value,
   level:              (game, skill) => game.registry.get(skill, "LevelHolder")?.level,
   value:              (game, value) => game.values[value],

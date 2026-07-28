@@ -32,6 +32,11 @@ export const REQUIREMENT_DEFS = {
     check: (game, r) => game.registry.get(r.skill, "LevelHolder").baseLevel >= r.value
   },
 
+  isTimed: {
+    create: (skill, id) => ({ type: "isTimed", id }),
+    check: (game, r) => game.registry.get(r.id, "DurationHolder").isTimed
+  },
+
   valueLessThan: {
     create: (value, amount) => ({
       type: "valueLessThan",
@@ -46,7 +51,6 @@ export const REQUIREMENT_DEFS = {
   active: {
     create: (id) => ({ type: "active", id }),
     check: (game, r) => {
-      console.log(r)
       return game.activation.active.has(r.id);
     }
   },

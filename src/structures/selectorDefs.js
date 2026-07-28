@@ -89,11 +89,11 @@ export const sel = {
     }),
 
 
-  // TODO - implement
   active: (...selectors) =>
     makeSelector((game) => {
-      
-    })
+      return resolveIds(game, sel.union(...selectors))
+        .filter((id) => game.activation.isActive(id));
+    }),
 };
 
 /*

@@ -27,7 +27,7 @@ export const ACTIONS = {
 
     result: [
       eff.gainXp("walking", 20),
-      eff.progress(fml.active(sel.tags("activity")), 1),
+      eff.progress(sel.active(sel.tags("activity")), 1),
     ],
   },
 
@@ -53,7 +53,7 @@ export const ACTIONS = {
 
     result: [
       eff.gainXp("running", 20),
-      eff.progress(fml.active(sel.tags("activity")), 2),
+      eff.progress(sel.active(sel.tags("activity")), 2),
     ],
   },
 
@@ -85,7 +85,7 @@ export const ACTIONS = {
 
     result: [
       eff.gainXp("running", 50),
-      eff.progress(fml.active(sel.tags("activity")), 5),
+      eff.progress(sel.active(sel.tags("activity")), 5),
     ],
   },
 
