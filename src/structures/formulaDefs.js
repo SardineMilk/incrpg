@@ -4,7 +4,7 @@ import { isSelector } from "./selectorDefs.js";
 import { byTag } from "../utils/tagIndex.js";
 
 const res = (val, game) => (typeof val === "function" ? val(game) : val);
-export const lift =
+const lift =
   (fn) =>
   (...args) =>
   (game) =>

@@ -3,7 +3,6 @@ export class StatLayer {
     this.flat = flat;
     this.percent = percent;
     this.multiplier = multiplier;
-    this.dirty = false;
   }
 
   static fromDefinition(def) {
@@ -11,6 +10,7 @@ export class StatLayer {
   }
 
   get value() {
+    this.preventDrift()
     return this.flat * this.percent * this.multiplier;
   }
 
@@ -18,7 +18,6 @@ export class StatLayer {
     this.flat       = flat;
     this.percent    = percent;
     this.multiplier = multiplier;
-    this.dirty = true;
     return this;
   }
 
@@ -26,7 +25,6 @@ export class StatLayer {
     this.flat       += flat;
     this.percent    += percent;
     this.multiplier *= multiplier;
-    this.dirty = true;
     return this;
   }
 
@@ -34,13 +32,12 @@ export class StatLayer {
     this.flat       -= flat;
     this.percent    -= percent;
     this.multiplier /= multiplier;
-    this.dirty = true;
     return this;
   }
 
-  consumeDirty() {
-    const was = this.dirty;
-    this.dirty = false;
-    return was;
+  preventDrift() {
+    this.flat       = Math.round(this.flat, 3);
+    this.percent    = Math.round(this.percent, 3);
+    this.multiplier = Math.round(this.multiplier, 3);
   }
 }
