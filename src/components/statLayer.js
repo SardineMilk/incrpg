@@ -6,7 +6,7 @@ export class StatLayer {
   }
 
   static fromDefinition(def) {
-    return new StatLayer({ flat: 1});
+    return new StatLayer({ flat: 1 });
   }
 
   get value() {
@@ -35,9 +35,8 @@ export class StatLayer {
     return this;
   }
 
+  // TODO - prevent floating point drift
   preventDrift() {
-    this.flat       = Math.round(this.flat, 3);
-    this.percent    = Math.round(this.percent, 3);
-    this.multiplier = Math.round(this.multiplier, 3);
+    return;
   }
 }

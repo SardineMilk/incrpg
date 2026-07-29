@@ -92,7 +92,7 @@ export const sel = {
   active: (...selectors) =>
     makeSelector((game) => {
       return resolveIds(game, sel.union(...selectors))
-        .filter((id) => game.activation.isActive(id));
+        .filter((id) => game.active.isActive(id));
     }),
 };
 

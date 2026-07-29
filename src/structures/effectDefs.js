@@ -46,25 +46,25 @@ function getStrength(game, entity) {
 
 
 function activateEntity(game, entity, duration = null) {
-  if (game.activation.isActive(entity)) return;
+  if (game.active.isActive(entity)) return;
 
   const effects = game.registry.get(entity, "PassiveHolder");
   if (effects) effects.apply(game, getStrength(game, entity));
 
   game.registry.get(entity, "DurationHolder")?.set(duration);
-  game.activation.activate(entity);
+  game.active.activate(entity);
 
   processTrigger(game, "onActivate", { id: entity });
 }
 
 function deactivateEntity(game, entity) {
-  if (!game.activation.isActive(entity)) return;
+  if (!game.active.isActive(entity)) return;
 
   const effects = game.registry.get(entity, "PassiveHolder");
   if (effects) effects.remove(game, getStrength(game, entity));
 
   //game.registry.get(entity, "DurationHolder")?.set(null);
-  game.activation.deactivate(entity);
+  game.active.deactivate(entity);
   
   processTrigger(game, "onDeactivate", { id: entity });
 }
@@ -247,7 +247,7 @@ export const EFFECT_DEFS = {
       amount,
     }),
     apply(game, e) {
-      if (!game.activation.isActive(e.id)) return;
+      if (!game.active.isActive(e.id)) return;
       const dh = game.registry.get(e.id, "DurationHolder");
       if (!dh || dh.duration === null) return; // untimed
       if (dh.change(e.amount)) { deactivateEntity(game, e.id); return "conditionRemoved"; }
@@ -269,6 +269,7 @@ export const EFFECT_DEFS = {
       return `change the duration of ${e.id} by ${e.amount}`;
     }
   },
+
   changeConditionStrength: {
     create: (condition, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
       type: "changeConditionStrength",

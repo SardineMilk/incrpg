@@ -27,7 +27,7 @@ const NAMESPACES = {
 
 export function initialiseState(game) {
   game.registry = new EntityRegistry();
-  game.activation = new ActivationLayer(game.registry);
+  game.active = new ActivationLayer(game.registry);
 
   // Tag every entity with its own namespace name
   // This means namespaces must be distinct from any tag used in data

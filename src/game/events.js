@@ -1,7 +1,6 @@
 
 export function processTrigger(game, triggerType, context) {
-  for (const id of game.registry.view("TriggerHolder")) {
-    if (!game.activation.active.has(id)) continue;
+  for (const id of game.active.view("TriggerHolder")) {
     const triggerHolder = game.registry.get(id, "TriggerHolder");
     const strengthHolder = game.registry.get(id, "StatLayer");
     const strength = strengthHolder ? strengthHolder.value: 1;
@@ -15,8 +14,7 @@ export function processTrigger(game, triggerType, context) {
 }
 
 export function processModifier(game, triggerType, context) {
-  for (const id of game.registry.view("ModifierHolder")) {
-    if (!game.activation.active.has(id)) continue;
+  for (const id of game.active.view("ModifierHolder")) {
     const triggerHolder = game.registry.get(id, "ModifierHolder");
     const strengthHolder = game.registry.get(id, "StatLayer");
     const strength = strengthHolder ? strengthHolder.value: 1;
