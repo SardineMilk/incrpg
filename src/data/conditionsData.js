@@ -44,6 +44,7 @@ export const INHERENT_EFFECTS = {
   startup: {
     effects: [
       eff.activate(sel.tags("system", "conditions")),
+      eff.activate(sel.tags("mortal", "conditions")),
       eff.activate("human"),
       eff.activate("new_meldrum"),
       eff.activate("sleep"),
@@ -318,30 +319,56 @@ export const INHERENT_EFFECTS = {
 
 
 const TRAITS = {
-  // Other forms can have different effects
   human: {
     tags: ["form"],
     effects: [
-      eff.activate(sel.tags("conditions", "mortal")),
-      eff.changeValue("healthMax", 100),
+      eff.changeValue("healthMax",  100),
       eff.changeValue("staminaMax", 100),
-      eff.changeValue("mentalMax", 100),
+      eff.changeValue("mentalMax",  100),
     ],
   },
 
   rat_king: {
     tags: ["form", "beast", "rat"],
     effects: [
-      eff.activate(sel.tags("conditions", "mortal")),
-      eff.changeValue("healthMax", 80),
+      eff.changeValue("healthMax",  80),
       eff.changeValue("staminaMax", 150),
-      eff.changeValue("mentalMax", 70),
+      eff.changeValue("mentalMax",  70),
+
       eff.deactivate("stamina_death"),
     ],
   },
 
   /* Elf 
   * All equipment must be natural
+  */
+
+
+  /* Dwarf
+  * Is an insect (COE5)
+  * Armour penetration?
+  * - affinity with stone/metal, therefore can break it easier
+  * - naturally better at mining, since rocks have high armour
+  * - might not lead to thematic builds
+  * Poison resistance
+  */
+
+  /* Automaton
+  * Replace stamina/mental with shared resource
+  * - heat or fuel?
+  * Immune to mental conditions
+  */
+
+  /* Parasite Elemental
+  * Very low stats/resources
+  * Wear the form of last defeated enemy
+  * Taking damage reduces form integrity, lowering bonuses
+  */
+
+  /* Arachne Brood
+  * Less health
+  * Crits inflict paralysing venom
+  * Damage bonus against restrained targets
   */
 
 }

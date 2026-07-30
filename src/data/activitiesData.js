@@ -9,26 +9,26 @@ export const ACTIVITIES = {
         requirements: [],
         tick: [],
         result: [],
-        tags: ["traversal"],
+        tags: ["exploration"],
+        allowed: ["traversal"],
         adversary_actions: {        
-            root_trip:{
-                weight: 1,
-            },
-            mud_puddle:{
-                weight: 1,
-            },
-            thorn_bush:{
-                weight: 0.5,
-            },
-            wind_gust:{
-                weight: 0.25,
-            },
-            spot_trail:{
-                weight:  0.25,
-            },
-            ignore_wisps:{
-                weight:  0.25,
-            },
+            root_trip:   { weight: 1, },
+            mud_puddle:  { weight: 1, },
+            thorn_bush:  { weight: 0.5, },
+            wind_gust:   { weight: 0.25, },
+            spot_trail:  { weight:  0.25, },
+            ignore_wisps:{ weight:  0.25, },
         },
-    }
+    },
+
+    chop_tree: {
+        requirements: [],
+        tick: [],
+        result: [],
+        tags: ["gathering"],
+        allowed: ["combat"],
+        adversaries: [
+            
+        ],
+    },
 }

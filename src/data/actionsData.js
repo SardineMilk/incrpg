@@ -6,11 +6,7 @@ export const ACTIONS = {
     name: "Walk",
     tags: ["traversal"],
     duration: 100,
-
-    effects: [
-      eff.changeValue("check_difficulty", -10),
-    ],
-
+    effects: [eff.changeValue("check_difficulty", -10)],
     triggers: [
       {
         event: evt.tick(),
@@ -24,7 +20,6 @@ export const ACTIONS = {
         ],
       },
     ],
-
     result: [
       eff.gainXp("walking", 20),
       eff.progress(sel.active(sel.tags("activity")), 1),
@@ -35,7 +30,6 @@ export const ACTIONS = {
     name: "Jog",
     tags: ["traversal"],
     duration: 50,
-
     triggers: [
       {
         event: evt.tick(),
@@ -50,7 +44,6 @@ export const ACTIONS = {
         ],
       },
     ],
-
     result: [
       eff.gainXp("running", 20),
       eff.progress(sel.active(sel.tags("activity")), 2),
@@ -62,11 +55,7 @@ export const ACTIONS = {
     name: "Sprint",
     tags: ["traversal"],
     duration: 20,
-
-    effects: [
-      eff.changeValue("check_difficulty", 10),
-    ],
-
+    effects: [eff.changeValue("check_difficulty", 10),],
     triggers: [
       {
         event: evt.tick(),
@@ -82,7 +71,6 @@ export const ACTIONS = {
         ],
       },
     ],
-
     result: [
       eff.gainXp("running", 50),
       eff.progress(sel.active(sel.tags("activity")), 5),
@@ -93,18 +81,7 @@ export const ACTIONS = {
     name: "Sleep",
     tags: ["rest"],
     duration: 100,
-
-    attributes: {
-      strength: 0,
-      constitution: 0.5,
-      agility: 0,
-      dexterity: 0,
-      intelligence: 0,
-      willpower: 0.5,
-      wit: 0,
-      perception: 0,
-    },
-
+    effects: [eff.activate("asleep")],
     triggers: [
       {
         event: evt.tick(),
@@ -114,33 +91,21 @@ export const ACTIONS = {
         ],
       },
     ],
-
-    effects: [
-      eff.activate("asleep"),
-    ],
-
-
     result: [eff.gainXp("sleeping", 20)],
   },
   
   become_rat: {
     name: "Become Rat King",
     tags: ["transform"],
-    duration: 100,
-
-    result: [
-      eff.activate("rat_king"),
-    ]
+    duration: 10,
+    result: [eff.activate("rat_king")]
   },
 
 
   test_exclusivity: {
     name: "Disable Action Exclusivity",
     duration: 10,
-
-    result: [
-      eff.deactivate("action_exclusivity"),
-    ]
+    result: [eff.deactivate("action_exclusivity"),]
   },
 };
 
