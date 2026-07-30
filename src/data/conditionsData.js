@@ -379,7 +379,7 @@ const TEMP_CONDITIONS = {
     name: "Asleep",
     description: "You are asleep, greatly boosting your natural recovery",
     effects: [
-      eff.changeConditionStrength(sel.tags("conditions", "passive_regen"), {flat: 10}),
+      eff.changeStrength(sel.tags("conditions", "passive_regen"), {flat: 10}),
     ],
   },
 
@@ -413,7 +413,7 @@ const TEMP_CONDITIONS = {
       "You feel chilly. You move and regenerate stamina slightly slower",
     effects: [
       eff.levelBonus("agility", {multiplier: 0.9}),
-      eff.changeConditionStrength("stamina_regen", {multiplier: 0.7}),
+      eff.changeStrength("stamina_regen", {multiplier: 0.7}),
     ],
   },
   

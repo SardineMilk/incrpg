@@ -270,34 +270,35 @@ export const EFFECT_DEFS = {
     }
   },
 
-  changeConditionStrength: {
-    create: (condition, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
-      type: "changeConditionStrength",
-      condition,
+  changeStrength: {
+    create: (id, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
+      type: "changeStrength",
+      id,
       flat,
       percent,
       multiplier,
     }),
     apply(game, e) {
-      const strength = game.registry.get(e.condition, "StatLayer");
+      const strength = game.registry.get(e.id, "StatLayer");
       if (!strength) return null;
 
       strength.change(e);
 
-      const effects = game.registry.get(e.condition, "PassiveHolder");
+      // TODO - this should be automatic
+      const effects = game.registry.get(e.id, "PassiveHolder");
       if (effects) { effects.reapply(game, strength.value);}
 
-      return "conditionStrengthChanged";
+      return "strengthChanged";
     },
     remove(game, e) {
-      const strength = game.registry.get(e.condition, "StatLayer");
+      const strength = game.registry.get(e.id, "StatLayer");
       if (!strength) return;
 
       strength.changeReverse(e);
     },
     scale: scaleStatLayer,
     display(game, e) {
-      let m = `modify ${e.condition} strength by: `;
+      let m = `modify ${e.id} strength by: `;
       if (e.flat != 0) m += `+${e.flat} `;
       if (e.percent != 0) m += `${e.percent}% `;
       if (e.multiplier != 1) m += `x${e.multiplier} `;
