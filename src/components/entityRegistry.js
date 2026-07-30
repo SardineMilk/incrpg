@@ -49,11 +49,16 @@ export class EntityRegistry {
 }
 
 export function registerEntities(registry, data, components) {
-    for (const [id, def] of Object.entries(data)) {
-        registry.create(id);
+  for (const [id, def] of Object.entries(data)) {
+    registry.create(id);
 
-        for (const Component of components) {
-            registry.add(id, Component.fromDefinition(def));
-        }
+    for (const Component of components) {
+      // Not all entities will actually make use of all their components
+      // e.g. conditions without trigger effects
+      // So skip adding them to the registry, improving performance
+      if (Component.appliesTo && !Component.appliesTo(def)) continue;
+
+      registry.add(id, Component.fromDefinition(def));
     }
+  }
 }

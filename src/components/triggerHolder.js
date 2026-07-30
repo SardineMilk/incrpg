@@ -16,8 +16,8 @@ export class TriggerHolder {
     );
   }
 
-  get isTriggerHolder() {
-    return this.triggerDefs.length > 0;
+  static appliesTo(def) {
+    return (def.triggers?.length ?? 0) > 0;
   }
 
   // Returns true if any trigger fired

@@ -42,7 +42,7 @@ I believe 1. is the most practical option to start with
 
 // TODO - figure out if this can easily be made dynamic
 // I want chronomancy
-const TICK_RATE = 1000 / 20;
+const TICK_RATE = 1000 / 10;
 
 let intervalId = null;
 export function startTicking(render) {
