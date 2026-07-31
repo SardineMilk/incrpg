@@ -1,4 +1,4 @@
-import { applyEffect, removeEffect } from "../game/effects.js";
+import { applyEffect, negateEffect } from "../game/effects.js";
 import { StatLayer } from "./statLayer.js";
 
 function xpToNext(level) {
@@ -73,7 +73,7 @@ export class LevelHolder {
         }
 
         while (this.appliedLevel > target) {
-            this._removeLevelEffects(game, this.appliedLevel);
+            this._negateLevelEffects(game, this.appliedLevel);
             this.appliedLevel--;
         }
     }
