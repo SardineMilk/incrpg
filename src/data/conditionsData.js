@@ -312,8 +312,27 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.onTrigger("health_regen"),
-        effects: [eff.sendMessage("system", fml.context("amount"))]
+        effects: [
+          //eff.sendMessage("system", "health_regens")
+        ]
       },
+      {
+        event: evt.valueGain("health"),
+        requirements: [],
+        effects: [
+          //eff.sendMessage("system", fml.context("amount"))
+        ],
+      }
+    ]
+  },
+
+  nuke: {
+    tags: ["system", "game_breaking"],
+    triggers: [
+      {
+        event: evt.valueLoss("test_value"),
+        effects: [eff.changeValue("test_value", -1)],
+      }
     ]
   },
 

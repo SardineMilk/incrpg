@@ -107,6 +107,12 @@ export const ACTIONS = {
     duration: 10,
     result: [eff.deactivate("action_exclusivity"),]
   },
+
+  detonate_nuke: {
+    name: "Detonate Nuke (value loss recursion)",
+    duration: 10,
+    result: [eff.changeValue("test_value", -1),]
+  },
 };
 
 

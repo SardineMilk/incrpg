@@ -1,6 +1,5 @@
 import { LogType } from "../game/log.js";
 import { LOCATIONS } from "../data/locationsData.js";
-import { currentContext } from "../utils/context.js";
 import { processTrigger } from "../game/events.js";
 /*
  * Each entry defines one effect type:
@@ -325,20 +324,20 @@ export const EFFECT_DEFS = {
   // ── Values ────────────────────────────────────────────────────────────────
 
   changeValue: {
-    create: (value, amount) => ({ type: "changeValue", value, amount }),
+    create: (id, amount) => ({ type: "changeValue", id, amount }),
     apply(game, e) {
-      game.values[e.value] = game.values[e.value] || 0;
-      game.values[e.value] += e.amount;
+      game.values[e.id] = game.values[e.id] || 0;
+      game.values[e.id] += e.amount;
       if (e.amount > 0) return "valueGain";
       if (e.amount < 0) return "valueLoss";
       return null;
     },
     remove(game, e) {
-      game.values[e.value] -= e.amount;
+      game.values[e.id] -= e.amount;
     },
     scale: scaleAmount,
     display(game, e) {
-      return `${e.amount > 0 ? 'gain' : 'lose'} ${Math.abs(e.amount)} ${e.value}`;
+      return `${e.amount > 0 ? 'gain' : 'lose'} ${Math.abs(e.amount)} ${e.id}`;
     }
   },
 

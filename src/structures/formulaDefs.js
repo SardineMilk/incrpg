@@ -1,5 +1,4 @@
 import { SKILLS } from "../data/skillsData.js";
-import { currentContext } from "../utils/context.js";
 import { isSelector } from "./selectorDefs.js";
 import { byTag } from "../utils/tagIndex.js";
 
@@ -13,7 +12,7 @@ const lift =
 // When adding a new formula it takes `game` as a parameter,
 // but you don't need to pass game at point of use.
 const definitions = {
-  context: (_game, key) => currentContext()[key],
+  context: (game, key) => game.context.get(key),
 
   conditionStrength:  (game, condition) => game.registry.get(condition, "StatLayer")?.value,
   level:              (game, skill) => game.registry.get(skill, "LevelHolder")?.level,

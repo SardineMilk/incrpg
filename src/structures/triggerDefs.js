@@ -14,12 +14,6 @@ import { tagsOf } from "../utils/tagIndex.js";
 
 
 export const TRIGGER_DEFS = {
-  
-  changeValue: {
-    create: (value) => ({ type: "changeValue", value }),
-    check: (trigger, ctx) => trigger.value === ctx.value,
-  },
-
   activate: {
     create: (tags = []) => ({ type: "activate", tags }),
     check: (trigger, ctx) =>
@@ -53,15 +47,15 @@ export const TRIGGER_DEFS = {
   },
 
   valueGain: {
-    create: (value, min = 1) => ({ type: "valueGain", value, min }),
+    create: (id, min = 1) => ({ type: "valueGain", id, min }),
     check: (trigger, ctx) =>
-      ctx.value === trigger.value && ctx.amount >= trigger.min,
+      ctx.id === trigger.id && ctx.amount >= trigger.min,
   },
 
   valueLoss: {
-    create: (value, min = 1) => ({ type: "valueLoss", value, min }),
+    create: (id, min = 1) => ({ type: "valueLoss", id, min }),
     check: (trigger, ctx) =>
-      ctx.value === trigger.value && ctx.amount <= -trigger.min,
+      ctx.id === trigger.id && ctx.amount <= -trigger.min,
   },
 
   resourceDropsBelowThreshold: {

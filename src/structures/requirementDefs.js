@@ -12,10 +12,7 @@ import { tagsOf } from "../utils/tagIndex.js";
  *   [[A, B], [C, D]]       -> (A || B) && (C || D)
  */
 export const REQUIREMENT_DEFS = {
-  item: {
-    create: (item) => ({ type: "item", item }),
-    check: (game, r) => (game.inventory[r.item] ?? 0) > 0,
-  },
+  // TODO - id of most recent context on stack equals
 
   hasTag: {
     create: (id, tag) => ({ type: "hasTag", id, tag }),
