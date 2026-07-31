@@ -7,9 +7,13 @@ export function processTrigger(game, triggerType, context) {
     const pending = triggerHolder.fire(game, triggerType, context);
     if (pending.length === 0) continue;
 
-    processModifier(game, "onTrigger", { id });
-    triggerHolder.apply(game, pending, strength);
-    processTrigger(game, "onTrigger", { id });
+    // TODO - this doesnt preserve the context stack properly
+    // Should context even be a parameter?
+    // Should context even be a stack, or threaded like game?
+    // TODO - investigate
+    processModifier(game, "onTrigger", { id },);
+    triggerHolder.apply(game, pending, strength, context);
+    processTrigger(game, "onTrigger", { id },);
   }
 }
 
@@ -22,8 +26,8 @@ export function processModifier(game, triggerType, context) {
     const pending = triggerHolder.fire(game, triggerType, context);
     if (pending.length === 0) continue;
 
-    processModifier(game, "onModifierTrigger", { id });
-    triggerHolder.apply(game, pending, strength);
-    processTrigger(game, "onModifierTrigger", { id });
+    processModifier(game, "onModifierTrigger", { id },);
+    triggerHolder.apply(game, pending, strength, context);
+    processTrigger(game, "onModifierTrigger", { id },);
   }
 }

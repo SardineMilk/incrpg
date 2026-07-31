@@ -305,13 +305,15 @@ export const INHERENT_EFFECTS = {
     ]
   },
 
+  // TODO - context is broken for health regen
   test: {
     tags: ["system"],
+
     triggers: [
       {
         event: evt.onTrigger("health_regen"),
-        effects: [eff.sendMessage("SYSTEM", "health regen triggers")]
-      }
+        effects: [eff.sendMessage("system", fml.context("amount"))]
+      },
     ]
   },
 

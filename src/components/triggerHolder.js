@@ -41,8 +41,11 @@ export class TriggerHolder {
   }
 
   // TODO - this is stupid
-  apply(game, pending, strength) {
-    for (const effect of pending) { applyEffect(game, effect, strength); }
+  apply(game, pending, strength, context) {
+    console.log(context)
+    withContext(context, () => {
+      for (const effect of pending) { applyEffect(game, effect, strength); }
+    });
   }
 
   // Resolves any selector on the trigger's event object
