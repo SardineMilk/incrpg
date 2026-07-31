@@ -30,7 +30,16 @@ export class CompletionHolder {
     }
 
     _checkCompletion(game) {
+        /*
+        // This allows multiple completions per advance, but breaks on `duration <= 0`
+        // TODO - design an elegant way for <=0 duration CompletionHolders to work
         while (this.progress >= this.duration) {
+            this.completions++;
+            this.progress -= this.duration;
+            for (const effect of this.resultEffects) applyEffect(game, effect);
+        }
+        */
+        if (this.progress >= this.duration) {
             this.completions++;
             this.progress -= this.duration;
             for (const effect of this.resultEffects) applyEffect(game, effect);
