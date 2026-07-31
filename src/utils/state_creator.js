@@ -12,8 +12,8 @@ import { LevelHolder } from "../components/levelHolder.js";
 import { DurationHolder } from "../components/durationHolder.js";
 
 import { generateTagIndex } from "./tagIndex.js";
-import { EntityRegistry, registerEntities } from "../components/entityRegistry.js";
-import { ActivationLayer } from "../components/activationLayer.js";
+import { EntityRegistry, registerEntities } from "./entityRegistry.js";
+import { ActivationLayer } from "./activationLayer.js";
 
 import { validate } from "./validator.js";
 

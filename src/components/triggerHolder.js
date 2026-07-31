@@ -1,9 +1,9 @@
 import { meetsRequirements } from "../game/requirements.js";
-import { applyEffect } from "../game/effects.js";
 import { resolveFormulas } from "../structures/formulaDefs.js";
 import { withContext } from "../utils/context.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
 import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
+import { applyEffect } from "../game/effects.js";
 
 export class TriggerHolder {
   constructor(triggerDefs = []) {
@@ -20,21 +20,29 @@ export class TriggerHolder {
     return (def.triggers?.length ?? 0) > 0;
   }
 
+  // TODO - .fire() should return an array of effects, which are applied at the call site
+  // This allows pre-fire modifiers to work properly
+
   // Returns true if any trigger fired
-  fire(game, triggerType, context, strength = 1) {
-    let result = false;
+  fire(game, triggerType, context) {
+    const pending = [];
+
     for (const t of this.triggerDefs) {
       if (t.event.type !== triggerType) continue;
 
-      const res = withContext(context, () => {
-        if (!this._matches(game, t.event, context)) return false;
-        if (!meetsRequirements(game, t)) return false;
-        for (const effect of t.effects) applyEffect(game, effect, strength);
-        return true;
+      withContext(context, () => {
+        if (!this._matches(game, t.event, context)) return;
+        if (!meetsRequirements(game, t)) return;
+        for (const effect of t.effects) { pending.push(effect); }
       });
-      if (res) result = true;
     }
-    return result;
+
+    return pending;
+  }
+
+  // TODO - this is stupid
+  apply(game, pending, strength) {
+    for (const effect of pending) { applyEffect(game, effect, strength); }
   }
 
   // Resolves any selector on the trigger's event object
