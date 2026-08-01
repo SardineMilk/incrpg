@@ -13,8 +13,7 @@ export const ACTIONS = {
         effects: [
           eff.gainXp("constitution", 0.5),
           eff.gainXp("agility", 0.5),
-          eff.gainXp("dexterity", 0.2),
-          eff.gainXp("perception", 0.2),
+          eff.gainXp("wit", 0.2),
 
           eff.changeValue("stamina", -1),
         ],
@@ -36,9 +35,8 @@ export const ACTIONS = {
         effects: [
           eff.gainXp("constitution", 0.5),
           eff.gainXp("agility", 0.5),
-          eff.gainXp("dexterity", 0.2),
+          eff.gainXp("wit", 0.2),
           eff.gainXp("willpower", 0.2),
-          eff.gainXp("perception", 0.5),
 
           eff.changeValue("stamina", -2),
         ],
@@ -60,11 +58,11 @@ export const ACTIONS = {
       {
         event: evt.tick(),
         effects: [
-          eff.gainXp("strength", 0.2),
           eff.gainXp("constitution", 0.5),
+          eff.gainXp("strength", 0.2),
           eff.gainXp("agility", 1),
+          eff.gainXp("wit", 0.5),
           eff.gainXp("willpower", 0.5),
-          eff.gainXp("perception", 1),
 
           eff.changeValue("stamina", -5),
           eff.changeValue("health", -2),

@@ -18,14 +18,12 @@ function renderStats(game) {
   box.innerHTML = "";
 
   const attributes = [
-    "strength",
     "constitution",
+    "strength",
     "agility",
-    "dexterity",
+    "wit",
     "intelligence",
     "willpower",
-    "wit",
-    "perception",
   ];
   for (const attrId of attributes) {
     const div = document.createElement("div");

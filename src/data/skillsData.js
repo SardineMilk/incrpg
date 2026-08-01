@@ -3,9 +3,33 @@ import { eff } from "../structures/structures.js";
 
 
 export const SKILLS = {
+  /*
+  * Planned Attributes
+  * - 2 per archetype 
+  * 
+  * Constitution - +health 
+  * Strength     - +health/stamina
+  * 
+  * Agility      - +stamina
+  * Wit   - +stamina/mental
+  * 
+  * Intelligence - +mental
+  * Willpower    - +mental/health
+  *
+  */
+
+
   // Attribute skills to allow them to level up and apply effects based on level.
   // Don't add milestones
   // The rendering code treats them as a special case
+
+  constitution: {
+    tags: ["characteristic"],
+    name: "Constitution",
+    level: [
+      eff.changeValue("healthMax", 2),
+    ], 
+  },
   strength: {
     tags: ["characteristic"],
     name: "Strength",
@@ -14,13 +38,7 @@ export const SKILLS = {
       eff.changeValue("staminaMax", 1),
     ], 
   },
-  constitution: {
-    tags: ["characteristic"],
-    name: "Constitution",
-    level: [
-      eff.changeValue("healthMax", 2),
-    ], 
-  },
+
   agility: {
     tags: ["characteristic"],
     name: "Agility",
@@ -28,12 +46,15 @@ export const SKILLS = {
       eff.changeValue("staminaMax", 2),
     ], 
   },
-  dexterity: {
+  wit: {
     tags: ["characteristic"],
-    name: "Dexterity",
+    name: "Wit",
     level: [
+      eff.changeValue("staminaMax", 1),
+      eff.changeValue("mentalMax", 1),
     ], 
   },
+
   intelligence: {
     tags: ["characteristic"],
     name: "Intelligence",
@@ -49,20 +70,7 @@ export const SKILLS = {
       eff.changeValue("mentalMax", 1),
     ], 
   },
-  wit: {
-    tags: ["characteristic"],
-    name: "Wit",
-    level: [
-      eff.changeValue("staminaMax", 1),
-      eff.changeValue("mentalMax", 1),
-    ], 
-  },
-  perception: {
-    tags: ["characteristic"],
-    name: "Perception",
-    level: [
-    ], 
-  },
+
 
   recovery: {
     name: "Recovery",
