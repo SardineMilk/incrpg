@@ -34,7 +34,7 @@ const definitions = {
   max: (_game, x, y) => Math.max(x, y),
   clamp: (_game, x, min, max) => Math.max(min, Math.min(max, x)),
   ternary: (_game, cond, t, f) => (cond ? t : f),
-  roll: (_game, min, max, threshold) => (Math.floor(Math.random() * (max - min + 1)) + min) >= threshold,
+  roll: (_game, min, max) => (Math.floor(Math.random() * (max - min + 1)) + min),
 };
 
 
