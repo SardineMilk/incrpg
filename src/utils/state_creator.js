@@ -17,6 +17,7 @@ import { ActivationLayer } from "./activationLayer.js";
 
 import { validate } from "./validator.js";
 import { ContextStack } from "./context.js";
+import { CandidateScope } from "./candidateScope.js";
 
 
 const NAMESPACES = {
@@ -32,6 +33,7 @@ export function initialiseState(game) {
   game.registry = new EntityRegistry();
   game.active = new ActivationLayer(game.registry);
   game.context = new ContextStack(MAX_CONTEXT_STACK_DEPTH);
+  game.candidateScope = new CandidateScope();
 
   // Tag every entity with its own namespace name
   // This means namespaces must be distinct from any tag used in data

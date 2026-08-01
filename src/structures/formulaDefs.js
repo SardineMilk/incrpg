@@ -12,9 +12,13 @@ const lift =
 // When adding a new formula it takes `game` as a parameter,
 // but you don't need to pass game at point of use.
 const definitions = {
+  // Get data from current effect stack
   context: (game, key) => game.context.get(key),
   id: (game) => game.context.get("id"),
   amount: (game) => game.context.get("amount"),
+
+  // Get data from current expanded selector candidate
+  candidate: (game, key) => game.candidateScope.get(key),
 
   conditionStrength:  (game, condition) => game.registry.get(condition, "StatLayer")?.value,
   level:              (game, skill) => game.registry.get(skill, "LevelHolder")?.level,

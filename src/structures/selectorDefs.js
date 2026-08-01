@@ -106,7 +106,6 @@ export const sel = {
 
 export function resolveTargets(game, structure) {
   const { requirements, ...base } = structure;
-
   const selectorFields = Object.entries(base).filter(
     ([key, val]) => key !== "type" && isSelector(val)
   );
@@ -121,11 +120,11 @@ export function resolveTargets(game, structure) {
 
   const resolved = [];
   for (const candidate of results) {
-    const outcome = game.context.with(candidate, () => {
+    const outcome = game.candidateScope.with(candidate, () => {
       const r = resolveFormulas(game, candidate);
       if (requirements && !meetsRequirements(game, { requirements })) return null;
       return r;
-    }, "selector-candidate");
+    });
     if (outcome !== null) resolved.push(outcome);
   }
   return resolved;
