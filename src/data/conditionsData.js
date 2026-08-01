@@ -262,7 +262,7 @@ export const INHERENT_EFFECTS = {
     modifiers: [
       {
         event: evt.activate(),
-        requirements: [req.hasTag(fml.context("id"), "actions")],
+        requirements: [req.hasTag(fml.id(), "actions")],
         effects: [
           eff.deactivate(sel.active(sel.tags("actions"))),
           eff.sendMessage("SYSTEM", "Action changed")
@@ -276,7 +276,7 @@ export const INHERENT_EFFECTS = {
     modifiers: [
       {
         event: evt.activate(),
-        requirements: [req.hasTag(fml.context("id"), "form")],
+        requirements: [req.hasTag(fml.id(), "form")],
         effects: [eff.deactivate(sel.active(sel.tags("form")))],
       },
     ],
@@ -325,6 +325,18 @@ export const INHERENT_EFFECTS = {
       }
     ]
   },
+
+  // Bug: formulas are not resolved inside the context of expanded selectors
+  // So `fml.context("id") can't read the id of the current skill, since it's not on the stack
+  // TODO - In selector resolution: fold formula resolution into the same context frame as requirements 
+  bug_example: {
+    tags: ["system"],
+
+    effects: [
+      eff.gainXp(sel.tags("skills"), fml.level(fml.id())),
+    ],
+  },
+
 
   nuke: {
     tags: ["system", "game_breaking"],

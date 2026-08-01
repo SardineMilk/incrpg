@@ -13,11 +13,14 @@ const lift =
 // but you don't need to pass game at point of use.
 const definitions = {
   context: (game, key) => game.context.get(key),
+  id: (game) => game.context.get("id"),
+  amount: (game) => game.context.get("amount"),
 
   conditionStrength:  (game, condition) => game.registry.get(condition, "StatLayer")?.value,
   level:              (game, skill) => game.registry.get(skill, "LevelHolder")?.level,
   value:              (game, value) => game.values[value],
   skillParent:        (_game, skill) => SKILLS[skill]?.parent,
+  level:              (game, id) => game.registry.get(id, "LevelHolder")?.level,
 
   add: (_game, x, y) => x + y,
   sub: (_game, x, y) => x - y,

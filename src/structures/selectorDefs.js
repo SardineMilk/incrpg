@@ -1,5 +1,6 @@
 import { byTag } from "../utils/tagIndex.js";
 import { meetsRequirements } from "../game/requirements.js";
+import { resolveFormulas } from "./formulaDefs.js";
 
 // Tag selectors so resolveTargets can find them in arbitrary fields.
 const SELECTOR = Symbol("selector");
@@ -118,12 +119,14 @@ export function resolveTargets(game, structure) {
     );
   }
 
-  // This lets you use requirements per expanded target of the selector
-  if (requirements) {
-    results = results.filter((candidate) =>
-      game.context.with(candidate, () => meetsRequirements(game, { requirements }), "selector-candidate")
-    );
+  const resolved = [];
+  for (const candidate of results) {
+    const outcome = game.context.with(candidate, () => {
+      const r = resolveFormulas(game, candidate);
+      if (requirements && !meetsRequirements(game, { requirements })) return null;
+      return r;
+    }, "selector-candidate");
+    if (outcome !== null) resolved.push(outcome);
   }
-
-  return results;
+  return resolved;
 }

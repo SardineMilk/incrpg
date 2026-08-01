@@ -307,13 +307,6 @@ export const SKILLS = {
     parent: "crafting",
   },
 
-  stoneworking: {
-    name: "Stoneworking",
-    description: "Rock is stubborn. Be more stubborn.",
-    level: [],
-    parent: "crafting",
-  },
-
   smithing: {
     name: "Smithing",
     description:
@@ -329,4 +322,16 @@ export const SKILLS = {
     level: [],
     parent: "crafting",
   },
+
+  stoneworking: {
+    name: "Stoneworking",
+    description: "Lorem ipsum",
+    level: [],
+    parent: "crafting",
+  },
+  stonecutting: {},
+  stonecarving: {},
+  stonecrafting: {},
+  engraving: {},
+
 };
