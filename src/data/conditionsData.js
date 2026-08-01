@@ -326,10 +326,8 @@ export const INHERENT_EFFECTS = {
     ]
   },
 
-  // Bug: formulas are not resolved inside the context of expanded selectors
-  // So `fml.context("id") can't read the id of the current skill, since it's not on the stack
-  // TODO - In selector resolution: fold formula resolution into the same context frame as requirements 
-  bug_example: {
+
+  TEST_formula_resolution_in_selector_candidate_context: {
     tags: ["system"],
 
     effects: [
