@@ -1,5 +1,5 @@
 export class ContextStack {
-  constructor({ maxDepth = 128 } = {}) {
+  constructor(maxDepth = 128) {
     this._stack = [];
     this._maxDepth = maxDepth;
   }
