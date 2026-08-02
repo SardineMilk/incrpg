@@ -291,8 +291,8 @@ export const INHERENT_EFFECTS = {
       }
     ]
   },
-
-  // onko342 easter egg, put this somewhere funy
+  
+  // onko342 easter egg, put this somewhere funny
   memory_leek: {
     tags: ["item", "eldritch"],
     name: "Memory Leek",

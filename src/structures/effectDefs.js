@@ -311,8 +311,7 @@ export const EFFECT_DEFS = {
       condition
     }),
     apply(game, e) {
-      const active = game.registry.get(e.condition, "ActiveHolder").active;
-      if (!active) return;
+      if (!game.active.isActive(e.condition)) return;
       const effects = game.registry.get(e.condition, "PassiveHolder");
       if (!effects) return;
       const strength = game.registry.get(e.condition, "StatLayer") || 1;

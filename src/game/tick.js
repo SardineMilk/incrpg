@@ -13,27 +13,12 @@ import { applyEffect }                          from "./effects.js";
 *   - Each skill has parent of attribute
 *   - Attributes are StatLayers rather than skills
 *     - They increase the strength of "stat_effect" conditions
-*/
-
-/*
-Recalculation of passive effects on formula change
-
-I see several ways this can be implemented
-1. When creating PassiveHolder, determine a "dynamic/static" bool.
-   Every tick, a system condition reapplies (removes+applies) every
-   active dynamic condition. 
-   The exisiting reapply-on-strength-change is required by static conditions
-   This loses sub-tick accuracy, but is easy to implement and performant
-2. Create an event registry at runtime, where dynamic conditions 'hook' onto
-   specific changes, being recalculated every time the change triggers.
-   e.g. "increase maxHealth by maxMana" would hook onto evt.changeValue("maxMana")
-3. Don't store values as literals. 
-   Instead, store them as combinations of everything that influences them
-   maxHealth = 150
-   maxHealth = {human:100, manaShield:fml.value("maxMana")}
-   The getter would resolve these combinations when accessing the value
-   When a condition is deactivated, it simply removes it's properties from all combinations 
-I believe 1. is the most practical option to start with
+*
+* - Dynamic passive/level effect handling
+* - Activities system
+*   - Allow expansion into combat
+* - Items
+* - UI framework
 */
 
 
