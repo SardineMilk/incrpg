@@ -93,10 +93,9 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       if (e.id == null) return null;
       if (e.amount == 0) return;
-
       game.registry
         .get(e.id, "LevelHolder")
-        .gainXp(game, e.amount);
+        ?.gainXp(game, e.amount);
 
       return "gainXp";
     },
@@ -448,6 +447,31 @@ export const EFFECT_DEFS = {
       return `log to console: "${e.str}"`;
     }
   },
+
+  assertEqual: {
+    create: (label, expected, actual) => ({ type: "assertEqual", label, expected, actual }),
+    apply(game, e) {
+      const pass =
+        typeof e.expected === "number" && typeof e.actual === "number"
+          ? Math.abs(e.expected - e.actual) < 1e-9
+          : e.expected === e.actual;
+
+      const key = pass ? "test_pass_count" : "test_fail_count";
+      game.values[key] = (game.values[key] || 0) + 1;
+
+      game.log.append(
+        LogType.ACTION,
+        `${pass ? "PASS" : "FAIL"} :: ${e.label} (expected ${e.expected}, got ${e.actual})`,
+      );
+      if (!pass) console.warn(`[TEST FAIL] ${e.label}: expected ${e.expected}, got ${e.actual}`);
+
+      return pass ? "assertPass" : "assertFail";
+    },
+    display(game, e) {
+      return `assert ${e.label} == ${e.expected}`;
+    },
+  },
+
 };
 
 export const eff = Object.fromEntries(

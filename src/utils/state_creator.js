@@ -19,12 +19,11 @@ import { validate } from "./validator.js";
 import { ContextStack } from "./context.js";
 import { CandidateScope } from "./candidateScope.js";
 
-
 const NAMESPACES = {
-  skills: SKILLS,
-  actions: ACTIONS,
-  conditions: CONDITIONS,
-  locations: LOCATIONS,
+  skills:     { ...SKILLS, },
+  actions:    { ...ACTIONS, },
+  conditions: { ...CONDITIONS, },
+  locations:  { ...LOCATIONS, }
 };
 
 const MAX_CONTEXT_STACK_DEPTH = 64;
@@ -59,11 +58,11 @@ export function initialiseState() {
   }
 
   // Skills
-  registerEntities(game.registry, SKILLS, [
+  registerEntities(game.registry, NAMESPACES.skills, [
     LevelHolder
   ]);
 
-  registerEntities(game.registry, ACTIONS, [
+  registerEntities(game.registry, NAMESPACES.actions, [
     PassiveHolder,
     TriggerHolder,
     ModifierHolder,
@@ -71,7 +70,7 @@ export function initialiseState() {
     DurationHolder,
   ]);
 
-  registerEntities(game.registry, CONDITIONS, [
+  registerEntities(game.registry, NAMESPACES.conditions, [
     PassiveHolder,
     TriggerHolder,
     ModifierHolder,

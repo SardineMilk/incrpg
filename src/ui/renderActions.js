@@ -1,21 +1,15 @@
-import { ACTIONS } from "../data/actionsData.js";
 import { applyEffect } from "../game/effects.js";
+import { byTag, nameOf } from "../utils/tagIndex.js";
 
 export function renderActions(game) {
   const container = document.getElementById("actions-box");
   if (!container) return;
 
-  for (const actionId in ACTIONS) {
-    const action = ACTIONS[actionId];
+  for (const actionId of byTag("actions")) {
+    const completionHolder = game.registry.get(actionId, "CompletionHolder");
+    const durationHolder = game.registry.get(actionId, "DurationHolder");
 
-    const completionHolder = game.registry.get(
-      actionId,
-      "CompletionHolder"
-    );
-
-    let entry = container.querySelector(
-      `[data-action="${actionId}"]`
-    );
+    let entry = container.querySelector(`[data-action="${actionId}"]`);
 
     let button;
     let info;
@@ -47,14 +41,12 @@ export function renderActions(game) {
       info = entry.querySelector(".action-info");
     }
 
-    button.textContent = action.name;
+    button.textContent = nameOf(actionId);
 
-    info.innerText =
-      `${Math.round(completionHolder.progress)}/${action.duration}`;
+    info.innerText = completionHolder
+      ? `${Math.round(completionHolder.progress)}/${completionHolder.duration}`
+      : "";
 
-    entry.classList.toggle(
-      "active-action",
-      game.active.isActive(actionId)
-    );
+    entry.classList.toggle("active-action", game.active.isActive(actionId));
   }
 }
