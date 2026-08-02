@@ -279,10 +279,9 @@ export const EFFECT_DEFS = {
     }),
     apply(game, e) {
       const strength = game.registry.get(e.id, "StatLayer");
-      if (!strength) return null;
+      if (!strength) return;
 
       strength.change(e);
-
       // TODO - this should be automatic
       const effects = game.registry.get(e.id, "PassiveHolder");
       if (effects) { effects.reapply(game, strength.value);}
@@ -301,6 +300,35 @@ export const EFFECT_DEFS = {
       if (e.flat != 0) m += `+${e.flat} `;
       if (e.percent != 0) m += `${e.percent}% `;
       if (e.multiplier != 1) m += `x${e.multiplier} `;
+      return m;
+    }
+  },
+
+  setStrength: {
+    create: (id, { flat = 1, percent = 1, multiplier = 1 } = {}) => ({
+      type: "setStrength",
+      id,
+      flat,
+      percent,
+      multiplier,
+    }),
+    apply(game, e) {
+      const strength = game.registry.get(e.id, "StatLayer");
+      if (!strength) return;
+      
+      strength.set(e);
+      // TODO - this should be automatic
+      const effects = game.registry.get(e.id, "PassiveHolder");
+      if (effects) { effects.reapply(game, strength.value);}
+
+      return "strengthChanged";
+    },
+    scale: scaleStatLayer,
+    display(game, e) {
+      let m = `set ${e.id} strength to: `;
+      m += `${e.flat} flat, `;
+      m += `${e.percent}%, `;
+      m += `x${e.multiplier} `;
       return m;
     }
   },
