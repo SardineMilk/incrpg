@@ -18,6 +18,8 @@ const definitions = {
   amount: (game) => game.context.get("amount"),
 
   // Get data from current expanded selector candidate
+  // Niche, but required in some cases where multiple fields use the candidate
+  // eff.gainXp(sel.tags("skills"), fml.level(fml.candidate("id")))
   candidate: (game, key) => game.candidateScope.get(key),
 
   conditionStrength:  (game, condition) => game.registry.get(condition, "StatLayer")?.value,

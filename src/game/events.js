@@ -4,7 +4,7 @@ export function processTrigger(game, triggerType, context) {
     const strength = game.registry.get(id, "StatLayer")?.value ?? 1;
 
     game.context.with(context, () => {
-      const pending = triggerHolder.fire(game, triggerType, context);
+      const pending = triggerHolder.collect(game, triggerType, context);
       if (pending.length === 0) return;
 
       processModifier(game, "onTrigger", { id });
@@ -20,7 +20,7 @@ export function processModifier(game, triggerType, context) {
     const strength = game.registry.get(id, "StatLayer")?.value ?? 1;
 
     game.context.with(context, () => {
-      const pending = modifierHolder.fire(game, triggerType, context);
+      const pending = modifierHolder.collect(game, triggerType, context);
       if (pending.length === 0) return;
 
       processModifier(game, "onModifierTrigger", { id });

@@ -19,7 +19,7 @@ export class TriggerHolder {
     return (def.triggers?.length ?? 0) > 0;
   }
 
-  fire(game, triggerType, context) {
+  collect(game, triggerType, context) {
     const pending = [];
     for (const t of this.triggerDefs) {
       if (t.event.type !== triggerType) continue;

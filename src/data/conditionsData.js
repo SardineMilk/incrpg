@@ -331,7 +331,7 @@ export const INHERENT_EFFECTS = {
     tags: ["system"],
 
     effects: [
-      eff.gainXp(sel.tags("skills"), fml.add(0, fml.level(fml.candidate(("id"))))),
+      eff.gainXp(sel.tags("skills"), fml.add(0, fml.level(fml.candidate("id")))),
     ],
   },
 
