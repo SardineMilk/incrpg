@@ -95,7 +95,8 @@ export const REQUIREMENT_DEFS = {
   */
   skillsImbalanced: {
     create: (a, b) => ({ type: "skillsImbalanced", a, b}),
-    check: (game, r) => ((game.skills[r.a].level/2) > game.skills[r.a].level)&&((game.skills[r.a].level - game.skills[r.a].level) > 10)
+    check: (game, r) => ((game.registry.get(r.a, "LevelHolder").level/2) > game.registry.get(r.b, "LevelHolder").level) &&
+                        ((game.registry.get(r.a, "LevelHolder").level - game.registry.get(r.b, "LevelHolder").level) > 10)
   }
 };
 

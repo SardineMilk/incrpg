@@ -478,49 +478,6 @@ const IMBALANCES = {
   * Agi > Con increases speed, but you take damage when moving fast
   * Con > Wil makes you take ~10% less damage, but when you lose health lose mental ~20% of the amount 
   */ 
-  imbalance_str_con: {
-    requirements: [req.skillsImbalanced("strength", "constitution")],
-    effects: [
-
-    ],
-  },
-  imbalance_str_agi: {
-    requirements: [req.skillsImbalanced("strength", "agility")],
-    effects: [
-
-    ],
-  },
-  imbalance_str_dex: {
-    requirements: [req.skillsImbalanced("strength", "dexterity")],
-    effects: [
-
-    ],
-  },
-  imbalance_str_int: {
-    requirements: [req.skillsImbalanced("strength", "intelligence")],
-    effects: [
-
-    ],
-  },
-  imbalance_str_wil: {
-    requirements: [req.skillsImbalanced("strength", "willpower")],
-    effects: [
-
-    ],
-  }, 
-  imbalance_str_wit: {
-    requirements: [req.skillsImbalanced("strength", "wit")],
-    effects: [
-
-    ],
-  }, 
-  imbalance_str_per: {
-    requirements: [req.skillsImbalanced("strength", "perception")],
-    effects: [
-
-    ],
-  }, 
-
   imbalance_con_str: {
     requirements: [req.skillsImbalanced("constitution", "strength")],
     effects: [
@@ -533,8 +490,8 @@ const IMBALANCES = {
 
     ],
   },
-  imbalance_con_dex: {
-    requirements: [req.skillsImbalanced("constitution", "dexterity")],
+  imbalance_con_wit: {
+    requirements: [req.skillsImbalanced("constitution", "wit")],
     effects: [
 
     ],
@@ -551,18 +508,38 @@ const IMBALANCES = {
 
     ],
   },
-  imbalance_con_wit: {
-    requirements: [req.skillsImbalanced("constitution", "wit")],
+
+  imbalance_str_con: {
+    requirements: [req.skillsImbalanced("strength", "constitution")],
     effects: [
 
     ],
   },
-  imbalance_con_per: {
-    requirements: [req.skillsImbalanced("constitution", "perception")],
+  imbalance_str_agi: {
+    requirements: [req.skillsImbalanced("strength", "agility")],
     effects: [
 
     ],
   },
+  imbalance_str_wit: {
+    requirements: [req.skillsImbalanced("strength", "wit")],
+    effects: [
+
+    ],
+  }, 
+  imbalance_str_int: {
+    requirements: [req.skillsImbalanced("strength", "intelligence")],
+    effects: [
+
+    ],
+  },
+  imbalance_str_wil: {
+    requirements: [req.skillsImbalanced("strength", "willpower")],
+    effects: [
+
+    ],
+  }, 
+
 
   imbalance_agi_str: {
     requirements: [req.skillsImbalanced("agility", "strength")],
@@ -576,8 +553,8 @@ const IMBALANCES = {
 
     ],
   },
-  imbalance_agi_dex: {
-    requirements: [req.skillsImbalanced("agility", "dexterity")],
+  imbalance_agi_wit: {
+    requirements: [req.skillsImbalanced("agility", "wit")],
     effects: [
 
     ],
@@ -593,147 +570,6 @@ const IMBALANCES = {
     effects: [
 
     ],
-  },
-  imbalance_agi_wit: {
-    requirements: [req.skillsImbalanced("agility", "wit")],
-    effects: [
-
-    ],
-  },
-  imbalance_agi_per: {
-    requirements: [req.skillsImbalanced("agility", "perception")],
-    effects: [
-
-    ],
-  },
-
-  imbalance_dex_str: {
-    requirements: [req.skillsImbalanced("dexterity", "strength")],
-    effects: [
-
-    ],
-  },
-  imbalance_dex_con: {
-    requirements: [req.skillsImbalanced("dexterity", "constitution")],
-    effects: [
-
-    ],
-  },
-  imbalance_dex_agi: {
-    requirements: [req.skillsImbalanced("dexterity", "agility")],
-    effects: [
-
-    ],
-  },
-  imbalance_dex_int: {
-    requirements: [req.skillsImbalanced("dexterity", "intelligence")],
-    effects: [
-
-    ],
-  },
-  imbalance_dex_wil: {
-    requirements: [req.skillsImbalanced("dexterity", "willpower")],
-    effects: [
-
-    ],
-  },
-  imbalance_dex_wit: {
-    requirements: [req.skillsImbalanced("dexterity", "wit")],
-    effects: [
-
-    ],
-  },
-  imbalance_dex_per: {
-    requirements: [req.skillsImbalanced("dexterity", "perception")],
-    effects: [
-
-    ],
-  },
-
-  imbalance_int_str: {
-    requirements: [req.skillsImbalanced("intelligence", "strength")],
-    effects: [
-
-    ],
-  },
-  imbalance_int_con: {
-    requirements: [req.skillsImbalanced("intelligence", "constitution")],
-    effects: [
-
-    ],
-  },
-  imbalance_int_agi: {
-    requirements: [req.skillsImbalanced("intelligence", "agility")],
-    effects: [
-
-    ],
-  },
-  imbalance_int_dex: {
-    requirements: [req.skillsImbalanced("intelligence", "dexterity")],
-    effects: [
-
-    ],
-  },
-  imbalance_int_wil: {
-    requirements: [req.skillsImbalanced("intelligence", "willpower")],
-    effects: [
-
-    ],
-  },
-  imbalance_int_wit: {
-    requirements: [req.skillsImbalanced("intelligence", "wit")],
-    effects: [
-
-    ],
-  },
-  imbalance_int_per: {
-    requirements: [req.skillsImbalanced("intelligence", "perception")],
-    effects: [
-
-    ],
-  },
-
-  imbalance_wil_str: { 
-    requirements: [req.skillsImbalanced("willpower", "strength")], 
-    effects: [
-
-    ], 
-  },
-  imbalance_wil_con: { 
-    requirements: [req.skillsImbalanced("willpower", "constitution")], 
-    effects: [
-
-    ], 
-  },
-  imbalance_wil_agi: { 
-    requirements: [req.skillsImbalanced("willpower", "agility")], 
-    effects: [
-
-    ], 
-  },
-  imbalance_wil_dex: { 
-    requirements: [req.skillsImbalanced("willpower", "dexterity")], 
-    effects: [
-
-    ], 
-  },
-  imbalance_wil_int: { 
-    requirements: [req.skillsImbalanced("willpower", "intelligence")], 
-    effects: [
-
-    ], 
-  },
-  imbalance_wil_wit: { 
-    requirements: [req.skillsImbalanced("willpower", "wit")], 
-    effects: [
-
-    ], 
-  },
-  imbalance_wil_per: { 
-    requirements: [req.skillsImbalanced("willpower", "perception")], 
-    effects: [
-
-    ], 
   },
 
   imbalance_wit_str: { 
@@ -772,55 +608,71 @@ const IMBALANCES = {
 
     ], 
   },
-  imbalance_wit_per: { 
-    requirements: [req.skillsImbalanced("wit", "perception")],
+
+
+  imbalance_int_str: {
+    requirements: [req.skillsImbalanced("intelligence", "strength")],
+    effects: [
+
+    ],
+  },
+  imbalance_int_con: {
+    requirements: [req.skillsImbalanced("intelligence", "constitution")],
+    effects: [
+
+    ],
+  },
+  imbalance_int_agi: {
+    requirements: [req.skillsImbalanced("intelligence", "agility")],
+    effects: [
+
+    ],
+  },
+  imbalance_int_wit: {
+    requirements: [req.skillsImbalanced("intelligence", "wit")],
+    effects: [
+
+    ],
+  },
+  imbalance_int_wil: {
+    requirements: [req.skillsImbalanced("intelligence", "willpower")],
+    effects: [
+
+    ],
+  },
+
+  imbalance_wil_str: { 
+    requirements: [req.skillsImbalanced("willpower", "strength")], 
+    effects: [
+
+    ], 
+  },
+  imbalance_wil_con: { 
+    requirements: [req.skillsImbalanced("willpower", "constitution")], 
+    effects: [
+
+    ], 
+  },
+  imbalance_wil_agi: { 
+    requirements: [req.skillsImbalanced("willpower", "agility")], 
+    effects: [
+
+    ], 
+  },
+  imbalance_wil_wit: { 
+    requirements: [req.skillsImbalanced("willpower", "wit")], 
+    effects: [
+
+    ], 
+  },
+  imbalance_wil_int: { 
+    requirements: [req.skillsImbalanced("willpower", "intelligence")], 
     effects: [
 
     ], 
   },
 
-  imbalance_per_str: { 
-    requirements: [req.skillsImbalanced("perception", "strength")],
-    effects: [
 
-    ], 
-  },
-  imbalance_per_con: { 
-    requirements: [req.skillsImbalanced("perception", "constitution")],
-    effects: [
-
-    ], 
-  },
-  imbalance_per_agi: { 
-    requirements: [req.skillsImbalanced("perception", "agility")],
-    effects: [
-
-    ], 
-  },
-  imbalance_per_dex: { 
-    requirements: [req.skillsImbalanced("perception", "dexterity")],
-    effects: [
-
-    ], 
-  },
-  imbalance_per_int: { 
-    requirements: [req.skillsImbalanced("perception", "intelligence")],
-    effects: [
-
-    ], 
-  },
-  imbalance_per_wil: { 
-    requirements: [req.skillsImbalanced("perception", "willpower")],
-    effects: [
-
-    ], 
-  },
-  imbalance_per_wit: { 
-    requirements: [req.skillsImbalanced("perception", "wit")],
-    effects: [
-
-    ], 
-  },
 }
 
 
