@@ -14,19 +14,21 @@ export class ActivationLayer {
   isActive(id) { return this.active.has(id); }
 
   activate(id) {
-    if (this.active.has(id)) return;
+    if (this.active.has(id)) return false;
     this.active.add(id);
     for (const type of this.registry.typesOf(id)) {
       this._indexFor(type).add(id);
     }
+    return true;
   }
 
   deactivate(id) {
-    if (!this.active.has(id)) return;
+    if (!this.active.has(id)) return false;
     this.active.delete(id);
     for (const type of this.registry.typesOf(id)) {
       this._byComponent.get(type)?.delete(id);
     }
+    return true;
   }
 
   _indexFor(type) {
