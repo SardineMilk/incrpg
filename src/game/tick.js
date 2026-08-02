@@ -1,5 +1,4 @@
 import { INHERENT_EFFECTS }         from "../data/conditionsData.js";
-import { game }                                 from "./state.js";
 import { initialiseState }                      from "../utils/state_creator.js";
 import { EventLog }                    from "./log.js";
 import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
@@ -23,12 +22,12 @@ import { applyEffect }                          from "./effects.js";
 
 
 // TODO - figure out if this can easily be made dynamic
-// I want chronomancy
 const TICK_RATE = 1000 / 10;
 
 let intervalId = null;
 export function startTicking(render) {
-  initialiseState(game);
+  const game = initialiseState();
+  window.game = game
 
   // TODO - refactor this somewhere else
   game.log = new EventLog({ container: document.getElementById("log-box") });

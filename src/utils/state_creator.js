@@ -29,11 +29,20 @@ const NAMESPACES = {
 
 const MAX_CONTEXT_STACK_DEPTH = 64;
 
-export function initialiseState(game) {
+export function initialiseState() {
+  const game = {};
   game.registry = new EntityRegistry();
   game.active = new ActivationLayer(game.registry);
   game.context = new ContextStack(MAX_CONTEXT_STACK_DEPTH);
   game.candidateScope = new CandidateScope();
+  // TODO - if these are removed values are NaN until changed
+  game.values = {
+    health: 0,
+    stamina: 0,
+    mental: 0,
+  },
+  game.stats  = {};
+
 
   // Tag every entity with its own namespace name
   // This means namespaces must be distinct from any tag used in data
@@ -69,4 +78,6 @@ export function initialiseState(game) {
     StatLayer,
     DurationHolder,
   ]);
+
+  return game;
 }
