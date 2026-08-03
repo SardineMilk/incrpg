@@ -111,6 +111,12 @@ export const ACTIONS = {
     duration: 10,
     result: [eff.changeValue("test_value", -1),]
   },
+
+  test_location: {
+    name: "Change Location",
+    duration: 10,
+    result: [eff.activate("new_meldrum"),]
+  },
 };
 
 

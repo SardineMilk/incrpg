@@ -47,14 +47,12 @@ export const REQUIREMENT_DEFS = {
 
   active: {
     create: (id) => ({ type: "active", id }),
-    check: (game, r) => {
-      return game.activation.active.has(r.id);
-    }
+    check: (game, r) => game.active.isActive(r.id),
   },
 
   inactive: {
     create: (id) => ({ type: "inactive", id }),
-    check: (game, r) => !game.activation.active.has(r.id),
+    check: (game, r) => !game.active.isActive(r.id),
   },
 
   flagSet: {

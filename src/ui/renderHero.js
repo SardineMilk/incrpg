@@ -1,3 +1,5 @@
+import { byTag } from "../utils/tagIndex.js";
+
 export function renderHero(game) {
   // TODO use formulas
   document.getElementById("health-bar").innerText =
@@ -10,6 +12,18 @@ export function renderHero(game) {
     `MP ${Math.floor(game.values.mental)}/${game.values.mentalMax}`;
 
   renderStats(game);
+
+
+  // All active with tag location
+  let currentLocationId = "";
+  for (const id of byTag("locations")) {
+    if (!game.active.isActive(id)) continue;
+    if (currentLocationId !== "") {
+      currentLocationId += " "
+    }
+    currentLocationId += id;
+  }
+    document.getElementById("location-box").innerText = `${currentLocationId}`;
 }
 
 function renderStats(game) {
@@ -27,6 +41,7 @@ function renderStats(game) {
 
     div.className = "attribute-box";
 
+    // TODO - use name instead of id
     div.innerText = `${capitalize(attrId)}: ${game.registry.get(attrId, 'LevelHolder').level}`;
 
     box.appendChild(div);

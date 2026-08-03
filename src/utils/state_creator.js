@@ -78,5 +78,11 @@ export function initialiseState() {
     DurationHolder,
   ]);
 
+  registerEntities(game.registry, NAMESPACES.locations, [
+    PassiveHolder,
+    TriggerHolder,
+    ModifierHolder
+  ]);
+
   return game;
 }

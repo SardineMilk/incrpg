@@ -46,7 +46,7 @@ export const INHERENT_EFFECTS = {
       eff.activate(sel.tags("system", "conditions")),
       eff.activate(sel.tags("mortal", "conditions")),
       eff.activate("human"),
-      eff.activate("new_meldrum"),
+      eff.activate("starter_hut"),
       eff.activate("sleep"),
     ]
   },
@@ -287,8 +287,8 @@ export const INHERENT_EFFECTS = {
     modifiers: [
       {
         event: evt.activate(),
-        requirements: [req.hasTag(fml.id(), "location")],
-        effects: [eff.deactivate(sel.active(sel.tags("location")))],
+        requirements: [req.hasTag(fml.id(), "locations")],
+        effects: [eff.deactivate(sel.active(sel.tags("locations")))],
       },
     ],
   },

@@ -8,7 +8,7 @@ export const LOCATIONS = {
     name: "Sturdy Hut",
     tags: ["inside", "forest", "town", "building"],
   },
-
+  
   new_meldrum_library: {
     name: "New Meldrum Public Library",
     tags: ["inside", "forest", "town", "building"],
