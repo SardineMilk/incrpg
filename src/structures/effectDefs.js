@@ -46,25 +46,21 @@ function getStrength(game, entity) {
 
 function activateEntity(game, entity, duration = null) {
   if (game.active.isActive(entity)) return;
-
   const effects = game.registry.get(entity, "PassiveHolder");
   if (effects) effects.apply(game, getStrength(game, entity));
-
-  game.registry.get(entity, "DurationHolder")?.set(duration);
+  if (duration != null) {
+    game.registry.get(entity, "CompletionHolder")?.resetMeter("duration", duration);
+  }
   game.active.activate(entity);
-
   processTrigger(game, "onActivate", { id: entity });
 }
 
 function deactivateEntity(game, entity) {
   if (!game.active.isActive(entity)) return;
-
   const effects = game.registry.get(entity, "PassiveHolder");
   if (effects) effects.remove(game, getStrength(game, entity));
-
-  //game.registry.get(entity, "DurationHolder")?.set(null);
+  game.registry.get(entity, "CompletionHolder")?.clearMeter("duration");
   game.active.deactivate(entity);
-  
   processTrigger(game, "onDeactivate", { id: entity });
 }
 
@@ -170,15 +166,12 @@ export const EFFECT_DEFS = {
   },
 
 
-  // ── ActiveHolder ────────────────────────────────────────────────────────────
+  // ── CompletionHolder ────────────────────────────────────────────────────────────
 
   activate: {
-    create: (id) => ({
-      type: "activate",
-      id,
-    }),
+    create: (id, duration = null) => ({ type: "activate", id, duration }),
     apply(game, e) {
-      activateEntity(game, e.id, null);
+      activateEntity(game, e.id, e.duration);
     },
     remove(game, e) {
       deactivateEntity(game, e.id);
@@ -204,70 +197,33 @@ export const EFFECT_DEFS = {
     }
   },
 
-  /*
-  applyDuration: {
-    create: (id, amount) => ({
-      type: "applyDuration",
-      id,
-      amount,
-    }),
+  progress: {
+    create: (id, amount, meter = "progress") => ({ type: "progress", id, amount, meter }),
     apply(game, e) {
-
-      activateEntity(game, e.id, 0);
-
-      const expired = dh.changeDuration(e.amount);
-
-      if (expired) {
-        deactivateEntity(game, e.id);
-        return "conditionRemoved"
-      }
-
-      return "applied";
+      const holder = game.registry.get(e.id, "CompletionHolder");
+      if (!holder) return;
+      holder.advanceProgress(game, e.amount, e.meter);
     },
-    remove(game, e) {
-
-      const expired = dh.changeDuration(-e.amount);
-
-      if (expired) {
-        deactivateEntity(game, e.id);
-        return "conditionRemoved"
-      }
-    },
+    scale: scaleAmount,
     display(game, e) {
-      return `gain ${e.id} for ${e.amount} turns`;
+      return `add ${e.amount} progress to ${e.id} (${e.meter})`;
     }
   },
 
   changeDuration: {
-    create: (id, amount) => ({
-      type: "changeDuration",
-      id,
-      amount,
-    }),
+    create: (id, amount) => ({ type: "changeDuration", id, amount }),
     apply(game, e) {
-      if (!game.active.isActive(e.id)) return;
-      const dh = game.registry.get(e.id, "DurationHolder");
-      if (!dh || dh.duration === null) return; // untimed
-      if (dh.change(e.amount)) { deactivateEntity(game, e.id); return "conditionRemoved"; }
+      const outcome = game.registry.get(e.id, "CompletionHolder")
+        ?.advanceProgress(game, e.amount, "duration");
+      if (outcome === "meterMin") return "durationExpired";
     },
     display(game, e) {
       return `change the duration of ${e.id} by ${e.amount}`;
     }
   },
-  */
-  changeDuration: {
-    create: (id, amount) => ({
-      type: "changeDuration",
-      id,
-      amount,
-    }),
-    apply(game, e) {
-      
-    },
-    display(game, e) {
-      return `change the duration of ${e.id} by ${e.amount}`;
-    }
-  },
+
+
+  // ── StrengthHolder ────────────────────────────────────────────────────────────
 
   changeStrength: {
     create: (id, { flat = 0, percent = 0, multiplier = 1 } = {}) => ({
@@ -330,20 +286,6 @@ export const EFFECT_DEFS = {
       m += `${e.percent}%, `;
       m += `x${e.multiplier} `;
       return m;
-    }
-  },
-
-  reapplyCondition: {
-    create: (condition) => ({
-      type: "reapplyCondition",
-      condition
-    }),
-    apply(game, e) {
-      if (!game.active.isActive(e.condition)) return;
-      const effects = game.registry.get(e.condition, "PassiveHolder");
-      if (!effects) return;
-      const strength = game.registry.get(e.condition, "StatLayer") || 1;
-      effects.reapply(game, strength.value);
     }
   },
 
@@ -449,30 +391,20 @@ export const EFFECT_DEFS = {
     }
   },
 
-  assertEqual: {
-    create: (label, expected, actual) => ({ type: "assertEqual", label, expected, actual }),
+  // TODO - this is stupid
+  reapplyCondition: {
+    create: (condition) => ({
+      type: "reapplyCondition",
+      condition
+    }),
     apply(game, e) {
-      const pass =
-        typeof e.expected === "number" && typeof e.actual === "number"
-          ? Math.abs(e.expected - e.actual) < 1e-9
-          : e.expected === e.actual;
-
-      const key = pass ? "test_pass_count" : "test_fail_count";
-      game.values[key] = (game.values[key] || 0) + 1;
-
-      game.log.append(
-        LogType.ACTION,
-        `${pass ? "PASS" : "FAIL"} :: ${e.label} (expected ${e.expected}, got ${e.actual})`,
-      );
-      if (!pass) console.warn(`[TEST FAIL] ${e.label}: expected ${e.expected}, got ${e.actual}`);
-
-      return pass ? "assertPass" : "assertFail";
-    },
-    display(game, e) {
-      return `assert ${e.label} == ${e.expected}`;
-    },
+      if (!game.active.isActive(e.condition)) return;
+      const effects = game.registry.get(e.condition, "PassiveHolder");
+      if (!effects) return;
+      const strength = game.registry.get(e.condition, "StatLayer") || 1;
+      effects.reapply(game, strength.value);
+    }
   },
-
 };
 
 export const eff = Object.fromEntries(

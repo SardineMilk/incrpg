@@ -10,7 +10,6 @@ import { TriggerHolder } from "../components/triggerHolder.js";
 import { ModifierHolder } from "../components/modifierHolder.js";
 import { CompletionHolder } from "../components/completionHolder.js";
 import { LevelHolder } from "../components/levelHolder.js";
-import { DurationHolder } from "../components/durationHolder.js";
 
 import { generateTagIndex } from "./tagIndex.js";
 import { EntityRegistry, registerEntities } from "./entityRegistry.js";
@@ -69,7 +68,6 @@ export function initialiseState() {
     TriggerHolder,
     ModifierHolder,
     CompletionHolder,
-    DurationHolder,
   ]);
 
   registerEntities(game.registry, NAMESPACES.conditions, [
@@ -77,7 +75,7 @@ export function initialiseState() {
     TriggerHolder,
     ModifierHolder,
     StatLayer,
-    DurationHolder,
+    CompletionHolder,
   ]);
 
   registerEntities(game.registry, NAMESPACES.locations, [

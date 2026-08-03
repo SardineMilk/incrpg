@@ -146,20 +146,7 @@ export const INHERENT_EFFECTS = {
     ]
   },
 
-  /*
-  death: {
-    triggers: [
-      {
-        event: evt.valueLoss(sel.ids(["health", "stamina", "mental"])),
-        requirements: [[req.valueLessThan(sel.ids(["health", "stamina", "mental"]), 0)]],
-        effects: [
-          eff.activate("sleep"),
-          eff.sendMessage("SYSTEM", "You pass out"),
-        ],
-      }
-    ],
-  },
-  */
+
   health_death: {
     tags: ["mortal"],
     triggers: [
@@ -255,7 +242,13 @@ export const INHERENT_EFFECTS = {
       },
     ],
   },
-
+  duration_expiry: {
+    tags: ["system", "entropy"],
+    triggers: [{
+      event: evt.durationExpired(),
+      effects: [eff.deactivate(fml.context("id")),eff.sendMessage("SYSTEM", "Duration expired")],
+    }],
+  },
   
   action_exclusivity: {
     tags: ["system", "singularity"],
@@ -325,28 +318,18 @@ export const INHERENT_EFFECTS = {
     ]
   },
 
-  // TODO - context is broken for health regen
   test: {
-    tags: ["system"],
-
     triggers: [
       {
-        event: evt.onTrigger("health_regen"),
+        event: evt.tick(),
         effects: [
-          //eff.sendMessage("system", "health_regens")
+          eff.sendMessage("system", fml.add("test condition: ", fml.duration("test")))
         ]
       },
-      {
-        event: evt.valueGain("health"),
-        requirements: [],
-        effects: [
-          //eff.sendMessage("system", fml.context("amount"))
-        ],
-      }
     ]
   },
 
-
+  /*
   TEST_formula_resolution_in_selector_candidate_context: {
     tags: ["system"],
 
@@ -354,7 +337,7 @@ export const INHERENT_EFFECTS = {
       eff.gainXp(sel.tags("skills"), fml.add(0, fml.level(fml.candidate("id")))),
     ],
   },
-
+  */
 
   nuke: {
     tags: ["system", "game_breaking"],
@@ -433,7 +416,7 @@ const TRAITS = {
         effects: null // increase roll.min by 1
       },
     ]
-  }
+  },
 
 }
 

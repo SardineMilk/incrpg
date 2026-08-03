@@ -30,6 +30,8 @@ export function validate(conditions, skills, actions, locations = {}) {
   // To mitigate misspelling causing silent errors
   // Must exclude namespace tags
 
+  // TODO - orphan ids
+
   if (warnings.length > 0) {
     console.warn(`Content validation: ${warnings.length} warning(s):\n` +
       warnings.map(w => `  - ${w}`).join("\n"));

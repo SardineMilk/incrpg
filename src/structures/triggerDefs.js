@@ -89,6 +89,10 @@ export const TRIGGER_DEFS = {
       trigger.tags.length === 0 || trigger.tags.every((tag) => tagsOf(ctx.location).includes(tag)),
   },
 
+  durationExpired: {
+    create: (id) => ({ type: "durationExpired", id }),
+    check: (trigger, ctx) => trigger.id == null || trigger.id === ctx.id,
+  },
 };
 
 export const evt = Object.fromEntries(

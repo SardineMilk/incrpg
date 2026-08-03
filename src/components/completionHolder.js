@@ -1,48 +1,63 @@
 import { applyEffect } from "../game/effects.js";
-
-/*
-* CompletionHolder gives the entity a duration
-* advanceProgress() increases the progress variable
-* When it reaches the duration, progress is reset
-* And resultEffects are triggered
-*
-* This pattern is used for Actions and Activities
-*/
-
 export class CompletionHolder {
-    constructor(duration, resultEffects = []) {
-        this.resultEffects = resultEffects;  // Static eff.* definitions, never mutated
-        this.duration = duration;
-        this.progress = 0;
-        this.completions = 0;
-    }
+  constructor(meterDefs = {}) {
+    this.defs = meterDefs;       // keep raw defs around for lazy recreation
+    this.meters = new Map();
+    for (const [name, def] of Object.entries(meterDefs)) this._createMeter(name, def);
+  }
 
-    static fromDefinition(def) {
-        return new CompletionHolder(
-            def.duration,
-            def.result
-        );
-    }
+  _createMeter(name, def, start) {
+    this.meters.set(name, {
+      progress: start ?? def.start ?? 0,
+      max: def.max ?? Infinity,
+      min: def.min ?? -Infinity,
+      resultEffects: def.result ?? [],
+      minEffects: def.onMin ?? [],
+      repeat: def.repeat ?? true,
+      completions: 0,
+    });
+  }
 
-    advanceProgress(game, amount = 1) {
-        this.progress += +(amount).toFixed(2);
-        this._checkCompletion(game);
-    }
+  static fromDefinition(def) {
+    const meterDefs = { ...def.meters };
 
-    _checkCompletion(game) {
-        /*
-        // This allows multiple completions per advance, but breaks on `duration <= 0`
-        // TODO - design an elegant way for <=0 duration CompletionHolders to work
-        while (this.progress >= this.duration) {
-            this.completions++;
-            this.progress -= this.duration;
-            for (const effect of this.resultEffects) applyEffect(game, effect);
-        }
-        */
-        if (this.progress >= this.duration) {
-            this.completions++;
-            this.progress -= this.duration;
-            for (const effect of this.resultEffects) applyEffect(game, effect);
-        }
+    // def.duration and def.result are syntactic sugar for common CompletionHolder forms
+    if (def.duration != null) meterDefs.progress ??= { max: def.duration, result: def.result ?? [] };
+    
+    return new CompletionHolder(meterDefs);
+  }
+
+  has(name) { return this.meters.has(name); }
+  get isTimed() { return this.has("duration"); }
+
+  progressOf(name = "progress") { return this.meters.get(name)?.progress ?? 0; }
+  maxOf(name = "progress") { return this.meters.get(name)?.max ?? 0; }
+
+  // Falls back to standard duration structure
+  resetMeter(name, start, fallback = { min: 0, max: Infinity, repeat: false }) {
+    this._createMeter(name, this.defs[name] ?? fallback, start);
+  }
+
+  clearMeter(name) { this.meters.delete(name); }
+
+  advanceProgress(game, amount, meter = "progress") {
+    const m = this.meters.get(meter);
+    if (!m) return; // untimed / doesn't track this meter - silent no-op
+    m.progress = +(m.progress + amount).toFixed(2);
+    return this._checkThresholds(game, m);
+  }
+
+  _checkThresholds(game, m) {
+    if (m.progress >= m.max) {
+      m.completions++;
+      for (const e of m.resultEffects) applyEffect(game, e);
+      m.progress = m.repeat ? m.progress - m.max : m.max;
+      return "meterMax";
     }
+    if (m.progress <= m.min) {
+      for (const e of m.minEffects) applyEffect(game, e);
+      m.progress = m.repeat ? m.progress - m.min : m.min;
+      return "meterMin";
+    }
+  }
 }

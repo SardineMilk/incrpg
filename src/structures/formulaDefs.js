@@ -27,6 +27,9 @@ const definitions = {
   value:              (game, value) => game.values[value],
   skillParent:        (_game, skill) => SKILLS[skill]?.parent,
   level:              (game, id) => game.registry.get(id, "LevelHolder")?.level,
+  duration:           (game, id) => game.registry.get(id, "CompletionHolder")?.progressOf("duration"),
+  progress:           (game, id, meter) => game.registry.get(id, "CompletionHolder")?.progressOf(meter),
+
 
   add: (_game, x, y) => x + y,
   sub: (_game, x, y) => x - y,

@@ -117,6 +117,13 @@ export const ACTIONS = {
     duration: 10,
     result: [eff.activate("new_meldrum"),]
   },
+
+  test_duration: {
+    name: "Activate Test Condition",
+    duration: 10,
+    result: [eff.activate("test", 5),]
+  },
+
 };
 
 
