@@ -25,6 +25,11 @@ export function validate(conditions, skills, actions, locations = {}) {
   console.log("- checking for unknown effect/requirement/trigger types");
   checkKnownTypes(namespaces, errors, warnings);
 
+  // TODO - orphan tags
+  // Tags that are referenced but not existent in the data
+  // To mitigate misspelling causing silent errors
+  // Must exclude namespace tags
+
   if (warnings.length > 0) {
     console.warn(`Content validation: ${warnings.length} warning(s):\n` +
       warnings.map(w => `  - ${w}`).join("\n"));

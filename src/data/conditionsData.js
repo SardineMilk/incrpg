@@ -270,7 +270,6 @@ export const INHERENT_EFFECTS = {
       }
     ]
   },
-
   form_exclusivity: {
     tags: ["system", "singularity"],
     modifiers: [
@@ -281,7 +280,6 @@ export const INHERENT_EFFECTS = {
       },
     ],
   },
-
   location_exclusivity: {
     tags: ["system", "singularity"],
     modifiers: [
@@ -292,6 +290,17 @@ export const INHERENT_EFFECTS = {
       },
     ],
   },
+  activity_exclusivity: {
+    tags: ["system", "singularity"],
+    modifiers: [
+      {
+        event: evt.activate(),
+        requirements: [req.hasTag(fml.id(), "activities")],
+        effects: [eff.deactivate(sel.active(sel.tags("activities")))],
+      },
+    ],
+  },
+
 
   tick_counter: {
     tags: ["system"],

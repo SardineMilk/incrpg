@@ -2,6 +2,7 @@ import { SKILLS } from "../data/skillsData.js";
 import { ACTIONS } from "../data/actionsData.js";
 import { CONDITIONS } from "../data/conditionsData.js";
 import { LOCATIONS } from "../data/locationsData.js";
+import { ACTIVITIES } from "../data/activitiesData.js"
 
 import { StatLayer } from "../components/statLayer.js";
 import { PassiveHolder } from "../components/passiveHolder.js";
@@ -22,8 +23,9 @@ import { CandidateScope } from "./candidateScope.js";
 const NAMESPACES = {
   skills:     { ...SKILLS, },
   actions:    { ...ACTIONS, },
+  activities: { ...ACTIVITIES, },
   conditions: { ...CONDITIONS, },
-  locations:  { ...LOCATIONS, }
+  locations:  { ...LOCATIONS, },
 };
 
 const MAX_CONTEXT_STACK_DEPTH = 64;

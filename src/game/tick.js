@@ -18,6 +18,9 @@ import { applyEffect }                          from "./effects.js";
 *   - Allow expansion into combat
 * - Items
 * - UI framework
+* - Visibility requirements
+*   - uses req.foo()
+*   - used to determine if it should be shown in UI
 */
 
 
