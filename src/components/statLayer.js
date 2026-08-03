@@ -5,12 +5,10 @@ export class StatLayer {
     this.multiplier = multiplier;
   }
 
-  static fromDefinition(def) {
-    return new StatLayer({ flat: 1 });
-  }
+  static fromDefinition(def) { return new StatLayer(def.strength ?? { flat: 1 }); }
 
   get value() {
-    this.preventDrift()
+    this.preventDrift();
     return this.flat * this.percent * this.multiplier;
   }
 

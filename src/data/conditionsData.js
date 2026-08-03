@@ -282,6 +282,17 @@ export const INHERENT_EFFECTS = {
     ],
   },
 
+  location_exclusivity: {
+    tags: ["system", "singularity"],
+    modifiers: [
+      {
+        event: evt.activate(),
+        requirements: [req.hasTag(fml.id(), "location")],
+        effects: [eff.deactivate(sel.active(sel.tags("location")))],
+      },
+    ],
+  },
+
   tick_counter: {
     tags: ["system"],
     modifiers: [
@@ -401,6 +412,19 @@ const TRAITS = {
   * Crits inflict paralysing venom
   * Damage bonus against restrained targets
   */
+
+
+  // This requires:
+  // modifiers to be able to hook formula resolution events
+  // formulas to be modifiable
+  loaded_die: {
+    modifiers: [
+      {
+        event: null,  // on fml.roll()
+        effects: null // increase roll.min by 1
+      },
+    ]
+  }
 
 }
 

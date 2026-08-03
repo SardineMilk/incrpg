@@ -262,7 +262,8 @@ export const EFFECT_DEFS = {
       amount,
     }),
     apply(game, e) {
-        },
+      
+    },
     display(game, e) {
       return `change the duration of ${e.id} by ${e.amount}`;
     }
