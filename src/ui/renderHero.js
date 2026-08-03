@@ -23,7 +23,8 @@ export function renderHero(game) {
     }
     currentLocationId += id;
   }
-    document.getElementById("location-box").innerText = `${currentLocationId}`;
+  // TODO - use name instead of id
+  document.getElementById("location-box").innerText = `${currentLocationId}`;
 }
 
 function renderStats(game) {
