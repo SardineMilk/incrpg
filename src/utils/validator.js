@@ -127,8 +127,9 @@ function checkType(path, value, kind, errors, warnings) {
     errors.push(`${path}: unknown ${kind} type "${value.type}"`);
     return;
   }
-  if (entry.stub) {
-    warnings.push(`${path}: uses stubbed ${kind} "${value.type}" — ${entry.stub}`);
+
+  if (entry.deprecated) {
+    warnings.push(`${path}: uses deprecated ${kind} "${value.type}" - ${entry.deprecated}`);
   }
 
   walkEntity(path, value, errors, warnings);
