@@ -79,16 +79,11 @@ footer {
 #skills-box,
 #actions-box,
 #tasks-box,
-#log-box {
+#log-box,
+#activity-box {
   background: var(--colour-surface);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-}
-
-.hero-box,
-#skills-box,
-#actions-box,
-#tasks-box {
   flex: 1;
   padding: var(--spacing-xs);
 }

@@ -45,10 +45,25 @@ export const ACTIVITIES = {
 
     climb_northern_cliff: {
         name: "Northern Cliff",
-        requirements: [],
-        effects: [],
         tags: ["exploration"],
         allowed: ["vertical_traversal"],
+        requirements: [],
+        effects: [],
+        triggers: [
+            // If you are at the bottom of the cliff, gain 1 grip per tick
+            {
+                event: evt.tick(),
+                requirements: [req.eq(fml.progress("climb_northern_cliff", "distance"), 0)],
+                effects: [eff.progress("climb_northern_cliff", 1, "grip")]
+            },
+            // While climbing, lose 1 grip per tick
+            {
+                event: evt.tick(),
+                requirements: [req.gt(fml.progress("climb_northern_cliff", "distance"), 0)],
+                effects: [eff.progress("climb_northern_cliff", -1, "grip")]
+            },
+        ],
+
         meters: {
             distance: {
                 max: 200,
@@ -64,8 +79,8 @@ export const ACTIVITIES = {
                 onMin: [
                     eff.sendMessage("SYSTEM", "You lose your grip and fall off the cliff face"),
                     eff.changeValue("health", fml.neg(fml.progress("climb_northern_cliff", "distance"))),
+                    eff.setMeter("climb_northern_cliff", 99, "grip"),
                     eff.setMeter("climb_northern_cliff", 0, "distance"),
-                    eff.setMeter("climb_northern_cliff", 100, "grip"),
                 ],
             },
         },

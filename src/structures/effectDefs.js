@@ -403,6 +403,32 @@ export const EFFECT_DEFS = {
       effects.reapply(game, strength.value);
     }
   },
+
+  skillCheck: {
+    create: (skills, difficulty, success, failure) => ({ type: "skillCheck", skills, difficulty, success, failure }),
+    resolve(game, c) {
+      const power = Object.entries(c.skills).reduce(
+        (sum, [skill, weight]) =>
+          sum + (game.registry.get(skill, "LevelHolder")?.level ?? 0) * weight,
+        0
+      );
+      // Placeholder balancing: skill power vs a difficulty-scaled roll.
+      const roll = Math.random() * c.difficulty * 2;
+      const successful =  power + roll >= c.difficulty;
+
+      // Needs some way to apply without calling applyEffect()
+      // Due to circular dependency stuff
+      // Also needs strength to be applied properly
+      // Should work for nested checks too
+      if (successful) {
+
+      } else {
+
+      }
+
+    },
+  },
+
 };
 
 export const eff = Object.fromEntries(
