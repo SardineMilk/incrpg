@@ -154,8 +154,8 @@ export const INHERENT_EFFECTS = {
         event: evt.valueLoss("health"),
         requirements: [req.valueLessThan("health", 0)],
         effects: [
-          eff.activate("sleep"),
           eff.sendMessage("SYSTEM", "You pass out from your injuries"),
+          eff.activate("sleep"),
         ],
       }
     ],
@@ -167,8 +167,8 @@ export const INHERENT_EFFECTS = {
         event: evt.valueLoss("stamina"),
         requirements: [req.valueLessThan("stamina", 0)],
         effects: [
-          eff.activate("sleep"),
           eff.sendMessage("SYSTEM", "You pass out"),
+          eff.activate("sleep"),
         ],
       }
     ],
@@ -180,8 +180,8 @@ export const INHERENT_EFFECTS = {
         event: evt.valueLoss("mental"),
         requirements: [req.valueLessThan("mental", 0)],
         effects: [
-          eff.activate("sleep"),
           eff.sendMessage("SYSTEM", "You pass out from stress"),
+          eff.activate("sleep"),
         ],
       }
     ],
@@ -258,7 +258,7 @@ export const INHERENT_EFFECTS = {
         requirements: [req.hasTag(fml.id(), "actions")],
         effects: [
           eff.deactivate(sel.active(sel.tags("actions"))),
-          eff.sendMessage("SYSTEM", "Action changed")
+          eff.sendMessage("SYSTEM", fml.add("Action: ", fml.id()))
         ],
       }
     ]

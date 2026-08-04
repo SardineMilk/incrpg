@@ -124,6 +124,35 @@ export const ACTIONS = {
     result: [eff.activate("test", 5),]
   },
 
+  test_climbing: {
+    name: "TEST - start climbing",
+    duration: 10,
+    result: [
+      eff.activate("climb_northern_cliff"),
+      eff.sendMessage("SYSTEM", "Started climbing"),
+    ]
+  },
+
+  test_climb_up: {
+    name: "TEST - climb up",
+    duration: 10,
+    result: [
+      eff.progress(sel.active(sel.tags("activities")), 50, "distance"),
+      // TODO - remove hardcoding of current activity
+      // Can a selector be used here?
+      eff.sendMessage("SYSTEM", fml.add("Climbed to: ", fml.progress("climb_northern_cliff", "distance"))),  
+    ]
+  },
+
+  test_lose_grip: {
+    name: "TEST - lose grip",
+    duration: 10,
+    result: [
+      eff.sendMessage("SYSTEM", fml.add("Grip at: ", fml.sub(fml.progress("climb_northern_cliff", "grip"), 50))),  
+      eff.progress(sel.active(sel.tags("activities")), -50, "grip"),
+    ]
+  },
+
 };
 
 
@@ -186,6 +215,28 @@ export const ADVERSARY_ACTIONS = {
   ignore_wisps:{
     name:"Ignore the lure of Will-o'-the-wisps",
     tags: ["fae"],
+    duration: 20,
+    check: {
+      difficulty: 10,
+      skills: {},
+      success: [],
+      failure: [],
+    },
+  },
+  falling_rocks:{
+    name:"Avoid a scattered fall of small rocks",
+    tags: ["earth"],
+    duration: 20,
+    check: {
+      difficulty: 10,
+      skills: {},
+      success: [],
+      failure: [],
+    },
+  },
+  falling_boulder:{
+    name:"Dodge a huge tumbling boulder",
+    tags: ["earth"],
     duration: 20,
     check: {
       difficulty: 10,

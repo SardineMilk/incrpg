@@ -8,10 +8,6 @@ import {eff, req, evt, sel, fml } from "../structures/structures.js";
 * Should the adversary plug into the activity
 * - this would make combat easier
 * - duration would be removed, actions would progress against the adversary
-*   - specific forest has a distance stat
-*     - traversal actions deal "distance" damage
-*   - this would be extended for everything else
-*       - integrity of rock, suspicion of guards, etc
 *   - may require a second data layer:
 *       - adversaries - meldrum woods
 *       - activity frameworks - explore woods
@@ -26,13 +22,18 @@ import {eff, req, evt, sel, fml } from "../structures/structures.js";
 *
 */
 export const ACTIVITIES = {
-    explore_woods: {
-        duration: 100,
+    explore_meldrum_woods: {
+        name: "Explore New Meldrum Woods",
         requirements: [],
-        result: [],
         tags: ["exploration"],
         allowed: ["traversal"],
-        adversary_actions: {        
+        meters: {
+            distance: {
+                max: 1000,
+                result: [],
+            },
+        },
+        actions: {
             root_trip:   { weight: 1, },
             mud_puddle:  { weight: 1, },
             thorn_bush:  { weight: 0.5, },
@@ -42,13 +43,52 @@ export const ACTIVITIES = {
         },
     },
 
-    chop_tree: {
+    climb_northern_cliff: {
+        name: "Northern Cliff",
         requirements: [],
-        result: [],
+        effects: [],
+        tags: ["exploration"],
+        allowed: ["vertical_traversal"],
+        meters: {
+            distance: {
+                max: 200,
+                result: [
+                    eff.sendMessage("SYSTEM", "You reach the top of the cliff"),
+                    eff.deactivate("climb_northern_cliff"),
+                ],
+            },
+            grip: {
+                start: 100,
+                max: 100,
+                min: 0,
+                onMin: [
+                    eff.sendMessage("SYSTEM", "You lose your grip and fall off the cliff face"),
+                    eff.changeValue("health", fml.neg(fml.progress("climb_northern_cliff", "distance"))),
+                    eff.setMeter("climb_northern_cliff", 0, "distance"),
+                    eff.setMeter("climb_northern_cliff", 100, "grip"),
+                ],
+            },
+        },
+        actions: {
+            wind_gust:       { weight: 1, },
+            falling_rocks:   { weight: 0.5, },
+            falling_boulder: { weight: 0.5, },
+        }
+    },
+
+    chop_tree: {
+        name: "Oak Tree",
+        requirements: [],
         tags: ["gathering"],
         allowed: ["combat"],
-        adversaries: [
-            "oak_tree"
-        ],
+        meters: {
+            health: {
+                max: 500,
+                min: 0,
+                onMin: [],
+            }
+        },
     },
+
+
 }

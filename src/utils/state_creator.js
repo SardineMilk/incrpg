@@ -70,6 +70,13 @@ export function initialiseState() {
     CompletionHolder,
   ]);
 
+  registerEntities(game.registry, NAMESPACES.activities, [
+    PassiveHolder,
+    TriggerHolder,
+    ModifierHolder,
+    CompletionHolder,
+  ]);
+
   registerEntities(game.registry, NAMESPACES.conditions, [
     PassiveHolder,
     TriggerHolder,

@@ -223,6 +223,19 @@ export const EFFECT_DEFS = {
   },
 
 
+  setMeter: {
+    create: (id, amount, meter) => ({ type: "setMeter", id, amount, meter }),
+    apply(game, e) {
+      const holder = game.registry.get(e.id, "CompletionHolder");
+      if (!holder) return;
+      holder.setProgress(game, e.amount, e.meter);
+    },
+    scale: scaleAmount,
+    display(game, e) {
+      return `add ${e.amount} progress to ${e.id} (${e.meter})`;
+    }
+  },
+
   // ── StrengthHolder ────────────────────────────────────────────────────────────
 
   changeStrength: {
@@ -330,21 +343,6 @@ export const EFFECT_DEFS = {
     }
   },
 
-
-  // ── Action ────────────────────────────────────────────────────────────────
-
-  progress: {
-    create: (id, amount) => ({ type: "progress", id, amount }),
-    apply(game, e) {
-      const holder = game.registry.get(e.id, "CompletionHolder");
-      if (!holder) return;
-      holder.advanceProgress(game, e.amount);
-    },
-    scale: scaleAmount,
-    display(game, e) {
-      return `add ${e.amount} progress to ${e.id}`;
-    }
-  },
 
   // ── UI / Log ──────────────────────────────────────────────────────────────
 

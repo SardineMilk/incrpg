@@ -35,6 +35,7 @@ const definitions = {
   sub: (_game, x, y) => x - y,
   mul: (_game, x, y) => x * y,
   div: (_game, x, y) => x / y,
+  neg: (_game, x) => -x,
   min: (_game, x, y) => Math.min(x, y),
   max: (_game, x, y) => Math.max(x, y),
   clamp: (_game, x, min, max) => Math.max(min, Math.min(max, x)),

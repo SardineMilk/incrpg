@@ -47,6 +47,13 @@ export class CompletionHolder {
     return this._checkThresholds(game, m);
   }
 
+  setProgress(game, amount, meter = "progress") {
+    const m = this.meters.get(meter);
+    if (!m) return; // untimed / doesn't track this meter - silent no-op
+    m.progress = +(amount).toFixed(2);
+    return this._checkThresholds(game, m);
+  }
+
   _checkThresholds(game, m) {
     if (m.progress >= m.max) {
       m.completions++;
