@@ -418,6 +418,21 @@ const TRAITS = {
     ]
   },
 
+  // 0.5x health regen normally
+  // 1.5x health regen for 10 ticks after taking damage
+  trollish_regeneration: {
+    effects: [eff.changeStrength("health_regen", {multiplier: 0.5})],
+    triggers: [
+      {
+        event: evt.valueLoss("health"),
+        effects: [eff.activate("impaired_trollish_regeneration", 10)],
+      }
+    ]
+  },
+  impaired_trollish_regeneration: {
+    effects: [eff.changeStrength("health_regen", {multiplier: 3})],
+  }
+
 }
 
 

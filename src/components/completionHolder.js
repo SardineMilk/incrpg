@@ -30,7 +30,10 @@ export class CompletionHolder {
   has(name) { return this.meters.has(name); }
   get isTimed() { return this.has("duration"); }
 
+  meterNames() { return [...this.meters.keys()]; }
+
   progressOf(name = "progress") { return this.meters.get(name)?.progress ?? 0; }
+  minOf(name = "progress") { return this.meters.get(name)?.min ?? 0; }
   maxOf(name = "progress") { return this.meters.get(name)?.max ?? 0; }
 
   // Falls back to standard duration structure

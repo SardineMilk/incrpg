@@ -199,6 +199,9 @@ footer {
   filter: brightness(1.08);
 }
 
+.activity-meter-bar { position: relative; height: 8px; background: #333; }
+.activity-meter-bar-fill { height: 100%; background: currentColor; transition: width 100ms linear; }
+
 /* 
   Skills
 */

@@ -44,7 +44,7 @@ export function renderActions(game) {
     button.textContent = nameOf(actionId);
 
     const progress = completionHolder?.progressOf("progress") ?? 0;
-    const max = completionHolder?.maxOf("progress") ?? action.duration ?? 0;
+    const max = completionHolder?.maxOf("progress") ?? 0;
     info.innerText = `${Math.round(progress)}/${max}`;
 
     entry.classList.toggle("active-action", game.active.isActive(actionId));
