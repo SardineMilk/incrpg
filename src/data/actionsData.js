@@ -139,7 +139,10 @@ export const ACTIONS = {
     triggers: [
       {
         event: evt.tick(),
-        effects: [eff.changeValue("stamina", -2),],
+        effects: [
+          eff.gainXp("climbing", 10),
+          eff.changeValue("stamina", -2),
+        ],
       },
     ],
     result: [

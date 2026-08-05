@@ -93,6 +93,11 @@ export const TRIGGER_DEFS = {
     create: (id) => ({ type: "durationExpired", id }),
     check: (trigger, ctx) => trigger.id == null || trigger.id === ctx.id,
   },
+
+  progress: {
+    create: (meter) => ({ type: "progress", meter }),
+    check: (trigger, ctx) => trigger.meter === ctx.meter,
+  }
 };
 
 export const evt = Object.fromEntries(

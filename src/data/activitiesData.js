@@ -55,6 +55,7 @@ export const ACTIVITIES = {
         },
     },
 
+    // TODO - proper resetting of meters upon deactivation 
     climb_northern_cliff: {
         name: "Northern Cliff",
         tags: ["exploration"],

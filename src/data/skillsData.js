@@ -253,7 +253,9 @@ export const SKILLS = {
     name: "Climbing",
     description:
       "Learn how to cling to a vertical surface without exhausting yourself.",
-    level: [],
+    level: [
+      eff.changeStrength("climbing_height_gain", {percent: 0.1})
+    ],
     parent: "traversal",
   },
 

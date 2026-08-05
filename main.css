@@ -233,16 +233,12 @@ footer {
 .action-info {
   font-size: 0.9rem;
   opacity: 0.85;
-}
-.action-info {
   display: inline-block;
   min-width: 7ch;
 }
 
 .action-button {
   padding: 0.5rem 0.75rem;
-  border: none;
-  border-radius: var(--radius-sm);
 
   background: var(--colour-primary);
   color: var(--colour-text);

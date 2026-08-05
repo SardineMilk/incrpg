@@ -349,6 +349,20 @@ export const INHERENT_EFFECTS = {
     ]
   },
 
+
+  climbing_height_gain: {
+    tags: ["system"],
+    modifiers: [
+      {
+        event: evt.progress("height"),
+        effects: [
+          eff.modifyAmountMult(1),
+        ]
+      }
+    ]
+  },
+
+
 };
 
 

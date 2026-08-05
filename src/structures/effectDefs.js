@@ -71,8 +71,21 @@ export const EFFECT_DEFS = {
   modifyAmount: {
     create: (amount) => ({ type: "modifyAmount", amount }),
     apply(game, e) {
-      currentContext().amount += e.amount;
-    }
+      const old = game.context.get("amount") 
+      game.context.set("amount", old+e.amount);
+    },
+    scale: scaleAmount,
+  },
+
+  // TODO - this should be StatLayer's problem
+  // Some kind of auto-conversion?
+  modifyAmountMult: {
+    create: (amount) => ({ type: "modifyAmountMult", amount }),
+    apply(game, e) {
+      const old = game.context.get("amount") 
+      game.context.set("amount", old*e.amount);
+    },
+    scale: scaleAmount,
   },
 
   cancelEffect: {
@@ -250,7 +263,9 @@ export const EFFECT_DEFS = {
       const strength = game.registry.get(e.id, "StatLayer");
       if (!strength) return;
 
-      strength.change(e);
+      const dirty = strength.change(e);
+      if (!dirty) return;
+
       // TODO - this should be automatic
       const effects = game.registry.get(e.id, "PassiveHolder");
       if (effects) { effects.reapply(game, strength.value);}
@@ -261,7 +276,8 @@ export const EFFECT_DEFS = {
       const strength = game.registry.get(e.id, "StatLayer");
       if (!strength) return;
 
-      strength.changeReverse(e);
+      const dirty = strength.changeReverse(e);
+      if (!dirty) return;
     },
     scale: scaleStatLayer,
     display(game, e) {
@@ -285,7 +301,8 @@ export const EFFECT_DEFS = {
       const strength = game.registry.get(e.id, "StatLayer");
       if (!strength) return;
       
-      strength.set(e);
+      const dirty = strength.set(e);
+      if (!dirty) return;
       // TODO - this should be automatic
       const effects = game.registry.get(e.id, "PassiveHolder");
       if (effects) { effects.reapply(game, strength.value);}

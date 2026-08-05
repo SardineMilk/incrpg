@@ -5,7 +5,9 @@ export class StatLayer {
     this.multiplier = multiplier;
   }
 
-  static fromDefinition(def) { return new StatLayer(def.strength ?? { flat: 1 }); }
+  static fromDefinition(def) {
+    return new StatLayer(def.strength ?? { flat: 1 });
+  }
 
   get value() {
     this.preventDrift();
@@ -13,24 +15,48 @@ export class StatLayer {
   }
 
   set({ flat = 0, percent = 1, multiplier = 1 } = {}) {
-    this.flat       = flat;
-    this.percent    = percent;
-    this.multiplier = multiplier;
-    return this;
+    const dirty =
+      this.flat !== flat ||
+      this.percent !== percent ||
+      this.multiplier !== multiplier;
+
+    if (dirty) {
+      this.flat = flat;
+      this.percent = percent;
+      this.multiplier = multiplier;
+    }
+
+    return dirty;
   }
 
   change({ flat = 0, percent = 0, multiplier = 1 } = {}) {
-    this.flat       += flat;
-    this.percent    += percent;
-    this.multiplier *= multiplier;
-    return this;
+    const dirty =
+      flat !== 0 ||
+      percent !== 0 ||
+      multiplier !== 1;
+
+    if (dirty) {
+      this.flat += flat;
+      this.percent += percent;
+      this.multiplier *= multiplier;
+    }
+
+    return dirty;
   }
 
   changeReverse({ flat = 0, percent = 0, multiplier = 1 } = {}) {
-    this.flat       -= flat;
-    this.percent    -= percent;
-    this.multiplier /= multiplier;
-    return this;
+    const dirty =
+      flat !== 0 ||
+      percent !== 0 ||
+      multiplier !== 1;
+
+    if (dirty) {
+      this.flat -= flat;
+      this.percent -= percent;
+      this.multiplier /= multiplier;
+    }
+
+    return dirty;
   }
 
   // TODO - prevent floating point drift
