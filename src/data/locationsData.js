@@ -19,6 +19,9 @@ export const LOCATIONS = {
     tags: ["outside", "forest"],
   },
 
+  test_cliff_top: {
+    name: "Cliff Top",
+  },
 
   /*
   * Realm Structure

@@ -1,4 +1,4 @@
-import { byTag } from "../utils/tagIndex.js";
+import { nameOf, byTag } from "../utils/tagIndex.js";
 
 export function renderHero(game) {
   // TODO use formulas
@@ -21,9 +21,9 @@ export function renderHero(game) {
     if (currentLocationId !== "") {
       currentLocationId += " "
     }
-    currentLocationId += id;
+    currentLocationId += nameOf(id);
   }
-  // TODO - use name instead of id
+  currentLocationId = "Location: "+currentLocationId
   document.getElementById("location-box").innerText = `${currentLocationId}`;
 }
 
@@ -42,13 +42,9 @@ function renderStats(game) {
 
     div.className = "attribute-box";
 
-    // TODO - use name instead of id
-    div.innerText = `${capitalize(attrId)}: ${game.registry.get(attrId, 'LevelHolder').level}`;
+    div.innerText = `${nameOf(attrId)}: ${game.registry.get(attrId, 'LevelHolder').level}`;
 
     box.appendChild(div);
   }
 }
 
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}

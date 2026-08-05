@@ -136,22 +136,17 @@ export const ACTIONS = {
   test_climb_up: {
     name: "TEST - climb up",
     duration: 10,
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [eff.changeValue("stamina", -2),],
+      },
+    ],
     result: [
-      eff.progress(sel.active(sel.tags("activities")), 50, "distance"),
-      // TODO - remove hardcoding of current activity
-      // Can a selector be used here?
-      eff.sendMessage("SYSTEM", fml.add("Climbed to: ", fml.progress("climb_northern_cliff", "distance"))),  
+      eff.progress(sel.active(sel.tags("activities")), 25, "height"),
     ]
   },
 
-  test_lose_grip: {
-    name: "TEST - lose grip",
-    duration: 10,
-    result: [
-      eff.sendMessage("SYSTEM", fml.add("Grip at: ", fml.sub(fml.progress("climb_northern_cliff", "grip"), 50))),  
-      eff.progress(sel.active(sel.tags("activities")), -50, "grip"),
-    ]
-  },
 
 };
 

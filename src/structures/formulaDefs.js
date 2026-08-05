@@ -49,10 +49,11 @@ export const fml = Object.fromEntries(
 );
 
 
-export function resolveFormulas(game, structure) {
+export function resolveFormulas(game, structure, { fields = null } = {}) {
   const result = { ...structure };
   for (const [key, val] of Object.entries(result)) {
     if (key === "type") continue;
+    if (fields && !fields.includes(key)) continue;
     if (typeof val !== "function") continue;
     if (isSelector(val)) continue;
     result[key] = val(game);

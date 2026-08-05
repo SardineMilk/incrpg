@@ -88,9 +88,11 @@ export class LevelHolder {
     }
 
     _negateLevelEffects(game, level) {
+        // negateEffect is used instead of removeEffect here
+        // so removal doesnt need to be of a tracked already applied effect
+        // this means that levels can be negative
         const milestoneEffects = this.milestones[level] || [];
         for (const effect of milestoneEffects) negateEffect(game, effect);
-
         for (const effect of this.levelEffects) negateEffect(game, effect);
     }
 }

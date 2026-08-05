@@ -22,6 +22,18 @@ import {eff, req, evt, sel, fml } from "../structures/structures.js";
 *
 */
 export const ACTIVITIES = {
+    fall_asleep: {
+        // While "relaxation">=50, apply "asleep" condition
+        // This might require effect objects with requirements, like triggers?
+        meters: {
+            relaxation: {
+                repeat: false,
+                max: 100,
+            }
+        },
+    },
+
+
     explore_meldrum_woods: {
         name: "Explore New Meldrum Woods",
         requirements: [],
@@ -53,34 +65,35 @@ export const ACTIVITIES = {
             // If you are at the bottom of the cliff, gain 1 grip per tick
             {
                 event: evt.tick(),
-                requirements: [req.eq(fml.progress("climb_northern_cliff", "distance"), 0)],
+                requirements: [req.eq(fml.progress("climb_northern_cliff", "height"), 0)],
                 effects: [eff.progress("climb_northern_cliff", 1, "grip")]
             },
             // While climbing, lose 1 grip per tick
             {
                 event: evt.tick(),
-                requirements: [req.gt(fml.progress("climb_northern_cliff", "distance"), 0)],
+                requirements: [req.gt(fml.progress("climb_northern_cliff", "height"), 0)],
                 effects: [eff.progress("climb_northern_cliff", -1, "grip")]
             },
         ],
 
         meters: {
-            distance: {
+            height: {
                 max: 200,
                 result: [
                     eff.sendMessage("SYSTEM", "You reach the top of the cliff"),
                     eff.deactivate("climb_northern_cliff"),
+                    eff.activate("test_cliff_top")
                 ],
             },
             grip: {
                 start: 100,
+                repeat: false,
                 max: 100,
                 min: 0,
                 onMin: [
                     eff.sendMessage("SYSTEM", "You lose your grip and fall off the cliff face"),
-                    eff.changeValue("health", fml.neg(fml.progress("climb_northern_cliff", "distance"))),
-                    eff.setMeter("climb_northern_cliff", 99, "grip"),
-                    eff.setMeter("climb_northern_cliff", 0, "distance"),
+                    eff.changeValue("health", fml.neg(fml.progress("climb_northern_cliff", "height"))),
+                    eff.setMeter("climb_northern_cliff", 0, "height"),
                 ],
             },
         },

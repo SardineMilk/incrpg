@@ -24,8 +24,10 @@ export function renderActions(game) {
       button.className = "action-button";
 
       button.addEventListener("click", () => {
+        const isActive = game.active.isActive(actionId);
+
         applyEffect(game, {
-          type: "activate",
+          type: isActive ? "deactivate" : "activate",
           id: actionId
         });
       });

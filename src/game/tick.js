@@ -21,6 +21,10 @@ import { applyEffect }                          from "./effects.js";
 * - Visibility requirements
 *   - uses req.foo()
 *   - used to determine if it should be shown in UI
+* - Save/loading
+*   - determine what data needs saved, and how
+*   - can `game` just get slapped into a file?
+*   
 */
 
 
