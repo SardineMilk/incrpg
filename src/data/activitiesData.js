@@ -59,7 +59,7 @@ export const ACTIVITIES = {
     climb_northern_cliff: {
         name: "Northern Cliff",
         tags: ["exploration"],
-        allowed: ["vertical_traversal"],
+        allowed: ["vertical_traversal", "climbing"],
         requirements: [],
         effects: [],
         triggers: [

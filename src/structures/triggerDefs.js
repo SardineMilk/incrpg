@@ -95,8 +95,8 @@ export const TRIGGER_DEFS = {
   },
 
   progress: {
-    create: (meter) => ({ type: "progress", meter }),
-    check: (trigger, ctx) => trigger.meter === ctx.meter,
+    create: (meter="progress") => ({ type: "progress", meter}),
+    check: (trigger, ctx) => (trigger.meter == null || trigger.meter === ctx.meter),
   }
 };
 
