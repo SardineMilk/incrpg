@@ -56,7 +56,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        requirements: [req.lessThan(fml.value("health"), fml.value("healthMax"))],
+        requirements: [req.lt(fml.value("health"), fml.value("healthMax"))],
         effects: [
           eff.changeValue("health", 1),
           eff.gainXp("regeneration", 0.5),
@@ -69,7 +69,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        requirements: [req.lessThan(fml.value("stamina"), fml.value("staminaMax"))],
+        requirements: [req.lt(fml.value("stamina"), fml.value("staminaMax"))],
         effects: [
           eff.changeValue("stamina", 1),
           eff.gainXp("breathing", 0.5),
@@ -82,7 +82,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        requirements: [req.lessThan(fml.value("mental"), fml.value("mentalMax"))],
+        requirements: [req.lt(fml.value("mental"), fml.value("mentalMax"))],
         effects: [
           eff.changeValue("mental", 1),
           eff.gainXp("mindfulness", 0.5),
@@ -105,7 +105,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        requirements: [req.moreThan(fml.value("health"), fml.value("healthMax"))],
+        requirements: [req.gt(fml.value("health"), fml.value("healthMax"))],
         effects: [
           eff.changeValue(
             "health", 
@@ -120,7 +120,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        requirements: [req.moreThan(fml.value("stamina"), fml.value("staminaMax"))],
+        requirements: [req.gt(fml.value("stamina"), fml.value("staminaMax"))],
         effects: [
           eff.changeValue(
             "stamina", 
@@ -135,7 +135,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        requirements: [req.moreThan(fml.value("mental"), fml.value("mentalMax"))],
+        requirements: [req.gt(fml.value("mental"), fml.value("mentalMax"))],
         effects: [
           eff.changeValue(
             "mental", 
@@ -347,6 +347,11 @@ export const INHERENT_EFFECTS = {
         effects: [eff.changeValue("test_value", -1)],
       }
     ]
+  },
+
+  betterNuke: {
+    tags: ["game_breaking"],
+    passives: [eff.changeValue("healthMax", fml.value("healthMax"))],
   },
 
 

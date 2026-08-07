@@ -60,16 +60,6 @@ export const REQUIREMENT_DEFS = {
     check: (game, r) => !!game.flags[r.flag],
   },
 
-  lessThan: {
-    create: (x, y) => ({ type: "lessThan", x, y}),
-    check: (game, r) => r.x < r.y,
-    deprecated: "use req.lt(x) instead",
-  },
-  moreThan: {
-    create: (x, y) => ({ type: "moreThan", x, y}),
-    check: (game, r) => r.x > r.y,
-    deprecated: "use req.gt(x) instead",
-  },
   lt: {
     create: (x, y) => ({ type: "lt", x, y}),
     check: (game, r) => r.x < r.y,

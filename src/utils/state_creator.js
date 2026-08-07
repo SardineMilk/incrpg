@@ -27,13 +27,26 @@ const NAMESPACES = {
   locations:  { ...LOCATIONS, },
 };
 
-const MAX_CONTEXT_STACK_DEPTH = 64;
+/*
+* Some entities in the game might cause infinite loops
+* Examples:
+* - evt.valueGain("foo") -> eff.changeValue("foo", 1)
+* - eff.changeValue("healthMax", fml.value("healthMax"))
+* This will often be a long chain of multiple interacting entities
+* To combat this, the effect stack has a depth limit
+* Past this depth, the stack will stop accepting new context
+* Instead, it will gracefully resolve the existing stack
+* Increase this number to make infinite loops last longer before being resolved
+* Decrease for better performance in the case of infinite loops
+* If it is too low, normal game operation may be impacted 
+*/
+const MAX_STACK_DEPTH = 64;
 
 export function initialiseState() {
   const game = {};
   game.registry = new EntityRegistry();
   game.active = new ActivationLayer(game.registry);
-  game.context = new ContextStack(MAX_CONTEXT_STACK_DEPTH);
+  game.context = new ContextStack(MAX_STACK_DEPTH);
   game.candidateScope = new CandidateScope();
   // TODO - if these are removed values are NaN until changed
   game.values = {
