@@ -30,12 +30,11 @@ function scaleStatLayer(game, effect, mul) {
   const prevMult = effect.multiplier;
   return {
     ...effect,
-    flat: (g)       => (typeof prevFlat === "function" ? prevFlat(g) : prevFlat) * mul,
-    percent: (g)    => (((typeof prevFlat === "function" ? prevPerc(g) : prevPerc)-1) * mul) + 1,
-    multiplier: (g) => (((typeof prevFlat === "function" ? prevMult(g) : prevMult)-1) * mul) + 1,
+    flat:       (g) => (typeof prevFlat === "function" ? prevFlat(g) : prevFlat) * mul,
+    percent:    (g) => (((typeof prevPerc === "function" ? prevPerc(g) : prevPerc) - 1) * mul) + 1,
+    multiplier: (g) => (((typeof prevMult === "function" ? prevMult(g) : prevMult) - 1) * mul) + 1,
   };
 }
-
 
 function getStrength(game, entity) {
   return (
@@ -159,14 +158,13 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       game.registry
         .get(e.id, "LevelHolder")
-        .levelBonus
-        .change(e);
+        .changeLevelBonus(game, e)
     },
     remove(game, e) {
       game.registry
         .get(e.id, "LevelHolder")
-        .levelBonus
-        .changeReverse(e);
+        .changeLevelBonusReverse(game, e)
+
     },
     scale: scaleStatLayer,
     display(game, e) {

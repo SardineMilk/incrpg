@@ -24,13 +24,25 @@ import {eff, req, evt, sel, fml } from "../structures/structures.js";
 export const ACTIVITIES = {
     fall_asleep: {
         // While "relaxation">=50, apply "asleep" condition
-        // This might require effect objects with requirements, like triggers?
         meters: {
             relaxation: {
                 repeat: false,
                 max: 100,
             }
         },
+    triggers: [
+        {
+            event: evt.tick(),
+            requirements: [req.geq(fml.progress("fall_asleep", "relaxation"), 50)],
+            effects: [eff.activate("asleep")],
+        },
+        {
+            event: evt.tick(),
+            requirements: [req.lt(fml.progress("fall_asleep", "relaxation"), 50)],
+            effects: [eff.deactivate("asleep")],
+        },
+    ],
+            
     },
 
 
