@@ -30,18 +30,18 @@ export const ACTIVITIES = {
                 max: 100,
             }
         },
-    triggers: [
-        {
-            event: evt.tick(),
-            requirements: [req.geq(fml.progress("fall_asleep", "relaxation"), 50)],
-            effects: [eff.activate("asleep")],
-        },
-        {
-            event: evt.tick(),
-            requirements: [req.lt(fml.progress("fall_asleep", "relaxation"), 50)],
-            effects: [eff.deactivate("asleep")],
-        },
-    ],
+        triggers: [
+            {
+                event: evt.tick(),
+                requirements: [req.geq(fml.progress("fall_asleep", "relaxation"), 50)],
+                effects: [eff.activate("asleep")],
+            },
+            {
+                event: evt.tick(),
+                requirements: [req.lt(fml.progress("fall_asleep", "relaxation"), 50)],
+                effects: [eff.deactivate("asleep")],
+            },
+        ],
             
     },
 
@@ -73,7 +73,7 @@ export const ACTIVITIES = {
         tags: ["exploration"],
         allowed: ["vertical_traversal", "climbing"],
         requirements: [],
-        effects: [],
+        passives: [],
         triggers: [
             // If you are at the bottom of the cliff, gain 1 grip per tick
             {

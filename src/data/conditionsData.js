@@ -36,13 +36,13 @@ export const INHERENT_EFFECTS = {
     tags: ["developer"],
     name: "System Awakened",
     description: "Lorem Ipsum",
-    effects: [
+    passives: [
       eff.xpMultiplier(sel.tags("skill"), { multiplier: 10 }),
     ],
   },
 
   startup: {
-    effects: [
+    passives: [
       eff.activate(sel.tags("system", "conditions")),
       eff.activate(sel.tags("mortal", "conditions")),
       eff.activate("human"),
@@ -369,7 +369,7 @@ export const INHERENT_EFFECTS = {
 const TRAITS = {
   human: {
     tags: ["form"],
-    effects: [
+    passives: [
       eff.changeValue("healthMax",  100),
       eff.changeValue("staminaMax", 100),
       eff.changeValue("mentalMax",  100),
@@ -378,7 +378,7 @@ const TRAITS = {
 
   rat_king: {
     tags: ["form", "beast", "rat"],
-    effects: [
+    passives: [
       eff.changeValue("healthMax",  80),
       eff.changeValue("staminaMax", 150),
       eff.changeValue("mentalMax",  70),
@@ -427,7 +427,7 @@ const TRAITS = {
     modifiers: [
       {
         event: null,  // on fml.roll()
-        effects: null // increase roll.min by 1
+        passives: null // increase roll.min by 1
       },
     ]
   },
@@ -435,16 +435,16 @@ const TRAITS = {
   // 0.5x health regen normally
   // 1.5x health regen for 10 ticks after taking damage
   trollish_regeneration: {
-    effects: [eff.changeStrength("health_regen", {multiplier: 0.5})],
+    passives: [eff.changeStrength("health_regen", {multiplier: 0.5})],
     triggers: [
       {
         event: evt.valueLoss("health"),
-        effects: [eff.activate("impaired_trollish_regeneration", 10)],
+        effects: [eff.activate("activated_trollish_regeneration", 10)],
       }
     ]
   },
-  impaired_trollish_regeneration: {
-    effects: [eff.changeStrength("health_regen", {multiplier: 3})],
+  activated_trollish_regeneration: {
+    passives: [eff.changeStrength("health_regen", {multiplier: 3})],
   }
 
 }
@@ -454,7 +454,7 @@ const TEMP_CONDITIONS = {
   asleep: {
     name: "Asleep",
     description: "You are asleep, greatly boosting your natural recovery",
-    effects: [
+    passives: [
       eff.changeStrength(sel.tags("conditions", "passive_regen"), {flat: 10}),
     ],
   },
@@ -478,7 +478,7 @@ const TEMP_CONDITIONS = {
     name: "Wet",
     description:
       "You're soaked. Lowers cold resistance, increases fire resistance",
-    effects: [
+    passives: [
 
     ],
   },
@@ -487,7 +487,7 @@ const TEMP_CONDITIONS = {
     name: "Chilly",
     description:
       "You feel chilly. You move and regenerate stamina slightly slower",
-    effects: [
+    passives: [
       eff.levelBonus("agility", {multiplier: 0.9}),
       eff.changeStrength("stamina_regen", {multiplier: 0.7}),
     ],
@@ -497,13 +497,13 @@ const TEMP_CONDITIONS = {
     name: "Cold",
     description:
       "You feel cold. You move and regenerate stamina slower. You have a slight mental drain.",
-    effects: [eff.levelBonus("agility", {multiplier: 0.7})]
+    passives: [eff.levelBonus("agility", {multiplier: 0.7})]
   },
 
   injury: {
     name: "Injury",
     description: "Lorem ipsum dolor sit amet.",
-    effects: [
+    passives: [
  
     ],
   },
@@ -525,62 +525,62 @@ const IMBALANCES = {
   */ 
   imbalance_con_str: {
     requirements: [req.skillsImbalanced("constitution", "strength")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_con_agi: {
     requirements: [req.skillsImbalanced("constitution", "agility")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_con_wit: {
     requirements: [req.skillsImbalanced("constitution", "wit")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_con_int: {
     requirements: [req.skillsImbalanced("constitution", "intelligence")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_con_wil: {
     requirements: [req.skillsImbalanced("constitution", "willpower")],
-    effects: [
+    passives: [
 
     ],
   },
 
   imbalance_str_con: {
     requirements: [req.skillsImbalanced("strength", "constitution")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_str_agi: {
     requirements: [req.skillsImbalanced("strength", "agility")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_str_wit: {
     requirements: [req.skillsImbalanced("strength", "wit")],
-    effects: [
+    passives: [
 
     ],
   }, 
   imbalance_str_int: {
     requirements: [req.skillsImbalanced("strength", "intelligence")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_str_wil: {
     requirements: [req.skillsImbalanced("strength", "willpower")],
-    effects: [
+    passives: [
 
     ],
   }, 
@@ -588,68 +588,68 @@ const IMBALANCES = {
 
   imbalance_agi_str: {
     requirements: [req.skillsImbalanced("agility", "strength")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_agi_con: {
     requirements: [req.skillsImbalanced("agility", "constitution")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_agi_wit: {
     requirements: [req.skillsImbalanced("agility", "wit")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_agi_int: {
     requirements: [req.skillsImbalanced("agility", "intelligence")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_agi_wil: {
     requirements: [req.skillsImbalanced("agility", "willpower")],
-    effects: [
+    passives: [
 
     ],
   },
 
   imbalance_wit_str: { 
     requirements: [req.skillsImbalanced("wit", "strength")],
-    effects: [
+    passives: [
 
     ], 
   },
   imbalance_wit_con: { 
     requirements: [req.skillsImbalanced("wit", "constitution")],
-    effects: [
+    passives: [
 
     ], 
   },
   imbalance_wit_agi: { 
     requirements: [req.skillsImbalanced("wit", "agility")],
-    effects: [
+    passives: [
 
     ], 
   },
   imbalance_wit_dex: { 
     requirements: [req.skillsImbalanced("wit", "dexterity")],
-    effects: [
+    passives: [
 
     ], 
   },
   imbalance_wit_int: { 
     requirements: [req.skillsImbalanced("wit", "intelligence")],
-    effects: [
+    passives: [
 
     ], 
   },
   imbalance_wit_wil: { 
     requirements: [req.skillsImbalanced("wit", "willpower")],
-    effects: [
+    passives: [
 
     ], 
   },
@@ -657,62 +657,62 @@ const IMBALANCES = {
 
   imbalance_int_str: {
     requirements: [req.skillsImbalanced("intelligence", "strength")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_int_con: {
     requirements: [req.skillsImbalanced("intelligence", "constitution")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_int_agi: {
     requirements: [req.skillsImbalanced("intelligence", "agility")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_int_wit: {
     requirements: [req.skillsImbalanced("intelligence", "wit")],
-    effects: [
+    passives: [
 
     ],
   },
   imbalance_int_wil: {
     requirements: [req.skillsImbalanced("intelligence", "willpower")],
-    effects: [
+    passives: [
 
     ],
   },
 
   imbalance_wil_str: { 
     requirements: [req.skillsImbalanced("willpower", "strength")], 
-    effects: [
+    passives: [
 
     ], 
   },
   imbalance_wil_con: { 
     requirements: [req.skillsImbalanced("willpower", "constitution")], 
-    effects: [
+    passives: [
 
     ], 
   },
   imbalance_wil_agi: { 
     requirements: [req.skillsImbalanced("willpower", "agility")], 
-    effects: [
+    passives: [
 
     ], 
   },
   imbalance_wil_wit: { 
     requirements: [req.skillsImbalanced("willpower", "wit")], 
-    effects: [
+    passives: [
 
     ], 
   },
   imbalance_wil_int: { 
     requirements: [req.skillsImbalanced("willpower", "intelligence")], 
-    effects: [
+    passives: [
 
     ], 
   },

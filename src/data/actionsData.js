@@ -6,7 +6,6 @@ export const ACTIONS = {
     name: "Walk",
     tags: ["traversal"],
     duration: 100,
-    effects: [eff.changeValue("check_difficulty", -10)],
     triggers: [
       {
         event: evt.tick(),
@@ -53,7 +52,6 @@ export const ACTIONS = {
     name: "Sprint",
     tags: ["traversal"],
     duration: 20,
-    effects: [eff.changeValue("check_difficulty", 10),],
     triggers: [
       {
         event: evt.tick(),
@@ -79,7 +77,7 @@ export const ACTIONS = {
     name: "Sleep",
     tags: ["rest"],
     duration: 100,
-    effects: [eff.activate("asleep")],
+    passives: [eff.activate("asleep")],
     triggers: [
       {
         event: evt.tick(),
@@ -146,7 +144,7 @@ export const ACTIONS = {
       },
     ],
     result: [
-      eff.progress(sel.active(sel.tags("activities")), 25, "height"),
+      eff.progress(sel.active(sel.tags("activities")), 10, "height"),
     ]
   },
 

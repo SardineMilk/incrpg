@@ -18,7 +18,7 @@ export class PassiveHolder {
   }
 
   static fromDefinition(def) {
-    return new PassiveHolder(def.effects ?? []);
+    return new PassiveHolder(def.passives ?? []);
   }
 
   get isApplied() {
