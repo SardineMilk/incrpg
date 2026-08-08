@@ -5,7 +5,10 @@ import { resolveFormulas } from "../structures/formulaDefs.js";
 import { tagsOf } from "../utils/tagIndex.js";
 
 
-function resolveEffect(game, effect, strength = 1) {
+// Resolves an effect's targets + formulas, scaling by strength if required.
+// Exported (was private) - the reactive passive reconciler needs to re-run
+// this same resolution step on demand, outside of a full applyEffect().
+export function resolveEffect(game, effect, strength = 1) {
   const scaledEffect = strength === 1
     ? effect
     : changeEffectStrength(game, effect, strength);
@@ -20,8 +23,11 @@ function changeEffectStrength(game, effect, multiplier) {
   return effect;
 }
 
-// Internal: apply one pre-resolved effect object and fire its trigger.
-function applyResolved(game, e) {
+// Apply one pre-resolved effect object and fire its trigger.
+// Exported (was private) - the reactive passive reconciler applies
+// individual resolved effects (and diffs) directly, without re-resolving
+// through applyEffect() each time.
+export function applyResolved(game, e) {
   const def = EFFECT_DEFS[e.type];
 
   processModifier(game, e.type, e);
@@ -70,3 +76,18 @@ export function removeEffect(game, resolved) {
   def.remove(game, resolved);
 }
 
+// Finds the smallest change to move an effect state from prev to next
+// Example:
+// eff.changeValue(), previously resolved to 1, now resolves to 10
+// returns change of 9
+export function diffEffect(prevResolved, nextResolved) {
+  const def = EFFECT_DEFS[nextResolved.type];
+  if (!def.diff) return undefined;
+  return def.diff(prevResolved, nextResolved);
+}
+
+// True if this effect type declares a remove()
+// Iff, then it's safe for PassiveHolder
+export function isReversible(effectType) {
+  return !!EFFECT_DEFS[effectType]?.remove;
+}

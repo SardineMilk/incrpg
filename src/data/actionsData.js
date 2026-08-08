@@ -10,7 +10,7 @@ export const ACTIONS = {
       {
         event: evt.tick(),
         effects: [
-          eff.gainXp("constitution", 0.5),
+          eff.gainXp("constitution", 5),
           eff.gainXp("agility", 0.5),
           eff.gainXp("wit", 0.2),
 
@@ -20,7 +20,7 @@ export const ACTIONS = {
     ],
     result: [
       eff.gainXp("walking", 20),
-      eff.progress(sel.active(sel.tags("activity")), 1),
+      eff.progress(sel.active(sel.tags("activity")), 1, "distance"),
     ],
   },
 
@@ -36,6 +36,7 @@ export const ACTIONS = {
           eff.gainXp("agility", 0.5),
           eff.gainXp("wit", 0.2),
           eff.gainXp("willpower", 0.2),
+          eff.gainXp("intelligence", 5),
 
           eff.changeValue("stamina", -2),
         ],
@@ -43,7 +44,7 @@ export const ACTIONS = {
     ],
     result: [
       eff.gainXp("running", 20),
-      eff.progress(sel.active(sel.tags("activity")), 2),
+      eff.progress(sel.active(sel.tags("activity")), 2, "distance"),
     ],
   },
 
@@ -69,15 +70,14 @@ export const ACTIONS = {
     ],
     result: [
       eff.gainXp("running", 50),
-      eff.progress(sel.active(sel.tags("activity")), 5),
+      eff.progress(sel.active(sel.tags("activity")), 5, "distance"),
     ],
   },
 
   sleep: {
     name: "Sleep",
     tags: ["rest"],
-    duration: 100,
-    passives: [eff.activate("asleep")],
+    duration: 10,
     triggers: [
       {
         event: evt.tick(),
@@ -87,7 +87,10 @@ export const ACTIONS = {
         ],
       },
     ],
-    result: [eff.gainXp("sleeping", 20)],
+    result: [
+      eff.gainXp("sleeping", 20),
+      eff.progress(sel.active(sel.tags("activities")), 10, "relaxation")
+    ],
   },
   
   become_rat: {
@@ -122,12 +125,32 @@ export const ACTIONS = {
     result: [eff.activate("test", 5),]
   },
 
+  mana_shield_on: {
+    name: "Mana Shield - On",
+    duration: 10,
+    result: [eff.activate("mana_shield")]
+  },
+  mana_shield_off: {
+    name: "Mana Shield - Off",
+    duration: 10,
+    result: [eff.deactivate("mana_shield")]
+  },
+
+  blood_mana_on: {
+    name: "Blood Mana - On",
+    duration: 10,
+    result: [eff.activate("blood_mana")]
+  },
+  blood_mana_off: {
+    name: "Blood Mana - Off",
+    duration: 10,
+    result: [eff.deactivate("blood_mana")]
+  },
   test_climbing: {
     name: "TEST - start climbing",
     duration: 10,
     result: [
       eff.activate("climb_northern_cliff"),
-      eff.sendMessage("SYSTEM", "Started climbing"),
     ]
   },
 
@@ -148,6 +171,13 @@ export const ACTIONS = {
     ]
   },
 
+  test_sleeping: {
+    name: "TEST - start sleeping",
+    duration: 10,
+    result: [
+      eff.activate("fall_asleep"),
+    ]
+  },
 
 };
 

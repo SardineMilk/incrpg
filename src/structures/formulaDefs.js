@@ -9,10 +9,10 @@ const lift =
   (game) =>
     fn(game, ...args.map((arg) => res(arg, game)));
 
-// When adding a new formula it takes `game` as a parameter,
+// When adding a new formula it always takes `game` as a parameter,
 // but you don't need to pass game at point of use.
 const definitions = {
-  // Get data from current effect stack
+  // Get data from current effect stack, with shortcuts for the most common uses
   context: (game, key) => game.context.get(key),
   id: (game) => game.context.get("id"),
   amount: (game) => game.context.get("amount"),
@@ -22,14 +22,28 @@ const definitions = {
   // eff.gainXp(sel.tags("skills"), fml.level(fml.candidate("id")))
   candidate: (game, key) => game.candidateScope.get(key),
 
-  conditionStrength:  (game, condition) => game.registry.get(condition, "StatLayer")?.value,
-  level:              (game, skill) => game.registry.get(skill, "LevelHolder")?.level,
-  value:              (game, value) => game.values[value],
-  skillParent:        (_game, skill) => SKILLS[skill]?.parent,
-  level:              (game, id) => game.registry.get(id, "LevelHolder")?.level,
-  duration:           (game, id) => game.registry.get(id, "CompletionHolder")?.progressOf("duration"),
-  progress:           (game, id, meter) => game.registry.get(id, "CompletionHolder")?.progressOf(meter),
+  strength: (game, id) => {
+    game.reactor.read(`strength:${id}`);
+    return game.registry.get(id, "StatLayer")?.value;
+  },
+  level: (game, id) => {
+    game.reactor.read(`level:${id}`);
+    return game.registry.get(id, "LevelHolder")?.level;
+  },
+  value: (game, value) => {
+    game.reactor.read(`value:${value}`);
+    return game.values[value];
+  },
+  duration: (game, id) => {
+    game.reactor.read(`meter:${id}:duration`);
+    return game.registry.get(id, "CompletionHolder")?.progressOf("duration");
+  },
+  progress: (game, id, meter) => {
+    game.reactor.read(`meter:${id}:${meter}`);
+    return game.registry.get(id, "CompletionHolder")?.progressOf(meter);
+  },
 
+  skillParent: (_game, skill) => SKILLS[skill]?.parent,
 
   add: (_game, x, y) => x + y,
   sub: (_game, x, y) => x - y,

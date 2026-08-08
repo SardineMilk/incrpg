@@ -19,41 +19,42 @@ export const REQUIREMENT_DEFS = {
     check: (game, r) => tagsOf(r.id).includes(r.tag),
   },
 
-  skillMoreThan: {
-    create: (skill, value) => ({ type: "skillMoreThan", skill, value }),
-    check: (game, r) => game.registry.get(r.skill, "LevelHolder").level >= r.value
-  },
-
-  skillBaseMoreThan: {
-    create: (skill, value) => ({ type: "skillBaseMoreThan", skill, value }),
-    check: (game, r) => game.registry.get(r.skill, "LevelHolder").baseLevel >= r.value
-  },
-
-  isTimed: {
-    create: (skill, id) => ({ type: "isTimed", id }),
-    check: (game, r) => game.registry.get(r.id, "DurationHolder").isTimed
-  },
-
-  valueLessThan: {
-    create: (value, amount) => ({
-      type: "valueLessThan",
-      value,
-      amount,
-    }),
+  active: {
+    create: (id) => ({ type: "active", id }),
     check: (game, r) => {
+      game.reactor.read(`active:${r.id}`);
+      return game.active.isActive(r.id);
+    },
+  },
+  inactive: {
+    create: (id) => ({ type: "inactive", id }),
+    check: (game, r) => {
+      game.reactor.read(`active:${r.id}`);
+      return !game.active.isActive(r.id);
+    },
+  },
+  valueLessThan: {
+    create: (value, amount) => ({ type: "valueLessThan", value, amount }),
+    check: (game, r) => {
+      game.reactor.read(`value:${r.value}`);
       return game.values[r.value] < r.amount;
     },
   },
-
-  active: {
-    create: (id) => ({ type: "active", id }),
-    check: (game, r) => game.active.isActive(r.id),
+  skillMoreThan: {
+    create: (skill, value) => ({ type: "skillMoreThan", skill, value }),
+    check: (game, r) => {
+      game.reactor.read(`level:${r.skill}`);
+      return game.registry.get(r.skill, "LevelHolder").level >= r.value;
+    }
+  },
+  skillBaseMoreThan: {
+    create: (skill, value) => ({ type: "skillBaseMoreThan", skill, value }),
+    check: (game, r) => {
+      game.reactor.read(`level:${r.skill}`);
+      return game.registry.get(r.skill, "LevelHolder").baseLevel >= r.value;
+    }
   },
 
-  inactive: {
-    create: (id) => ({ type: "inactive", id }),
-    check: (game, r) => !game.active.isActive(r.id),
-  },
 
   flagSet: {
     create: (flag) => ({ type: "flagSet", flag }),
@@ -92,10 +93,15 @@ export const REQUIREMENT_DEFS = {
   * Be careful with these, they're an escape hatch not a normal feature
   */
   skillsImbalanced: {
-    create: (a, b) => ({ type: "skillsImbalanced", a, b}),
-    check: (game, r) => ((game.registry.get(r.a, "LevelHolder").level/2) > game.registry.get(r.b, "LevelHolder").level) &&
-                        ((game.registry.get(r.a, "LevelHolder").level - game.registry.get(r.b, "LevelHolder").level) > 10)
-  }
+    create: (a, b) => ({ type: "skillsImbalanced", a, b }),
+    check: (game, r) => {
+      game.reactor.read(`level:${r.a}`);
+      game.reactor.read(`level:${r.b}`);
+      const A = game.registry.get(r.a, "LevelHolder").level;
+      const B = game.registry.get(r.b, "LevelHolder").level;
+      return (A / 2 > B) && (A - B > 10);
+    }
+  },
 };
 
 export const req = Object.fromEntries(

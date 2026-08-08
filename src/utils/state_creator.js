@@ -14,6 +14,7 @@ import { LevelHolder } from "../components/levelHolder.js";
 import { generateTagIndex } from "./tagIndex.js";
 import { EntityRegistry, registerEntities } from "./entityRegistry.js";
 import { ActivationLayer } from "./activationLayer.js";
+import { Reactor } from "./reactor.js";
 
 import { validate } from "./validator.js";
 import { ContextStack } from "./context.js";
@@ -48,6 +49,8 @@ export function initialiseState() {
   game.active = new ActivationLayer(game.registry);
   game.context = new ContextStack(MAX_STACK_DEPTH);
   game.candidateScope = new CandidateScope();
+  game.reactor = new Reactor(MAX_STACK_DEPTH);
+
   // TODO - if these are removed values are NaN until changed
   game.values = {
     health: 0,

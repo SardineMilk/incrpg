@@ -36,6 +36,24 @@ function scaleStatLayer(game, effect, mul) {
   };
 }
 
+
+const EPSILON = 1e-9;
+
+function diffAmount(prev, next) {
+  const d = next.amount - prev.amount;
+  return Math.abs(d) < EPSILON ? null : { ...next, amount: d };
+}
+
+function diffStatLayer(prev, next) {
+  const dFlat = next.flat - prev.flat;
+  const dPercent = next.percent - prev.percent;
+  const dMultiplier = prev.multiplier === 0 ? 1 : next.multiplier / prev.multiplier;
+  if (Math.abs(dFlat) < EPSILON && Math.abs(dPercent) < EPSILON && Math.abs(dMultiplier - 1) < EPSILON) {
+    return null;
+  }
+  return { ...next, flat: dFlat, percent: dPercent, multiplier: dMultiplier };
+}
+
 function getStrength(game, entity) {
   return (
     game.registry.get(entity, "StatLayer")?.value ?? 1
@@ -45,21 +63,27 @@ function getStrength(game, entity) {
 
 function activateEntity(game, entity, duration = null) {
   if (game.active.isActive(entity)) return;
-  const effects = game.registry.get(entity, "PassiveHolder");
-  if (effects) effects.apply(game, getStrength(game, entity));
+  game.registry.get(entity, "PassiveHolder")?.apply(game, getStrength(game, entity));
+
   if (duration != null) {
     game.registry.get(entity, "CompletionHolder")?.resetMeter("duration", duration);
+    game.reactor.notify(`meter:${entity}:duration`);
   }
+
   game.active.activate(entity);
+  game.reactor.notify(`active:${entity}`);
   processTrigger(game, "onActivate", { id: entity });
 }
 
 function deactivateEntity(game, entity) {
   if (!game.active.isActive(entity)) return;
-  const effects = game.registry.get(entity, "PassiveHolder");
-  if (effects) effects.remove(game, getStrength(game, entity));
+  game.registry.get(entity, "PassiveHolder")?.remove(game);
+
   game.registry.get(entity, "CompletionHolder")?.clearMeter("duration");
+  game.reactor.notify(`meter:${entity}:duration`);
+
   game.active.deactivate(entity);
+  game.reactor.notify(`active:${entity}`);
   processTrigger(game, "onDeactivate", { id: entity });
 }
 
@@ -101,9 +125,8 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       if (e.id == null) return null;
       if (e.amount == 0) return;
-      game.registry
-        .get(e.id, "LevelHolder")
-        ?.gainXp(game, e.amount);
+      game.registry.get(e.id, "LevelHolder")?.gainXp(game, e.amount);
+      game.reactor.notify(`level:${e.id}`);
 
       return "gainXp";
     },
@@ -138,6 +161,7 @@ export const EFFECT_DEFS = {
         .changeReverse(e);
     },
     scale: scaleAmount,
+    diff: diffStatLayer,
     display(game, e) {
       let m = `increase ${e.id} xp gain multiplier by: `;
       if (e.flat != 0) m += `+${e.flat} `;
@@ -156,17 +180,15 @@ export const EFFECT_DEFS = {
       multiplier,
     }),
     apply(game, e) {
-      game.registry
-        .get(e.id, "LevelHolder")
-        .changeLevelBonus(game, e)
+      game.registry.get(e.id, "LevelHolder").changeLevelBonus(game, e)
+      game.reactor.notify(`level:${e.id}`);
     },
     remove(game, e) {
-      game.registry
-        .get(e.id, "LevelHolder")
-        .changeLevelBonusReverse(game, e)
-
+      game.registry.get(e.id, "LevelHolder").changeLevelBonusReverse(game, e)
+      game.reactor.notify(`level:${e.id}`);
     },
     scale: scaleStatLayer,
+    diff: diffStatLayer,
     display(game, e) {
       let m = `increase ${e.id} level by: `;
       if (e.flat != 0) m += `+${e.flat} `;
@@ -180,13 +202,14 @@ export const EFFECT_DEFS = {
   // ── CompletionHolder ────────────────────────────────────────────────────────────
 
   activate: {
-    create: (id, duration = null) => ({ type: "activate", id, duration }),
+    create: (id, amount = null) => ({ type: "activate", id, amount}),
     apply(game, e) {
-      activateEntity(game, e.id, e.duration);
+      activateEntity(game, e.id, e.amount);
     },
     remove(game, e) {
       deactivateEntity(game, e.id);
     },
+    diff: diffAmount,
     display(game, e) {
       return `gain ${e.id} permanently`;
     }
@@ -214,6 +237,7 @@ export const EFFECT_DEFS = {
       const holder = game.registry.get(e.id, "CompletionHolder");
       if (!holder) return;
       holder.advanceProgress(game, e.amount, e.meter);
+      game.reactor.notify(`meter:${e.id}:${e.meter}`);
     },
     scale: scaleAmount,
     display(game, e) {
@@ -226,6 +250,7 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       const outcome = game.registry.get(e.id, "CompletionHolder")
         ?.advanceProgress(game, e.amount, "duration");
+      game.reactor.notify(`meter:${e.id}:duration`);
       if (outcome === "meterMin") return "durationExpired";
     },
     display(game, e) {
@@ -240,6 +265,7 @@ export const EFFECT_DEFS = {
       const holder = game.registry.get(e.id, "CompletionHolder");
       if (!holder) return;
       holder.setProgress(game, e.amount, e.meter);
+      game.reactor.notify(`meter:${e.id}:${e.meter}`);
     },
     scale: scaleAmount,
     display(game, e) {
@@ -263,10 +289,7 @@ export const EFFECT_DEFS = {
 
       const dirty = strength.change(e);
       if (!dirty) return;
-
-      // TODO - this should be automatic
-      const effects = game.registry.get(e.id, "PassiveHolder");
-      if (effects) { effects.reapply(game, strength.value);}
+      game.reactor.notify(`strength:${e.id}`);
 
       return "strengthChanged";
     },
@@ -276,8 +299,11 @@ export const EFFECT_DEFS = {
 
       const dirty = strength.changeReverse(e);
       if (!dirty) return;
+      game.reactor.notify(`strength:${e.id}`);
+
     },
     scale: scaleStatLayer,
+    diff: diffStatLayer,
     display(game, e) {
       let m = `modify ${e.id} strength by: `;
       if (e.flat != 0) m += `+${e.flat} `;
@@ -301,9 +327,7 @@ export const EFFECT_DEFS = {
       
       const dirty = strength.set(e);
       if (!dirty) return;
-      // TODO - this should be automatic
-      const effects = game.registry.get(e.id, "PassiveHolder");
-      if (effects) { effects.reapply(game, strength.value);}
+      game.reactor.notify(`strength:${e.id}`);
 
       return "strengthChanged";
     },
@@ -325,26 +349,33 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       game.values[e.id] = game.values[e.id] || 0;
       game.values[e.id] += e.amount;
+      if (e.amount == 0) return;
+
+      game.reactor.notify(`value:${e.id}`);
+
       if (e.amount > 0) return "valueGain";
       if (e.amount < 0) return "valueLoss";
       return null;
     },
     remove(game, e) {
       game.values[e.id] -= e.amount;
+      game.reactor.notify(`value:${e.id}`);
     },
     scale: scaleAmount,
+    diff: diffAmount,
     display(game, e) {
       return `${e.amount > 0 ? 'gain' : 'lose'} ${Math.abs(e.amount)} ${e.id}`;
     }
   },
 
   setValue: {
-    create: (value, amount) => ({ type: "setValue", value, amount }),
+    create: (id, amount) => ({ type: "setValue", id, amount }),
     apply(game, e) {
-      game.values[e.value] = e.amount;
+      game.values[e.id] = e.amount;
+      game.reactor.notify(`value:${e.id}`);
     },
     display(game, e) {
-      return `set ${e.value} to ${e.amount}`;
+      return `set ${e.id} to ${e.amount}`;
     }
   },
 

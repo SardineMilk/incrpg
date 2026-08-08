@@ -60,13 +60,13 @@ export class CompletionHolder {
   _checkThresholds(game, m) {
     if (m.progress >= m.max) {
       m.completions++;
-      for (const e of m.resultEffects) applyEffect(game, e);
       m.progress = m.repeat ? m.progress - m.max : m.max;
+      for (const e of m.resultEffects) applyEffect(game, e);
       return "meterMax";
     }
     if (m.progress <= m.min) {
-      for (const e of m.minEffects) applyEffect(game, e);
       m.progress = m.repeat ? m.progress - m.min : m.min;
+      for (const e of m.minEffects) applyEffect(game, e);
       return "meterMin";
     }
   }

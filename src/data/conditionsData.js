@@ -203,24 +203,6 @@ export const INHERENT_EFFECTS = {
     ],
   },
 
-  // Utterly idiotic way to do this
-  // Condition passive effects can contain formulas, 
-  // which need reapplied whenever the formula resolved value changes
-  // Solution - manually tag them with "dynamic", then reapply every tick
-  // Simple!
-  // lmfao.
-  condition_update: {
-    tags: ["system", "causality"],
-    triggers: [
-      {
-        event: evt.tick(),
-        effects: [
-          eff.reapplyCondition(sel.tags("conditions", "dynamic"))
-        ]
-      }
-    ]
-  },
-
   action_progress: {
     tags: ["system", "entropy"],
     triggers: [
@@ -243,7 +225,7 @@ export const INHERENT_EFFECTS = {
     ],
   },
   duration_expiry: {
-    tags: ["system", "entropy"],
+    tags: ["system", "causality"],
     triggers: [{
       event: evt.durationExpired(),
       effects: [eff.deactivate(fml.context("id")),eff.sendMessage("SYSTEM", "Duration expired")],
@@ -329,6 +311,12 @@ export const INHERENT_EFFECTS = {
     ]
   },
 
+  mana_shield: {
+    passives: [eff.changeValue("healthMax", fml.value("mentalMax"))]
+  },
+  blood_mana: {
+    passives: [eff.changeValue("mentalMax", fml.value("healthMax"))]
+  },
   /*
   TEST_formula_resolution_in_selector_candidate_context: {
     tags: ["system"],
