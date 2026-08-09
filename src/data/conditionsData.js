@@ -37,7 +37,7 @@ export const INHERENT_EFFECTS = {
     name: "System Awakened",
     description: "Lorem Ipsum",
     passives: [
-      eff.xpMultiplier(sel.tags("skill"), { multiplier: 10 }),
+      eff.xpMultiplier(sel.tags("skills"), { multiplier: 10 }),
     ],
   },
 

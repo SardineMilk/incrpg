@@ -47,7 +47,10 @@ export const ACTIVITIES = {
         meters: {
             distance: {
                 max: 1000,
-                result: [],
+                result: [
+                    eff.sendMessage("SYSTEM", "You reach the centre of the forest"),
+                    eff.deactivate("explore_meldrum_woods")
+                ],
             },
         },
         actions: {

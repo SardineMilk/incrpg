@@ -1,4 +1,3 @@
-
 import {
   resolveEffect,
   applyResolved,
@@ -28,45 +27,49 @@ function getInstanceKey(resolved) {
   return resolved.id ?? SINGLETON_KEY;
 }
 
-function reconcileInstances(game, previous, resolvedList) {
-  const next = new Map();
+function reconcileInstance(game, instances, key, next) {
+  const previous = instances.get(key);
 
-  for (const resolved of resolvedList) {
-    const key = getInstanceKey(resolved);
-    next.set(
-      key,
-      reconcileInstance(game, previous.get(key), resolved),
-    );
-  }
-
-  for (const [key, previousResolved] of previous) {
-    if (next.has(key)) continue;
-
-    if (isReversible(previousResolved.type)) {
-      removeEffect(game, previousResolved);
-    }
-  }
-
-  return next;
-}
-
-function reconcileInstance(game, previous, next) {
   if (!previous) {
+    instances.set(key, next);
     applyResolved(game, next);
-    return next;
+    return;
   }
 
   const delta = diffEffect(previous, next);
 
   if (delta) {
+    instances.set(key, next);
     applyResolved(game, delta);
   } else if (delta === undefined) {
     console.warn("PassiveHolder effect has no eff.diff() defined");
-    if (isReversible(previous.type)) { removeEffect(game, previous); }
+    instances.delete(key);
+    if (isReversible(previous.type)) removeEffect(game, previous);
+    instances.set(key, next);
     applyResolved(game, next);
+  } else {
+    instances.set(key, next);
+  }
+}
+
+function reconcileInstances(game, instances, resolvedList) {
+  const seen = new Set();
+
+  for (const resolved of resolvedList) {
+    const key = getInstanceKey(resolved);
+    seen.add(key);
+    reconcileInstance(game, instances, key, resolved);
   }
 
-  return next;
+  for (const [key, previousResolved] of [...instances]) {
+    if (seen.has(key)) continue;
+    instances.delete(key);
+    if (isReversible(previousResolved.type)) {
+      removeEffect(game, previousResolved);
+    }
+  }
+
+  return instances;
 }
 
 export class PassiveHolder {
@@ -76,6 +79,8 @@ export class PassiveHolder {
     // [{ raw, instances, sub }] for each group.
     this._entries = this.groups.map(() => []);
     this._presenceSubs = this.groups.map(() => null);
+
+    this._presenceBusy = this.groups.map(() => false);
 
     this._strength = 1;
     this._game = null;
@@ -135,27 +140,35 @@ export class PassiveHolder {
   }
 
   _reconcilePresence(groupIndex) {
-    const game = this._game;
-    const group = this.groups[groupIndex];
+    if (this._presenceBusy[groupIndex]) return;
+    this._presenceBusy[groupIndex] = true;
 
-    const { result: shouldBeActive, deps } = game.reactor.track(() =>
-      meetsRequirements(game, group),
-    );
+    try {
+      const game = this._game;
+      const group = this.groups[groupIndex];
 
-    const isActive = this._entries[groupIndex].length > 0;
+      const { result: shouldBeActive, deps } = game.reactor.track(() =>
+        meetsRequirements(game, group),
+      );
 
-    if (shouldBeActive && !isActive) {
-      this._activateGroup(groupIndex);
-    } else if (!shouldBeActive && isActive) {
-      this._deactivateGroup(groupIndex);
+
+      this._updateSubscription(
+        this._presenceSubs,
+        groupIndex,
+        deps,
+        () => this._reconcilePresence(groupIndex),
+      );
+
+      const isActive = this._entries[groupIndex].length > 0;
+
+      if (shouldBeActive && !isActive) {
+        this._activateGroup(groupIndex);
+      } else if (!shouldBeActive && isActive) {
+        this._deactivateGroup(groupIndex);
+      }
+    } finally {
+      this._presenceBusy[groupIndex] = false;
     }
-
-    this._updateSubscription(
-      this._presenceSubs,
-      groupIndex,
-      deps,
-      () => this._reconcilePresence(groupIndex),
-    );
   }
 
   _activateGroup(groupIndex) {
@@ -180,11 +193,7 @@ export class PassiveHolder {
         entry.sub = null;
       }
 
-      entry.instances = reconcileInstances(
-        game,
-        entry.instances,
-        [],
-      );
+      reconcileInstances(game, entry.instances, []);
     }
 
     this._entries[groupIndex] = [];
@@ -197,11 +206,6 @@ export class PassiveHolder {
       resolveEffect(game, entry.raw, this._strength),
     );
 
-    entry.instances = reconcileInstances(
-      game,
-      entry.instances,
-      resolvedList,
-    );
 
     if (entry.sub) {
       game.reactor.resubscribe(entry.sub, deps);
@@ -211,6 +215,8 @@ export class PassiveHolder {
         () => this._reconcileRawEffect(entry),
       );
     }
+
+    reconcileInstances(game, entry.instances, resolvedList);
   }
 
   _updateSubscription(subscriptions, index, deps, callback) {
@@ -224,4 +230,3 @@ export class PassiveHolder {
     }
   }
 }
-
