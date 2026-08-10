@@ -50,6 +50,12 @@ export class Reactor {
     }
   }
 
+  notifyAll() {
+    for (const cellKey of [...this._subscribers.keys()]) {
+      this.notify(cellKey);
+    }
+  }
+
   subscribe(cellKeys, run) {
     const sub = { run, cellKeys: EMPTY_DEPS };
     this._resubscribe(sub, cellKeys);

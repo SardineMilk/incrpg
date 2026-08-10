@@ -206,7 +206,6 @@ export class PassiveHolder {
       resolveEffect(game, entry.raw, this._strength),
     );
 
-
     if (entry.sub) {
       game.reactor.resubscribe(entry.sub, deps);
     } else if (deps.size > 0) {

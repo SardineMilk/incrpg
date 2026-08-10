@@ -276,6 +276,15 @@ export const INHERENT_EFFECTS = {
     ],
   },
 
+  force_notify_per_tick: {
+    tags: ["system"],
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [eff.forceNotifyAll()]
+      }
+    ],
+  },
 
   tick_counter: {
     tags: ["system"],
@@ -309,6 +318,11 @@ export const INHERENT_EFFECTS = {
         ]
       },
     ]
+  },
+
+  test2: {
+    tags: ["system"],
+    passives: [eff.changeStrength("test2", { multiplier: 2}), eff.changeValue("staminaMax", 1)]
   },
 
   mana_shield: {

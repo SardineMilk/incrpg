@@ -425,6 +425,16 @@ export const EFFECT_DEFS = {
     }
   },
 
+  forceNotifyAll: {
+    create: () => ({ type: "forceNotifyAll" }),
+    apply(game, e) {
+      game.reactor.notifyAll();
+    },
+    display(game, e) {
+      return `force a full reactor notify pass`;
+    }
+  },
+
   log: {
     create: (str) => ({ type: "log", str }),
     apply(game, e) {
