@@ -1,5 +1,5 @@
 import { EFFECT_DEFS } from "../structures/effectDefs.js";
-import { processModifier, processTrigger } from "./events.js";
+import { processTrigger } from "./events.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
 import { resolveFormulas } from "../structures/formulaDefs.js";
 import { tagsOf } from "../utils/tagIndex.js";
@@ -30,13 +30,13 @@ function changeEffectStrength(game, effect, multiplier) {
 export function applyResolved(game, e) {
   const def = EFFECT_DEFS[e.type];
 
-  processModifier(game, e.type, e);
-  if (e.cancelled) return;
+  processTrigger(game, e.type, e, "pre");
+  if (e.cancelled) return; // Cancels *after* all pre-triggers have executed
 
   const result = def.apply(game, e);
 
-  const resultType = result || e.type;
-  processTrigger(game, resultType, e);
+  const resultType = result || e.type;  // TODO - additive not replacing
+  processTrigger(game, resultType, e, "post");
 }
 
 /* 

@@ -46,6 +46,11 @@ export const TRIGGER_DEFS = {
     check: () => true,
   },
 
+  changeValue: {
+    create: (id) => ({ type: "changeValue", id }),
+    check: (trigger, ctx) => ctx.id === trigger.id,
+  },
+
   valueGain: {
     create: (id, min = 1) => ({ type: "valueGain", id, min }),
     check: (trigger, ctx) =>

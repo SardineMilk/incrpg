@@ -234,9 +234,10 @@ export const INHERENT_EFFECTS = {
   
   action_exclusivity: {
     tags: ["system", "singularity"],
-    modifiers: [
+    triggers: [
       {
         event: evt.activate(),
+        phase: "pre",
         requirements: [req.hasTag(fml.id(), "actions")],
         effects: [
           eff.deactivate(sel.active(sel.tags("actions"))),
@@ -247,9 +248,10 @@ export const INHERENT_EFFECTS = {
   },
   form_exclusivity: {
     tags: ["system", "singularity"],
-    modifiers: [
+    triggers: [
       {
         event: evt.activate(),
+        phase: "pre",
         requirements: [req.hasTag(fml.id(), "form")],
         effects: [eff.deactivate(sel.active(sel.tags("form")))],
       },
@@ -257,9 +259,10 @@ export const INHERENT_EFFECTS = {
   },
   location_exclusivity: {
     tags: ["system", "singularity"],
-    modifiers: [
+    triggers: [
       {
         event: evt.activate(),
+        phase: "pre",
         requirements: [req.hasTag(fml.id(), "locations")],
         effects: [eff.deactivate(sel.active(sel.tags("locations")))],
       },
@@ -267,9 +270,10 @@ export const INHERENT_EFFECTS = {
   },
   activity_exclusivity: {
     tags: ["system", "singularity"],
-    modifiers: [
+    triggers: [
       {
         event: evt.activate(),
+        phase: "pre",
         requirements: [req.hasTag(fml.id(), "activities")],
         effects: [eff.deactivate(sel.active(sel.tags("activities")))],
       },
@@ -288,9 +292,10 @@ export const INHERENT_EFFECTS = {
 
   tick_counter: {
     tags: ["system"],
-    modifiers: [
+    triggers: [
       {
         event: evt.tick(),
+        phase: "pre",
         effects: [eff.changeValue("current_tick", 1)]
       }
     ]
@@ -318,11 +323,6 @@ export const INHERENT_EFFECTS = {
         ]
       },
     ]
-  },
-
-  test2: {
-    tags: ["system"],
-    passives: [eff.changeStrength("test2", { multiplier: 2}), eff.changeValue("staminaMax", 1)]
   },
 
   test_prng: {
@@ -369,14 +369,43 @@ export const INHERENT_EFFECTS = {
 
   climbing_height_gain: {
     tags: ["system"],
-    modifiers: [
+    triggers: [
       {
         event: evt.progress("height"),
+        phase: "pre",
         effects: [
           eff.modifyAmountMult(1),
         ]
       }
     ]
+  },
+
+  // TODO - fix this
+  /*
+  * Bug replication:
+  * Activate blood_mana and mana_shield
+  * Allow the notify stack to resolve
+  * Deactivate both conditions
+  * 
+  * Expected behaviour:
+  * - the modified amounts are tracked and removed
+  * - healthMax returns to baseline
+  * Actual behaviour:
+  * - The modified amounts are not tracked and removed
+  * - This leads to an increase in 1 for every notify that resolved
+  */
+   modify_test: {
+    tags: ["system"],
+    triggers: [
+      {
+        event: evt.changeValue("healthMax"),
+        phase: "pre",
+        requirements: [req.gt(fml.amount(), 0)],
+        effects: [
+          eff.modifyAmount(1)
+        ],
+      },
+    ],
   },
 
 
@@ -441,9 +470,10 @@ const TRAITS = {
   // modifiers to be able to hook formula resolution events
   // formulas to be modifiable
   loaded_die: {
-    modifiers: [
+    triggers: [
       {
         event: null,  // on fml.roll()
+        phase: "pre",
         passives: null // increase roll.min by 1
       },
     ]

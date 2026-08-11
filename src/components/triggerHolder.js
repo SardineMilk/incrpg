@@ -19,10 +19,13 @@ export class TriggerHolder {
     return (def.triggers?.length ?? 0) > 0;
   }
 
-  collect(game, triggerType, context) {
+  collect(game, triggerType, context, phase) {
     const pending = [];
     for (const t of this.triggerDefs) {
+      t.phase ??= "post";  // TODO - do in state_creator.js
+
       if (t.event.type !== triggerType) continue;
+      if (t.phase !== phase) continue;
       if (!this._matches(game, t.event, context)) continue;
       if (!meetsRequirements(game, t)) continue;
       for (const effect of t.effects) pending.push(effect);

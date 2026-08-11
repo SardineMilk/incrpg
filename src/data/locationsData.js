@@ -57,7 +57,7 @@ export const LOCATIONS = {
   * Festering Fields
   *
   * The festering fields used to be a thriving necromancy-powered social commune
-  * Increases in life-based agriculture caused the community to collapse
+  * The huge decrease in demand caused it to collapse
   * The workers were left to keep farming, but the farm slowly decayed over years
   * Undead went feral
   * Tongue-in-cheek social commentary

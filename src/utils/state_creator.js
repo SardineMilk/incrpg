@@ -7,7 +7,6 @@ import { ACTIVITIES } from "../data/activitiesData.js"
 import { StatLayer } from "../components/statLayer.js";
 import { PassiveHolder } from "../components/passiveHolder.js";
 import { TriggerHolder } from "../components/triggerHolder.js";
-import { ModifierHolder } from "../components/modifierHolder.js";
 import { CompletionHolder } from "../components/completionHolder.js";
 import { LevelHolder } from "../components/levelHolder.js";
 
@@ -92,21 +91,18 @@ export function initialiseState() {
   registerEntities(game.registry, NAMESPACES.actions, [
     PassiveHolder,
     TriggerHolder,
-    ModifierHolder,
     CompletionHolder,
   ]);
 
   registerEntities(game.registry, NAMESPACES.activities, [
     PassiveHolder,
     TriggerHolder,
-    ModifierHolder,
     CompletionHolder,
   ]);
 
   registerEntities(game.registry, NAMESPACES.conditions, [
     PassiveHolder,
     TriggerHolder,
-    ModifierHolder,
     StatLayer,
     CompletionHolder,
   ]);
@@ -114,7 +110,6 @@ export function initialiseState() {
   registerEntities(game.registry, NAMESPACES.locations, [
     PassiveHolder,
     TriggerHolder,
-    ModifierHolder
   ]);
 
   return game;

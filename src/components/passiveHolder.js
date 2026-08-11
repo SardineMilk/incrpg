@@ -52,6 +52,7 @@ function reconcileInstance(game, instances, key, next) {
   }
 }
 
+// TODO - check if modifying causes drift
 function reconcileInstances(game, instances, resolvedList) {
   const seen = new Set();
 

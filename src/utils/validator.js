@@ -7,7 +7,7 @@ const REGISTRIES = { effect: EFFECT_DEFS, requirement: REQUIREMENT_DEFS, trigger
 const EFFECT_LIST_FIELDS = new Set(["effects", "result", "level", "success", "failure"]);
 const MILESTONE_FIELD = "milestones";
 const REQUIREMENT_LIST_FIELD = "requirements";
-const TRIGGER_LIST_FIELDS = new Set(["triggers", "modifiers"]);
+const TRIGGER_LIST_FIELDS = new Set(["triggers"]);
 
 export function validate(conditions, skills, actions, locations = {}) {
   console.log("Static Validation: ");
