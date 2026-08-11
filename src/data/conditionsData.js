@@ -325,6 +325,16 @@ export const INHERENT_EFFECTS = {
     passives: [eff.changeStrength("test2", { multiplier: 2}), eff.changeValue("staminaMax", 1)]
   },
 
+  test_prng: {
+    tags: [],
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [eff.sendMessage("SYSTEM", fml.roll(0, 99))],
+      }
+    ],
+  },
+
   mana_shield: {
     passives: [eff.changeValue("healthMax", fml.value("mentalMax"))]
   },

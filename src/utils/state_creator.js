@@ -43,6 +43,15 @@ const NAMESPACES = {
 */
 const MAX_STACK_DEPTH = 64;
 
+function rngFactory(seed) {
+  return function() {
+    seed = (seed * 1103515245 + 12345) % 2147483648;
+    return seed / 2147483648;
+  };
+}
+
+
+
 export function initialiseState() {
   const game = {};
   game.registry = new EntityRegistry();
@@ -50,6 +59,7 @@ export function initialiseState() {
   game.context = new ContextStack(MAX_STACK_DEPTH);
   game.candidateScope = new CandidateScope();
   game.reactor = new Reactor(MAX_STACK_DEPTH);
+  game.rng = rngFactory(0);
 
   // TODO - if these are removed values are NaN until changed
   game.values = {
