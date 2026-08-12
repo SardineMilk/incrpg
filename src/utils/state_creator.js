@@ -43,10 +43,14 @@ const NAMESPACES = {
 const MAX_STACK_DEPTH = 64;
 
 function rngFactory(seed) {
-  return function() {
-    seed = (seed * 1103515245 + 12345) % 2147483648;
-    return seed / 2147483648;
+  let state = seed
+  const rng = () => {
+    state = (state * 1103515245 + 12345) % 2147483648;
+    return state / 2147483648;
   };
+  rng.getSeed = () => state;
+  rng.setSeed = (s) => { state = s; };
+  return rng
 }
 
 
