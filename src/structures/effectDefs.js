@@ -1,6 +1,7 @@
 import { LogType } from "../game/log.js";
 import { LOCATIONS } from "../data/locationsData.js";
 import { processTrigger } from "../game/events.js";
+import { scaleAmount, scaleStatLayer } from "./scaling.js";
 /*
  * Each entry defines one effect type:
  *
@@ -15,26 +16,6 @@ import { processTrigger } from "../game/events.js";
  * Effects with a `remove` method are reversible.
  * Effects without `remove` are fire-and-forget (tick effects, one-time rewards).
  */
-
-function scaleAmount(game, effect, mul) {
-  const prev = effect.amount;
-  return {
-    ...effect,
-    amount: (g) => (typeof prev === "function" ? prev(g) : prev) * mul,
-  };
-}
-
-function scaleStatLayer(game, effect, mul) {
-  const prevFlat = effect.flat;
-  const prevPerc = effect.percent;
-  const prevMult = effect.multiplier;
-  return {
-    ...effect,
-    flat:       (g) => (typeof prevFlat === "function" ? prevFlat(g) : prevFlat) * mul,
-    percent:    (g) => (((typeof prevPerc === "function" ? prevPerc(g) : prevPerc) - 1) * mul) + 1,
-    multiplier: (g) => (((typeof prevMult === "function" ? prevMult(g) : prevMult) - 1) * mul) + 1,
-  };
-}
 
 
 const EPSILON = 1e-9;
