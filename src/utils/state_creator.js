@@ -9,6 +9,7 @@ import { PassiveHolder } from "../components/passiveHolder.js";
 import { TriggerHolder } from "../components/triggerHolder.js";
 import { CompletionHolder } from "../components/completionHolder.js";
 import { LevelHolder } from "../components/levelHolder.js";
+import { ModifierHolder } from "../components/modifierHolder.js";
 
 import { generateTagIndex } from "./tagIndex.js";
 import { EntityRegistry, registerEntities } from "./entityRegistry.js";
@@ -87,7 +88,6 @@ export function initialiseState() {
     generateTagIndex(dataset);
   }
 
-  // Skills
   registerEntities(game.registry, NAMESPACES.skills, [
     LevelHolder
   ]);
@@ -95,6 +95,7 @@ export function initialiseState() {
   registerEntities(game.registry, NAMESPACES.actions, [
     PassiveHolder,
     TriggerHolder,
+    ModifierHolder,
     CompletionHolder,
   ]);
 
@@ -107,6 +108,7 @@ export function initialiseState() {
   registerEntities(game.registry, NAMESPACES.conditions, [
     PassiveHolder,
     TriggerHolder,
+    ModifierHolder,
     StatLayer,
     CompletionHolder,
   ]);

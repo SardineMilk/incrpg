@@ -89,34 +89,6 @@ function deactivateEntity(game, entity) {
 
 
 export const EFFECT_DEFS = {
-  // Modifiers
-  modifyAmount: {
-    create: (amount) => ({ type: "modifyAmount", amount }),
-    apply(game, e) {
-      const old = game.context.get("amount") 
-      game.context.set("amount", old+e.amount);
-    },
-    scale: scaleAmount,
-  },
-
-  // TODO - this should be StatLayer's problem
-  // Some kind of auto-conversion?
-  modifyAmountMult: {
-    create: (amount) => ({ type: "modifyAmountMult", amount }),
-    apply(game, e) {
-      const old = game.context.get("amount") 
-      game.context.set("amount", old*e.amount);
-    },
-    scale: scaleAmount,
-  },
-
-  cancelEffect: {
-    create: () => ({ type: "cancelEffect" }),
-    apply(game, e) {
-      e.cancelled = true;
-    }
-  },
-
   // ── LevelHolder ────────────────────────────────────────────────────────────────
 
   gainXp: {

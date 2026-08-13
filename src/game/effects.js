@@ -3,19 +3,22 @@ import { processTrigger } from "./events.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
 import { resolveFormulas } from "../structures/formulaDefs.js";
 import { tagsOf } from "../utils/tagIndex.js";
+import { applyModifiers } from "../components/modifierHolder.js";
 
 
 // Resolves an effect's targets + formulas, scaling by strength if required.
 // Exported (was private) - the reactive passive reconciler needs to re-run
 // this same resolution step on demand, outside of a full applyEffect().
 export function resolveEffect(game, effect, strength = 1) {
-  const scaledEffect = strength === 1
-    ? effect
-    : changeEffectStrength(game, effect, strength);
+  const scaledEffect = strength === 1 ? effect : changeEffectStrength(game, effect, strength);
 
   const targets = resolveTargets(game, scaledEffect);
-  return targets.map(target => resolveFormulas(game, target));
-}
+  return targets.map(target => {
+    const resolved = resolveFormulas(game, target)
+    return applyModifiers(game, resolved)
+  });
+
+  }
 
 function changeEffectStrength(game, effect, multiplier) {
   const def = EFFECT_DEFS[effect.type];

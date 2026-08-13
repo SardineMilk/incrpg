@@ -1,4 +1,4 @@
-import {eff, req, evt, sel, fml } from "../structures/structures.js";
+import {eff, req, evt, sel, fml, mod } from "../structures/structures.js";
 
 /*
 * Worldbuilding
@@ -369,42 +369,26 @@ export const INHERENT_EFFECTS = {
 
   climbing_height_gain: {
     tags: ["system"],
-    triggers: [
+    modifiers: [
       {
         event: evt.progress("height"),
-        phase: "pre",
-        effects: [
-          eff.modifyAmountMult(1),
+        modify: [
+          mod.amountMult(1),
         ]
       }
     ]
   },
 
-  // TODO - fix this
-  /*
-  * Bug replication:
-  * Activate blood_mana and mana_shield
-  * Allow the notify stack to resolve
-  * Deactivate both conditions
-  * 
-  * Expected behaviour:
-  * - the modified amounts are tracked and removed
-  * - healthMax returns to baseline
-  * Actual behaviour:
-  * - The modified amounts are not tracked and removed
-  * - This leads to an increase in 1 for every notify tha t resolved
-  */
+
    modify_test: {
     tags: ["system"],
-    triggers: [
+
+    modifiers: [
       {
         event: evt.changeValue("healthMax"),
-        phase: "pre",
         requirements: [req.gt(fml.amount(), 0)],
-        effects: [
-          eff.modifyAmount(1)
-        ],
-      },
+        modify: [mod.amount(0)]
+      }
     ],
   },
 

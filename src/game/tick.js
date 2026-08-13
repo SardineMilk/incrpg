@@ -22,8 +22,6 @@ import { applyEffect }                          from "./effects.js";
 * - Save/loading
 *   - determine what data needs saved, and how
 *   - can `game` just get slapped into a file?
-* - Separate mod.foo() from eff.foo()
-*   - modifiers need applied *before* resolved effect is saved for PassiveHolder    
 */
 
 
