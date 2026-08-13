@@ -392,7 +392,7 @@ export const INHERENT_EFFECTS = {
   * - healthMax returns to baseline
   * Actual behaviour:
   * - The modified amounts are not tracked and removed
-  * - This leads to an increase in 1 for every notify that resolved
+  * - This leads to an increase in 1 for every notify tha t resolved
   */
    modify_test: {
     tags: ["system"],

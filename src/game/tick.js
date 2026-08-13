@@ -13,9 +13,7 @@ import { applyEffect }                          from "./effects.js";
 *   - Attributes are StatLayers rather than skills
 *     - They increase the strength of "stat_effect" conditions
 *
-* - Dynamic passive/level effect handling
-* - Activities system
-*   - Allow expansion into combat
+* - Combat system
 * - Items
 * - UI framework
 * - Visibility requirements
@@ -24,7 +22,8 @@ import { applyEffect }                          from "./effects.js";
 * - Save/loading
 *   - determine what data needs saved, and how
 *   - can `game` just get slapped into a file?
-*   
+* - Separate mod.foo() from eff.foo()
+*   - modifiers need applied *before* resolved effect is saved for PassiveHolder    
 */
 
 

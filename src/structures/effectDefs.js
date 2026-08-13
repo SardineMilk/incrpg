@@ -90,7 +90,6 @@ function deactivateEntity(game, entity) {
 
 export const EFFECT_DEFS = {
   // Modifiers
-  // TODO - static validator check these aren't used in trigger, only modifier block
   modifyAmount: {
     create: (amount) => ({ type: "modifyAmount", amount }),
     apply(game, e) {
