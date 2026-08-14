@@ -8,7 +8,7 @@ export function scaleStatLayer(_game, effect, mul) {
   return {
     ...effect,
     flat:       (g) => (typeof prevFlat === "function" ? prevFlat(g) : prevFlat) * mul,
-    percent:    (g) => (((typeof prevPerc === "function" ? prevPerc(g) : prevPerc) - 1) * mul) + 1,
+    percent:    (g) => (typeof prevPerc === "function" ? prevPerc(g) : prevPerc) * mul,
     multiplier: (g) => (((typeof prevMult === "function" ? prevMult(g) : prevMult) - 1) * mul) + 1,
   };
 }
