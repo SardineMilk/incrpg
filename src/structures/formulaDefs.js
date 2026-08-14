@@ -43,7 +43,7 @@ const definitions = {
     return game.registry.get(id, "CompletionHolder")?.progressOf(meter);
   },
 
-  // TODO - generalize this
+  // TODO - generalize this, remove direct reference to data
   parent: (_game, id) => SKILLS[id]?.parent,
 
   add: (_game, x, y) => x + y,

@@ -19,9 +19,6 @@ export function validate(conditions, skills, actions, locations = {}) {
   console.log("- checking for duplicate ids");
   checkDuplicateIds(namespaces, errors);
 
-  console.log("- checking for dynamic level effects");
-  checkStaticLevelEffects(skills, errors);
-
   console.log("- checking for unknown effect/requirement/trigger types");
   checkKnownTypes(namespaces, errors, warnings);
 
@@ -59,25 +56,6 @@ function checkDuplicateIds(collections, errors) {
   }
 }
 
-function checkStaticLevelEffects(skills, errors) {
-  for (const [skillId, skill] of Object.entries(skills)) {
-    checkEffectListIsStatic(skillId, "level", skill.level ?? [], errors);
-    for (const [milestoneLevel, effects] of Object.entries(skill.milestones ?? {})) {
-      checkEffectListIsStatic(skillId, `milestones[${milestoneLevel}]`, effects, errors);
-    }
-  }
-}
-
-function checkEffectListIsStatic(entityId, listName, effects, errors) {
-  const nonStaticFormulaIds = ["context"];
-  for (const effect of effects) {
-    for (const [field, value] of Object.entries(effect)) {
-      if (nonStaticFormulaIds.includes(field)) {
-        errors.push(`${entityId}.${listName}: non-static "${field}" formula in a static level-effect list`);
-      }
-    }
-  }
-}
 
 
 function checkKnownTypes(namespaces, errors, warnings) {
