@@ -195,7 +195,7 @@ export const INHERENT_EFFECTS = {
         event: evt.gainXp(),
         effects: [
           eff.gainXp(
-            fml.skillParent(fml.context("id")),
+            fml.parent(fml.context("id")),
             fml.context("amount"),
            ),
         ]
@@ -507,8 +507,7 @@ const TEMP_CONDITIONS = {
 
   wet: {
     name: "Wet",
-    description:
-      "You're soaked. Lowers cold resistance, increases fire resistance",
+    description: "You're soaked to the bone",
     passives: [
 
     ],
@@ -516,8 +515,7 @@ const TEMP_CONDITIONS = {
 
   chilly: {
     name: "Chilly",
-    description:
-      "You feel chilly. You move and regenerate stamina slightly slower",
+    description: "You feel chilly. You move and regenerate stamina slightly slower",
     passives: [
       eff.levelBonus("agility", {multiplier: 0.9}),
       eff.changeStrength("stamina_regen", {multiplier: 0.7}),
@@ -526,9 +524,11 @@ const TEMP_CONDITIONS = {
   
   cold: {
     name: "Cold",
-    description:
-      "You feel cold. You move and regenerate stamina slower. You have a slight mental drain.",
-    passives: [eff.levelBonus("agility", {multiplier: 0.7})]
+    description: "You feel very cold",
+    passives: [
+      eff.levelBonus("agility", {multiplier: 0.7}),
+      eff.changeStrength("stamina_regen", {multiplier: 0.4}),
+    ]
   },
 
   injury: {

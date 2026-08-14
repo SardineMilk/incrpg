@@ -43,7 +43,8 @@ const definitions = {
     return game.registry.get(id, "CompletionHolder")?.progressOf(meter);
   },
 
-  skillParent: (_game, skill) => SKILLS[skill]?.parent,
+  // TODO - generalize this
+  parent: (_game, id) => SKILLS[id]?.parent,
 
   add: (_game, x, y) => x + y,
   sub: (_game, x, y) => x - y,

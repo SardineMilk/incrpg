@@ -91,6 +91,9 @@ export function initialiseState() {
   registerEntities(game.registry, NAMESPACES.skills, [
     LevelHolder
   ]);
+  for (const id in NAMESPACES.skills) {
+    game.registry.get(id, "LevelHolder").initPassives(game);
+  }
 
   registerEntities(game.registry, NAMESPACES.actions, [
     PassiveHolder,

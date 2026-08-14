@@ -299,10 +299,11 @@ export const EFFECT_DEFS = {
   changeValue: {
     create: (id, amount) => ({ type: "changeValue", id, amount }),
     apply(game, e) {
-      game.values[e.id] = game.values[e.id] || 0;
-      game.values[e.id] += e.amount;
+      // changeValue also creates the value if nonexistent
+      game.values[e.id] ||= 0;
       if (e.amount == 0) return;
 
+      game.values[e.id] += e.amount;
       game.reactor.notify(`value:${e.id}`);
 
       if (e.amount > 0) return "valueGain";
