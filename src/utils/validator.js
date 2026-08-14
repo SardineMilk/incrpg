@@ -22,6 +22,9 @@ export function validate(conditions, skills, actions, locations = {}) {
   console.log("- checking for unknown effect/requirement/trigger types");
   checkKnownTypes(namespaces, errors, warnings);
 
+  //console.log("- checking for misused effects");
+  // TODO - use checkReactiveEffectSupport
+
   // TODO - orphan tags
   // Tags that are referenced but not existent in the data
   // To mitigate misspelling causing silent errors
@@ -56,7 +59,14 @@ function checkDuplicateIds(collections, errors) {
   }
 }
 
-
+function checkReactiveEffectSupport(skillId, listName, effects, errors) {
+  for (const effect of effects) {
+    const def = EFFECT_DEFS[effect.type];
+    if (!def) continue; // unknown-type already caught elsewhere
+    if (!def.scale) errors.push(`${skillId}.${listName}: effect "${effect.type}" has no scale() — level-scaling will silently no-op`);
+    if (!def.diff)  errors.push(`${skillId}.${listName}: effect "${effect.type}" has no diff() — will fall back to remove+reapply every reconciliation`);
+  }
+}
 
 function checkKnownTypes(namespaces, errors, warnings) {
   for (const [namespaceId, dataset] of Object.entries(namespaces)) {

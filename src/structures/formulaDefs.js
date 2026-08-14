@@ -1,6 +1,5 @@
-import { SKILLS } from "../data/skillsData.js";
 import { isSelector } from "./selectorDefs.js";
-import { byTag } from "../utils/tagIndex.js";
+import { byTag, parentOf } from "../utils/tagIndex.js";
 
 const res = (val, game) => (typeof val === "function" ? val(game) : val);
 const lift =
@@ -43,8 +42,7 @@ const definitions = {
     return game.registry.get(id, "CompletionHolder")?.progressOf(meter);
   },
 
-  // TODO - generalize this, remove direct reference to data
-  parent: (_game, id) => SKILLS[id]?.parent,
+  parent: (_game, id) => parentOf(id),
 
   add: (_game, x, y) => x + y,
   sub: (_game, x, y) => x - y,

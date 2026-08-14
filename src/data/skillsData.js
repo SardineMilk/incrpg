@@ -1,5 +1,4 @@
-import { eff } from "../structures/structures.js";
-
+import { eff, fml, sel } from "../structures/structures.js";
 
 
 export const SKILLS = {
@@ -11,7 +10,7 @@ export const SKILLS = {
   * Strength     - +health/stamina
   * 
   * Agility      - +stamina
-  * Wit   - +stamina/mental
+  * Wit          - +stamina/mental
   * 
   * Intelligence - +mental
   * Willpower    - +mental/health

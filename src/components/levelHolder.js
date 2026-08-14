@@ -1,6 +1,8 @@
 import { applyEffect, negateEffect } from "../game/effects.js";
 import { StatLayer } from "./statLayer.js";
 import { PassiveHolder } from "./passiveHolder.js";
+import { req } from "../structures/requirementDefs.js";
+import { fml } from "../structures/formulaDefs.js";
 
 function xpToNext(level) {
   const scalingFactor = 100;
@@ -11,7 +13,7 @@ function xpToNext(level) {
 // Upon reaching level 1, it is set to 1/10 instead of 11/10
 
 export class LevelHolder {
-    constructor(levelEffects = [], milestones = {}, name) {
+    constructor(levelEffects = [], milestones = {}, name, id) {
         this.milestones = milestones || {};
         this.baseLevel = 0;
         this.xp = 0;
@@ -21,20 +23,31 @@ export class LevelHolder {
         this.name = name;
 
         this._levelPassives = new PassiveHolder([{ requirements: [], effects: levelEffects || [] }]);
+    
+        this._milestonePassives = new PassiveHolder(
+            Object.entries(this.milestones).map(([levelStr, effects]) => ({
+                requirements: [req.geq(fml.level(id), Number(levelStr))],
+                effects,
+            }))
+        );
     }
 
-    static fromDefinition(def) {
+    static fromDefinition(def, id) {
         return new LevelHolder(
             def.level,
             def.milestones,
-            def.name
+            def.name,
+            id
         );
     }
 
     get level() {
         return (this.baseLevel + this.levelBonus.flat) * this.levelBonus.percent * this.levelBonus.multiplier;
     }
-    initPassives(game) { this._levelPassives.apply(game, this.level); }
+    initPassives(game) { 
+        this._levelPassives.apply(game, this.level); 
+        this._milestonePassives.apply(game, 1);
+    }
 
     gainXp(game, amount) {
         this.xp += amount * this.xpBonus.value;
@@ -45,36 +58,25 @@ export class LevelHolder {
         while (this.xp >= xpToNext(this.baseLevel)) {
             this.xp -= xpToNext(this.baseLevel);
             this.baseLevel++;
+            // TODO - replace with evt.levelUp(id) trigger
+            // possibly modifier too?
             applyEffect(game, {
                 type: "sendMessage",
                 category: "LEVEL",
                 message: `${this.name} leveled to ${this.baseLevel}`
             });
         }
-        this._syncLevel(game);
+        this._levelPassives.reapply(game, this.level);
+
     }
 
     // Any changes to levelBonus must go through here
     changeLevelBonus(game, statChange) {
         this.levelBonus.change(statChange);
-        this._syncLevel(game);
+        this._levelPassives.reapply(game, this.level);
     }
     changeLevelBonusReverse(game, statChange) {
         this.levelBonus.changeReverse(statChange);
-        this._syncLevel(game);
+        this._levelPassives.reapply(game, this.level);
     }
-
-  _syncLevel(game) {
-    this._levelPassives.reapply(game, this.level);
-    // TODO - PassiveHolder for level milestones
-    const target = Math.floor(this.level);
-    while (this.appliedLevel < target) {
-      this.appliedLevel++;
-      for (const e of this.milestones[this.appliedLevel] || []) applyEffect(game, e);
-    }
-    while (this.appliedLevel > target) {
-      for (const e of this.milestones[this.appliedLevel] || []) negateEffect(game, e);
-      this.appliedLevel--;
-    }
-  }
 }

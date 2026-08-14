@@ -58,7 +58,7 @@ export function registerEntities(registry, data, components) {
       // So skip adding them to the registry, improving performance
       if (Component.appliesTo && !Component.appliesTo(def)) continue;
 
-      registry.add(id, Component.fromDefinition(def));
+      registry.add(id, Component.fromDefinition(def, id));
     }
   }
 }
