@@ -83,4 +83,19 @@ export class LevelHolder {
         this.levelBonus.changeReverse(statChange);
         this._levelPassives.reapply(game, this.level);
     }
+
+    getState() {
+        return {
+            baseLevel: this.baseLevel,
+            xp: this.xp,
+            xpBonus: { ...this.xpBonus },
+            levelBonus: { ...this.levelBonus },
+        };
+    }
+    setState(s) {
+        this.baseLevel = s.baseLevel;
+        this.xp = s.xp;
+        Object.assign(this.xpBonus, s.xpBonus);
+        Object.assign(this.levelBonus, s.levelBonus);
+    }
 }

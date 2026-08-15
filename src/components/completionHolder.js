@@ -70,4 +70,19 @@ export class CompletionHolder {
       return "meterMin";
     }
   }
+
+  setState(s) {
+    for (const [name, meterState] of Object.entries(s.meters ?? {})) {
+      // TODO - resetMeter is quite hacky, but needed for duration
+      this.resetMeter(name, meterState.progress);  
+      const m = this.meters.get(name);
+      if (m) m.completions = meterState.completions;
+    }
+  }
+  getState() {
+    const meters = {};
+    for (const [name, m] of this.meters) meters[name] = { progress: m.progress, completions: m.completions };
+    return { meters };
+  }
+
 }

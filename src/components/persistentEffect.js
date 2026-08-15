@@ -24,6 +24,11 @@ export class PersistentEffect {
   get isActive() { return this._active; }
   get isPresent() { return this._present; }
 
+  getState() { return [...this.instances.values()]; }
+  setState(saved) {
+    this.instances = new Map(saved.map(r => [getInstanceKey(r), r]));
+  }
+
   activate(game, strength = 1) { this._start(game, strength, true); }
   prime(game, strength = 1) { this._start(game, strength, false); }
 
@@ -68,7 +73,7 @@ export class PersistentEffect {
     }
   }
 
-  _reconcileEffect(apply) {
+  _reconcileEffect(apply = true) {
     const game = this._game;
     const { result: resolvedList, deps } = game.reactor.track(() =>
       resolveEffect(game, this.raw, this._strength));
@@ -76,7 +81,9 @@ export class PersistentEffect {
     if (this._effectSub) game.reactor.resubscribe(this._effectSub, deps);
     else if (deps.size > 0) this._effectSub = game.reactor.subscribe(deps, () => this._reconcileEffect(true));
 
-    this._reconcileInstances(resolvedList, apply);
+    if (apply || this.instances.size === 0) {
+      this._reconcileInstances(resolvedList, apply);
+    }
   }
 
   _teardownEffect() {

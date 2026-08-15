@@ -25,7 +25,6 @@ export class PassiveHolder {
   prime(game, strength = 1) { this._start(game, strength, true); }
 
   _start(game, strength, priming) {
-    if (this._applied) console.error("Passive started while applied. Either the application or warning is wrong");
     this._applied = true;
     for (const pe of this._effects) {
       if (priming) pe.prime(game, strength);
@@ -42,5 +41,10 @@ export class PassiveHolder {
   reapply(game, strength = 1) {
     if (!this._applied) return;
     for (const pe of this._effects) pe.setStrength(strength);
+  }
+
+  getState() { return this._effects.map((pe) => pe.getState()); }
+  setState(states) {
+    this._effects.forEach((pe, i) => { if (states[i]) pe.setState(states[i]); });
   }
 }

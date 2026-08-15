@@ -57,4 +57,8 @@ export class ActivationLayer {
       yield id;
     }
   }
+  
+  getActiveState(active) { return [...active.active]; }
+  restoreActive(active, ids) { for (const id of ids) active.activate(id); } // no triggers fire
+
 }

@@ -20,13 +20,6 @@ import { validate } from "./validator.js";
 import { ContextStack } from "./context.js";
 import { CandidateScope } from "./candidateScope.js";
 
-const NAMESPACES = {
-  skills:     { ...SKILLS, },
-  actions:    { ...ACTIONS, },
-  activities: { ...ACTIVITIES, },
-  conditions: { ...CONDITIONS, },
-  locations:  { ...LOCATIONS, },
-};
 
 /*
 * Some entities in the game might cause infinite loops
@@ -43,7 +36,7 @@ const NAMESPACES = {
 */
 const MAX_STACK_DEPTH = 64;
 
-function rngFactory(seed) {
+export function rngFactory(seed) {
   let state = seed
   const rng = () => {
     state = (state * 1103515245 + 12345) % 2147483648;
@@ -54,6 +47,13 @@ function rngFactory(seed) {
   return rng
 }
 
+export const NAMESPACES = {
+  skills:     { ...SKILLS, },
+  actions:    { ...ACTIONS, },
+  activities: { ...ACTIVITIES, },
+  conditions: { ...CONDITIONS, },
+  locations:  { ...LOCATIONS, },
+};
 
 
 export function initialiseState() {
@@ -123,3 +123,4 @@ export function initialiseState() {
 
   return game;
 }
+

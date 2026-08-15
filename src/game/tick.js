@@ -4,6 +4,7 @@ import { EventLog }                    from "./log.js";
 import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
 import { processTrigger }                       from "./events.js";
 import { applyEffect }                          from "./effects.js";
+import { hasStoredSave, loadFromStorage, saveToStorage } from "../utils/save.js";
 
 
 /* TODO
@@ -31,23 +32,37 @@ import { applyEffect }                          from "./effects.js";
 // TODO - figure out if this can easily be made dynamic
 const TICK_RATE = 1000 / 10;
 
+let tickCounter = 0;
 let intervalId = null;
 export function startTicking(render) {
-  const game = initialiseState();
-  window.game = game
+  let game;
+  if (hasStoredSave()) {
+    game = loadFromStorage();
+  } else {
+    game = initialiseState();
+  }
 
-  // TODO - refactor this somewhere else
   game.log = new EventLog({ container: document.getElementById("log-box") });
   game.log.container.scrollTop = game.log.container.scrollHeight;
   game.log.followTail = true;
 
-  applyEffect(game, { type: "activate", id: "startup" });
+  if (!hasStoredSave()) applyEffect(game, { type: "activate", id: "startup" });
+
+  window.game = game
+
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {
     processTrigger(game, "tick", {}, "pre");
     processTrigger(game, "tick", {}, "post");
     render(game);
+
+    // TODO - replace with something better
+    if (++tickCounter >= 100) {
+      tickCounter = 0;
+      console.log("Saving...")
+      saveToStorage(game);
+    }
 
   }, TICK_RATE);
 

@@ -63,4 +63,7 @@ export class StatLayer {
   preventDrift() {
     return;
   }
+
+  getState() { return { flat: this.flat, percent: this.percent, multiplier: this.multiplier }; }
+  setState(s) { this.flat = s.flat; this.percent = s.percent; this.multiplier = s.multiplier; }
 }
