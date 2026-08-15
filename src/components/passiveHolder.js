@@ -1,7 +1,6 @@
 import { PersistentEffect } from "./persistentEffect.js";
-import { meetsRequirements } from "../game/requirements.js";
 
-// TODO - this should be in state_creator
+// TODO - move to state_creator. Why is PassiveHolder editing the data formatting?
 function normalize(passiveDefs) {
   return passiveDefs.map((p) =>
     p && Array.isArray(p.effects)
@@ -12,13 +11,10 @@ function normalize(passiveDefs) {
 
 export class PassiveHolder {
   constructor(passiveDefs = []) {
-    this.groups = normalize(passiveDefs);
-    this._groupEffects = this.groups.map((g) => g.effects.map((raw) => new PersistentEffect(raw)));
-    this._presenceSubs = this.groups.map(() => null);
-    this._presenceBusy = this.groups.map(() => false);
-    this._strength = 1;
-    this._game = null;
-    this._priming = false;
+    const groups = normalize(passiveDefs);
+    this._effects = groups.flatMap((g) =>
+      g.effects.map((raw) => new PersistentEffect(raw, g.requirements))
+    );
     this._applied = false;
   }
 
@@ -29,66 +25,22 @@ export class PassiveHolder {
   prime(game, strength = 1) { this._start(game, strength, true); }
 
   _start(game, strength, priming) {
-    if (this._applied) {
-      console.warn("PassiveHolder.apply()/prime() called while already applied — call remove() first");
-      return;
-    }
+    if (this._applied) console.error("Passive started while applied. Either the application or warning is wrong");
     this._applied = true;
-    this._game = game;
-    this._strength = strength;
-    this._priming = priming;
-    for (let i = 0; i < this.groups.length; i++) this._reconcilePresence(i);
+    for (const pe of this._effects) {
+      if (priming) pe.prime(game, strength);
+      else pe.activate(game, strength);
+    }
   }
 
-  remove(game) {
+  remove() {
     if (!this._applied) return;
-    for (let i = 0; i < this.groups.length; i++) {
-      this._deactivateGroup(i);
-      const sub = this._presenceSubs[i];
-      if (sub) { game.reactor.unsubscribe(sub); this._presenceSubs[i] = null; }
-    }
+    for (const pe of this._effects) pe.deactivate();
     this._applied = false;
-    this._game = null;
   }
 
   reapply(game, strength = 1) {
     if (!this._applied) return;
-    this._strength = strength;
-    for (const effects of this._groupEffects) for (const pe of effects) pe.setStrength(strength);
-  }
-
-  _reconcilePresence(groupIndex) {
-    if (this._presenceBusy[groupIndex]) return;
-    this._presenceBusy[groupIndex] = true;
-    try {
-      const game = this._game;
-      const group = this.groups[groupIndex];
-      const { result: shouldBeActive, deps } = game.reactor.track(() => meetsRequirements(game, group));
-      this._updateSubscription(this._presenceSubs, groupIndex, deps, () => this._reconcilePresence(groupIndex));
-
-      const isActive = this._groupEffects[groupIndex][0]?.isActive ?? false;
-      if (shouldBeActive && !isActive) this._activateGroup(groupIndex);
-      else if (!shouldBeActive && isActive) this._deactivateGroup(groupIndex);
-    } finally {
-      this._presenceBusy[groupIndex] = false;
-    }
-  }
-
-  _activateGroup(groupIndex) {
-    for (const pe of this._groupEffects[groupIndex]) {
-      if (this._priming) pe.prime(this._game, this._strength);
-      else pe.activate(this._game, this._strength);
-    }
-  }
-
-  _deactivateGroup(groupIndex) {
-    for (const pe of this._groupEffects[groupIndex]) pe.deactivate();
-  }
-
-  _updateSubscription(subscriptions, index, deps, callback) {
-    const game = this._game;
-    const existing = subscriptions[index];
-    if (existing) game.reactor.resubscribe(existing, deps);
-    else if (deps.size > 0) subscriptions[index] = game.reactor.subscribe(deps, callback);
+    for (const pe of this._effects) pe.setStrength(strength);
   }
 }
