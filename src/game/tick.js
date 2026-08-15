@@ -24,8 +24,13 @@ import { hasStoredSave, loadFromStorage, saveToStorage } from "../utils/save.js"
 *   - uses req.foo()
 *   - used to determine if it should be shown in UI
 * - Save/loading
-*   - determine what data needs saved, and how
-*   - can `game` just get slapped into a file?
+*   - test edge cases
+*   - mainly relating to persistent effects
+* - Integrate activities into the UI
+* - Determine if push or pull requirements for activity/location and action/activity are better
+*   - pull uses existing requirement system
+*   - push is much more elegant on the content design side
+*   - a new code generation system to convert push in the data to pull at runtime?
 */
 
 
@@ -35,12 +40,10 @@ const TICK_RATE = 1000 / 10;
 let tickCounter = 0;
 let intervalId = null;
 export function startTicking(render) {
-  let game;
+  const game = initialiseState();
   if (hasStoredSave()) {
-    game = loadFromStorage();
-  } else {
-    game = initialiseState();
-  }
+    loadFromStorage(game);
+  } 
 
   game.log = new EventLog({ container: document.getElementById("log-box") });
   game.log.container.scrollTop = game.log.container.scrollHeight;

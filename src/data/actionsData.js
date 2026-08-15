@@ -92,70 +92,9 @@ export const ACTIONS = {
       eff.progress(sel.active(sel.tags("activities")), 10, "relaxation")
     ],
   },
-  
-  become_rat: {
-    name: "Become Rat King",
-    tags: ["transform"],
-    duration: 10,
-    result: [eff.activate("rat_king")]
-  },
 
-
-  test_exclusivity: {
-    name: "Disable Action Exclusivity",
-    duration: 10,
-    result: [eff.deactivate("action_exclusivity"),]
-  },
-
-  detonate_nuke: {
-    name: "Detonate Nuke (value loss recursion)",
-    duration: 10,
-    result: [eff.changeValue("test_value", -1),]
-  },
-
-  test_location: {
-    name: "Change Location",
-    duration: 10,
-    result: [eff.activate("new_meldrum"),]
-  },
-
-  test_duration: {
-    name: "Activate Test Condition",
-    duration: 10,
-    result: [eff.activate("test", 5),]
-  },
-
-  mana_shield_on: {
-    name: "Mana Shield - On",
-    duration: 10,
-    result: [eff.activate("mana_shield")]
-  },
-  mana_shield_off: {
-    name: "Mana Shield - Off",
-    duration: 10,
-    result: [eff.deactivate("mana_shield")]
-  },
-
-  blood_mana_on: {
-    name: "Blood Mana - On",
-    duration: 10,
-    result: [eff.activate("blood_mana")]
-  },
-  blood_mana_off: {
-    name: "Blood Mana - Off",
-    duration: 10,
-    result: [eff.deactivate("blood_mana")]
-  },
-  test_climbing: {
-    name: "TEST - start climbing",
-    duration: 10,
-    result: [
-      eff.activate("climb_northern_cliff"),
-    ]
-  },
-
-  test_climb_up: {
-    name: "TEST - climb up",
+  climb_up: {
+    name: "Climb Up",
     duration: 10,
     triggers: [
       {
@@ -168,6 +107,14 @@ export const ACTIONS = {
     ],
     result: [
       eff.progress(sel.active(sel.tags("activities")), 10, "height"),
+    ]
+  },
+
+  test_climbing: {
+    name: "TEST - start climbing",
+    duration: 10,
+    result: [
+      eff.activate("climb_northern_cliff"),
     ]
   },
 

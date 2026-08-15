@@ -86,16 +86,17 @@ export class LevelHolder {
 
     getState() {
         return {
-            baseLevel: this.baseLevel,
-            xp: this.xp,
-            xpBonus: { ...this.xpBonus },
-            levelBonus: { ...this.levelBonus },
+            baseLevel: this.baseLevel, xp: this.xp,
+            xpBonus: { ...this.xpBonus }, levelBonus: { ...this.levelBonus },
+            levelPassives: this._levelPassives.getState(),
+            milestonePassives: this._milestonePassives.getState(),
         };
     }
     setState(s) {
-        this.baseLevel = s.baseLevel;
-        this.xp = s.xp;
+        this.baseLevel = s.baseLevel; this.xp = s.xp;
         Object.assign(this.xpBonus, s.xpBonus);
         Object.assign(this.levelBonus, s.levelBonus);
+        this._levelPassives.setState(s.levelPassives);
+        this._milestonePassives.setState(s.milestonePassives);
     }
 }

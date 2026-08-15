@@ -146,7 +146,8 @@ export const INHERENT_EFFECTS = {
     ]
   },
 
-
+  // TODO - some actually interesting death penalty
+  // maybe incentivize recovering in bed? 
   health_death: {
     tags: ["mortal"],
     triggers: [
@@ -155,7 +156,7 @@ export const INHERENT_EFFECTS = {
         requirements: [req.valueLessThan("health", 0)],
         effects: [
           eff.sendMessage("SYSTEM", "You pass out from your injuries"),
-          eff.activate("sleep"),
+          eff.activate("sleep"),  
         ],
       }
     ],
@@ -314,59 +315,9 @@ export const INHERENT_EFFECTS = {
     ]
   },
 
-  test: {
-    triggers: [
-      {
-        event: evt.tick(),
-        effects: [
-          eff.sendMessage("system", fml.add("test condition: ", fml.duration("test")))
-        ]
-      },
-    ]
-  },
-
-  test_prng: {
-    tags: [],
-    triggers: [
-      {
-        event: evt.tick(),
-        effects: [eff.sendMessage("SYSTEM", fml.roll(0, 99))],
-      }
-    ],
-  },
-
-  mana_shield: {
-    passives: [eff.changeValue("healthMax", fml.div(fml.value("mentalMax"), 1))]
-  },
-  blood_mana: {
-    passives: [eff.changeValue("mentalMax", fml.div(fml.value("healthMax"), 1))]
-  },
-  /*
-  TEST_formula_resolution_in_selector_candidate_context: {
-    tags: ["system"],
-
-    effects: [
-      eff.gainXp(sel.tags("skills"), fml.add(0, fml.level(fml.candidate("id")))),
-    ],
-  },
-  */
-
-  nuke: {
-    tags: ["system", "game_breaking"],
-    triggers: [
-      {
-        event: evt.valueLoss("test_value"),
-        effects: [eff.changeValue("test_value", -1)],
-      }
-    ]
-  },
-
-  betterNuke: {
-    tags: ["game_breaking"],
-    passives: [eff.changeValue("healthMax", fml.value("healthMax"))],
-  },
-
-
+  // This is used by climbing skill
+  // Skill increases strength of this per level
+  // This will be a common pattern, and it's quite clunky
   climbing_height_gain: {
     tags: ["system"],
     modifiers: [
@@ -380,19 +331,6 @@ export const INHERENT_EFFECTS = {
   },
 
 
-   modify_test: {
-    tags: ["system"],
-
-    modifiers: [
-      {
-        event: evt.changeValue("healthMax"),
-        requirements: [req.gt(fml.amount(), 0)],
-        modify: [mod.amount(0)]
-      }
-    ],
-  },
-
-
 };
 
 
@@ -401,19 +339,19 @@ const TRAITS = {
     tags: ["form"],
     passives: [
       eff.changeValue("healthMax",  100),
-      eff.changeValue("staminaMax", 100),
+      eff.changeValue("staminaMax", 150),
       eff.changeValue("mentalMax",  100),
     ],
   },
 
-  rat_king: {
+  ratkin: {
     tags: ["form", "beast", "rat"],
     passives: [
       eff.changeValue("healthMax",  80),
-      eff.changeValue("staminaMax", 150),
-      eff.changeValue("mentalMax",  70),
+      eff.changeValue("staminaMax", 100),
+      eff.changeValue("mentalMax",  90),
 
-      eff.deactivate("stamina_death"),
+      // some rat-themed perk. maybe disable food poisoning?
     ],
   },
 
@@ -453,12 +391,12 @@ const TRAITS = {
   // This requires:
   // modifiers to be able to hook formula resolution events
   // formulas to be modifiable
+  // pre-triggers too preferably
   loaded_die: {
-    triggers: [
+    modifiers: [
       {
         event: null,  // on fml.roll()
-        phase: "pre",
-        passives: null // increase roll.min by 1
+        modify: null // increase roll.min by 1
       },
     ]
   },
