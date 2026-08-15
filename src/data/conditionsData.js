@@ -336,10 +336,10 @@ export const INHERENT_EFFECTS = {
   },
 
   mana_shield: {
-    passives: [eff.changeValue("healthMax", fml.value("mentalMax"))]
+    passives: [eff.changeValue("healthMax", fml.div(fml.value("mentalMax"), 1))]
   },
   blood_mana: {
-    passives: [eff.changeValue("mentalMax", fml.value("healthMax"))]
+    passives: [eff.changeValue("mentalMax", fml.div(fml.value("healthMax"), 1))]
   },
   /*
   TEST_formula_resolution_in_selector_candidate_context: {

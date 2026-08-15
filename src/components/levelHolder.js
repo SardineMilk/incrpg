@@ -48,6 +48,10 @@ export class LevelHolder {
         this._levelPassives.apply(game, this.level); 
         this._milestonePassives.apply(game, 1);
     }
+    primePassives(game) {
+        this._levelPassives.prime(game, this.level);
+        this._milestonePassives.prime(game, 1);
+    }
 
     gainXp(game, amount) {
         this.xp += amount * this.xpBonus.value;

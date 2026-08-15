@@ -12,6 +12,9 @@ import { applyEffect }                          from "./effects.js";
 *   - Each skill has parent of attribute
 *   - Attributes are StatLayers rather than skills
 *     - They increase the strength of "stat_effect" conditions
+*     - Increased mostly by milestones
+*   - Using hp/sp/mp grants xp in related attributes
+*     - 1hp = 1 con, 0.5 str, 0.5 wil
 *
 * - Combat system
 * - Items
