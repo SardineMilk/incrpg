@@ -3,11 +3,8 @@ import { StatLayer } from "./statLayer.js";
 import { PassiveHolder } from "./passiveHolder.js";
 import { req } from "../structures/requirementDefs.js";
 import { fml } from "../structures/formulaDefs.js";
+import { xpToNext } from "../utils/math.js";
 
-function xpToNext(level) {
-  const scalingFactor = 100;
-  return Math.floor(scalingFactor * Math.pow(2, level / 5));
-}
 
 // TODO - stamina regen is weird with this
 // Upon reaching level 1, it is set to 1/10 instead of 11/10
@@ -21,6 +18,7 @@ export class LevelHolder {
         this.levelBonus = new StatLayer();
         this.appliedLevel = 0; 
         this.name = name;
+        this.id = id;
 
         this._levelPassives = new PassiveHolder([{ requirements: [], effects: levelEffects || [] }]);
     
@@ -56,6 +54,7 @@ export class LevelHolder {
     gainXp(game, amount) {
         this.xp += amount * this.xpBonus.value;
         this._checkXpProgress(game);
+        game.reactor.notify(`xp:${this.id}`);
     }
 
     _checkXpProgress(game) {

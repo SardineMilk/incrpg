@@ -1,5 +1,6 @@
 import { isSelector } from "./selectorDefs.js";
 import { byTag, parentOf } from "../utils/tagIndex.js";
+import { xpToNext } from "../utils/math.js";
 
 const res = (val, game) => (typeof val === "function" ? val(game) : val);
 const lift =
@@ -21,14 +22,7 @@ const definitions = {
   // eff.gainXp(sel.tags("skills"), fml.level(fml.candidate("id")))
   candidate: (game, key) => game.candidateScope.get(key),
 
-  strength: (game, id) => {
-    game.reactor.read(`strength:${id}`);
-    return game.registry.get(id, "StatLayer")?.value;
-  },
-  level: (game, id) => {
-    game.reactor.read(`level:${id}`);
-    return game.registry.get(id, "LevelHolder")?.level;
-  },
+
   value: (game, value) => {
     game.reactor.read(`value:${value}`);
     return game.values[value];
@@ -40,6 +34,22 @@ const definitions = {
   progress: (game, id, meter) => {
     game.reactor.read(`meter:${id}:${meter}`);
     return game.registry.get(id, "CompletionHolder")?.progressOf(meter);
+  },
+  strength: (game, id) => {
+    game.reactor.read(`strength:${id}`);
+    return game.registry.get(id, "StatLayer")?.value;
+  },
+  level: (game, id) => {
+    game.reactor.read(`level:${id}`);
+    return game.registry.get(id, "LevelHolder")?.level;
+  },
+  xpToNext: (game, id) => {
+    game.reactor.read(`level:${id}`);
+    return xpToNext(game.registry.get(id, "LevelHolder")?.level);
+  },
+  xp: (game, id) => {
+    game.reactor.read(`xp:${id}`);
+    return game.registry.get(id, "LevelHolder")?.xp;
   },
 
   parent: (_game, id) => parentOf(id),

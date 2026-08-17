@@ -91,9 +91,12 @@ export const sel = {
 
   active: (...selectors) =>
     makeSelector((game) => {
-      return resolveIds(game, sel.union(...selectors))
-        .filter((id) => game.active.isActive(id));
+      return resolveIds(game, sel.union(...selectors)).filter((id) => {
+        game.reactor.read(`active:${id}`);  // read every matching entity, including inactive
+        return game.active.isActive(id);
+      });
     }),
+
 };
 
 /*
