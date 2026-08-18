@@ -330,6 +330,16 @@ export const INHERENT_EFFECTS = {
     ]
   },
 
+  level_up_message: {
+    tags: ["system"],
+    triggers: [
+      {
+        event: evt.levelUp(),
+        effects: [eff.sendMessage("SYSTEM", fml.add(fml.id(), " leveled up: ", fml.context("level")))]
+      }
+    ]
+  },
+
 
 };
 

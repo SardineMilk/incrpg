@@ -14,6 +14,7 @@ import { tagsOf } from "../utils/tagIndex.js";
 
 
 export const TRIGGER_DEFS = {
+  // TODO - replace all similar events with something like evt.apply(eff)
   activate: {
     create: (tags = []) => ({ type: "activate", tags }),
     check: (trigger, ctx) =>
@@ -102,7 +103,12 @@ export const TRIGGER_DEFS = {
   progress: {
     create: (meter="progress") => ({ type: "progress", meter}),
     check: (trigger, ctx) => (trigger.meter == null || trigger.meter === ctx.meter),
-  }
+  },
+
+  levelUp: {
+    create: (id) => ({ type: "levelUp", id }),
+    check: (trigger, ctx) => ((trigger.id == null) || (ctx.id === trigger.id))
+  },
 };
 
 export const evt = Object.fromEntries(

@@ -23,6 +23,8 @@ const definitions = {
   candidate: (game, key) => game.candidateScope.get(key),
 
 
+  // TODO - fml.name(id)
+
   value: (game, value) => {
     game.reactor.read(`value:${value}`);
     return game.values[value];
@@ -54,13 +56,13 @@ const definitions = {
 
   parent: (_game, id) => parentOf(id),
 
-  add: (_game, x, y) => x + y,
-  sub: (_game, x, y) => x - y,
-  mul: (_game, x, y) => x * y,
-  div: (_game, x, y) => x / y,
+  add: (_game, ...args) => args.reduce((a, b) => a + b, ""),  // TODO - properly test string+number handling
+  sub: (_game, ...args) => args.reduce((a, b) => a - b),
+  mul: (_game, ...args) => args.reduce((a, b) => a * b, 1),
+  div: (_game, ...args) => args.reduce((a, b) => a / b),
+  min: (_game, ...args) => Math.min(...args),
+  max: (_game, ...args) => Math.max(...args),
   neg: (_game, x) => -x,
-  min: (_game, x, y) => Math.min(x, y),
-  max: (_game, x, y) => Math.max(x, y),
   clamp: (_game, x, min, max) => Math.max(min, Math.min(max, x)),
   ternary: (_game, cond, t, f) => (cond ? t : f),
   roll: (game, min, max) => (Math.floor(game.rng() * (max - min + 1)) + min),

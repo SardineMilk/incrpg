@@ -4,6 +4,7 @@ import { PassiveHolder } from "./passiveHolder.js";
 import { req } from "../structures/requirementDefs.js";
 import { fml } from "../structures/formulaDefs.js";
 import { xpToNext } from "../utils/math.js";
+import { processTrigger } from "../game/events.js";
 
 
 // TODO - stamina regen is weird with this
@@ -59,15 +60,16 @@ export class LevelHolder {
 
     _checkXpProgress(game) {
         while (this.xp >= xpToNext(this.baseLevel)) {
+            processTrigger(game, "levelUp", { id:this.id, level:this.baseLevel+1 }, "pre")
             this.xp -= xpToNext(this.baseLevel);
             this.baseLevel++;
-            // TODO - replace with evt.levelUp(id) trigger
-            // possibly modifier too?
-            applyEffect(game, {
-                type: "sendMessage",
-                category: "LEVEL",
-                message: `${this.name} leveled to ${this.baseLevel}`
-            });
+            processTrigger(game, "levelUp", { id:this.id, level:this.baseLevel }, "post")
+        }
+        while (this.xp <= 0) {
+            processTrigger(game, "levelDown", { id:this.id, level:this.baseLevel-1 }, "pre")
+            this.xp += xpToNext(this.baseLevel-1);
+            this.baseLevel--;
+            processTrigger(game, "levelDown", { id:this.id, level:this.baseLevel }, "post")
         }
         this._levelPassives.reapply(game, this.level);
 

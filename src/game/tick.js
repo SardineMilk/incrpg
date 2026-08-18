@@ -48,6 +48,7 @@ export function startTicking(render) {
     loadFromStorage(game);
   } 
 
+  // TODO - refactor this somewhere smarter
   game.log = new EventLog({ container: document.getElementById("log-box") });
   game.log.container.scrollTop = game.log.container.scrollHeight;
   game.log.followTail = true;

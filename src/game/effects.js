@@ -33,6 +33,7 @@ function changeEffectStrength(game, effect, multiplier) {
 export function applyResolved(game, e) {
   const def = EFFECT_DEFS[e.type];
 
+  // TODO - replace with a standard trigger type
   processTrigger(game, e.type, e, "pre");
   if (e.cancelled) return; // Cancels *after* all pre-triggers have executed
 
