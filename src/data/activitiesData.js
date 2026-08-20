@@ -65,7 +65,7 @@ export const ACTIVITIES = {
 
     // TODO - proper resetting of meters upon deactivation 
     climb_northern_cliff: {
-        name: "Northern Cliff",
+        name: "Climb Northern Cliff",
         tags: ["exploration"],
         allowed: ["vertical_traversal", "climbing"],
         requirements: [],
@@ -114,12 +114,13 @@ export const ACTIVITIES = {
     },
 
     chop_tree: {
-        name: "Oak Tree",
+        name: "Chop Oak Tree",
         requirements: [],
         tags: ["gathering"],
         allowed: ["combat"],
         meters: {
             health: {
+                start: 100,
                 max: 500,
                 min: 0,
                 onMin: [],

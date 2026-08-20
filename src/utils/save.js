@@ -24,7 +24,7 @@ export function serializeGame(game) {
   return {
     version: SAVE_VERSION,
     values: structuredClone(game.values),
-    flags: structuredClone(game.flags ?? {}),
+    stats: structuredClone(game.stats),
     rngSeed: game.rng.getSeed(),
     active: [...game.active.active],
     components,

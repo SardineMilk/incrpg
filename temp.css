@@ -3,9 +3,9 @@
   --colour-background: #111827;
   --colour-surface: #1f2937;
   --colour-primary: #2563eb;
-  --colour-select:  #60a5fa;
-  --colour-border:  #374151;
-  --colour-text:    #f3f4f6;
+  --colour-select: #60a5fa;
+  --colour-border: #374151;
+  --colour-text: #f3f4f6;
 
   /* Layout */
   --radius: 1px;
@@ -76,7 +76,7 @@ footer {
 }
 
 
-#hero-panel {
+.hero-box {
   grid-column: 1;
   grid-row: 1 / 3;
 }
@@ -93,6 +93,7 @@ footer {
   grid-column: 2;
   grid-row: 2;
 }
+
 .centre-panel {
   grid-column: 2;
   grid-row: 1 / 3;
@@ -121,15 +122,13 @@ footer {
 #skills-panel {
   flex: 0 0 auto;
 }
+
 /*
   Shared Panels
 */
 
-#hero-panel,
-#skills-panel,
-#actions-panel,
-#tasks-panel,
-#activity-panel,
+.hero-box,
+.panel,
 #log-box {
   background: var(--colour-surface);
   border-radius: var(--radius);
@@ -140,6 +139,7 @@ footer {
 
 #log-box {
   flex: 0 0 300px;
+  height: 90vh;
   padding: var(--spacing-sm);
   overflow-y: auto;
 }
@@ -154,11 +154,19 @@ footer {
 .action-entry,
 .log-element {
   border-radius: var(--radius-sm);
+}
+
+/* 
+  Stat / info cards 
+*/
+
+.name-box,
+.location-box,
+.attribute-box {
   margin-bottom: var(--spacing-sm);
   padding: var(--spacing-sm);
   background: var(--colour-primary);
 }
-
 
 /* 
   Log entries 
@@ -173,75 +181,15 @@ footer {
   border: 1px solid var(--colour-border);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
-/*
-  Status
-*/
-
-
-.stats-box {
-  margin-bottom: var(--spacing-sm);
-  padding: var(--spacing-sm);
-  background: var(--colour-background);
-  /* Arrange the 6 stats in a 3x 2y grid */
-  /* or a hexagon might be interesting */
-}
 
 /*
-  Actions
+  ui.* widgets (structures/widgetDefs.js, ui/widget.js) - every widget of a
+  given type carries a base .ui-<type> class, so these rules apply uniformly
+  across the hero bars, action progress, activity meters and skill xp bars.
+  Panel-specific classes (.resource-bar, .activity-meter-row, ...) layer on
+  top of these rather than replacing them.
 */
 
-.action-option,
-.activity-option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-sm);
-
-  margin-bottom: var(--spacing-sm);
-  padding: 0.5rem;
-
-  background: var(--colour-background);
-  border: 1px solid var(--colour-border);
-
-  transition:
-    border-color var(--transition),
-    background-color var(--transition);
-}
-
-.action-option,
-.activity-option,
-.ui-bar {
-  flex: 1;
-  margin-bottom: 0;
-  margin-left: var(--spacing-sm);
-}
-
-.active-action {
-  border-color: var(--colour-select);
-  background: rgba(37, 99, 235, 0.08);
-}
-
-.action-button,
-.activity-button,
-.leave-activity-button {
-  padding: 0.5rem 0.75rem;
-
-  background: var(--colour-primary);
-  color: var(--colour-text);
-
-  font-weight: 600;
-  cursor: pointer;
-
-  transition: filter var(--transition);
-}
-
-.action-button:hover {
-  filter: brightness(1.08);
-}
-
-/*
-  ui.* widgets
-*/
 .ui-group {
   display: flex;
   flex-direction: column;
@@ -277,6 +225,83 @@ footer {
 }
 
 /*
+  Status
+*/
+
+.status-box {
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--colour-background);
+}
+
+.resource-bar .ui-bar-fill {
+  background: var(--colour-select);
+}
+
+.stats-box {
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--colour-background);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xs);
+  /* Arrange the 6 stats in a 3x 2y grid */
+  /* or a hexagon might be interesting */
+}
+
+.stats-box .attribute-box {
+  margin-bottom: 0;
+}
+
+/*
+  Actions
+*/
+
+.action-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+
+  margin-bottom: var(--spacing-sm);
+  padding: 0.5rem;
+
+  background: var(--colour-background);
+  border: 1px solid var(--colour-border);
+
+  transition:
+    border-color var(--transition),
+    background-color var(--transition);
+}
+
+.action-entry .ui-bar {
+  flex: 1;
+  margin-bottom: 0;
+  margin-left: var(--spacing-sm);
+}
+
+.active-action {
+  border-color: var(--colour-select);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.action-button {
+  padding: 0.5rem 0.75rem;
+
+  background: var(--colour-primary);
+  color: var(--colour-text);
+
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: filter var(--transition);
+}
+
+.action-button:hover {
+  filter: brightness(1.08);
+}
+
+/*
   Activity
 */
 
@@ -301,6 +326,11 @@ footer {
   background: var(--colour-select);
 }
 
+/*
+  Tooltips (ui/tooltipLayer.js, ui/widget.js) - one shared fixed-position
+  layer above everything else, so tooltips are never clipped by a
+  scrollable panel or fought over on z-index.
+*/
 
 #ui-tooltip-layer {
   position: fixed;

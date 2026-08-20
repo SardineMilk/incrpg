@@ -1,5 +1,5 @@
 import { isSelector } from "./selectorDefs.js";
-import { byTag, parentOf } from "../utils/tagIndex.js";
+import { byTag, nameOf, parentOf } from "../utils/tagIndex.js";
 import { xpToNext } from "../utils/math.js";
 
 const res = (val, game) => (typeof val === "function" ? val(game) : val);
@@ -13,7 +13,7 @@ const lift =
 // but you don't need to pass game at point of use.
 const definitions = {
   // Get data from current effect stack, with shortcuts for the most common uses
-  context: (game, key) => game.context.get(key),
+  ctx: (game, key) => game.context.get(key),
   id: (game) => game.context.get("id"),
   amount: (game) => game.context.get("amount"),
 
@@ -23,7 +23,6 @@ const definitions = {
   candidate: (game, key) => game.candidateScope.get(key),
 
 
-  // TODO - fml.name(id)
 
   value: (game, value) => {
     game.reactor.read(`value:${value}`);
@@ -55,6 +54,7 @@ const definitions = {
   },
 
   parent: (_game, id) => parentOf(id),
+  name: (game, id) => nameOf(id),
 
   add: (_game, ...args) => args.reduce((a, b) => a + b, ""),  // TODO - properly test string+number handling
   sub: (_game, ...args) => args.reduce((a, b) => a - b),

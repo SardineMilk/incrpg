@@ -20,7 +20,7 @@ export const ACTIONS = {
     ],
     result: [
       eff.gainXp("walking", 20),
-      eff.progress(sel.active(sel.tags("activity")), 1, "distance"),
+      eff.progress(sel.active(sel.tags("activities")), 1, "distance"),
     ],
   },
 
@@ -44,7 +44,7 @@ export const ACTIONS = {
     ],
     result: [
       eff.gainXp("running", 20),
-      eff.progress(sel.active(sel.tags("activity")), 2, "distance"),
+      eff.progress(sel.active(sel.tags("activities")), 2, "distance"),
     ],
   },
 
@@ -70,7 +70,7 @@ export const ACTIONS = {
     ],
     result: [
       eff.gainXp("running", 50),
-      eff.progress(sel.active(sel.tags("activity")), 5, "distance"),
+      eff.progress(sel.active(sel.tags("activities")), 5, "distance"),
     ],
   },
 
@@ -107,22 +107,6 @@ export const ACTIONS = {
     ],
     result: [
       eff.progress(sel.active(sel.tags("activities")), 10, "height"),
-    ]
-  },
-
-  test_climbing: {
-    name: "TEST - start climbing",
-    duration: 10,
-    result: [
-      eff.activate("climb_northern_cliff"),
-    ]
-  },
-
-  test_sleeping: {
-    name: "TEST - start sleeping",
-    duration: 10,
-    result: [
-      eff.activate("fall_asleep"),
     ]
   },
 

@@ -5,6 +5,8 @@ import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
 import { processTrigger }                       from "./events.js";
 import { applyEffect }                          from "./effects.js";
 import { hasStoredSave, loadFromStorage, saveToStorage } from "../utils/save.js";
+import { initUI } from "../ui/panelManager.js";
+import { renderLog } from "../ui/renderLog.js";
 
 
 /* TODO
@@ -42,7 +44,7 @@ const TICK_RATE = 1000 / 10;
 
 let tickCounter = 0;
 let intervalId = null;
-export function startTicking(render) {
+export function startTicking() {
   const game = initialiseState();
   if (hasStoredSave()) {
     loadFromStorage(game);
@@ -57,12 +59,13 @@ export function startTicking(render) {
 
   window.game = game
 
+  initUI(game)
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {
     processTrigger(game, "tick", {}, "pre");
     processTrigger(game, "tick", {}, "post");
-    render(game);
+    renderLog(game);
 
     // TODO - replace with something better
     if (++tickCounter >= 100) {

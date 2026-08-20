@@ -65,7 +65,7 @@ export class LevelHolder {
             this.baseLevel++;
             processTrigger(game, "levelUp", { id:this.id, level:this.baseLevel }, "post")
         }
-        while (this.xp <= 0) {
+        while (this.xp < 0) {
             processTrigger(game, "levelDown", { id:this.id, level:this.baseLevel-1 }, "pre")
             this.xp += xpToNext(this.baseLevel-1);
             this.baseLevel--;

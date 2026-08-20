@@ -196,8 +196,8 @@ export const INHERENT_EFFECTS = {
         event: evt.gainXp(),
         effects: [
           eff.gainXp(
-            fml.parent(fml.context("id")),
-            fml.context("amount"),
+            fml.parent(fml.id()),
+            fml.amount(),
            ),
         ]
       }
@@ -229,7 +229,7 @@ export const INHERENT_EFFECTS = {
     tags: ["system", "causality"],
     triggers: [{
       event: evt.durationExpired(),
-      effects: [eff.deactivate(fml.context("id")),eff.sendMessage("SYSTEM", "Duration expired")],
+      effects: [eff.deactivate(fml.id()),eff.sendMessage("SYSTEM", "Duration expired")],
     }],
   },
   
@@ -335,7 +335,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.levelUp(),
-        effects: [eff.sendMessage("SYSTEM", fml.add(fml.id(), " leveled up: ", fml.context("level")))]
+        effects: [eff.sendMessage("SYSTEM", fml.add("Level Up: ",fml.name(fml.id())," ",fml.ctx("level")))]
       }
     ]
   },
@@ -397,6 +397,11 @@ const TRAITS = {
   * Damage bonus against restrained targets
   */
 
+  /* Shroomkin
+  * Mushroom
+  * Eating too many strong mushrooms turns you into one
+  * 
+  */
 
   // This requires:
   // modifiers to be able to hook formula resolution events

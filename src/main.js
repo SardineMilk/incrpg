@@ -1,4 +1,4 @@
 import { startTicking } from "./game/tick.js";
-import { render } from "./ui/render.js";
 
-startTicking(render);
+// TODO - move the startTicking() functionality here
+startTicking();
