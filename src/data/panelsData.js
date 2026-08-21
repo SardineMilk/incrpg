@@ -1,6 +1,9 @@
-import { ui, req, fml, sel } from "../structures/structures.js";
-import { EFFECT_DEFS } from "../structures/effectDefs.js";
+import { req, fml, sel } from "../structures/structures.js";
+import { ui } from "../ui/widgetDefs.js";
 import { byTag, nameOf } from "../utils/tagIndex.js";
+
+import { EFFECT_DEFS } from "../structures/effectDefs.js";
+import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
 
 // TODO - don't use the raw data files
 import { ACTIONS } from "./actionsData.js";
@@ -26,6 +29,7 @@ function describeAction(game, id) {
   // TODO - group effects by trigger
   // Each tick: eff1, eff2, eff3
   // Also triggers aren't guaranteed to be tick(), that needs changed
+  // Use TRIGGER_DEFS[trig.type].display
   for (const trig of def.triggers ?? []) {
     for (const e of trig.effects ?? []) {
       const line = EFFECT_DEFS[e.type]?.display?.(game, e);

@@ -1,15 +1,29 @@
 import { applyEffect } from "../game/effects.js";
-import { resolveDynamic } from "../structures/widgetDefs.js";
 
-// TODO - renderers shouldnt be separate from defs
-export const RENDERERS = {
+
+export function resolveDynamic(env, val) {
+  if (typeof val !== "function") return val;
+  return val.length >= 2 ? val(env.game, env.id) : val(env.game);
+}
+
+export const WIDGET_DEFS = {
   text: {
+    create: (content, opts = {}) => ({ type: "text", content, ...opts }),
+    read: (env, w) => resolveDynamic(env, w.content),
     patch(el, value, w) {
       el.textContent = w.format ? w.format(value) : String(value ?? "");
     },
   },
 
   bar: {
+    create: (current, max, opts = {}) => ({ type: "bar", current, max, min: 0, ...opts }),
+    read: (env, w) => ({
+      current: resolveDynamic(env, w.current),
+      max: resolveDynamic(env, w.max),
+      min: resolveDynamic(env, w.min),
+    }),
+    diff: (prev, next) =>
+      !prev || prev.current !== next.current || prev.max !== next.max || prev.min !== next.min,
     mount(el) {
       el.innerHTML =
         `<div class="ui-bar-label"></div>` +
@@ -34,6 +48,17 @@ export const RENDERERS = {
   },
 
   button: {
+    create: (label, effects, opts = {}) => ({ type: "button", label, effects, ...opts }),
+    read: (env, w) => ({
+      label: resolveDynamic(env, w.label),
+      disabled: w.disabled ? !!resolveDynamic(env, w.disabled) : false,
+      active: w.active ? !!resolveDynamic(env, w.active) : false,
+    }),
+    diff: (prev, next) =>
+      !prev ||
+      prev.label !== next.label ||
+      prev.disabled !== next.disabled ||
+      prev.active !== next.active,
     tag: "button",
     mount(el, w, env) {
       el.type = "button";
@@ -53,12 +78,26 @@ export const RENDERERS = {
     },
   },
 
+  // source: selector | (game) => id[]     
+  //  item: (id) => widget descriptor
+  list: {
+    create: (source, item, opts = {}) => ({ type: "list", source, item, ...opts }),
+  },
+
+  // children: widget descriptor[]
   group: {
+    create: (children, opts = {}) => ({ type: "group", children, ...opts }),
     mount(el, w) {
       if (w.layout) el.classList.add(`ui-group-${w.layout}`);
     },
   },
 
-  list: {},
-  custom: {},
+  // mount: (el, game, id) => (cleanup fn | void)
+  custom: {
+    create: (mount, opts = {}) => ({ type: "custom", mount, ...opts }),
+  },
 };
+
+export const ui = Object.fromEntries(
+  Object.entries(WIDGET_DEFS).map(([key, def]) => [key, def.create]),
+);
