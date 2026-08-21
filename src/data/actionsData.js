@@ -107,11 +107,31 @@ export const ACTIONS = {
         effects: [
           eff.gainXp("climbing", 10),
           eff.changeValue("stamina", -2),
+          eff.progress(sel.active(sel.tags("activities")), -3, "grip"),
         ],
       },
     ],
     result: [
       eff.progress(sel.active(sel.tags("activities")), 10, "height"),
+    ]
+  },
+
+  climb_down: {
+    name: "Climb Down",
+    duration: 10,
+    requirements: [[req.active(sel.tags("activities", "vertical_traversal"))]],
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [
+          eff.gainXp("climbing", 15),
+          eff.changeValue("stamina", -3),
+          eff.progress(sel.active(sel.tags("activities")), -3, "grip"),
+        ],
+      },
+    ],
+    result: [
+      eff.progress(sel.active(sel.tags("activities")), -5, "height"),
     ]
   },
 

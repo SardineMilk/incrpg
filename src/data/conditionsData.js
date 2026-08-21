@@ -46,8 +46,7 @@ export const INHERENT_EFFECTS = {
       eff.activate(sel.tags("system", "conditions")),
       eff.activate(sel.tags("mortal", "conditions")),
       eff.activate("human"),
-      eff.activate("starter_hut"),
-      eff.activate("sleep"),
+      eff.activate("new_meldrum"),
     ]
   },
 
@@ -147,7 +146,12 @@ export const INHERENT_EFFECTS = {
   },
 
   // TODO - some actually interesting death penalty
-  // maybe incentivize recovering in bed? 
+  // Losing all health/stamina/mental makes you vulnerable, not dead
+  // Health - death
+  // Stamina - cannot perform actions or dodge
+  // Mental - cannot resist debuffs
+  // At beginning, you have a buff with pre trigger on death that teleports you to bed
+
   health_death: {
     tags: ["mortal"],
     triggers: [
@@ -156,7 +160,8 @@ export const INHERENT_EFFECTS = {
         requirements: [req.valueLessThan("health", 0)],
         effects: [
           eff.sendMessage("SYSTEM", "You pass out from your injuries"),
-          eff.activate("sleep"),  
+          eff.deactivate(sel.active(sel.tags("actions"))),
+          eff.deactivate(sel.active(sel.tags("activities")))
         ],
       }
     ],
@@ -169,7 +174,8 @@ export const INHERENT_EFFECTS = {
         requirements: [req.valueLessThan("stamina", 0)],
         effects: [
           eff.sendMessage("SYSTEM", "You pass out"),
-          eff.activate("sleep"),
+          eff.deactivate(sel.active(sel.tags("actions"))),
+          eff.deactivate(sel.active(sel.tags("activities")))
         ],
       }
     ],
@@ -182,7 +188,8 @@ export const INHERENT_EFFECTS = {
         requirements: [req.valueLessThan("mental", 0)],
         effects: [
           eff.sendMessage("SYSTEM", "You pass out from stress"),
-          eff.activate("sleep"),
+          eff.deactivate(sel.active(sel.tags("actions"))),
+          eff.deactivate(sel.active(sel.tags("activities")))
         ],
       }
     ],
@@ -329,6 +336,19 @@ export const INHERENT_EFFECTS = {
       }
     ]
   },
+
+  grip_restore: {
+    tags: ["system"],
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [
+          eff.progress(sel.active(sel.tags("activities")), 1, "grip")
+        ]
+      }
+    ]
+  },
+
 
   level_up_message: {
     tags: ["system"],

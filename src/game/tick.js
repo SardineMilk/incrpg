@@ -33,9 +33,8 @@ import { renderLog } from "../ui/renderLog.js";
 *   - pull uses existing requirement system
 *   - push is much more elegant on the content design side
 *   - a new code generation system to convert push in the data to pull at runtime?
-* - Bugfix reactor
-*   - sel.active() needs to register reads
-*     - should it just be removed instead?
+* - URGENT: action requirements checked constantly, not just on apply
+*   - requirementHolder?  
 */
 
 
