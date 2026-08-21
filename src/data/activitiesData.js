@@ -20,10 +20,19 @@ import {eff, req, evt, sel, fml } from "../structures/structures.js";
 *   - how should this be described in code?
 *       - activity stack? tree?
 *
+* Two options:
+* Activities define tagged actions that are valid to use
+* - Potentially more elegant?
+* - Would require a pre-processing step to convert to the latter
+* Actions define tagged activities that are value to use
+* - Works with existing architecture
+* 
+* 
 */
 export const ACTIVITIES = {
     fall_asleep: {
         name: "Try to fall asleep",
+        tags: ["rest"],
         meters: {
             relaxation: {
                 repeat: false,
@@ -42,8 +51,7 @@ export const ACTIVITIES = {
     explore_meldrum_woods: {
         name: "Explore New Meldrum Woods",
         requirements: [],
-        tags: ["exploration"],
-        allowed: ["traversal"],
+        tags: ["exploration", "traversal"],
         meters: {
             distance: {
                 max: 1000,
@@ -66,8 +74,7 @@ export const ACTIVITIES = {
     // TODO - proper resetting of meters upon deactivation 
     climb_northern_cliff: {
         name: "Climb Northern Cliff",
-        tags: ["exploration"],
-        allowed: ["vertical_traversal", "climbing"],
+        tags: ["exploration", "vertical_traversal"],
         requirements: [],
         passives: [],
         triggers: [

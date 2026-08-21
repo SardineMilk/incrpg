@@ -198,6 +198,7 @@ export class Widget {
     this._tooltipWidget = null;
   }
 
+  // TODO - a nice automatic placement algorithm
   _positionTooltip(el, spec) {
     const rect = this.el.getBoundingClientRect();
     const margin = 8;

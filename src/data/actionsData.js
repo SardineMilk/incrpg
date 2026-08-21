@@ -5,6 +5,7 @@ export const ACTIONS = {
   walk: {
     name: "Walk",
     tags: ["traversal"],
+    requirements: [[req.active(sel.tags("activities", "traversal"))]],
     duration: 100,
     triggers: [
       {
@@ -27,6 +28,7 @@ export const ACTIONS = {
   jog: {
     name: "Jog",
     tags: ["traversal"],
+    requirements: [[req.active(sel.tags("activities", "traversal"))]],
     duration: 50,
     triggers: [
       {
@@ -52,6 +54,7 @@ export const ACTIONS = {
   sprint: {
     name: "Sprint",
     tags: ["traversal"],
+    requirements: [[req.active(sel.tags("activities", "traversal"))]],
     duration: 20,
     triggers: [
       {
@@ -77,6 +80,7 @@ export const ACTIONS = {
   sleep: {
     name: "Sleep",
     tags: ["rest"],
+    requirements: [[req.active(sel.tags("activities", "rest"))]],
     duration: 10,
     triggers: [
       {
@@ -96,6 +100,7 @@ export const ACTIONS = {
   climb_up: {
     name: "Climb Up",
     duration: 10,
+    requirements: [[req.active(sel.tags("activities", "vertical_traversal"))]],
     triggers: [
       {
         event: evt.tick(),

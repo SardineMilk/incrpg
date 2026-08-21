@@ -6,6 +6,7 @@ import { EFFECT_DEFS } from "../structures/effectDefs.js";
 import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
 
 // TODO - don't use the raw data files
+// Probably add a new holder? Or use the tag registry because thats the answer to everything
 import { ACTIONS } from "./actionsData.js";
 import { ACTIVITIES } from "./activitiesData.js";
 
@@ -97,6 +98,7 @@ export const PANELS = {
         ),
       ], {
         className: "action-option",
+        requirements: ACTIONS[id]?.requirements ?? [],
         tooltip: {
           content: (game, rowId) => ui.text(describeAction(game, rowId)),
         },
