@@ -380,9 +380,6 @@ export const EFFECT_DEFS = {
       const el = document.querySelector(e.selector);
       if (el) el.classList.remove(e.className);
     },
-    display(game, e) {
-      return `add class "${e.className}" to ${e.selector}`;
-    }
   },
 
   uiStyle: {
@@ -405,9 +402,6 @@ export const EFFECT_DEFS = {
         });
       }
     },
-    display(game, e) {
-      return `update styles on ${e.selector}`;
-    }
   },
 
 
