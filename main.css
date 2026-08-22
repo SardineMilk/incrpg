@@ -19,6 +19,25 @@
   --transition: 0.2s ease;
 }
 
+
+/* Rain effect */
+.weather-rain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, var(--colour-primary) 2px, transparent 2px);
+  background-size: 20px 20px;
+  animation: rain-fall 0.5s linear infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes rain-fall {
+  from { transform: translateY(-20px); }
+  to { transform: translateY(0); }
+}
+
+
 /*
   Base
 */
@@ -46,7 +65,7 @@ body {
   min-height: 100vh;
 }
 
-.game-screen {
+#game-screen {
   display: grid;
   grid-template-columns: 260px 1fr 300px;
   grid-template-rows: 1fr auto;

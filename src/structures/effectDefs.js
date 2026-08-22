@@ -366,6 +366,51 @@ export const EFFECT_DEFS = {
     }
   },
 
+  uiClass: {
+    create: (selector, className) => ({ 
+      type: "uiClass", 
+      selector,  // DOM selector or "body", "game-screen", etc.
+      className 
+    }),
+    apply(game, e) {
+      const el = document.querySelector(e.selector);
+      if (el) el.classList.add(e.className);
+    },
+    remove(game, e) {
+      const el = document.querySelector(e.selector);
+      if (el) el.classList.remove(e.className);
+    },
+    display(game, e) {
+      return `add class "${e.className}" to ${e.selector}`;
+    }
+  },
+
+  uiStyle: {
+    create: (selector, styles) => ({ 
+      type: "uiStyle", 
+      selector,
+      styles  //e.g. { backgroundColor: "red", opacity: 0.5 }
+    }),
+    apply(game, e) {
+      const el = document.querySelector(e.selector);
+      if (el) {
+        Object.assign(el.style, e.styles);
+      }
+    },
+    remove(game, e) {
+      const el = document.querySelector(e.selector);
+      if (el) {
+        Object.keys(e.styles).forEach(key => {
+          el.style[key] = "";
+        });
+      }
+    },
+    display(game, e) {
+      return `update styles on ${e.selector}`;
+    }
+  },
+
+
   // ── Misc ──────────────────────────────────────────────────────────────────
 
   forceTrigger: {

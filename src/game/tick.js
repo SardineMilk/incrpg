@@ -35,6 +35,7 @@ import { renderLog } from "../ui/renderLog.js";
 *   - a new code generation system to convert push in the data to pull at runtime?
 * - URGENT: action requirements checked constantly, not just on apply
 *   - requirementHolder?  
+*   - or just check at triggerHolder and passiveHolder
 */
 
 
