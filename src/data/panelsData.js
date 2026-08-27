@@ -27,22 +27,47 @@ function describeAction(game, id) {
   if (!def) return "";
 
   const lines = [];
-  // TODO - group effects by trigger
-  // Each tick: eff1, eff2, eff3
-  // Also triggers aren't guaranteed to be tick(), that needs changed
-  // Use TRIGGER_DEFS[trig.type].display
-  for (const trig of def.triggers ?? []) {
-    for (const e of trig.effects ?? []) {
-      const line = EFFECT_DEFS[e.type]?.display?.(game, e);
-      if (line) lines.push(`Each tick: ${line}`);
+  
+  // Group effects by trigger type
+  if (def.triggers ?? []) {
+    const triggerGroups = {};
+    
+    for (const trig of def.triggers) {
+      const triggerDisplay = TRIGGER_DEFS[trig.event.type]?.display() || trig.event.type;
+      console.log(trig)
+      
+      if (!triggerGroups[triggerDisplay]) {
+        triggerGroups[triggerDisplay] = [];
+      }
+      
+      for (const e of trig.effects ?? []) {
+        const line = EFFECT_DEFS[e.type]?.display?.(game, e);
+        if (line) {
+          triggerGroups[triggerDisplay].push(line);
+        }
+      }
+    }
+    
+    // Output grouped effects
+    for (const [trigger, effects] of Object.entries(triggerGroups)) {
+      if (effects.length > 0) {
+        lines.push(`${trigger}: ${effects.join(", ")}`);
+      }
     }
   }
+  
+  const completionEffects = [];
   for (const e of def.result ?? []) {
     const line = EFFECT_DEFS[e.type]?.display?.(game, e);
-    if (line) lines.push(`On completion: ${line}`);
+    if (line) completionEffects.push(line);
   }
+  if (completionEffects.length > 0) {
+    lines.push(`On completion: ${completionEffects.join(", ")}`);
+  }
+  
   return lines.join("\n") || def.name;
 }
+
 
 // In case I want to special-case multiple active activities later
 function activeActivityIds(game) {

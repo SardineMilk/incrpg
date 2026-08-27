@@ -29,6 +29,7 @@ export const TRIGGER_DEFS = {
   tick: {
     create: () => ({ type: "tick" }),
     check: () => true,
+    display: () => "On tick"
   },
 
   onTrigger: {
