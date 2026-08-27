@@ -44,7 +44,7 @@ export const ACTIVITIES = {
                 requirements: [req.geq(fml.progress("fall_asleep", "relaxation"), 50)],
                 effects: [
                     eff.activate("asleep"), 
-                    eff.uiStyle("#hero-panel", {backgroundColor:"black"})
+                    eff.uiStyle("#hero-panel", { backgroundColor:"black", })
                 ],
             }
         ],   

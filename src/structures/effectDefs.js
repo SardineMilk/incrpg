@@ -97,7 +97,7 @@ export const EFFECT_DEFS = {
       multiplier,
     }),
     apply(game, e) {
-      if (e.idl == null) return;
+      if (e.id == null) return;
 
       game.registry
         .get(e.id, "LevelHolder")

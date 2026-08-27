@@ -5,7 +5,6 @@ const SINGLETON_KEY = Symbol("singleton-target");
 const getInstanceKey = (resolved) => resolved.id ?? SINGLETON_KEY;
 
 // TODO - this is a bloated mess, it needs a rewrite
-// LevelHolder doesnt even use it
 export class PersistentEffect {
   constructor(raw, requirements = []) {
     this.raw = raw;
@@ -115,8 +114,11 @@ export class PersistentEffect {
     const delta = diffEffect(previous, next);
     this.instances.set(key, next);
     if (delta) {
-      this.instances.set(key, next);
       if (apply) applyResolved(this._game, delta);
+    } else {
+      // Fallback
+      removeEffect(this._game, previous);
+      applyResolved(this._game, next);
     }
   }
 

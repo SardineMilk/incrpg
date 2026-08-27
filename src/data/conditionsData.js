@@ -41,12 +41,6 @@ export const INHERENT_EFFECTS = {
     ],
   },
 
-  rain: {
-    passives: [
-      eff.uiClass("#game-screen", "weather-rain")
-    ],   
-  },
-
   startup: {
     passives: [
       eff.activate(sel.tags("system", "conditions")),

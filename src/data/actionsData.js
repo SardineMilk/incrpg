@@ -137,16 +137,8 @@ export const ACTIONS = {
 
   activate_rain: {
     name: "TEST - Activate Rain",
-    duration: 10,
-    result: [
-      eff.activate("rain")
-    ],
-  },
-  deactivate_rain: {
-    name: "TEST - Deactivate Rain",
-    duration: 10,
-    result: [
-      eff.deactivate("rain")
+    passives: [
+      eff.uiClass("#game-screen", "weather-rain")
     ],
   },
 };

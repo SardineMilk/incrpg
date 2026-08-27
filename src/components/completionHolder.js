@@ -22,7 +22,7 @@ export class CompletionHolder {
     const meterDefs = { ...def.meters };
 
     // def.duration and def.result are syntactic sugar for common CompletionHolder forms
-    if (def.duration != null) meterDefs.progress ??= { max: def.duration, result: def.result ?? [] };
+    if (def.duration != null) meterDefs.duration ??= { max: def.duration, result: def.result ?? [] };
     
     return new CompletionHolder(meterDefs);
   }

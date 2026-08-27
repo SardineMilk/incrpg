@@ -20,7 +20,7 @@
 }
 
 
-/* Rain effect */
+/* Rain effect test*/
 .weather-rain::before {
   content: "";
   position: fixed;
