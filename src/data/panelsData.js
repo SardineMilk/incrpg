@@ -29,12 +29,12 @@ function describeAction(game, id) {
   const lines = [];
   
   // Group effects by trigger type
-  if (def.triggers ?? []) {
+  def.triggers ??= [];  // mmm tasty side effects...
+  if (def.triggers) {
     const triggerGroups = {};
     
     for (const trig of def.triggers) {
       const triggerDisplay = TRIGGER_DEFS[trig.event.type]?.display() || trig.event.type;
-      console.log(trig)
       
       if (!triggerGroups[triggerDisplay]) {
         triggerGroups[triggerDisplay] = [];
@@ -69,7 +69,7 @@ function describeAction(game, id) {
 }
 
 
-// In case I want to special-case multiple active activities later
+// In case I want to special-case multiple active activity rendering later
 function activeActivityIds(game) {
   const active = sel.active(sel.tags("activities"))(game);
   return active;

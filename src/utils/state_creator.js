@@ -56,26 +56,17 @@ export const NAMESPACES = {
 };
 
 
-export function initialiseState() {
-  const game = {};
-  game.registry = new EntityRegistry();
-  game.active = new ActivationLayer(game.registry);
-  game.context = new ContextStack(MAX_STACK_DEPTH);
-  game.candidateScope = new CandidateScope();
-  game.reactor = new Reactor(MAX_STACK_DEPTH);
-  game.rng = rngFactory(0);
+export function initialiseWorld() {
+  const world = {};
+  world.context = new ContextStack(MAX_STACK_DEPTH);
+  world.candidateScope = new CandidateScope();
+  world.reactor = new Reactor(MAX_STACK_DEPTH);
+  world.rng = rngFactory(0);
 
-  // TODO - if these are removed values are NaN until changed
-  game.values = {
-    health: 0,
-    stamina: 0,
-    mental: 0,
-  },
-  game.stats  = {};
+  world.log = null;
 
+  world.actors = new Map();
 
-  // Tag every entity with its own namespace name
-  // This means namespaces must be distinct from any tag used in data
   for (const [namespace, dataset] of Object.entries(NAMESPACES)) {
     for (const id in dataset) {
       dataset[id].tags = [...(dataset[id].tags ?? []), namespace];
@@ -88,27 +79,59 @@ export function initialiseState() {
     generateTagIndex(dataset);
   }
 
-  registerEntities(game.registry, NAMESPACES.skills, [
-    LevelHolder
-  ]);
-  for (const id in NAMESPACES.skills) {
-    game.registry.get(id, "LevelHolder").initPassives(game);
+  return world;
+}
+
+
+let actorCounter = 0;
+
+export function createActor(world, { id, team = "neutral" } = {}) {
+  id ??= `actor_${actorCounter++}`;
+  if (world.actors.has(id)) {
+    throw new Error(`createActor: id "${id}" already exists in this world`);
   }
 
-  registerEntities(game.registry, NAMESPACES.actions, [
+  const actor = {
+    id,
+    team,
+    world,  // escape hatch just in case
+    reactor: world.reactor,
+    context: world.context,
+    candidateScope: world.candidateScope,
+    rng: world.rng,
+    registry: new EntityRegistry(),
+    values: { health: 0, stamina: 0, mental: 0 },  // TODO - remove this hardcoding  
+    stats: {},
+  };
+  actor.active = new ActivationLayer(actor.registry);
+
+  // Replace this once log is properly initialised, not in tick.js
+  Object.defineProperty(actor, "log", {
+    get: () => world.log,
+    enumerable: true,
+  });
+
+  registerEntities(actor.registry, NAMESPACES.skills, [
+    LevelHolder
+  ]);
+  for (const skillId in NAMESPACES.skills) {
+    actor.registry.get(skillId, "LevelHolder").initPassives(actor);
+  }
+
+  registerEntities(actor.registry, NAMESPACES.actions, [
     PassiveHolder,
     TriggerHolder,
     ModifierHolder,
     CompletionHolder,
   ]);
 
-  registerEntities(game.registry, NAMESPACES.activities, [
+  registerEntities(actor.registry, NAMESPACES.activities, [
     PassiveHolder,
     TriggerHolder,
     CompletionHolder,
   ]);
 
-  registerEntities(game.registry, NAMESPACES.conditions, [
+  registerEntities(actor.registry, NAMESPACES.conditions, [
     PassiveHolder,
     TriggerHolder,
     ModifierHolder,
@@ -116,11 +139,11 @@ export function initialiseState() {
     CompletionHolder,
   ]);
 
-  registerEntities(game.registry, NAMESPACES.locations, [
+  registerEntities(actor.registry, NAMESPACES.locations, [
     PassiveHolder,
     TriggerHolder,
   ]);
 
-  return game;
+  world.actors.set(id, actor);
+  return actor;
 }
-

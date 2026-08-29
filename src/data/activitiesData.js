@@ -142,6 +142,7 @@ export const ACTIVITIES = {
                     eff.changeValue("health", fml.neg(fml.progress("descend_northern_cliff", "height"))),
                     eff.setMeter("descend_northern_cliff", 0, "height"),
                     eff.setMeter("descend_northern_cliff", 100, "grip"),
+                    eff.activate("new_meldrum")
                 ],
             },
         },

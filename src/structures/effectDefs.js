@@ -48,11 +48,11 @@ function activateEntity(game, entity, duration = null) {
 
   if (duration != null) {
     game.registry.get(entity, "CompletionHolder")?.resetMeter("duration", duration);
-    game.reactor.notify(`meter:${entity}:duration`);
+    game.reactor.notify(`meter:${game.id}:${entity}:duration`);
   }
 
   game.active.activate(entity);
-  game.reactor.notify(`active:${entity}`);
+  game.reactor.notify(`active:${game.id}:${entity}`);
   processTrigger(game, "onActivate", { id: entity });
 }
 
@@ -61,10 +61,10 @@ function deactivateEntity(game, entity) {
   game.registry.get(entity, "PassiveHolder")?.remove(game);
 
   game.registry.get(entity, "CompletionHolder")?.clearMeter("duration");
-  game.reactor.notify(`meter:${entity}:duration`);
+  game.reactor.notify(`meter:${game.id}:${entity}:duration`);
 
   game.active.deactivate(entity);
-  game.reactor.notify(`active:${entity}`);
+  game.reactor.notify(`active:${game.id}:${entity}`);
   processTrigger(game, "onDeactivate", { id: entity });
 }
 
@@ -78,7 +78,7 @@ export const EFFECT_DEFS = {
       if (e.id == null) return null;
       if (e.amount == 0) return;
       game.registry.get(e.id, "LevelHolder")?.gainXp(game, e.amount);
-      game.reactor.notify(`level:${e.id}`);
+      game.reactor.notify(`level:${game.id}:${e.id}`);
 
       return "gainXp";
     },
@@ -133,11 +133,11 @@ export const EFFECT_DEFS = {
     }),
     apply(game, e) {
       game.registry.get(e.id, "LevelHolder").changeLevelBonus(game, e)
-      game.reactor.notify(`level:${e.id}`);
+      game.reactor.notify(`level:${game.id}:${e.id}`);
     },
     remove(game, e) {
       game.registry.get(e.id, "LevelHolder").changeLevelBonusReverse(game, e)
-      game.reactor.notify(`level:${e.id}`);
+      game.reactor.notify(`level:${game.id}:${e.id}`);
     },
     scale: scaleStatLayer,
     diff: diffStatLayer,
@@ -189,7 +189,7 @@ export const EFFECT_DEFS = {
       const holder = game.registry.get(e.id, "CompletionHolder");
       if (!holder) return;
       holder.advanceProgress(game, e.amount, e.meter);
-      game.reactor.notify(`meter:${e.id}:${e.meter}`);
+      game.reactor.notify(`meter:${game.id}:${e.id}:${e.meter}`);
     },
     scale: scaleAmount,
     display(game, e) {
@@ -202,7 +202,7 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       const outcome = game.registry.get(e.id, "CompletionHolder")
         ?.advanceProgress(game, e.amount, "duration");
-      game.reactor.notify(`meter:${e.id}:duration`);
+      game.reactor.notify(`meter:${game.id}:${e.id}:duration`);
       if (outcome === "meterMin") return "durationExpired";
     },
     display(game, e) {
@@ -217,7 +217,7 @@ export const EFFECT_DEFS = {
       const holder = game.registry.get(e.id, "CompletionHolder");
       if (!holder) return;
       holder.setProgress(game, e.amount, e.meter);
-      game.reactor.notify(`meter:${e.id}:${e.meter}`);
+      game.reactor.notify(`meter:${game.id}:${e.id}:${e.meter}`);
     },
     scale: scaleAmount,
     display(game, e) {
@@ -241,7 +241,7 @@ export const EFFECT_DEFS = {
 
       const dirty = strength.change(e);
       if (!dirty) return;
-      game.reactor.notify(`strength:${e.id}`);
+      game.reactor.notify(`strength:${game.id}:${e.id}`);
 
       return "strengthChanged";
     },
@@ -279,7 +279,7 @@ export const EFFECT_DEFS = {
       
       const dirty = strength.set(e);
       if (!dirty) return;
-      game.reactor.notify(`strength:${e.id}`);
+      game.reactor.notify(`strength:${game.id}:${e.id}`);
 
       return "strengthChanged";
     },
@@ -304,7 +304,7 @@ export const EFFECT_DEFS = {
       if (e.amount == 0) return;
 
       game.values[e.id] += e.amount;
-      game.reactor.notify(`value:${e.id}`);
+      game.reactor.notify(`value:${game.id}:${e.id}`);
 
       if (e.amount > 0) return "valueGain";
       if (e.amount < 0) return "valueLoss";
@@ -312,7 +312,7 @@ export const EFFECT_DEFS = {
     },
     remove(game, e) {
       game.values[e.id] -= e.amount;
-      game.reactor.notify(`value:${e.id}`);
+      game.reactor.notify(`value:${game.id}:${e.id}`);
     },
     scale: scaleAmount,
     diff: diffAmount,
@@ -325,7 +325,7 @@ export const EFFECT_DEFS = {
     create: (id, amount) => ({ type: "setValue", id, amount }),
     apply(game, e) {
       game.values[e.id] = e.amount;
-      game.reactor.notify(`value:${e.id}`);
+      game.reactor.notify(`value:${game.id}:${e.id}`);
     },
     display(game, e) {
       return `set ${e.id} to ${e.amount}`;
@@ -337,9 +337,6 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       delete game.values[e.value];
     },
-    display(game, e) {
-      return `remove value ${e.value}`;
-    }
   },
 
 
@@ -350,9 +347,6 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       game.log.append(LogType.ACTION, e.message);
     },
-    display(game, e) {
-      return `send message: "${e.message}"`;
-    }
   },
 
   // TODO
@@ -361,9 +355,6 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       game.log.append(LogType.ACTION, e.options);
     },
-    display(game, e) {
-      return `present choice with ${Array.isArray(e.options) ? e.options.length : 1} option(s)`;
-    }
   },
 
   uiClass: {
@@ -422,9 +413,6 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       game.reactor.notifyAll();
     },
-    display(game, e) {
-      return `force a full reactor notify pass`;
-    }
   },
 
   log: {
@@ -432,24 +420,6 @@ export const EFFECT_DEFS = {
     apply(game, e) {
       console.log(e.str);
     },
-    display(game, e) {
-      return `log to console: "${e.str}"`;
-    }
-  },
-
-  // TODO - this is stupid
-  reapplyCondition: {
-    create: (condition) => ({
-      type: "reapplyCondition",
-      condition
-    }),
-    apply(game, e) {
-      if (!game.active.isActive(e.condition)) return;
-      const effects = game.registry.get(e.condition, "PassiveHolder");
-      if (!effects) return;
-      const strength = game.registry.get(e.condition, "StatLayer") || 1;
-      effects.reapply(game, strength.value);
-    }
   },
 
   skillCheck: {

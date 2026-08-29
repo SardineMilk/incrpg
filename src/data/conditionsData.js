@@ -512,6 +512,18 @@ const TEMP_CONDITIONS = {
     ],
   },
 
+  poison: {
+    name: "Poison",
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [
+          eff.changeValue("health", fml.neg(fml.duration("poison")))
+        ]
+      }
+    ]
+  }
+
 };
 
 

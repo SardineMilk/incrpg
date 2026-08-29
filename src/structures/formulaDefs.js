@@ -25,31 +25,31 @@ const definitions = {
 
 
   value: (game, value) => {
-    game.reactor.read(`value:${value}`);
+    game.reactor.read(`value:${game.id}:${value}`);
     return game.values[value];
   },
   duration: (game, id) => {
-    game.reactor.read(`meter:${id}:duration`);
+    game.reactor.read(`meter:${game.id}:${id}:duration`);
     return game.registry.get(id, "CompletionHolder")?.progressOf("duration");
   },
   progress: (game, id, meter) => {
-    game.reactor.read(`meter:${id}:${meter}`);
+    game.reactor.read(`meter:${game.id}:${id}:${meter}`);
     return game.registry.get(id, "CompletionHolder")?.progressOf(meter);
   },
   strength: (game, id) => {
-    game.reactor.read(`strength:${id}`);
+    game.reactor.read(`strength:${game.id}:${id}`);
     return game.registry.get(id, "StatLayer")?.value;
   },
   level: (game, id) => {
-    game.reactor.read(`level:${id}`);
+    game.reactor.read(`level:${game.id}:${id}`);
     return game.registry.get(id, "LevelHolder")?.level;
   },
   xpToNext: (game, id) => {
-    game.reactor.read(`level:${id}`);
+    game.reactor.read(`level:${game.id}:${id}`);
     return xpToNext(game.registry.get(id, "LevelHolder")?.level);
   },
   xp: (game, id) => {
-    game.reactor.read(`xp:${id}`);
+    game.reactor.read(`xp:${game.id}:${id}`);
     return game.registry.get(id, "LevelHolder")?.xp;
   },
 

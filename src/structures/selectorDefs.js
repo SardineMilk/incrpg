@@ -35,23 +35,7 @@ function intersectSets(sets) {
   return sets.reduce((a, b) => new Set([...a].filter((x) => b.has(x))));
 }
 
-/*
- * Namespaces (skills/actions/conditions/locations) are plain tags now.
- * There's nothing special about passing one as the first clause below -
- * it AND-intersects exactly like any other tag would.
- *
- *   sel.tags("skills", "combat")                      // skills AND combat
- *   sel.tags("skills", "combat", "regen")              // skills AND combat AND regen
- *   sel.tags("skills", "combat", ["melee", "ranged"])  // skills AND combat AND (melee OR ranged)
- *
- *   eff.gainXp(sel.tags("skills", "physical"), 5)
- *   eff.changeConditionStrength(sel.tags("conditions", "passive_regen"), {flat: -0.5})
- *   eff.changeValue(sel.ids("health", "stamina"), -10)
- *
- *
- *   // union across two unrelated tag groups
- *   sel.union(sel.tags("conditions", "weather"), sel.tags("conditions", "terrain"))
- */
+
 export const sel = {
   // ── Set Theory ──────────────────────────────────────────────────────────────
 
@@ -92,7 +76,7 @@ export const sel = {
   active: (...selectors) =>
     makeSelector((game) => {
       return resolveIds(game, sel.union(...selectors)).filter((id) => {
-        game.reactor.read(`active:${id}`);  // read every matching entity, including inactive
+        game.reactor.read(`active:${game.id}:${id}`);  // read every matching entity, including inactive
         return game.active.isActive(id);
       });
     }),
