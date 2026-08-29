@@ -395,6 +395,15 @@ export const EFFECT_DEFS = {
     },
   },
 
+  // TODO - make UI actually support hotswapping actor
+  changeProtagonist: {
+    create: (actor) => ({
+      type: "changeProtagonist",
+      actor
+    }),
+    apply(game, e) {
+    }
+  },
 
   // ── Misc ──────────────────────────────────────────────────────────────────
 

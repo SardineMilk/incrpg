@@ -522,7 +522,17 @@ const TEMP_CONDITIONS = {
         ]
       }
     ]
-  }
+  },
+
+
+  // Core condition for assassin archetype
+  // Gained when entering combat, and from various traits/attacks etc
+  // Massive increase to damage of attack
+  // Removed on attack
+  initiative: {
+    name: "Initiative",
+
+  },
 
 };
 
