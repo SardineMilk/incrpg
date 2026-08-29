@@ -16,10 +16,17 @@ let intervalId = null;
 export function startTicking() {
   const world = initialiseWorld();
 
-  let player = loadFromStorage(world);
+  if (hasStoredSave()) {
+    loadFromStorage(world); // populates world.actors
+  }
+
+  // TODO - ensure actor id collision doesnt happen
+  // player data getting overwritten by a football-themed mod wouldnt be ideal lmao
+  let player = world.actors.get("player");
+
   const isNewGame = !player;
   if (isNewGame) {
-    player = createActor(world, { id: "player", team: "player" });
+    player = createActor(world, { id: "player", team: "player" });  // Look, its you!
   }
 
   // TODO - move to world creation
@@ -31,13 +38,11 @@ export function startTicking() {
 
   window.world = world;
 
-  // Can something fun be done with this?
+  // Literally the only place where player is special-cased
   initUI(world, player);
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {
-    // Separate tick() events per actor
-    // TODO - ordering of world actors for tick priority in combat etc
     for (const actor of world.actors.values()) {
       processTrigger(actor, "tick", {}, "pre");
       processTrigger(actor, "tick", {}, "post");
@@ -48,7 +53,7 @@ export function startTicking() {
     if (++tickCounter >= 100) {
       tickCounter = 0;
       console.log("Saving...")
-      saveToStorage(world, player);
+      saveToStorage(world);
     }
 
   }, TICK_RATE);
