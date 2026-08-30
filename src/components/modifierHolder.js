@@ -6,6 +6,7 @@ import { resolveTargets } from "../structures/selectorDefs.js";
 import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
 
 export class ModifierHolder {
+  static shareable = true;
   constructor(modifierDefs = []) { this.modifierDefs = modifierDefs; }
   static fromDefinition(def) { return new ModifierHolder(def.modifiers); }
   static appliesTo(def) { return (def.modifiers?.length ?? 0) > 0; }

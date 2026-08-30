@@ -5,6 +5,7 @@ import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
 import { applyEffect } from "../game/effects.js";
 
 export class TriggerHolder {
+  static shareable = true;
   constructor(triggerDefs = []) {
     this.triggerDefs = triggerDefs;
   }

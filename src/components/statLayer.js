@@ -14,6 +14,10 @@ export class StatLayer {
     return this.flat * this.percent * this.multiplier;
   }
 
+  clone() {
+    return new StatLayer({ flat: this.flat, percent: this.percent, multiplier: this.multiplier });
+  }
+
   set({ flat = 0, percent = 1, multiplier = 1 } = {}) {
     const dirty =
       this.flat !== flat ||

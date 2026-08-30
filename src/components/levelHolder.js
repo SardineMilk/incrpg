@@ -40,6 +40,14 @@ export class LevelHolder {
         );
     }
 
+    clone() {
+    const holder = new LevelHolder([], {}, this.name, this.id);
+    holder.milestones = this.milestones;
+    holder._levelPassives = this._levelPassives.clone();
+    holder._milestonePassives = this._milestonePassives.clone();
+    return holder;
+    }
+
     get level() {
         return (this.baseLevel + this.levelBonus.flat) * this.levelBonus.percent * this.levelBonus.multiplier;
     }

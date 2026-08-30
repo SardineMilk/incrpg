@@ -21,6 +21,12 @@ export class PassiveHolder {
   static fromDefinition(def) { return new PassiveHolder(def.passives ?? []); }
   get isApplied() { return this._applied; }
 
+  clone() {
+    const holder = new PassiveHolder([]);
+    holder._effects = this._effects.map((pe) => new PersistentEffect(pe.raw, pe.requirements));
+    return holder;
+  }
+
   apply(game, strength = 1) { this._start(game, strength, false); }
   prime(game, strength = 1) { this._start(game, strength, true); }
 

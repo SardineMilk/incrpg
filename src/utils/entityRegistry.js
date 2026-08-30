@@ -46,6 +46,26 @@ export class EntityRegistry {
       if (componentMaps.every(map => map.has(id))) yield id;
     }
   }
+
+  static cloneFrom(template) {
+    const registry = new EntityRegistry();
+
+    registry.entities = new Set(template.entities);
+    for (const [id, types] of template.typesByEntity) {
+      registry.typesByEntity.set(id, new Set(types));
+    }
+
+    for (const [typeName, componentMap] of template.components) {
+      const cloned = new Map();
+      for (const [id, component] of componentMap) {
+        cloned.set(id, component.constructor.shareable ? component : component.clone());
+      }
+      registry.components.set(typeName, cloned);
+    }
+
+    return registry;
+  }
+
 }
 
 export function registerEntities(registry, data, components) {

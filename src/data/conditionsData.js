@@ -41,15 +41,6 @@ export const INHERENT_EFFECTS = {
     ],
   },
 
-  startup: {
-    passives: [
-      eff.activate(sel.tags("system", "conditions")),
-      eff.activate(sel.tags("mortal", "conditions")),
-      eff.activate("human"),
-      eff.activate("new_meldrum"),
-    ]
-  },
-
   health_regen: {
     tags: ["passive_regen", "mortal"],
     triggers: [

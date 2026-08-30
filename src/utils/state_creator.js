@@ -4,6 +4,12 @@ import { CONDITIONS } from "../data/conditionsData.js";
 import { LOCATIONS } from "../data/locationsData.js";
 import { ACTIVITIES } from "../data/activitiesData.js"
 
+import { CompletionHolder } from "../components/completionHolder.js";
+import { LevelHolder } from "../components/levelHolder.js";
+import { ModifierHolder } from "../components/modifierHolder.js";
+import { PassiveHolder } from "../components/passiveHolder.js";
+import { StatLayer } from "../components/statLayer.js";
+import { TriggerHolder } from "../components/triggerHolder.js";
 
 import { generateTagIndex } from "./tagIndex.js";
 import { Reactor } from "./reactor.js";
@@ -11,6 +17,7 @@ import { Reactor } from "./reactor.js";
 import { validate } from "./validator.js";
 import { ContextStack } from "./context.js";
 import { CandidateScope } from "./candidateScope.js";
+import { EntityRegistry, registerEntities } from "./entityRegistry.js";
 
 
 /*
@@ -48,6 +55,25 @@ export const NAMESPACES = {
 };
 
 
+export function buildTemplateRegistry() {
+  const registry = new EntityRegistry();
+
+  registerEntities(registry, NAMESPACES.skills, [LevelHolder]);
+  registerEntities(registry, NAMESPACES.actions, [
+    PassiveHolder, TriggerHolder, ModifierHolder, CompletionHolder,
+  ]);
+  registerEntities(registry, NAMESPACES.activities, [
+    PassiveHolder, TriggerHolder, CompletionHolder,
+  ]);
+  registerEntities(registry, NAMESPACES.conditions, [
+    PassiveHolder, TriggerHolder, ModifierHolder, StatLayer, CompletionHolder,
+  ]);
+  registerEntities(registry, NAMESPACES.locations, [PassiveHolder, TriggerHolder]);
+
+  return registry;
+}
+
+
 export function initialiseWorld() {
   const world = {};
   world.context = new ContextStack(MAX_STACK_DEPTH);
@@ -70,6 +96,9 @@ export function initialiseWorld() {
   for (const dataset of Object.values(NAMESPACES)) {
     generateTagIndex(dataset);
   }
+
+
+  world.templateRegistry = buildTemplateRegistry();
 
   return world;
 }

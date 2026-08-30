@@ -1,5 +1,5 @@
 import { NAMESPACES } from "./state_creator.js";
-import { createActor } from "./createActor.js";
+import { createActor } from "../game/actor.js";
 
 export const SAVE_VERSION = 1;  // TODO - shove this in a config file somewhere
 const STORAGE_KEY = "savegame";

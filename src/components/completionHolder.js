@@ -28,6 +28,10 @@ export class CompletionHolder {
     return new CompletionHolder(meterDefs);
   }
 
+  clone() {
+    return new CompletionHolder(this.defs);
+  }
+
   has(name) { return this.meters.has(name); }
   get isTimed() { return this.has("duration"); }
 
