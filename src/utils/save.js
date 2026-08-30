@@ -1,4 +1,5 @@
-import { createActor, NAMESPACES } from "./state_creator.js";
+import { NAMESPACES } from "./state_creator.js";
+import { createActor } from "./createActor.js";
 
 export const SAVE_VERSION = 1;  // TODO - shove this in a config file somewhere
 const STORAGE_KEY = "savegame";
@@ -40,7 +41,7 @@ export function serializeGame(world) {
 
 function deserializeActor(actor, saved) {
   actor.values = structuredClone(saved.values);
-  actor.stats  = structuredClone(saved.stats ?? {});
+  actor.stats = structuredClone(saved.stats ?? {});
 
   for (const [id, entry] of Object.entries(saved.components)) {
     for (const [typeName, state] of Object.entries(entry)) {

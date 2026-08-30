@@ -1,9 +1,10 @@
-import { INHERENT_EFFECTS }                     from "../data/conditionsData.js";
-import { initialiseWorld, createActor }         from "../utils/state_creator.js";
-import { EventLog }                             from "./log.js";
-import { setIntervalFix, clearIntervalFix }     from "../utils/throttleFix.js";
-import { processTrigger }                       from "./events.js";
-import { applyEffect }                          from "./effects.js";
+import { INHERENT_EFFECTS } from "../data/conditionsData.js";
+import { initialiseWorld } from "../utils/state_creator.js";
+import { createActor } from "../utils/createActor.js";
+import { EventLog } from "./log.js";
+import { setIntervalFix, clearIntervalFix } from "../utils/throttleFix.js";
+import { processTrigger } from "./events.js";
+import { applyEffect } from "./effects.js";
 import { hasStoredSave, loadFromStorage, saveToStorage } from "../utils/save.js";
 import { initUI } from "../ui/panelManager.js";
 import { renderLog } from "../ui/renderLog.js";
