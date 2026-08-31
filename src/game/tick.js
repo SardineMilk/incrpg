@@ -28,7 +28,7 @@ export function startTicking() {
 
   const isNewGame = !player;
   if (isNewGame) {
-    player = spawnActor(world, { id: "player", team: "good" });  // Look, its you!
+    player = spawnActor(world, { defId: "player", team: "good" });  // Look, its you!
   }
 
   // TODO - move to world creation

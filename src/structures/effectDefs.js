@@ -341,16 +341,16 @@ export const EFFECT_DEFS = {
 
   // ── Actors ──────────────────────────────────────────────────────────────
   spawn: {
-    create: (actorId = null, team = "neutral") => ({ type: "spawn", actorId, team }),
+    create: (id = null, team = "neutral") => ({ type: "spawn", id, team }),
     apply(game, e) {
       const actor = game.world.spawn(game.world, {
-        id: e.actorId,
+        defId: e.id,
         team: e.team,
       });
       e.spawnedId = actor.id;
     },
     display(game, e) {
-      return `spawn a new ${e.team} ${e.actorId}`;
+      return `spawn a new ${e.team} ${e.id}`;
     }
   },
 
@@ -415,12 +415,14 @@ export const EFFECT_DEFS = {
   },
 
   // TODO - make UI actually support hotswapping actor
+  // importing initUI causes circular dependency from PANELS->eff
   changeProtagonist: {
-    create: (actor) => ({
+    create: (id) => ({
       type: "changeProtagonist",
-      actor
+      id
     }),
     apply(game, e) {
+      initUI(id);
     }
   },
 

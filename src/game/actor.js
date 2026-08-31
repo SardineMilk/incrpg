@@ -4,21 +4,33 @@ import { NAMESPACES } from "../utils/state_creator.js";
 import { applyEffect } from "./effects.js";;
 import { ACTORS } from "../data/actorData.js"
 
-// TODO - separate the referring ID from the definition ID
-// URGENT, this is currently broken
-let actorCounter = 0;
+const actorCounters = new Map(); // Per-definition counters
+
+function getNextId(definitionId) {
+  const current = actorCounters.get(definitionId) ?? 0;
+  actorCounters.set(definitionId, current + 1);
+  if (current == 0) return definitionId;
+  return `${definitionId}_${current}`;
+}
 
 // Create the bare actor skeleton
 // Used when loading saves
-export function createActor(world, { id, team = "neutral", actorDef = null } = {}) {
-  id ??= `actor_${actorCounter++}`;
+export function createActor(world, { id=null, defId, team = "neutral", actorDef = null } = {}) {
+  if (!defId && !id) {
+    throw new Error("createActor: must provide either id or definitionId");
+  }
+
+  id ??= getNextId(defId);
+
   if (world.actors.has(id)) {
     throw new Error(`createActor: id "${id}" already exists in this world`);
   }
 
+  // Who needs smart separation of responsibility when you can just use references? Every actor contains multitudes <3 
   const actor = {
     id,
-    name: actorDef?.name ?? id,
+    defId,
+    name: actorDef?.name ?? defId,
     team,
     world,
     reactor: world.reactor,
@@ -43,9 +55,9 @@ export function createActor(world, { id, team = "neutral", actorDef = null } = {
 }
 
 // Spawn a new actor, applying startup effects
-export function spawnActor(world, { id, team = "neutral"} = {}) {
-  const actorDef = ACTORS[id];  // TODO - make this less fragile
-  const actor = createActor(world, { id, team, actorDef });
+export function spawnActor(world, { defId, team = "neutral"} = {}) {
+  const actorDef = ACTORS[defId];
+  const actor = createActor(world, { defId, team, actorDef });
 
   for (const skillId in NAMESPACES.skills) {
     actor.registry.get(skillId, "LevelHolder").initPassives(actor);

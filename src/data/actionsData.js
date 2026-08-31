@@ -141,6 +141,14 @@ export const ACTIONS = {
       eff.uiClass("#game-screen", "weather-rain")
     ],
   },
+
+  spawn_rat: {
+    name: "TEST - Spawn Rat",
+    passives: [
+      eff.spawn("rat", "good")
+    ],
+
+  }
 };
 
 
