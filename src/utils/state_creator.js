@@ -18,6 +18,7 @@ import { validate } from "./validator.js";
 import { ContextStack } from "./context.js";
 import { CandidateScope } from "./candidateScope.js";
 import { EntityRegistry, registerEntities } from "./entityRegistry.js";
+import { spawnActor } from "../game/actor.js";
 
 
 /*
@@ -80,10 +81,9 @@ export function initialiseWorld() {
   world.candidateScope = new CandidateScope();
   world.reactor = new Reactor(MAX_STACK_DEPTH);
   world.rng = rngFactory(0);
-
   world.log = null;
-
   world.actors = new Map();
+  world.spawn = spawnActor
 
   for (const [namespace, dataset] of Object.entries(NAMESPACES)) {
     for (const id in dataset) {

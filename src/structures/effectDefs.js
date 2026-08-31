@@ -339,6 +339,25 @@ export const EFFECT_DEFS = {
     },
   },
 
+  // ── Actors ──────────────────────────────────────────────────────────────
+  spawn: {
+    create: (actorId = null, team = "neutral") => ({ type: "spawn", actorId, team }),
+    apply(game, e) {
+      const actor = game.world.spawn(game.world, {
+        id: e.actorId,
+        team: e.team,
+      });
+      e.spawnedId = actor.id;
+    },
+    display(game, e) {
+      return `spawn a new ${e.team} ${e.actorId}`;
+    }
+  },
+
+  despawn: {
+    // TODO
+  },
+
 
   // ── UI / Log ──────────────────────────────────────────────────────────────
 
