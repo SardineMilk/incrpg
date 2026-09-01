@@ -145,7 +145,7 @@ export const ACTIONS = {
   spawn_rat: {
     name: "TEST - Spawn Rat",
     passives: [
-      eff.spawn("rat", "good")
+      eff.spawn("rat", "evil")
     ],
 
   }

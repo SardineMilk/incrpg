@@ -96,6 +96,14 @@ export const WIDGET_DEFS = {
   custom: {
     create: (mount, opts = {}) => ({ type: "custom", mount, ...opts }),
   },
+
+  actorList: {
+    create: (source, item, opts = {}) => ({ type: "actorList", source, item, ...opts }),
+    mount(el, w) {
+      if (w.layout) el.classList.add(`ui-actorList-${w.layout}`);
+    },
+  },
+
 };
 
 export const ui = Object.fromEntries(

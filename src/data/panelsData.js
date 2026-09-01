@@ -1,6 +1,7 @@
 import { req, fml, sel } from "../structures/structures.js";
 import { ui } from "../ui/widgetDefs.js";
 import { byTag, nameOf } from "../utils/tagIndex.js";
+import { actorsByTeam } from "../game/actor.js";
 
 import { EFFECT_DEFS } from "../structures/effectDefs.js";
 import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
@@ -75,6 +76,15 @@ function activeActivityIds(game) {
   return active;
 }
 
+
+const TEAMS = ["good", "evil"];
+function actorCard(actor) {
+  return ui.group([
+    ui.text(actor.name ?? actor.id, { className: "combatant-name" }),
+    ui.bar(fml.value("health"), fml.value("healthMax"), { label: "HP", className: "resource-bar" }),
+    ui.bar(fml.value("stamina"), fml.value("staminaMax"), { label: "SP", className: "resource-bar" }),
+  ], { className: "combatant-card" });
+}
 
 
 export const PANELS = {
@@ -198,6 +208,18 @@ export const PANELS = {
         },
       }),
       { className: "skills-list" }
+    ),
+  },
+
+  combat: {
+    container: "combat-panel",
+    root: ui.group(
+      TEAMS.map((team) =>
+        ui.actorList((world) => actorsByTeam(world, team), actorCard, {
+          className: `team-column team-${team}`,
+        })
+      ),
+      { className: "combat-teams", layout: "row" }
     ),
   },
 };

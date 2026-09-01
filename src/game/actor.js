@@ -69,3 +69,26 @@ export function spawnActor(world, { defId, team = "neutral"} = {}) {
 
   return actor;
 }
+
+
+export function allActors(world) {
+  world.reactor.read("actors");
+  return [...world.actors.values()];
+}
+
+export function actorById(world, id) {
+  world.reactor.read("actors");
+  return world.actors.get(id);
+}
+
+export function actorsByTeam(world, team) {
+  return allActors(world).filter((a) => a.team === team);
+}
+
+export function actorsExcludingTeam(world, team) {
+  return allActors(world).filter((a) => a.team !== team);
+}
+
+export function actorsWhere(world, predicate) {
+  return allActors(world).filter(predicate);
+}

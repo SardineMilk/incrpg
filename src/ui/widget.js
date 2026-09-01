@@ -83,8 +83,9 @@ export class Widget {
 
     if (this.descriptor.tooltip) this._wireTooltip(this.descriptor.tooltip, env);
 
-    // TODO - stupid, this should be defined in widgetDefs?
+    // TODO - stupid, should this be defined in widgetDefs?
     if (type === "list") { this._setupList(); return; }
+    if (type === "actorList") { this._setupActorList(); return; }
     if (type === "group") { this._setupGroup(); return; }
     if (type === "custom") { this._setupCustom(env); return; }
 
@@ -156,6 +157,36 @@ export class Widget {
         if (this._children.has(rowId)) continue;
         const child = new Widget(this.descriptor.item(rowId), game, rowId);
         this._children.set(rowId, child);
+        child.mount(this.el);
+      }
+    };
+
+    reconcileMembers();
+  }
+
+  _setupActorList() {
+    const world = this.game.world;
+    const resolveSource = () => {
+      const src = this.descriptor.source;
+      return typeof src === "function" ? src(world) : src ?? [];
+    };
+
+    const reconcileMembers = () => {
+      const { result: actors, deps } = this.game.reactor.track(resolveSource);
+
+      if (this._membersSub) this.game.reactor.resubscribe(this._membersSub, deps);
+      else if (deps.size > 0) this._membersSub = this.game.reactor.subscribe(deps, reconcileMembers);
+
+      const seen = new Set(actors.map((a) => a.id));
+      for (const [actorId, child] of [...this._children]) {
+        if (seen.has(actorId)) continue;
+        child.destroy();
+        this._children.delete(actorId);
+      }
+      for (const actor of actors) {
+        if (this._children.has(actor.id)) continue;
+        const child = new Widget(this.descriptor.item(actor), actor, actor.id);
+        this._children.set(actor.id, child);
         child.mount(this.el);
       }
     };
