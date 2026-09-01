@@ -76,14 +76,15 @@ function activeActivityIds(game) {
   return active;
 }
 
-
+// TODO - hardcoding this is stupid, there should be an engine level validator with relationships described
 const TEAMS = ["good", "evil"];
 function actorCard(actor) {
   return ui.group([
-    ui.text(actor.name ?? actor.id, { className: "combatant-name" }),
+    ui.text(actor.name ?? actor.id, { className: "actor-name" }),
     ui.bar(fml.value("health"), fml.value("healthMax"), { label: "HP", className: "resource-bar" }),
     ui.bar(fml.value("stamina"), fml.value("staminaMax"), { label: "SP", className: "resource-bar" }),
-  ], { className: "combatant-card" });
+    ui.bar(fml.value("mental"), fml.value("mentalMax"), { label: "MP", className: "resource-bar" }),
+  ], { className: "actor-card" });
 }
 
 
@@ -212,14 +213,14 @@ export const PANELS = {
   },
 
   combat: {
-    container: "combat-panel",
+    container: "actor-panel",
     root: ui.group(
       TEAMS.map((team) =>
         ui.actorList((world) => actorsByTeam(world, team), actorCard, {
           className: `team-column team-${team}`,
         })
       ),
-      { className: "combat-teams", layout: "row" }
+      { className: "actor-teams", layout: "row" }
     ),
   },
 };

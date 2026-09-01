@@ -2,6 +2,7 @@ import { eff, sel, fml } from "../structures/structures.js";
 
 export const ACTORS = {
   player: {
+    name: "Player",
     values: {health:0, stamina: 0, mental: 0},
     stats: {healthMax: 0, staminaMax: 0, mentalMax: 0},
     startup: [
@@ -13,6 +14,7 @@ export const ACTORS = {
   },
 
   rat: {
+    name: "Rat",
     startup: [
       eff.activate(sel.tags("system", "conditions")),
       eff.activate(sel.tags("mortal", "conditions")),

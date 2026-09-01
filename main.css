@@ -150,7 +150,7 @@ footer {
 #actions-panel,
 #tasks-panel,
 #activity-panel,
-#combat-panel,
+#actor-panel,
 #log-box {
   background: var(--colour-surface);
   border-radius: var(--radius);
