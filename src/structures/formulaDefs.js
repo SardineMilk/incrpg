@@ -22,6 +22,7 @@ const definitions = {
   // eff.gainXp(sel.tags("skills"), fml.level(fml.candidate("id")))
   candidate: (game, key) => game.candidateScope.get(key),
 
+  actor: (game, id) => game.world.actors.get(id),
 
 
   value: (game, value) => {

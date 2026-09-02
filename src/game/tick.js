@@ -8,6 +8,7 @@ import { applyEffect } from "./effects.js";
 import { hasStoredSave, loadFromStorage, saveToStorage } from "../utils/save.js";
 import { initUI } from "../ui/panelManager.js";
 import { renderLog } from "../ui/renderLog.js";
+import { PANELS } from "../data/panelsData.js";
 
 
 const TICK_RATE = 1000 / 10;
@@ -40,7 +41,7 @@ export function startTicking() {
   window.world = world;
 
   // Literally the only place where player is special-cased
-  initUI(world, player);
+  initUI(world, player, PANELS);
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {

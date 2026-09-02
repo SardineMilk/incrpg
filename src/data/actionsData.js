@@ -147,8 +147,23 @@ export const ACTIONS = {
     passives: [
       eff.spawn("rat", "evil")
     ],
+  },
 
-  }
+  become_rat: {
+    name: "TEST - Become Rat",
+    duration: 10,
+    result: [
+      eff.changeUIActor(fml.actor("rat"))
+    ]
+  },
+
+  become_player: {
+    name: "TEST - Become Player",
+    duration: 10,
+    result: [
+      eff.changeUIActor(fml.actor("player"))
+    ]
+  },
 };
 
 

@@ -2,6 +2,7 @@ import { LogType } from "../game/log.js";
 import { LOCATIONS } from "../data/locationsData.js";
 import { processTrigger } from "../game/events.js";
 import { scaleAmount, scaleStatLayer } from "./scaling.js";
+import { changeUIActor } from "../ui/panelManager.js";
 /*
  * Each entry defines one effect type:
  *
@@ -416,13 +417,13 @@ export const EFFECT_DEFS = {
 
   // TODO - make UI actually support hotswapping actor
   // importing initUI causes circular dependency from PANELS->eff
-  changeProtagonist: {
+  changeUIActor: {
     create: (id) => ({
-      type: "changeProtagonist",
+      type: "changeUIActor",
       id
     }),
     apply(game, e) {
-      initUI(id);
+      changeUIActor(e.id);
     }
   },
 
