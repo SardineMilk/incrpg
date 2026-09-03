@@ -1,5 +1,6 @@
 import { NAMESPACES } from "./state_creator.js";
 import { createActor } from "../game/actor.js";
+import { wireRequirementHolders } from "../structures/effectDefs.js";
 
 export const SAVE_VERSION = 1;  // TODO - shove this in a config file somewhere
 const STORAGE_KEY = "savegame";
@@ -53,7 +54,12 @@ function deserializeActor(actor, saved) {
 
   for (const id of saved.active) {
     const strength = actor.registry.get(id, "StatLayer")?.value ?? 1;
-    actor.registry.get(id, "PassiveHolder")?.prime(actor, strength);
+    const passiveHolder = actor.registry.get(id, "PassiveHolder");
+    // Priming requirementHolder wiring
+    wireRequirementHolders(actor, id, {
+      applyPassives: () => passiveHolder?.prime(actor, strength),
+      removePassives: () => {},
+    });
     actor.reactor.notifyAll();  // Hacky not-quite-fix for mid-cascade saves
   }
   // TODO - dont use bare NAMESPACES

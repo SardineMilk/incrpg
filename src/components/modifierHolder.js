@@ -41,6 +41,8 @@ export function applyModifiers(game, resolved) {
   let current = resolved;
 
   for (const id of game.active.view("ModifierHolder")) {
+    if (game.registry.get(id, "DormantHolder")?.state === false) continue;
+
     const holder = game.registry.get(id, "ModifierHolder");
     const strength = game.registry.get(id, "StatLayer")?.value ?? 1;
 

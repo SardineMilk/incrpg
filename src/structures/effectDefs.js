@@ -42,10 +42,29 @@ function getStrength(game, entity) {
   );
 }
 
+export function wireRequirementHolders(game, entity, { applyPassives, removePassives }) {
+  const dormantHolder = game.registry.get(entity, "DormantHolder");
+  if (dormantHolder) dormantHolder.wire(game, applyPassives, removePassives);
+  else applyPassives();
+
+  game.registry.get(entity, "RequirementHolder")?.wire(
+    game,
+    () => {},
+    () => deactivateEntity(game, entity),
+  );
+
+  game.registry.get(entity, "VisibilityHolder")?.wire(game, () => {}, () => {});
+}
+
+export function unwireRequirementHolders(game, entity) {
+  game.registry.get(entity, "RequirementHolder")?.unwire(game);
+  game.registry.get(entity, "DormantHolder")?.unwire(game);
+  game.registry.get(entity, "VisibilityHolder")?.unwire(game);
+}
+
 
 function activateEntity(game, entity, duration = null) {
   if (game.active.isActive(entity)) return;
-  game.registry.get(entity, "PassiveHolder")?.apply(game, getStrength(game, entity));
 
   if (duration != null) {
     game.registry.get(entity, "CompletionHolder")?.resetMeter("duration", duration);
@@ -54,11 +73,21 @@ function activateEntity(game, entity, duration = null) {
 
   game.active.activate(entity);
   game.reactor.notify(`active:${game.id}:${entity}`);
+
+  const passiveHolder = game.registry.get(entity, "PassiveHolder");
+  wireRequirementHolders(game, entity, {
+    applyPassives: () => passiveHolder?.apply(game, getStrength(game, entity)),
+    removePassives: () => passiveHolder?.remove(game),
+  });
+
+  if (!game.active.isActive(entity)) return;
   processTrigger(game, "onActivate", { id: entity });
 }
 
 function deactivateEntity(game, entity) {
   if (!game.active.isActive(entity)) return;
+
+  unwireRequirementHolders(game, entity);
   game.registry.get(entity, "PassiveHolder")?.remove(game);
 
   game.registry.get(entity, "CompletionHolder")?.clearMeter("duration");

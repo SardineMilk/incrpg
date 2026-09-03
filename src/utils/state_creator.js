@@ -10,6 +10,8 @@ import { ModifierHolder } from "../components/modifierHolder.js";
 import { PassiveHolder } from "../components/passiveHolder.js";
 import { StatLayer } from "../components/statLayer.js";
 import { TriggerHolder } from "../components/triggerHolder.js";
+import { RequirementHolder, DormantHolder, VisibilityHolder } from "../components/requirementHolder.js";
+
 
 import { generateTagIndex } from "./tagIndex.js";
 import { Reactor } from "./reactor.js";
@@ -59,21 +61,28 @@ export const NAMESPACES = {
 export function buildTemplateRegistry() {
   const registry = new EntityRegistry();
 
-  registerEntities(registry, NAMESPACES.skills, [LevelHolder]);
+  registerEntities(registry, NAMESPACES.skills, [
+    LevelHolder
+  ]);
   registerEntities(registry, NAMESPACES.actions, [
     PassiveHolder, TriggerHolder, ModifierHolder, CompletionHolder,
+    RequirementHolder, DormantHolder, VisibilityHolder,
   ]);
   registerEntities(registry, NAMESPACES.activities, [
     PassiveHolder, TriggerHolder, CompletionHolder,
+    RequirementHolder, DormantHolder, VisibilityHolder,
   ]);
   registerEntities(registry, NAMESPACES.conditions, [
     PassiveHolder, TriggerHolder, ModifierHolder, StatLayer, CompletionHolder,
+    RequirementHolder, DormantHolder, VisibilityHolder,
   ]);
-  registerEntities(registry, NAMESPACES.locations, [PassiveHolder, TriggerHolder]);
+  registerEntities(registry, NAMESPACES.locations, [
+    PassiveHolder, TriggerHolder,
+    RequirementHolder, DormantHolder, VisibilityHolder,
+  ]);
 
   return registry;
 }
-
 
 export function initialiseWorld() {
   const world = {};

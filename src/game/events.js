@@ -1,5 +1,7 @@
 export function processTrigger(game, triggerType, context, phase) {
   for (const id of game.active.view("TriggerHolder")) {
+    if (game.registry.get(id, "DormantHolder")?.state === false) continue;
+
     const triggerHolder = game.registry.get(id, "TriggerHolder");
     const strength = game.registry.get(id, "StatLayer")?.value ?? 1;
 

@@ -164,6 +164,11 @@ export const ACTIONS = {
       eff.changeUIActor(fml.actor("player"))
     ]
   },
+
+  test_vis: {
+    name: "TEST - visibility requirements",
+    visibility: [req.active("activate_rain")]
+  },
 };
 
 
