@@ -1,4 +1,4 @@
-import { req, fml, sel } from "../structures/structures.js";
+import { fml, sel } from "../structures/structures.js";
 import { ui } from "../ui/widgetDefs.js";
 import { byTag, nameOf } from "../utils/tagIndex.js";
 import { actorsByTeam } from "../game/actor.js";
@@ -10,6 +10,19 @@ import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
 // Probably add a new holder? Or use the tag registry because thats the answer to everything
 import { ACTIONS } from "./actionsData.js";
 import { ACTIVITIES } from "./activitiesData.js";
+import { SKILLS } from "./skillsData.js";
+
+// A def's requirements gate whether it *functions* (can be used/entered/
+// activated); its visibility gates whether it *shows up* in the UI at all.
+// Most defs don't bother drawing that distinction, so visibility falls
+// back to requirements when not given explicitly. This is a UI-local
+// convenience over the raw defs this file already imports, not a general
+// engine concept - utils/tagIndex.js deliberately knows nothing about
+// either field name, so any other consumer that wants this same fallback
+// gets to decide that for itself too, rather than inheriting it silently.
+function visibilityOf(def) {
+  return def?.visibility ?? def?.requirements;
+}
 
 const CHARACTERISTICS = [
   "constitution", "strength",
@@ -134,7 +147,7 @@ export const PANELS = {
         ),
       ], {
         className: "action-option",
-        requirements: ACTIONS[id]?.requirements ?? [],
+        requirements: visibilityOf(ACTIONS[id]),
         tooltip: {
           content: (game, rowId) => ui.text(describeAction(game, rowId)),
         },
@@ -155,7 +168,7 @@ export const PANELS = {
           }),
         ], {
           className: "activity-option",
-          requirements: ACTIVITIES[id]?.requirements ?? [],
+          requirements: visibilityOf(ACTIVITIES[id]),
         }),
         { className: "activities-list" }
       ),
@@ -196,10 +209,13 @@ export const PANELS = {
         ui.bar(fml.xp(id), fml.xpToNext(id), { className: "skill-progress" }),
       ], {
         className: "skill-entry",
-        requirements: [[
-          req.geq(fml.level(id), 1),
-          req.geq(fml.xp(id), fml.div(fml.xpToNext(id), 2)),
-        ]],
+        requirements: fml.and(
+          visibilityOf(SKILLS[id]),
+          fml.or(
+            fml.geq(fml.level(id), 1),
+            fml.geq(fml.xp(id), fml.div(fml.xpToNext(id), 2)),
+          ),
+        ),
         // TODO - skill level effects and milestones
         tooltip: {
           content: (game, rowId) => ui.group([

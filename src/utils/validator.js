@@ -1,12 +1,10 @@
 import { EFFECT_DEFS } from "../structures/effectDefs.js";
-import { REQUIREMENT_DEFS } from "../structures/requirementDefs.js";
 import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
 
-const REGISTRIES = { effect: EFFECT_DEFS, requirement: REQUIREMENT_DEFS, trigger: TRIGGER_DEFS };
+const REGISTRIES = { effect: EFFECT_DEFS, trigger: TRIGGER_DEFS };
 
 const EFFECT_LIST_FIELDS = new Set(["effects", "result", "level", "success", "failure"]);
 const MILESTONE_FIELD = "milestones";
-const REQUIREMENT_LIST_FIELD = "requirements";
 const TRIGGER_LIST_FIELDS = new Set(["triggers"]);
 
 export function validate(conditions, skills, actions, locations = {}) {
@@ -19,7 +17,7 @@ export function validate(conditions, skills, actions, locations = {}) {
   console.log("- checking for duplicate ids");
   checkDuplicateIds(namespaces, errors);
 
-  console.log("- checking for unknown effect/requirement/trigger types");
+  console.log("- checking for unknown effect/trigger types");
   checkKnownTypes(namespaces, errors, warnings);
 
   //console.log("- checking for misused effects");
@@ -86,8 +84,6 @@ function walkEntity(path, def, errors, warnings) {
       for (const [level, effects] of Object.entries(value)) {
         walkTypedList(`${path}.milestones[${level}]`, effects, "effect", errors, warnings);
       }
-    } else if (key === REQUIREMENT_LIST_FIELD) {
-      walkTypedList(`${path}.requirements`, value, "requirement", errors, warnings);
     } else if (TRIGGER_LIST_FIELDS.has(key) && Array.isArray(value)) {
       value.forEach((entry, i) => walkTriggerEntry(`${path}.${key}[${i}]`, entry, errors, warnings));
     }
@@ -97,7 +93,6 @@ function walkEntity(path, def, errors, warnings) {
 function walkTriggerEntry(path, entry, errors, warnings) {
   if (!entry || typeof entry !== "object") return;
   if (entry.event) checkType(`${path}.event`, entry.event, "trigger", errors, warnings);
-  if (entry.requirements) walkTypedList(`${path}.requirements`, entry.requirements, "requirement", errors, warnings);
   if (entry.effects) walkTypedList(`${path}.effects`, entry.effects, "effect", errors, warnings);
 }
 

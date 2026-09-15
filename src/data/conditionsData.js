@@ -1,4 +1,4 @@
-import {eff, req, evt, sel, fml, mod } from "../structures/structures.js";
+import {eff, evt, sel, fml, mod } from "../structures/structures.js";
 
 /*
 * Worldbuilding
@@ -46,7 +46,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        requirements: [req.lt(fml.value("health"), fml.value("healthMax"))],
+        requirements: fml.lt(fml.value("health"), fml.value("healthMax")),
         effects: [
           eff.changeValue("health", 1),
           eff.gainXp("regeneration", 0.5),
@@ -59,7 +59,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        requirements: [req.lt(fml.value("stamina"), fml.value("staminaMax"))],
+        requirements: fml.lt(fml.value("stamina"), fml.value("staminaMax")),
         effects: [
           eff.changeValue("stamina", 1),
           eff.gainXp("breathing", 0.5),
@@ -72,7 +72,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        requirements: [req.lt(fml.value("mental"), fml.value("mentalMax"))],
+        requirements: fml.lt(fml.value("mental"), fml.value("mentalMax")),
         effects: [
           eff.changeValue("mental", 1),
           eff.gainXp("mindfulness", 0.5),
@@ -95,7 +95,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        requirements: [req.gt(fml.value("health"), fml.value("healthMax"))],
+        requirements: fml.gt(fml.value("health"), fml.value("healthMax")),
         effects: [
           eff.changeValue(
             "health", 
@@ -110,7 +110,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        requirements: [req.gt(fml.value("stamina"), fml.value("staminaMax"))],
+        requirements: fml.gt(fml.value("stamina"), fml.value("staminaMax")),
         effects: [
           eff.changeValue(
             "stamina", 
@@ -125,7 +125,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.tick(),
-        requirements: [req.gt(fml.value("mental"), fml.value("mentalMax"))],
+        requirements: fml.gt(fml.value("mental"), fml.value("mentalMax")),
         effects: [
           eff.changeValue(
             "mental", 
@@ -148,7 +148,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.valueLoss("health"),
-        requirements: [req.valueLessThan("health", 0)],
+        requirements: fml.lt(fml.value("health"), 0),
         effects: [
           eff.sendMessage("SYSTEM", "You pass out from your injuries"),
           eff.deactivate(sel.active(sel.tags("actions"))),
@@ -162,7 +162,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.valueLoss("stamina"),
-        requirements: [req.valueLessThan("stamina", 0)],
+        requirements: fml.lt(fml.value("stamina"), 0),
         effects: [
           eff.sendMessage("SYSTEM", "You pass out"),
           eff.deactivate(sel.active(sel.tags("actions"))),
@@ -176,7 +176,7 @@ export const INHERENT_EFFECTS = {
     triggers: [
       {
         event: evt.valueLoss("mental"),
-        requirements: [req.valueLessThan("mental", 0)],
+        requirements: fml.lt(fml.value("mental"), 0),
         effects: [
           eff.sendMessage("SYSTEM", "You pass out from stress"),
           eff.deactivate(sel.active(sel.tags("actions"))),
@@ -237,7 +237,7 @@ export const INHERENT_EFFECTS = {
       {
         event: evt.activate(),
         phase: "pre",
-        requirements: [req.hasTag(fml.id(), "actions")],
+        requirements: fml.hasTag(fml.id(), "actions"),
         effects: [
           eff.deactivate(sel.active(sel.tags("actions"))),
           eff.sendMessage("SYSTEM", fml.add("Action: ", fml.id()))
@@ -251,7 +251,7 @@ export const INHERENT_EFFECTS = {
       {
         event: evt.activate(),
         phase: "pre",
-        requirements: [req.hasTag(fml.id(), "form")],
+        requirements: fml.hasTag(fml.id(), "form"),
         effects: [eff.deactivate(sel.active(sel.tags("form")))],
       },
     ],
@@ -262,7 +262,7 @@ export const INHERENT_EFFECTS = {
       {
         event: evt.activate(),
         phase: "pre",
-        requirements: [req.hasTag(fml.id(), "locations")],
+        requirements: fml.hasTag(fml.id(), "locations"),
         effects: [eff.deactivate(sel.active(sel.tags("locations")))],
       },
     ],
@@ -273,7 +273,7 @@ export const INHERENT_EFFECTS = {
       {
         event: evt.activate(),
         phase: "pre",
-        requirements: [req.hasTag(fml.id(), "activities")],
+        requirements: fml.hasTag(fml.id(), "activities"),
         effects: [eff.deactivate(sel.active(sel.tags("activities")))],
       },
     ],
@@ -541,62 +541,62 @@ const IMBALANCES = {
   * Con > Wil makes you take ~10% less damage, but when you lose health lose mental ~20% of the amount 
   */ 
   imbalance_con_str: {
-    requirements: [req.skillsImbalanced("constitution", "strength")],
+    requirements: fml.skillsImbalanced("constitution", "strength"),
     passives: [
 
     ],
   },
   imbalance_con_agi: {
-    requirements: [req.skillsImbalanced("constitution", "agility")],
+    requirements: fml.skillsImbalanced("constitution", "agility"),
     passives: [
 
     ],
   },
   imbalance_con_wit: {
-    requirements: [req.skillsImbalanced("constitution", "wit")],
+    requirements: fml.skillsImbalanced("constitution", "wit"),
     passives: [
 
     ],
   },
   imbalance_con_int: {
-    requirements: [req.skillsImbalanced("constitution", "intelligence")],
+    requirements: fml.skillsImbalanced("constitution", "intelligence"),
     passives: [
 
     ],
   },
   imbalance_con_wil: {
-    requirements: [req.skillsImbalanced("constitution", "willpower")],
+    requirements: fml.skillsImbalanced("constitution", "willpower"),
     passives: [
 
     ],
   },
 
   imbalance_str_con: {
-    requirements: [req.skillsImbalanced("strength", "constitution")],
+    requirements: fml.skillsImbalanced("strength", "constitution"),
     passives: [
 
     ],
   },
   imbalance_str_agi: {
-    requirements: [req.skillsImbalanced("strength", "agility")],
+    requirements: fml.skillsImbalanced("strength", "agility"),
     passives: [
 
     ],
   },
   imbalance_str_wit: {
-    requirements: [req.skillsImbalanced("strength", "wit")],
+    requirements: fml.skillsImbalanced("strength", "wit"),
     passives: [
 
     ],
   }, 
   imbalance_str_int: {
-    requirements: [req.skillsImbalanced("strength", "intelligence")],
+    requirements: fml.skillsImbalanced("strength", "intelligence"),
     passives: [
 
     ],
   },
   imbalance_str_wil: {
-    requirements: [req.skillsImbalanced("strength", "willpower")],
+    requirements: fml.skillsImbalanced("strength", "willpower"),
     passives: [
 
     ],
@@ -604,68 +604,68 @@ const IMBALANCES = {
 
 
   imbalance_agi_str: {
-    requirements: [req.skillsImbalanced("agility", "strength")],
+    requirements: fml.skillsImbalanced("agility", "strength"),
     passives: [
 
     ],
   },
   imbalance_agi_con: {
-    requirements: [req.skillsImbalanced("agility", "constitution")],
+    requirements: fml.skillsImbalanced("agility", "constitution"),
     passives: [
 
     ],
   },
   imbalance_agi_wit: {
-    requirements: [req.skillsImbalanced("agility", "wit")],
+    requirements: fml.skillsImbalanced("agility", "wit"),
     passives: [
 
     ],
   },
   imbalance_agi_int: {
-    requirements: [req.skillsImbalanced("agility", "intelligence")],
+    requirements: fml.skillsImbalanced("agility", "intelligence"),
     passives: [
 
     ],
   },
   imbalance_agi_wil: {
-    requirements: [req.skillsImbalanced("agility", "willpower")],
+    requirements: fml.skillsImbalanced("agility", "willpower"),
     passives: [
 
     ],
   },
 
   imbalance_wit_str: { 
-    requirements: [req.skillsImbalanced("wit", "strength")],
+    requirements: fml.skillsImbalanced("wit", "strength"),
     passives: [
 
     ], 
   },
   imbalance_wit_con: { 
-    requirements: [req.skillsImbalanced("wit", "constitution")],
+    requirements: fml.skillsImbalanced("wit", "constitution"),
     passives: [
 
     ], 
   },
   imbalance_wit_agi: { 
-    requirements: [req.skillsImbalanced("wit", "agility")],
+    requirements: fml.skillsImbalanced("wit", "agility"),
     passives: [
 
     ], 
   },
   imbalance_wit_dex: { 
-    requirements: [req.skillsImbalanced("wit", "dexterity")],
+    requirements: fml.skillsImbalanced("wit", "dexterity"),
     passives: [
 
     ], 
   },
   imbalance_wit_int: { 
-    requirements: [req.skillsImbalanced("wit", "intelligence")],
+    requirements: fml.skillsImbalanced("wit", "intelligence"),
     passives: [
 
     ], 
   },
   imbalance_wit_wil: { 
-    requirements: [req.skillsImbalanced("wit", "willpower")],
+    requirements: fml.skillsImbalanced("wit", "willpower"),
     passives: [
 
     ], 
@@ -673,62 +673,62 @@ const IMBALANCES = {
 
 
   imbalance_int_str: {
-    requirements: [req.skillsImbalanced("intelligence", "strength")],
+    requirements: fml.skillsImbalanced("intelligence", "strength"),
     passives: [
 
     ],
   },
   imbalance_int_con: {
-    requirements: [req.skillsImbalanced("intelligence", "constitution")],
+    requirements: fml.skillsImbalanced("intelligence", "constitution"),
     passives: [
 
     ],
   },
   imbalance_int_agi: {
-    requirements: [req.skillsImbalanced("intelligence", "agility")],
+    requirements: fml.skillsImbalanced("intelligence", "agility"),
     passives: [
 
     ],
   },
   imbalance_int_wit: {
-    requirements: [req.skillsImbalanced("intelligence", "wit")],
+    requirements: fml.skillsImbalanced("intelligence", "wit"),
     passives: [
 
     ],
   },
   imbalance_int_wil: {
-    requirements: [req.skillsImbalanced("intelligence", "willpower")],
+    requirements: fml.skillsImbalanced("intelligence", "willpower"),
     passives: [
 
     ],
   },
 
   imbalance_wil_str: { 
-    requirements: [req.skillsImbalanced("willpower", "strength")], 
+    requirements: fml.skillsImbalanced("willpower", "strength"), 
     passives: [
 
     ], 
   },
   imbalance_wil_con: { 
-    requirements: [req.skillsImbalanced("willpower", "constitution")], 
+    requirements: fml.skillsImbalanced("willpower", "constitution"), 
     passives: [
 
     ], 
   },
   imbalance_wil_agi: { 
-    requirements: [req.skillsImbalanced("willpower", "agility")], 
+    requirements: fml.skillsImbalanced("willpower", "agility"), 
     passives: [
 
     ], 
   },
   imbalance_wil_wit: { 
-    requirements: [req.skillsImbalanced("willpower", "wit")], 
+    requirements: fml.skillsImbalanced("willpower", "wit"), 
     passives: [
 
     ], 
   },
   imbalance_wil_int: { 
-    requirements: [req.skillsImbalanced("willpower", "intelligence")], 
+    requirements: fml.skillsImbalanced("willpower", "intelligence"), 
     passives: [
 
     ], 

@@ -1,6 +1,6 @@
 // components/modifierHolder.js
 import { MODIFIER_DEFS } from "../structures/modifierDefs.js";
-import { meetsRequirements } from "../game/requirements.js";
+import { check } from "../game/requirements.js";
 import { resolveFormulas } from "../structures/formulaDefs.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
 import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
@@ -16,7 +16,7 @@ export class ModifierHolder {
     for (const m of this.modifierDefs) {
       if (m.event.type !== resolved.type) continue;
       if (!this._matches(game, m.event, resolved)) continue;
-      if (!meetsRequirements(game, m)) continue;
+      if (!check(game, m.requirements)) continue;
       ops.push(...m.modify);
     }
     return ops;

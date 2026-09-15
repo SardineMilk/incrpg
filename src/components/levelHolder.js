@@ -1,7 +1,6 @@
 import { applyEffect, negateEffect } from "../game/effects.js";
 import { StatLayer } from "./statLayer.js";
 import { PassiveHolder } from "./passiveHolder.js";
-import { req } from "../structures/requirementDefs.js";
 import { fml } from "../structures/formulaDefs.js";
 import { xpToNext } from "../utils/math.js";
 import { processTrigger } from "../game/events.js";
@@ -21,14 +20,15 @@ export class LevelHolder {
         this.name = name;
         this.id = id;
 
-        this._levelPassives = new PassiveHolder([{ requirements: [], effects: levelEffects || [] }]);
-    
-        this._milestonePassives = new PassiveHolder(
-            Object.entries(this.milestones).map(([levelStr, effects]) => ({
-                requirements: [req.geq(fml.level(id), Number(levelStr))],
-                effects,
-            }))
-        );
+
+    this._levelPassives = new PassiveHolder([{ effects: levelEffects || [] }]);
+
+    this._milestonePassives = new PassiveHolder(
+        Object.entries(this.milestones).map(([levelStr, effects]) => ({
+            requirements: fml.geq(fml.level(id), Number(levelStr)),
+            effects,
+        }))
+    );
     }
 
     static fromDefinition(def, id) {

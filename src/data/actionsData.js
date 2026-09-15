@@ -1,11 +1,11 @@
-import { eff, evt, req, fml, sel } from "../structures/structures.js";
+import { eff, evt, fml, sel } from "../structures/structures.js";
 
 
 export const ACTIONS = {
   walk: {
     name: "Walk",
     tags: ["traversal"],
-    requirements: [[req.active(sel.tags("activities", "traversal"))]],
+    requirements: fml.any(sel.active(sel.tags("activities", "traversal"))),
     duration: 100,
     triggers: [
       {
@@ -28,7 +28,7 @@ export const ACTIONS = {
   jog: {
     name: "Jog",
     tags: ["traversal"],
-    requirements: [[req.active(sel.tags("activities", "traversal"))]],
+    requirements: fml.any(sel.active(sel.tags("activities", "traversal"))),
     duration: 50,
     triggers: [
       {
@@ -54,7 +54,7 @@ export const ACTIONS = {
   sprint: {
     name: "Sprint",
     tags: ["traversal"],
-    requirements: [[req.active(sel.tags("activities", "traversal"))]],
+    requirements: fml.any(sel.active(sel.tags("activities", "traversal"))),
     duration: 20,
     triggers: [
       {
@@ -80,7 +80,7 @@ export const ACTIONS = {
   sleep: {
     name: "Sleep",
     tags: ["rest"],
-    requirements: [[req.active(sel.tags("activities", "rest"))]],
+    requirements: fml.any(sel.active(sel.tags("activities", "rest"))),
     duration: 10,
     triggers: [
       {
@@ -100,7 +100,7 @@ export const ACTIONS = {
   climb_up: {
     name: "Climb Up",
     duration: 10,
-    requirements: [[req.active(sel.tags("activities", "vertical_traversal"))]],
+    requirements: fml.any(sel.active(sel.tags("activities", "vertical_traversal"))),
     triggers: [
       {
         event: evt.tick(),
@@ -119,7 +119,7 @@ export const ACTIONS = {
   climb_down: {
     name: "Climb Down",
     duration: 10,
-    requirements: [[req.active(sel.tags("activities", "vertical_traversal"))]],
+    requirements: fml.any(sel.active(sel.tags("activities", "vertical_traversal"))),
     triggers: [
       {
         event: evt.tick(),
@@ -165,10 +165,6 @@ export const ACTIONS = {
     ]
   },
 
-  test_vis: {
-    name: "TEST - visibility requirements",
-    visibility: [req.active("activate_rain")]
-  },
 };
 
 

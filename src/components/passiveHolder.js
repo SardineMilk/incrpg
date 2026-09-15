@@ -4,8 +4,8 @@ import { PersistentEffect } from "./persistentEffect.js";
 function normalize(passiveDefs) {
   return passiveDefs.map((p) =>
     p && Array.isArray(p.effects)
-      ? { requirements: p.requirements ?? [], effects: p.effects }
-      : { requirements: [], effects: [p] }
+      ? { requirements: p.requirements ?? null, effects: p.effects }
+      : { requirements: null, effects: [p] }
   );
 }
 

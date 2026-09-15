@@ -1,12 +1,12 @@
 import { resolveEffect, diffEffect, applyResolved, removeEffect, isReversible } from "../game/effects.js";
-import { meetsRequirements } from "../game/requirements.js";
+import { check } from "../game/requirements.js";
 
 const SINGLETON_KEY = Symbol("singleton-target");
 const getInstanceKey = (resolved) => resolved.id ?? SINGLETON_KEY;
 
 // TODO - this is a bloated mess, it needs a rewrite
 export class PersistentEffect {
-  constructor(raw, requirements = []) {
+  constructor(raw, requirements = null) {
     this.raw = raw;
     this.requirements = requirements;
 
@@ -58,7 +58,7 @@ export class PersistentEffect {
   _reconcilePresence(apply = true) {
     const game = this._game;
     const { result: shouldBePresent, deps } = game.reactor.track(() =>
-      meetsRequirements(game, { requirements: this.requirements }));
+      check(game, this.requirements));
 
     if (this._presenceSub) game.reactor.resubscribe(this._presenceSub, deps);
     else if (deps.size > 0) this._presenceSub = game.reactor.subscribe(deps, () => this._reconcilePresence());

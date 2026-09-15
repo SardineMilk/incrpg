@@ -1,34 +1,5 @@
-import {eff, req, evt, sel, fml } from "../structures/structures.js";
+import {eff, evt, sel, fml } from "../structures/structures.js";
 
-// Activities should mostly replace actions as the default way the player interacts with the world
-//
-
-// TODO - actually design how this should look
-/*
-* Should the adversary plug into the activity
-* - this would make combat easier
-* - duration would be removed, actions would progress against the adversary
-*   - may require a second data layer:
-*       - adversaries - meldrum woods
-*       - activity frameworks - explore woods
-*       - combinations - explore meldrum woods
-*       - could this be done with a pseudo dependency injection system? 
-* Activities should be able to trigger sub-activities
-*   - exploring woods can lead to fighting a monster
-*   - fairly simple description in data: 
-*       - encounter_goblin adversary action has the effect of starting goblin fight activity
-*   - how should this be described in code?
-*       - activity stack? tree?
-*
-* Two options:
-* Activities define tagged actions that are valid to use
-* - Potentially more elegant?
-* - Would require a pre-processing step to convert to the latter
-* Actions define tagged activities that are value to use
-* - Works with existing architecture
-* 
-* 
-*/
 export const ACTIVITIES = {
     fall_asleep: {
         name: "Try to fall asleep",
@@ -41,7 +12,7 @@ export const ACTIVITIES = {
         },
         passives: [
             {
-                requirements: [req.geq(fml.progress("fall_asleep", "relaxation"), 50)],
+                requirements: fml.geq(fml.progress("fall_asleep", "relaxation"), 50),
                 effects: [
                     eff.activate("asleep"), 
                     eff.uiStyle("#hero-panel", { backgroundColor:"black", })
@@ -53,7 +24,6 @@ export const ACTIVITIES = {
 
     explore_meldrum_woods: {
         name: "Explore New Meldrum Woods",
-        requirements: [],
         tags: ["exploration", "traversal"],
         meters: {
             distance: {
@@ -82,7 +52,7 @@ export const ACTIVITIES = {
     climb_northern_cliff: {
         name: "Climb Northern Cliff",
         tags: ["exploration", "vertical_traversal"],
-        requirements: [req.active("new_meldrum")],
+        requirements: fml.active("new_meldrum"),
         passives: [],
 
         meters: {
@@ -118,7 +88,7 @@ export const ACTIVITIES = {
     descend_northern_cliff: {
         name: "Descend Northern Cliff",
         tags: ["exploration", "vertical_traversal"],
-        requirements: [req.active("northern_cliff_top")],
+        requirements: fml.active("northern_cliff_top"),
         passives: [],
 
         meters: {
@@ -155,7 +125,6 @@ export const ACTIVITIES = {
 
     chop_tree: {
         name: "Chop Oak Tree",
-        requirements: [],
         tags: ["gathering"],
         allowed: ["combat"],
         meters: {

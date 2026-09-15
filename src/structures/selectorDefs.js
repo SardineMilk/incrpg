@@ -1,5 +1,5 @@
 import { byTag } from "../utils/tagIndex.js";
-import { meetsRequirements } from "../game/requirements.js";
+import { check } from "../game/requirements.js";
 import { resolveFormulas } from "./formulaDefs.js";
 
 // Tag selectors so resolveTargets can find them in arbitrary fields.
@@ -109,7 +109,7 @@ export function resolveTargets(game, structure) {
   for (const candidate of results) {
     const outcome = game.candidateScope.with(candidate, () => {
       const r = resolveFormulas(game, candidate);
-      if (requirements && !meetsRequirements(game, { requirements })) return null;
+      if (requirements && !check(game, requirements)) return null;
       return r;
     });
     if (outcome !== null) resolved.push(outcome);

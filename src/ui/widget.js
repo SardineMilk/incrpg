@@ -1,5 +1,5 @@
 import { WIDGET_DEFS } from "./widgetDefs.js";
-import { meetsRequirements } from "../game/requirements.js";
+import { check } from "../game/requirements.js";
 import { getTooltipLayer } from "./tooltipLayer.js";
 
 const TOOLTIP_SHOW_DELAY = 400;
@@ -56,7 +56,7 @@ export class Widget {
   _reconcilePresence() {
     const game = this.game;
     const { result: shouldBePresent, deps } = game.reactor.track(() =>
-      meetsRequirements(game, { requirements: this.descriptor.requirements }));
+      check(game, this.descriptor.requirements));
 
     if (this._presenceSub) game.reactor.resubscribe(this._presenceSub, deps);
     else if (deps.size > 0) this._presenceSub = game.reactor.subscribe(deps, () => this._reconcilePresence());

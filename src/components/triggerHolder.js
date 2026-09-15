@@ -1,4 +1,4 @@
-import { meetsRequirements } from "../game/requirements.js";
+import { check } from "../game/requirements.js";
 import { resolveFormulas } from "../structures/formulaDefs.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
 import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
@@ -28,7 +28,7 @@ export class TriggerHolder {
       if (t.event.type !== triggerType) continue;
       if (t.phase !== phase) continue;
       if (!this._matches(game, t.event, context)) continue;
-      if (!meetsRequirements(game, t)) continue;
+      if (!check(game, t.requirements)) continue;
       for (const effect of t.effects) pending.push(effect);
     }
     return pending;
