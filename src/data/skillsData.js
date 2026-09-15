@@ -343,4 +343,118 @@ export const SKILLS = {
   stonecrafting: {},
   engraving: {},
 
+/*
+Skill Ideas 
+(not final)
+
+# Combat
+Archery
+Axe Fighting
+Dagger Fighting
+Spear Fighting
+Sword Fighting
+Shield Fighting
+Throwing
+Caber Tossing
+
+Unarmed Combat
+Aikido
+Bodybuilding
+Grappling
+Wrestling
+
+
+# Movement
+Acrobatics
+Aerobics
+Athletics
+Calisthenics
+Climbing
+Evasion
+Parkour
+Running
+Swimming
+Tumbling
+Walking
+
+# Subterfuge
+Ambushing
+Lockpicking
+Pickpocketing
+Sneaking
+Stealthing
+Tracking
+
+
+# Survival
+Bird Watching
+Horseback Riding
+Mountaineering
+Navigation
+Riding
+Taming
+Scavenging
+Survival
+Tracking
+Trapping
+
+# Gathering
+Fishing
+Foraging
+Geology
+Herbalism
+Hunting
+Mining
+Prospecting
+
+# Crafting
+Alchemy
+Armour Smithing
+Baking
+Blacksmithing
+Brewing
+Butchery
+Cooking
+Jewelry Making
+Leatherworking
+Metalworking
+Sewing
+Smithing
+Stone Masonry
+Taxidermy
+Weaving
+Weapon Maintenance
+
+# Knowledge
+Anatomy
+Appraising
+Astronomy
+Learning
+Literacy
+Observation
+Occultism
+Reading
+Scanning
+Strategy
+Teaching
+Writing
+
+# Social
+Bartering
+Intimidation
+Negotiation
+Persuasion
+Sarcasm
+Storytelling
+Ventriloquism
+
+Breathing
+Drinking
+Gambling
+Knot Tying
+Meditation
+Painting
+Poisoncraft
+  */
+
 };
