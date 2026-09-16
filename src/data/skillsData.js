@@ -2,21 +2,6 @@ import { eff } from "../structures/structures.js";
 
 export const SKILLS = {
   /*
-  * Planned Attributes
-  * - 2 per archetype
-  *
-  * Constitution - +health
-  * Strength     - +health/stamina
-  *
-  * Agility      - +stamina
-  * Wit          - +stamina/mental
-  *
-  * Intelligence - +mental
-  * Willpower    - +mental/health
-  *
-  */
-
-  /*
   * Skill tree layout (top-level nodes only - see individual entries for children)
   *
   * Combat      - weapon_proficiency, ranged, unarmed, evasion
@@ -101,6 +86,7 @@ export const SKILLS = {
       15: [eff.changeValue("mentalMax", 3)],
     },
   },
+
   regeneration: {
     name: "Regeneration",
     description:
@@ -113,7 +99,6 @@ export const SKILLS = {
       15: [eff.changeStrength("health_regen", { percent: 0.05 })],
     },
   },
-
   breathing: {
     name: "Breathing",
     description:
@@ -126,7 +111,6 @@ export const SKILLS = {
       15: [eff.changeStrength("stamina_regen", { percent: 0.05 })],
     },
   },
-
   mindfulness: {
     name: "Mindfulness",
     description: "Become more aware of your mental state, whats affecting it, and how to improve it.",

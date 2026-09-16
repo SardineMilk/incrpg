@@ -19,6 +19,7 @@ import { changeUIActor } from "../ui/panelManager.js";
  */
 
 
+// TODO - should the diff functions be here?
 const EPSILON = 1e-9;
 
 function diffAmount(prev, next) {
@@ -36,12 +37,8 @@ function diffStatLayer(prev, next) {
   return { ...next, flat: dFlat, percent: dPercent, multiplier: dMultiplier };
 }
 
-function getStrength(game, entity) {
-  return (
-    game.registry.get(entity, "StatLayer")?.value ?? 1
-  );
-}
 
+// TODO - rewrite this
 export function wireRequirementHolders(game, entity, { applyPassives, removePassives }) {
   const dormantHolder = game.registry.get(entity, "DormantHolder");
   if (dormantHolder) dormantHolder.wire(game, applyPassives, removePassives);
@@ -76,7 +73,7 @@ function activateEntity(game, entity, duration = null) {
 
   const passiveHolder = game.registry.get(entity, "PassiveHolder");
   wireRequirementHolders(game, entity, {
-    applyPassives: () => passiveHolder?.apply(game, getStrength(game, entity)),
+    applyPassives: () => passiveHolder?.apply(game, game.registry.get(entity, "StatLayer")?.value ?? 1),
     removePassives: () => passiveHolder?.remove(game),
   });
 
