@@ -1,4 +1,4 @@
-import { eff, evt, fml, sel } from "../structures/structures.js";
+import { eff, evt, fml, sel, target } from "../structures/structures.js";
 
 
 export const ACTIONS = {
@@ -162,6 +162,17 @@ export const ACTIONS = {
     duration: 10,
     result: [
       eff.changeUIActor(fml.actor("player"))
+    ]
+  },
+
+  hit_rat: {
+    name: "TEST - Hit Rat",
+    duration: 10,
+    result: [
+      eff.onTarget(
+        target.random(target.enemies()),  // TODO - generalize attack target
+        eff.changeValue("health", -25)
+      )
     ]
   },
 

@@ -4,6 +4,7 @@ import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
 const REGISTRIES = { effect: EFFECT_DEFS, trigger: TRIGGER_DEFS };
 
 const EFFECT_LIST_FIELDS = new Set(["effects", "result", "level", "success", "failure"]);
+const NESTED_EFFECT_FIELDS = new Set(["effect"]);
 const MILESTONE_FIELD = "milestones";
 const TRIGGER_LIST_FIELDS = new Set(["triggers"]);
 
@@ -61,8 +62,8 @@ function checkReactiveEffectSupport(skillId, listName, effects, errors) {
   for (const effect of effects) {
     const def = EFFECT_DEFS[effect.type];
     if (!def) continue; // unknown-type already caught elsewhere
-    if (!def.scale) errors.push(`${skillId}.${listName}: effect "${effect.type}" has no scale() — level-scaling will silently no-op`);
-    if (!def.diff)  errors.push(`${skillId}.${listName}: effect "${effect.type}" has no diff() — will fall back to remove+reapply every reconciliation`);
+    if (!def.scale) errors.push(`${skillId}.${listName}: effect "${effect.type}" has no scale()`);
+    if (!def.diff)  errors.push(`${skillId}.${listName}: effect "${effect.type}" has no diff()`);
   }
 }
 
@@ -80,6 +81,8 @@ function walkEntity(path, def, errors, warnings) {
   for (const [key, value] of Object.entries(def)) {
     if (EFFECT_LIST_FIELDS.has(key)) {
       walkTypedList(`${path}.${key}`, value, "effect", errors, warnings);
+    } else if (NESTED_EFFECT_FIELDS.has(key)) {
+      checkType(`${path}.${key}`, value, "effect", errors, warnings);
     } else if (key === MILESTONE_FIELD && value && typeof value === "object") {
       for (const [level, effects] of Object.entries(value)) {
         walkTypedList(`${path}.milestones[${level}]`, effects, "effect", errors, warnings);

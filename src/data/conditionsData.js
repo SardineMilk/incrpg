@@ -1,4 +1,4 @@
-import {eff, evt, sel, fml, mod } from "../structures/structures.js";
+import {eff, evt, sel, fml, mod, target } from "../structures/structures.js";
 
 /*
 * Worldbuilding
@@ -352,6 +352,28 @@ export const INHERENT_EFFECTS = {
   },
 
 
+  /*
+  plot_armor: {
+    modifiers: [
+      {
+        event: evt.trigger("health_death"),
+        modify: [
+          mod.cancel()
+        ]
+      }
+    ],
+    triggers: [
+      {
+        event: evt.trigger("health_death"),
+        phase: "pre",
+        effects: [
+          eff.activate("starter_hut")
+        ]
+      }
+    ]
+  },
+ */
+
 };
 
 
@@ -440,7 +462,19 @@ const TRAITS = {
   },
   activated_trollish_regeneration: {
     passives: [eff.changeStrength("health_regen", {multiplier: 3})],
-  }
+  },
+
+  thorns: {
+    triggers: [{
+      event: evt.valueLoss("health"),
+      effects: [
+        eff.onTarget(
+          target.actor(fml.sourceActor()),
+          eff.changeValue("health", -10),
+        ),
+      ],
+    }]
+  },  
 
 }
 

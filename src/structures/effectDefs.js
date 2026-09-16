@@ -3,6 +3,7 @@ import { LOCATIONS } from "../data/locationsData.js";
 import { processTrigger } from "../game/events.js";
 import { scaleAmount, scaleStatLayer } from "./scaling.js";
 import { changeUIActor } from "../ui/panelManager.js";
+import { isTargetSelector } from "./targetDefs.js";
 /*
  * Each entry defines one effect type:
  *
@@ -19,7 +20,6 @@ import { changeUIActor } from "../ui/panelManager.js";
  */
 
 
-// TODO - should the diff functions be here?
 const EPSILON = 1e-9;
 
 function diffAmount(prev, next) {
@@ -38,7 +38,6 @@ function diffStatLayer(prev, next) {
 }
 
 
-// TODO - rewrite this
 export function wireRequirementHolders(game, entity, { applyPassives, removePassives }) {
   const dormantHolder = game.registry.get(entity, "DormantHolder");
   if (dormantHolder) dormantHolder.wire(game, applyPassives, removePassives);
@@ -383,6 +382,38 @@ export const EFFECT_DEFS = {
 
   despawn: {
     // TODO
+  },
+
+  onTarget: {
+    create: (selector, effect) => {
+      if (!isTargetSelector(selector)) {
+        throw new Error(
+          `eff.onTarget() requires a target.* selector (targetDefs.js), got ${typeof selector}. ` +
+          `sel.* selectors resolve entity ids within an actor's own registry, not actor ids ` +
+          `in the world - they can't be used here.`
+        );
+      }
+      return { type: "onTarget", selector, effect };
+    },
+    apply(game, e) {
+      for (const targetId of e.selector) {
+        const targetActor = game.world.actors.get(targetId);
+        if (!targetActor) continue; // stale id - target despawned mid-resolution
+
+        game.context.with({ actor: game.id }, () => {
+          game.world.applyEffect(targetActor, e.effect);
+        }, `onTarget:${game.id}->${targetId}`);
+      }
+    },
+    scale(game, e, multiplier) {
+      const innerDef = EFFECT_DEFS[e.effect.type];
+      const scaledInner = innerDef?.scale ? innerDef.scale(game, e.effect, multiplier) : e.effect;
+      return { ...e, effect: scaledInner };
+    },
+    display(game, e) {
+      const innerLine = EFFECT_DEFS[e.effect?.type]?.display?.(game, e.effect) ?? e.effect?.type;
+      return `apply to target(s): ${innerLine}`;
+    },
   },
 
 

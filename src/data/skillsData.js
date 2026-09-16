@@ -465,12 +465,12 @@ export const SKILLS = {
   },
 
 
-  // ── Subterfuge ────────────────────────────────────────────────────────
+  // Subterfuge
 
   subterfuge: {
     name: "Subterfuge",
     description:
-      "The fine art of being somewhere you shouldn't, and leaving before anyone notices.",
+      "The fine art of being somewhere you shouldn't, and leaving before anyone notices. Best attempted with a high-vis vest.",
     level: [],
     milestones: {
       5:  [eff.changeValue("staminaMax", 3)],
@@ -482,7 +482,7 @@ export const SKILLS = {
   sneaking: {
     name: "Sneaking",
     description:
-      "Move without being seen, heard, or otherwise noticed. Best attempted with a high-vis vest",
+      "Move without being seen, heard, or otherwise noticed. Best attempted without a high-vis vest.",
     level: [],
     parent: "subterfuge",
     milestones: {
@@ -505,7 +505,7 @@ export const SKILLS = {
 
   pickpocketing: {
     name: "Pickpocketing",
-    description: "People are so generous around here",
+    description: "People are so generous around here.",
     level: [],
     parent: "subterfuge",
     milestones: {

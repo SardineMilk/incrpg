@@ -9,16 +9,46 @@ const lift =
   (game) =>
     fn(game, ...args.map((arg) => res(arg, game)));
 
-// Nulls are truthy. Because I say so.
+// An absent (null/undefined) argument to and/or/not/atLeast - a def that
+// never set an optional requirements/visibility field - is treated as
+// vacuously satisfied, matching the top-level convention (see
+// game/requirements.js#check: "no requirement = true"). Applying that
+// same rule here lets a composed formula fold in an optional slot (e.g.
+// panelsData.js's visibilityOf()) without it counting as a hard failure
+// just because nothing was there to check.
 const satisfied = (b) => b == null || !!b;
 
 // When adding a new formula it always takes `game` as a parameter,
 // but you don't need to pass game at point of use.
+//
+// This dictionary covers both value-producing formulas (value, level,
+// add, ...) and boolean predicates (active, gt, and, any, ...) - a
+// "requirement" is just a formula whose result happens to be treated as
+// a boolean by whoever calls it (see game/requirements.js#check). They
+// share one namespace and one composition mechanism (lift/res above)
+// because the engine doesn't otherwise distinguish value types: nothing
+// about how a formula is built or called cares whether it returns a
+// number, an id, or a boolean.
+//
+// and/or/not/atLeast are ordinary entries here, built the same way as
+// every other formula below - there is no separate "logic node" type and
+// no dispatch table anywhere for them. They compose for free through
+// lift()'s existing argument resolution: each argument that's a function
+// (a nested fml.* call, or a sel.* selector passed to any/none) gets
+// called with `game` before the outer formula's own body runs, exactly
+// like fml.add(fml.value(...), 5) already worked before this file had
+// any boolean-returning entries in it.
 const definitions = {
   // Get data from current effect stack, with shortcuts for the most common uses
   ctx: (game, key) => game.context.get(key),
   id: (game) => game.context.get("id"),
   amount: (game) => game.context.get("amount"),
+  // Set by eff.onTarget() (effectDefs.js) around the nested effect it
+  // applies to a target actor - the id of whoever called onTarget. Lets a
+  // target's own triggers react to who's responsible (thorns, retaliate-
+  // on-hit, etc.) without needing any other way to identify them. Reads
+  // as undefined outside of an onTarget-driven effect.
+  sourceActor: (game) => game.context.get("actor"),
 
   // Get data from current expanded selector candidate
   // Niche, but required in some cases where multiple fields use the candidate

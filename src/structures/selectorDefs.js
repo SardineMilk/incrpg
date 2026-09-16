@@ -81,6 +81,15 @@ export const sel = {
       });
     }),
 
+  random: (selector, count = 1) =>
+    makeSelector((game) => {
+      const ids = resolveIds(game, selector);
+      if (ids.length === 0) return [];
+      
+      const shuffled = [...ids].sort(() => Math.random() - 0.5);
+      return shuffled.slice(0, Math.min(count, ids.length));
+    }),
+
 };
 
 /*

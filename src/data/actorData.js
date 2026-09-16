@@ -10,6 +10,7 @@ export const ACTORS = {
       eff.activate(sel.tags("mortal", "conditions")),
       eff.activate("human"),
       eff.activate("new_meldrum"),
+      eff.activate("plot_armor")
     ]
   },
 
@@ -20,6 +21,7 @@ export const ACTORS = {
       eff.activate(sel.tags("mortal", "conditions")),
       eff.activate("ratkin"),
       eff.activate("new_meldrum"),
+      eff.activate("thorns")
     ]
   }
 };
