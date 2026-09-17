@@ -77,7 +77,7 @@ function activateEntity(game, entity, duration = null) {
   });
 
   if (!game.active.isActive(entity)) return;
-  processTrigger(game, "onActivate", { id: entity });
+  processTrigger(game, "onActivate", { id: entity }, "post");
 }
 
 function deactivateEntity(game, entity) {
@@ -91,7 +91,7 @@ function deactivateEntity(game, entity) {
 
   game.active.deactivate(entity);
   game.reactor.notify(`active:${game.id}:${entity}`);
-  processTrigger(game, "onDeactivate", { id: entity });
+  processTrigger(game, "onDeactivate", { id: entity }, "post");
 }
 
 
