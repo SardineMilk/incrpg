@@ -39,13 +39,13 @@ export const TRIGGER_DEFS = {
 
 
   onActivate: {
-    create: () => ({ type: "onActivate" }),
-    check: () => true,
+    create: (id) => ({ type: "onActivate", id }),
+    check: (trigger, ctx) => trigger.id == null || trigger.id === ctx.id,
   },
 
   onDeactivate: {
-    create: () => ({ type: "onDeactivate" }),
-    check: () => true,
+    create: (id) => ({ type: "onDeactivate", id }),
+    check: (trigger, ctx) => trigger.id == null || trigger.id === ctx.id,
   },
 
   changeValue: {

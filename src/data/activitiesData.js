@@ -1,5 +1,6 @@
 import {eff, evt, sel, fml } from "../structures/structures.js";
 
+
 export const ACTIVITIES = {
     fall_asleep: {
         name: "Try to fall asleep",
@@ -44,75 +45,54 @@ export const ACTIVITIES = {
         },
     },
 
-    // TODO - should these be condensed into one activity?
-    // Maybe requirements for leaving activity, with different effects depending on height meter?
-    // The starting height would nee
 
-    // TODO - proper resetting of meters upon deactivation 
     climb_northern_cliff: {
         name: "Climb Northern Cliff",
         tags: ["exploration", "vertical_traversal"],
-        requirements: fml.active("new_meldrum"),
-        passives: [],
+        requirements: fml.or(fml.active("new_meldrum"), fml.active("northern_cliff_top")),
 
+        triggers: [
+            {
+                event: evt.onActivate("climb_northern_cliff"),
+                effects: [
+                    eff.resetMeter("climb_northern_cliff",
+                        fml.ternary(fml.active("northern_cliff_top"), 200, 0), "height"),
+                    eff.resetMeter("climb_northern_cliff", 100, "grip"),
+                ],
+            },
+        ],
         meters: {
             height: {
                 max: 200,
+                min: 0,
                 repeat: false,
                 result: [
                     eff.sendMessage("SYSTEM", "You reach the top of the cliff"),
                     eff.deactivate("climb_northern_cliff"),
-                    eff.activate("northern_cliff_top")
+                    eff.activate("northern_cliff_top"),
                 ],
-            },
-            grip: {
-                start: 100,
-                repeat: false,
-                max: 100,
-                min: 0,
-                onMin: [
-                    eff.sendMessage("SYSTEM", "You lose your grip and fall off the cliff face"),
-                    eff.changeValue("health", fml.neg(fml.progress("climb_northern_cliff", "height"))),
-                    eff.setMeter("climb_northern_cliff", 0, "height"),
-                    eff.setMeter("climb_northern_cliff", 100, "grip"),
-                ],
-            },
-        },
-        actions: {
-            wind_gust:       { weight: 1, },
-            falling_rocks:   { weight: 0.5, },
-            falling_boulder: { weight: 0.5, },
-        }
-    },
-
-    descend_northern_cliff: {
-        name: "Descend Northern Cliff",
-        tags: ["exploration", "vertical_traversal"],
-        requirements: fml.active("northern_cliff_top"),
-        passives: [],
-
-        meters: {
-            height: {
-                start: 200,
-                max: 200,
-                repeat: false,
                 onMin: [
                     eff.sendMessage("SYSTEM", "You reach the bottom of the cliff"),
-                    eff.deactivate("descend_northern_cliff"),
-                    eff.activate("new_meldrum")
+                    eff.deactivate("climb_northern_cliff"),
+                    eff.activate("new_meldrum"),
                 ],
             },
+            // Depletes while climbing, regenerates on it's own
+            // Losing grip makes you fall to the bottom, losing health
             grip: {
                 start: 100,
-                repeat: false,
                 max: 100,
                 min: 0,
+                repeat: false,
                 onMin: [
-                    eff.sendMessage("SYSTEM", "You lose your grip and fall off the cliff face"),
-                    eff.changeValue("health", fml.neg(fml.progress("descend_northern_cliff", "height"))),
-                    eff.setMeter("descend_northern_cliff", 0, "height"),
-                    eff.setMeter("descend_northern_cliff", 100, "grip"),
-                    eff.activate("new_meldrum")
+                    eff.sendMessage("SYSTEM", "Your grip gives out and you land at the bottom of the cliff"),
+                    // Damage scales with how far you'd fallen
+                    eff.changeValue(
+                        "health",
+                        fml.mul(fml.progress("climb_northern_cliff", "height"), -0.15),
+                    ),
+                    eff.setMeter("climb_northern_cliff", 0, "height"),
+                    eff.resetMeter("climb_northern_cliff", 100, "grip"),
                 ],
             },
         },
@@ -120,7 +100,7 @@ export const ACTIVITIES = {
             wind_gust:       { weight: 1, },
             falling_rocks:   { weight: 0.5, },
             falling_boulder: { weight: 0.5, },
-        }
+        },
     },
 
     chop_tree: {

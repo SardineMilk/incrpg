@@ -426,7 +426,7 @@ export const SKILLS = {
     milestones: {
       5:  [eff.xpMultiplier("mountaineering", { percent: 0.08 })],
       10: [eff.changeValue("staminaMax", 3)],
-      15: [eff.changeStrength("climbing_height_gain", { percent: 0.05 })],
+      15: [eff.changeStrength("climbing_height_gain", { multiplier: 1.25 })],
     },
   },
 

@@ -173,7 +173,7 @@ export const PANELS = {
         { className: "activities-list" }
       ),
  
-      // The active activity screen, shown only while one is active
+      // The active activity screen, shown only while active
       ui.list(
         (game) => activeActivityIds(game).slice(0, 1),
         (id) => ui.group([

@@ -237,6 +237,7 @@ export const EFFECT_DEFS = {
   },
 
 
+  // Setting meter checks the min/max results of meter
   setMeter: {
     create: (id, amount, meter) => ({ type: "setMeter", id, amount, meter }),
     apply(game, e) {
@@ -248,6 +249,20 @@ export const EFFECT_DEFS = {
     scale: scaleAmount,
     display(game, e) {
       return `add ${e.amount} progress to ${e.id} (${e.meter})`;
+    }
+  },
+
+  // resetMeter rebuilds from static definition, doesn't trigger min/max effects, even if applicable
+  resetMeter: {
+    create: (id, amount, meter = "progress") => ({ type: "resetMeter", id, amount, meter }),
+    apply(game, e) {
+      const holder = game.registry.get(e.id, "CompletionHolder");
+      if (!holder) return;
+      holder.resetMeter(e.meter, e.amount);
+      game.reactor.notify(`meter:${game.id}:${e.id}:${e.meter}`);
+    },
+    display(game, e) {
+      return `reset ${e.id}'s ${e.meter} meter to ${e.amount}`;
     }
   },
 
