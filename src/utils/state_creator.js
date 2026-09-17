@@ -70,7 +70,7 @@ export function buildTemplateRegistry() {
     RequirementHolder, DormantHolder, VisibilityHolder,
   ]);
   registerEntities(registry, NAMESPACES.activities, [
-    PassiveHolder, TriggerHolder, CompletionHolder,
+    PassiveHolder, TriggerHolder, ModifierHolder, CompletionHolder,
     RequirementHolder, DormantHolder, VisibilityHolder,
   ]);
   registerEntities(registry, NAMESPACES.conditions, [

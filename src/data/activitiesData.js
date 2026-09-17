@@ -2,9 +2,72 @@ import {eff, evt, sel, fml } from "../structures/structures.js";
 
 
 export const ACTIVITIES = {
+    
+
+    // meldrum_to_beach
+    // beach_to_meldrum
+    climb_sea_cliff: {
+        name: "Climb Sea Cliff",
+        tags: ["exploration", "vertical_traversal"],
+        requirements: fml.or(fml.active("new_meldrum"), fml.active("meldrum_beach")),
+
+        triggers: [
+            {
+                event: evt.onActivate("climb_sea_cliff"),
+                effects: [
+                    eff.resetMeter("climb_sea_cliff",
+                        fml.ternary(fml.active("new_meldrum"), 200, 0), "height"),
+                    eff.resetMeter("climb_sea_cliff", 100, "grip"),
+                ],
+            },
+        ],
+        meters: {
+            height: {
+                max: 200,
+                min: 0,
+                repeat: false,
+                result: [
+                    eff.sendMessage("SYSTEM", "You reach the top of the cliff"),
+                    eff.deactivate("climb_sea_cliff"),
+                    eff.activate("new_meldrum"),
+                ],
+                onMin: [
+                    eff.sendMessage("SYSTEM", "You reach the bottom of the cliff"),
+                    eff.deactivate("climb_sea_cliff"),
+                    eff.activate("meldrum_beach"),
+                ],
+            },
+            // Depletes while climbing, regenerates on it's own
+            // Losing grip makes you fall to the bottom, losing health
+            grip: {
+                start: 100,
+                max: 100,
+                min: 0,
+                repeat: false,
+                onMin: [
+                    eff.sendMessage("SYSTEM", "Your grip gives out and you fall"),
+                    // Damage scales with how far you'd fallen
+                    eff.changeValue(
+                        "health",
+                        fml.mul(fml.progress("climb_sea_cliff", "height"), -0.5),
+                    ),
+                    eff.setMeter("climb_sea_cliff", 0, "height"),
+                    eff.resetMeter("climb_sea_cliff", 100, "grip"),
+                ],
+            },
+        },
+        actions: {
+            wind_gust:       { weight: 1, },
+            falling_rocks:   { weight: 0.5, },
+            falling_boulder: { weight: 0.5, },
+        },
+    },
+
+
     fall_asleep: {
         name: "Try to fall asleep",
         tags: ["rest"],
+        requirements: fml.active(sel.tags("bed")),
         meters: {
             relaxation: {
                 repeat: false,
@@ -26,6 +89,7 @@ export const ACTIVITIES = {
     explore_meldrum_woods: {
         name: "Explore New Meldrum Woods",
         tags: ["exploration", "traversal"],
+        requirements: fml.active("meldrum_woods"),
         meters: {
             distance: {
                 max: 1000,
@@ -44,78 +108,5 @@ export const ACTIVITIES = {
             ignore_wisps:{ weight:  0.25, },
         },
     },
-
-
-    climb_northern_cliff: {
-        name: "Climb Northern Cliff",
-        tags: ["exploration", "vertical_traversal"],
-        requirements: fml.or(fml.active("new_meldrum"), fml.active("northern_cliff_top")),
-
-        triggers: [
-            {
-                event: evt.onActivate("climb_northern_cliff"),
-                effects: [
-                    eff.resetMeter("climb_northern_cliff",
-                        fml.ternary(fml.active("northern_cliff_top"), 200, 0), "height"),
-                    eff.resetMeter("climb_northern_cliff", 100, "grip"),
-                ],
-            },
-        ],
-        meters: {
-            height: {
-                max: 200,
-                min: 0,
-                repeat: false,
-                result: [
-                    eff.sendMessage("SYSTEM", "You reach the top of the cliff"),
-                    eff.deactivate("climb_northern_cliff"),
-                    eff.activate("northern_cliff_top"),
-                ],
-                onMin: [
-                    eff.sendMessage("SYSTEM", "You reach the bottom of the cliff"),
-                    eff.deactivate("climb_northern_cliff"),
-                    eff.activate("new_meldrum"),
-                ],
-            },
-            // Depletes while climbing, regenerates on it's own
-            // Losing grip makes you fall to the bottom, losing health
-            grip: {
-                start: 100,
-                max: 100,
-                min: 0,
-                repeat: false,
-                onMin: [
-                    eff.sendMessage("SYSTEM", "Your grip gives out and you land at the bottom of the cliff"),
-                    // Damage scales with how far you'd fallen
-                    eff.changeValue(
-                        "health",
-                        fml.mul(fml.progress("climb_northern_cliff", "height"), -0.15),
-                    ),
-                    eff.setMeter("climb_northern_cliff", 0, "height"),
-                    eff.resetMeter("climb_northern_cliff", 100, "grip"),
-                ],
-            },
-        },
-        actions: {
-            wind_gust:       { weight: 1, },
-            falling_rocks:   { weight: 0.5, },
-            falling_boulder: { weight: 0.5, },
-        },
-    },
-
-    chop_tree: {
-        name: "Chop Oak Tree",
-        tags: ["gathering"],
-        allowed: ["combat"],
-        meters: {
-            health: {
-                start: 100,
-                max: 500,
-                min: 0,
-                onMin: [],
-            }
-        },
-    },
-
 
 }

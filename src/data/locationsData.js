@@ -1,26 +1,51 @@
 export const LOCATIONS = {
+  /*
+  * New Meldrum sits on the top of a rugged cliff, overlooking the sea to the south
+  * To the north and west a forest surrounds the village 
+  * To the east, a stream provides water
+  * The stream comes from the eastern mountains
+  *
+  * On the beach, 
+  * A dark cave in the cliff the the west
+  * Tide pools to the east
+  * A magical sea-spout draws water from near the rock pools
+  *   Filters salt from the water
+  *   Source of the stream
+  *   You can hitch a ride up the cliff 
+  * 
+  * Beyond the forest,
+  * West, moorland stretches out
+  * Beyond the moors, the festering farm
+  * North, the forest grows darker
+  * 
+  * 
+  */
   new_meldrum: {
     name: "New Meldrum",
     tags: ["outside", "forest", "town"],
   },
-
   starter_hut: {
     name: "Sturdy Hut",
     tags: ["inside", "forest", "town", "building"],
   },
-  
   new_meldrum_library: {
     name: "New Meldrum Public Library",
     tags: ["inside", "forest", "town", "building"],
   },
 
-  meldrum_shaw: {
+  meldrum_forest: {
     name: "Meldrum Shaw",
     tags: ["outside", "forest"],
   },
 
-  northern_cliff_top: {
-    name: "Cliff Top",
+  meldrum_beach: {
+    name: "Meldrum Beach",
+  },
+  meldrum_tide_pools: {
+    name: "Tide Pools",
+  },
+  meldrum_sea_cave: {
+    name: "Sea Cave"
   },
 
   /*
@@ -39,20 +64,7 @@ export const LOCATIONS = {
   * Raining gems, fire storms etc
   *  
   */
-  core_surface: {
-    name: "Realm Core Surface",
-    tags: ["outside"],
-  },
-  
-  core_tunnels: {
-    name: "Realm Core Maintenance Tunnels",
-    tags: ["inside", "narrow", "hot"],
-  },
 
-  core_centre: {
-    name: "Realm Core Centre",
-    tags: ["inside", "construct", "genius_loci"],
-  },
   /* 
   * Festering Fields
   *
@@ -108,12 +120,13 @@ export const LOCATIONS = {
   * - Dodge/pick fruits from the treants
   * - Dig for bones 
   * 
-  */
-
   undead_farm_outskirts: {},
   undead_farm_fields: {},
   undead_farm_warrens: {},
   undead_farm_compound: {},
+  */
+
+
 
 
   /*
@@ -139,10 +152,9 @@ export const LOCATIONS = {
   * - Gather aquatic herbs, algae etc
   * 
   * 
-  */
-
   walled_city_bulwark: {},
   walled_city_promenade: {},
   walled_city_streets: {},
   walled_city_chambers: {},
+  */
 };
