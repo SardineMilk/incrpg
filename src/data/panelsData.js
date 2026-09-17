@@ -179,7 +179,7 @@ export const PANELS = {
         (id) => ui.group([
           ui.text(nameOf(id), { className: "activity-name" }),
           ui.list(
-            () => Object.keys(ACTIVITIES[id]?.meters ?? {}),
+            () => Object.keys(ACTIVITIES[id]?.meters ?? {}),  // TODO - remove hardcoding, use completionHolder
             (meterName) => ui.bar(
               fml.progress(id, meterName),
               (game) => game.registry.get(id, "CompletionHolder")?.maxOf(meterName) ?? 0,

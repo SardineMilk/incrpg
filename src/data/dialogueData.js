@@ -68,7 +68,7 @@ export const DIALOGUES = {
     result: [
       eff.sendMessage(
         "SIGHT",
-        "You wake up. This isn't your bed. You look around.",
+        "You wake up and look around.",
       ),
       eff.sendMessage(
         "SIGHT",
@@ -76,47 +76,46 @@ export const DIALOGUES = {
       ),
       eff.sendMessage(
         "SIGHT",
-        "A stout older woman with ginger hair and lightly tanned skin pushes through the door, carrying a wicker basket filled with folded sheets. Her eyes widen with surprise when she sees you.",
+        "A stout older woman with ginger hair and lightly tanned skin pushes through the door, carrying a wicker basket filled with folded sheets. Her face falls when she sees you.",
       ),
       eff.sendMessage(
         "betty",
-        "Oh, Haddow! I didn't expect to see you back so soon!",
+        "Oh, dear. I assume it worked, then?",
       ),
       eff.presentChoice([
         {
-          text: "Where am I?",
+          text: "I think so. I'm not in control of myself, anyway.",
           result: [eff.setActiveAction("betty_wakeup_2")],
         },
-        { text: "Haddow?", result: [eff.setActiveAction("betty_wakeup_2")] },
-        {
-          text: "*Stay silent.*",
-          result: [eff.setActiveAction("betty_wakeup_2_hide")],
+        { 
+          text: "Yeah, it worked. I don't know what's in here with me, but there's definitely something.", 
+          result: [eff.setActiveAction("betty_wakeup_2")] 
         },
+
       ]),
     ],
   },
 
   betty_wakeup_2: {
     result: [
-      eff.sendMessage("SIGHT", "The woman's bushy eyebrows shoot up."),
       eff.sendMessage(
-        "betty",
-        "Do you... not remember? Oh dear, ressurection sickness shouldn't be this bad...",
+        "SIGHT",
+        "She puts the basket down and takes a sheet of rough-looking paper from a shelf near the door, reading over it.",
       ),
       eff.sendMessage(
         "SIGHT",
-        "She puts the basket down and takes a sheet of rough-looking paper from a shelf near the door.",
+        "Her bushy eyebrows steadily rise as she repeatedly unfolds the paper, the end trailing on the floor by the time she looks up.",
       ),
       eff.sendMessage(
         "betty",
-        "I'm going to ask you some questions, alright? Do you remember your name? Where you are right now? What you were doing before you woke up?",
+        "You certainly made these instructions extensive, didn't you? Alrighty then, what am I meant to start with...",
       ),
+
       eff.presentChoice([
-        { text: "No, no, and no. Whats going on?", action: "betty_wakeup_3" },
-        {
-          text: "I.. should. I should know this! Why don't I?",
-          action: "betty_wakeup_3",
-        },
+        { text: "Section 3. My personality is intact, but my ego is fully taken over by the entity's.", action: "betty_wakeup_3" },
+      ]),
+      eff.presentChoice([
+        { text: "Don't bother with that. I'm hosting an eldritch horror, my ramblings won't make much difference to the final outcome. I'm going to leave now.", action: "betty_leave" },
       ]),
     ],
   },
@@ -124,135 +123,55 @@ export const DIALOGUES = {
   betty_wakeup_3: {
     result: [
       eff.sendMessage(
-        "betty",
-        "It seems you've got a wee case of... severe retrograde amnesia.",
-      ),
-      eff.sendMessage(
         "SIGHT",
-        "With a sigh, she sits in a small wooden chair facing your bed.",
+        "She is clearly saddened by the news. This was expected, but not desired"
       ),
       eff.sendMessage(
         "betty",
-        "My name's Betty. Among other things, I take care of the ressurection house for our village.",
+        "Oh. I'm sorry, dearie. I hope it's worth the sacrifice"
+      ),
+      eff.sendMessage(
+        "SOUND",
+        "She clears her throat, before starting to read from the paper"
       ),
       eff.sendMessage(
         "betty",
-        "And your name is - or was, at least - Haddow. You left the village a few months ago searching out some mystical whatnot.",
+        "Greetings, whoever is currently piloting my body. I hope you make good use of it, as I once did."
       ),
       eff.sendMessage(
         "betty",
-        "You must have failed, because you took the fast way home. Looks like your memories didn't make it back with you though.",
+        "The process that invited you here also crippled my cultivation, leaving me a blank slate for you to carve. Your current goal is simple: Explore, grow stronger and find your path."
+      ),
+      eff.sendMessage(
+        "betty",
+        "Explore, and discover the same truths I did. Gain the strength to break the shackles that bind us. I faltered at the final step, but you will not."
+      ),
+      eff.sendMessage(
+        "SOUND",
+        "She finishes reading the paper, and laughs."
+      ),
+      eff.sendMessage(
+        "betty",
+        "Always had a flair for the dramatic, you did. I hope that doesn't change now you're some kind of... finger puppet."
       ),
       eff.presentChoice([
-        {
-          text: "Ressurection house? And what do you mean, 'the fast way home'?",
-          action: "betty_wakeup_ressurection",
-        },
-      ]),
-    ],
+        { text: "Tasteful. Well, what should I do now? This entity doesn't have any of my memories, just my personality.", action: "betty_leave"}
+      ])
+    ]
   },
 
-  betty_wakeup_ressurection: {
-    result: [
-      eff.sendMessage(
-        "betty",
-        "You don't even remember that? What happened to you, Had-",
-      ),
-      eff.sendMessage("SIGHT", "She cuts off her mumbling, looking up at you."),
-      eff.sendMessage(
-        "betty",
-        "Well, whenever you're too damaged, you die. Your body shuts down, and you wake up some time later in your bed.",
-      ),
-      eff.sendMessage(
-        "betty",
-        "You're always a bit worse for wear after you die, but memory loss is a new one to me. Anyway, most large towns have a designated ressurection house, with beds that everyone collectively owns for easier ressurection.",
-      ),
-      eff.sendMessage(
-        "betty",
-        "Apparently they're also very convinient for higher beings getting up to narrative shenanigans, but I wouldn't know anything about that.",
-      ),
-      eff.sendMessage("betty", "Does that answer your question?"),
-      eff.presentChoice([
-        {
-          text: "You said most large towns have a ressurection house, but that we're in a small village?",
-          action: "betty_wakeup_ressurection_b",
-        },
-        { text: "Higher beings?", action: "betty_wakeup_ressurection_c" },
-      ]),
-    ],
-  },
-
-  betty_wakeup_ressurection_b: {
-    result: [
-      eff.sendMessage(
-        "betty",
-        "Ooh, still a sharp one, you are. Good to see the amnesia isn't anterograde!",
-      ),
-      eff.sendMessage(
-        "betty",
-        "Well, to answer your question, our village is a bit more... active than most. You're a fine example yourself!",
-      ),
-      eff.sendMessage(
-        "betty",
-        "If you want to know more, you should have a chat with Albie, he's much more involved in running the village.",
-      ),
-      eff.sendMessage(
-        "betty",
-        "You should probably let him know you lost your memories first though, or he'd be mighty confused! Just tell him what happened, he'll take care of you.",
-      ),
-      eff,
-      presentChoice([
-        { text: "Where can I find Albie?", action: "betty_wakeup_albie" },
-      ]),
-    ],
-  },
-
-  betty_wakeup_ressurection_c: {
-    result: [
-      eff.sendMessage("SIGHT", "Her mouth crinkles up in mirth"),
-      eff.sendMessage(
-        "betty",
-        "Just said I wouldn't know anything about that, didn't I?",
-      ),
-      eff.sendMessage(
-        "betty",
-        "I'm not the best person to be talking to about all this, though. You should go see Albie",
-      ),
-      eff.sendMessage(
-        "betty",
-        "Just tell him what happened, he'll take care of you. You're not the first newcomer we've had, even if you're a wee bit of a... special case.",
-      ),
-      eff,
-      presentChoice([
-        { text: "Where can I find Albie?", action: "betty_wakeup_albie" },
-      ]),
-    ],
-  },
-
-  betty_wakeup_albie: {
-    result: [
-      eff.sendMessage(
-        "betty",
-        "He's just a few houses down, on the left. His house has a turf roof, you can't miss it.",
-      ),
-      eff,
-      presentChoice([
-        { text: "I'll head over there then.", action: "betty_wakeup_goodbye" },
-      ]),
-    ],
-  },
-
-  betty_wakeup_goodbye: {
+  betty_leave: {
     result: [
       eff.sendMessage(
         "SIGHT",
-        "You climb out of bed, walking over to the door.",
+        "Her body slumps as she realises what your situation means"
       ),
       eff.sendMessage(
         "betty",
-        "Don't be afraid to come to me if you have any questions, or just want a blether!",
-      ),
-      eff.setActiveAction(null),
-    ],
-  },
+        "Just... head out into the village. Get to know people. Maybe stop by Elder Albie, his hut is the one with the turf roof."
+      )
+
+    ]
+  }
+
 };
