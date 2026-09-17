@@ -181,6 +181,62 @@ export const ACTIONS = {
     ]
   },
 
+  // TODO - could this be automated? Would require proper macro code generation setup
+  // Trivial Location Connections
+  // To activate, they require the inital location and sometimes a prerequisite completion
+  // Upon completion, they change location
+  meldrum_to_forest: {
+    name: "Enter the Forest",
+    requirements: fml.active("new_meldrum"),
+    duration: 10,
+    result: [eff.activate("meldrum_forest")],
+  },
+  forest_to_meldrum: {
+    name: "Return to the Village",
+    requirements: fml.active("meldrum_forest"),
+    duration: 10,
+    result: [eff.activate("new_meldrum")],
+  },
+
+  forest_to_deep: {
+    name: "Enter the Deep Forest",
+    requirements: fml.active("meldrum_forest"),
+    duration: 10,
+    result: [eff.activate("meldrum_forest_deep")],
+  },
+  deep_to_forest: {
+    name: "Return to the Forest Outskirts",
+    requirements: fml.active("meldrum_forest_deep"),
+    duration: 10,
+    result: [eff.activate("meldrum_forest")],
+  },
+
+  beach_to_cave: {
+    name: "Enter Sea Cave",
+    requirements: fml.active("meldrum_beach"),
+    duration: 10,
+    result: [eff.activate("meldrum_sea_cave")],
+  },
+  cave_to_beach: {
+    name: "Exit the Cave to the Beach",
+    requirements: fml.active("meldrum_sea_cave"),
+    duration: 10,
+    result: [eff.activate("meldrum_beach")],
+  },
+
+  beach_to_pools: {
+    name: "Stroll Along to the Tide Pools",
+    requirements: fml.active("meldrum_beach"),
+    duration: 10,
+    result: [eff.activate("meldrum_tide_pools")],
+
+  },
+  pools_to_beach: {
+    name: "Return to the Beach",
+    requirements: fml.active("meldrum_tide_pools"),
+    duration: 10,
+    result: [eff.activate("meldrum_beach")],
+  },
 
 
 };
