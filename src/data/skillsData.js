@@ -141,7 +141,7 @@ export const SKILLS = {
   * Leveling weapon skills unlocks Styles
   * Styles are mutually exclusive, used in combat
   * They give buffs
-  * Determine which combat actions you take
+  * Determine which combat actions you automatically take
   */
   weapon_proficiency: {
     name: "Weapon Proficiency",

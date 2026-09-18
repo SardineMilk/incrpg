@@ -37,6 +37,9 @@ export const LOCATIONS = {
     name: "Meldrum Shaw",
     tags: ["outside", "forest"],
   },
+  meldrum_forest_deep: {
+    name: "Deep Meldrum Forest",
+  },
 
   meldrum_beach: {
     name: "Meldrum Beach",

@@ -279,8 +279,9 @@ export const INHERENT_EFFECTS = {
     ],
   },
 
+  // Stupid
   force_notify_per_tick: {
-    tags: ["system"],
+    tags: ["!system"],
     triggers: [
       {
         event: evt.tick(),

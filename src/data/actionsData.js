@@ -232,7 +232,7 @@ export const ACTIONS = {
 
   },
   pools_to_beach: {
-    name: "Return to the Beach",
+    name: "Return to the Sandy Beach",
     requirements: fml.active("meldrum_tide_pools"),
     duration: 10,
     result: [eff.activate("meldrum_beach")],
