@@ -169,13 +169,13 @@ export const ACTIONS = {
     ]
   },
 
-  hit_rat: {
-    name: "TEST - Hit Rat",
+  punch: {
+    name: "TEST - Punch",
     requirements: fml.active("meldrum_library"),
     duration: 10,
     result: [
       eff.onTarget(
-        target.random(target.enemies()),  // TODO - generalize attack target
+        target.random(target.enemies()),
         eff.changeValue("health", -25)
       )
     ]
@@ -185,6 +185,20 @@ export const ACTIONS = {
   // Trivial Location Connections
   // To activate, they require the inital location and sometimes a prerequisite completion
   // Upon completion, they change location
+
+  meldrum_to_library: {
+    name: "Visit the library",
+    requirements: fml.active("new_meldrum"),
+    duration: 10,
+    result: [eff.activate("meldrum_library")]
+  },
+  library_to_meldrum: {
+    name: "Leave the library",
+    requirements: fml.active("meldrum_library"),
+    duration: 10,
+    result: [eff.activate("new_meldrum")]
+  },
+
   meldrum_to_forest: {
     name: "Enter the Forest",
     requirements: fml.active("new_meldrum"),
