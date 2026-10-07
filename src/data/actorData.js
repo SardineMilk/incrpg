@@ -20,7 +20,7 @@ export const ACTORS = {
       eff.activate(sel.tags("system", "conditions")),
       eff.activate(sel.tags("mortal", "conditions")),
       eff.activate("ratkin"),
-      eff.activate("new_meldrum"),
+      eff.activate("meldrum_library"),
       eff.activate("thorns"),
       eff.activate("punch")
     ]

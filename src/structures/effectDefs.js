@@ -396,7 +396,11 @@ export const EFFECT_DEFS = {
   },
 
   despawn: {
-    // TODO
+    create: () => ({ type: "despawn" }),
+    apply(game) {
+      game.world.despawn(game.world, game);
+    },
+    display: () => "die",
   },
 
   onTarget: {

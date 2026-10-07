@@ -20,7 +20,7 @@ import { validate } from "./validator.js";
 import { ContextStack } from "./context.js";
 import { CandidateScope } from "./candidateScope.js";
 import { EntityRegistry, registerEntities } from "./entityRegistry.js";
-import { spawnActor } from "../game/actor.js";
+import { spawnActor, despawnActor } from "../game/actor.js";
 import { applyEffect } from "../game/effects.js";
 
 
@@ -94,6 +94,7 @@ export function initialiseWorld() {
   world.log = null;
   world.actors = new Map();
   world.spawn = spawnActor;
+  world.despawn = despawnActor;
   world.applyEffect = applyEffect; // Evil dependency fuckery
 
   for (const [namespace, dataset] of Object.entries(NAMESPACES)) {

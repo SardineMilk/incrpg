@@ -41,11 +41,11 @@ export class LevelHolder {
     }
 
     clone() {
-    const holder = new LevelHolder([], {}, this.name, this.id);
-    holder.milestones = this.milestones;
-    holder._levelPassives = this._levelPassives.clone();
-    holder._milestonePassives = this._milestonePassives.clone();
-    return holder;
+        const holder = new LevelHolder([], {}, this.name, this.id);
+        holder.milestones = this.milestones;
+        holder._levelPassives = this._levelPassives.clone();
+        holder._milestonePassives = this._milestonePassives.clone();
+        return holder;
     }
 
     get level() {
@@ -107,5 +107,10 @@ export class LevelHolder {
         Object.assign(this.levelBonus, s.levelBonus);
         this._levelPassives.setState(s.levelPassives);
         this._milestonePassives.setState(s.milestonePassives);
+    }
+
+    dispose() {
+        this._levelPassives.remove();
+        this._milestonePassives.remove();
     }
 }

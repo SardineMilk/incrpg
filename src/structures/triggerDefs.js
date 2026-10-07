@@ -117,6 +117,10 @@ export const TRIGGER_DEFS = {
     display: () => "On an effect you delivered landing",
   },
 
+  despawn: {
+    create: () => ({ type: "despawn" }),
+    check: () => true,
+  },
 };
 
 export const evt = Object.fromEntries(

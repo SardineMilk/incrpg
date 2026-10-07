@@ -150,8 +150,9 @@ export const INHERENT_EFFECTS = {
         event: evt.valueLoss("health"),
         requirements: fml.lt(fml.value("health"), 0),
         effects: [
-          eff.deactivate(sel.active(sel.tags("actions"))),
-          eff.deactivate(sel.active(sel.tags("activities")))
+          eff.sendMessage("SYSTEM", "You die!"),
+          eff.despawn(),
+          eff.forceNotifyAll()
         ],
       }
     ],
@@ -350,27 +351,21 @@ export const INHERENT_EFFECTS = {
   },
 
 
-  /*
   plot_armor: {
-    modifiers: [
-      {
-        event: evt.trigger("health_death"),
-        modify: [
-          mod.cancel()
-        ]
-      }
-    ],
-    triggers: [
-      {
-        event: evt.trigger("health_death"),
-        phase: "pre",
-        effects: [
-          eff.activate("starter_hut")
-        ]
-      }
-    ]
+    name: "Plot Armor",
+    description: "Death is cancelled.",
+    modifiers: [{ event: evt.despawn(), modify: [mod.cancel()] }],
+    triggers: [{
+      event: evt.despawn(),
+      effects: [
+        eff.deactivate(sel.active(sel.tags("actions"))),
+        eff.deactivate(sel.active(sel.tags("activities"))),
+        eff.activate("starter_hut"),
+        eff.setValue("health", 0),
+        eff.sendMessage("SYSTEM", "You wake up in your hut."),
+      ],
+      }]
   },
- */
 
 };
 

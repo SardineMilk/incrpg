@@ -171,6 +171,7 @@ export const ACTIONS = {
 
   punch: {
     name: "TEST - Punch",
+    requirements: fml.active("meldrum_library"),
     duration: 10,
     result: [
       eff.onTarget(

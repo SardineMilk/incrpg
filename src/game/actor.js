@@ -1,8 +1,9 @@
 import { ActivationLayer } from "../utils/activationLayer.js";
 import { EntityRegistry, registerEntities } from "../utils/entityRegistry.js";
 import { NAMESPACES } from "../utils/state_creator.js";
-import { applyEffect } from "./effects.js";;
-import { ACTORS } from "../data/actorData.js"
+import { applyEffect } from "./effects.js";
+import { ACTORS } from "../data/actorData.js";
+import { EFFECT_DEFS } from "../structures/effectDefs.js";
 
 const actorCounters = new Map(); // Per-definition counters
 
@@ -68,6 +69,20 @@ export function spawnActor(world, { defId, team = "neutral"} = {}) {
   }
 
   return actor;
+}
+
+export function despawnActor(world, actor) {
+  if (actor.dead) return false;
+  actor.dead = true;                 // from here on the actor is inert
+  world.actors.delete(actor.id);
+  world.reactor.notify("actors");    // UI actor lists drop its widgets first
+
+  // Unwind everything the actor holds in shared state (subscriptions, global passives)
+  for (const id of [...actor.active.active]) EFFECT_DEFS.deactivate.apply(actor, { id });
+  for (const id of actor.registry.view("LevelHolder")) {
+    actor.registry.get(id, "LevelHolder").dispose();
+  }
+  return true;
 }
 
 
