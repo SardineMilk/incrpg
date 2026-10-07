@@ -257,8 +257,8 @@ export const ACTIONS = {
 
 
 export const ADVERSARY_ACTIONS = {
-  root_trip:{
-    name:"Avoid tripping on a root",
+  root_trip: {
+    name: "Avoid tripping on a root",
     tags: ["ground", "nature"],
     duration: 20,
     check: {
@@ -267,9 +267,9 @@ export const ADVERSARY_ACTIONS = {
       success: [],
       failure: [],
     },
-  }, 
-  mud_puddle:{
-    name:"Dodge a puddle of mud",
+  },
+  mud_puddle: {
+    name: "Dodge a puddle of mud",
     tags: ["ground", "earth"],
     duration: 20,
     check: {
@@ -278,9 +278,9 @@ export const ADVERSARY_ACTIONS = {
       success: [],
       failure: [],
     },
-  }, 
-  thorn_bush:{
-    name:"Fend off a thorny branch",
+  },
+  thorn_bush: {
+    name: "Fend off a thorny branch",
     tags: ["nature"],
     duration: 20,
     check: {
@@ -289,9 +289,9 @@ export const ADVERSARY_ACTIONS = {
       success: [],
       failure: [],
     },
-  }, 
-  wind_gust:{
-    name:"Push through a sudden gust of wind",
+  },
+  wind_gust: {
+    name: "Push through a sudden gust of wind",
     tags: ["weather"],
     duration: 20,
     check: {
@@ -301,8 +301,8 @@ export const ADVERSARY_ACTIONS = {
       failure: [],
     },
   },
-  spot_trail:{
-    name:"Find where the trail continues",
+  spot_trail: {
+    name: "Find where the trail continues",
     tags: [],
     duration: 20,
     check: {
@@ -312,8 +312,8 @@ export const ADVERSARY_ACTIONS = {
       failure: [],
     },
   },
-  ignore_wisps:{
-    name:"Ignore the lure of Will-o'-the-wisps",
+  ignore_wisps: {
+    name: "Ignore the lure of Will-o'-the-wisps",
     tags: ["fae"],
     duration: 20,
     check: {
@@ -323,8 +323,8 @@ export const ADVERSARY_ACTIONS = {
       failure: [],
     },
   },
-  falling_rocks:{
-    name:"Avoid a scattered fall of small rocks",
+  falling_rocks: {
+    name: "Avoid a scattered fall of small rocks",
     tags: ["earth"],
     duration: 20,
     check: {
@@ -334,8 +334,8 @@ export const ADVERSARY_ACTIONS = {
       failure: [],
     },
   },
-  falling_boulder:{
-    name:"Dodge a huge tumbling boulder",
+  falling_boulder: {
+    name: "Dodge a huge tumbling boulder",
     tags: ["earth"],
     duration: 20,
     check: {

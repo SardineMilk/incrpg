@@ -1,4 +1,4 @@
-import { applyEffect, negateEffect } from "../game/effects.js";
+import { applyEffect, removeEffect } from "../game/effects.js";
 import { StatLayer } from "./statLayer.js";
 import { PassiveHolder } from "./passiveHolder.js";
 import { fml } from "../structures/formulaDefs.js";
