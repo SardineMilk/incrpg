@@ -13,13 +13,15 @@ export class ModifierHolder {
 
   collect(game, resolved) {
     const ops = [];
+    const matched = [];
     for (const m of this.modifierDefs) {
       if (m.event.type !== resolved.type) continue;
       if (!this._matches(game, m.event, resolved)) continue;
       if (!check(game, m.requirements)) continue;
-      ops.push(...m.modify);
+      if (m.modify) ops.push(...m.modify);
+      if (m.effects?.length) matched.push(m);
     }
-    return ops;
+    return { ops, matched };
   }
 
   _matches(game, event, context) {
@@ -38,7 +40,7 @@ function scaleOp(game, rawOp, strength) {
 }
 
 export function applyModifiers(game, resolved) {
-  let current = resolved;
+  let current = { ...resolved, flags: resolved.flags ?? {} };
 
   for (const id of game.active.view("ModifierHolder")) {
     if (game.registry.get(id, "DormantHolder")?.state === false) continue;
@@ -46,7 +48,7 @@ export function applyModifiers(game, resolved) {
     const holder = game.registry.get(id, "ModifierHolder");
     const strength = game.registry.get(id, "StatLayer")?.value ?? 1;
 
-    const rawOps = game.context.with(current, () => holder.collect(game, current), `modifier:${id}`);
+    const { ops: rawOps, matched } = game.context.with(current, () => holder.collect(game, current), `modifier:${id}`);
 
     for (const rawOp of rawOps) {
       current = game.context.with(current, () => {
@@ -54,6 +56,12 @@ export function applyModifiers(game, resolved) {
         const op = resolveFormulas(game, scaled);
         return MODIFIER_DEFS[op.type].apply(current, op);
       }, `modifier-op:${id}`);
+    }
+
+    for (const m of matched) {
+      game.context.with(current, () => {
+        for (const effect of m.effects) game.world.applyEffect(game, effect, strength);
+      }, `modifier-reaction:${id}`);
     }
   }
 

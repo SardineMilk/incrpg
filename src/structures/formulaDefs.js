@@ -57,6 +57,8 @@ const definitions = {
 
   actor: (game, id) => game.world.actors.get(id),
 
+  flag: (game, key) => game.context.get("flags")?.[key],
+
 
   value: (game, value) => {
     game.reactor.read(`value:${game.id}:${value}`);
@@ -165,9 +167,26 @@ export function resolveFormulas(game, structure, { fields = null } = {}) {
   for (const [key, val] of Object.entries(result)) {
     if (key === "type") continue;
     if (fields && !fields.includes(key)) continue;
+
+    if (key === "flags") {
+      const bag = typeof val === "function" && !isSelector(val) ? val(game) : val;
+      result.flags = bag && typeof bag === "object" && !Array.isArray(bag)
+        ? resolveFlagValues(game, bag)
+        : bag;
+      continue;
+    }
+
     if (typeof val !== "function") continue;
     if (isSelector(val)) continue;
     result[key] = val(game);
   }
   return result;
+}
+
+function resolveFlagValues(game, flags) {
+  const resolved = {};
+  for (const [key, val] of Object.entries(flags)) {
+    resolved[key] = typeof val === "function" ? val(game) : val;
+  }
+  return resolved;
 }

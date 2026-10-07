@@ -297,7 +297,7 @@ export const SKILLS = {
   evasion: {
     name: "Evasion",
     description: "Why would you let the opponent hit you? Just move out the way, don't be stupid.",
-    level: [],
+    level: [eff.changeStrength("dodge_attack", { percent: 0.05 })],
     parent: "combat",
     milestones: {
       5:  [eff.xpMultiplier("agility", { percent: 0.03 })],

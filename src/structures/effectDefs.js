@@ -400,7 +400,7 @@ export const EFFECT_DEFS = {
   },
 
   onTarget: {
-    create: (selector, effect) => {
+    create: (selector, effect, flags = {}) => {
       if (!isTargetSelector(selector)) {
         throw new Error(
           `eff.onTarget() requires a target.* selector (targetDefs.js), got ${typeof selector}. ` +
@@ -408,16 +408,26 @@ export const EFFECT_DEFS = {
           `in the world - they can't be used here.`
         );
       }
-      return { type: "onTarget", selector, effect };
+      return { type: "onTarget", selector, effect, flags };
     },
     apply(game, e) {
       for (const targetId of e.selector) {
         const targetActor = game.world.actors.get(targetId);
         if (!targetActor) continue; // stale id - target despawned mid-resolution
 
-        game.context.with({ actor: game.id }, () => {
-          game.world.applyEffect(targetActor, e.effect);
+        const delivered = game.context.with({ actor: game.id }, () => {
+          return game.world.applyEffect(targetActor, {
+            ...e.effect,
+            flags: { ...(e.effect.flags ?? {}), ...e.flags },
+          });
         }, `onTarget:${game.id}->${targetId}`);
+
+        const landed = delivered.filter((r) => !r.cancelled);
+        if (landed.length === 0) continue;
+
+        // Report the delivery's final flags, with any modifiers
+        const finalFlags = landed.reduce((acc, r) => ({ ...acc, ...(r.flags ?? {}) }), e.flags ?? {});
+        processTrigger(game, "delivered", { target: targetId, flags: finalFlags }, "post");
       }
     },
     scale(game, e, multiplier) {
@@ -427,7 +437,11 @@ export const EFFECT_DEFS = {
     },
     display(game, e) {
       const innerLine = EFFECT_DEFS[e.effect?.type]?.display?.(game, e.effect) ?? e.effect?.type;
-      return `apply to target(s): ${innerLine}`;
+      const flagPairs = Object.entries(e.flags ?? {}).filter(([, v]) => v != null && v !== false);
+      const flagLine = flagPairs.length
+        ? ` [${flagPairs.map(([k, v]) => (v === true ? k : `${k}=${v}`)).join(", ")}]`
+        : "";
+      return `apply to target(s): ${innerLine}${flagLine}`;
     },
   },
 

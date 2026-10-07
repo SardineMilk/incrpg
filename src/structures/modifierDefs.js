@@ -27,6 +27,13 @@ export const MODIFIER_DEFS = {
     create: () => ({ type: "cancel" }),
     apply: (resolved) => ({ ...resolved, cancelled: true }),
   },
+  flag: {
+    create: (key, value) => ({ type: "flag", key, value }),
+    apply: (resolved, m) => ({
+      ...resolved,
+      flags: { ...(resolved.flags ?? {}), [m.key]: m.value },
+    }),
+  },
 };
 
 export const mod = Object.fromEntries(

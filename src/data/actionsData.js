@@ -171,12 +171,12 @@ export const ACTIONS = {
 
   punch: {
     name: "TEST - Punch",
-    requirements: fml.active("meldrum_library"),
     duration: 10,
     result: [
       eff.onTarget(
         target.random(target.enemies()),
-        eff.changeValue("health", -25)
+        eff.changeValue("health", -25),
+        { isAttack: true, damageType: "physical" }
       )
     ]
   },

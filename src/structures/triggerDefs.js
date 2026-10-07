@@ -49,20 +49,20 @@ export const TRIGGER_DEFS = {
   },
 
   changeValue: {
-    create: (id) => ({ type: "changeValue", id }),
-    check: (trigger, ctx) => ctx.id === trigger.id,
+    create: (id = null) => ({ type: "changeValue", id }),
+    check: (trigger, ctx) => trigger.id == null || ctx.id === trigger.id,
   },
 
   valueGain: {
-    create: (id, min = 1) => ({ type: "valueGain", id, min }),
+    create: (id = null, min = 1) => ({ type: "valueGain", id, min }),
     check: (trigger, ctx) =>
-      ctx.id === trigger.id && ctx.amount >= trigger.min,
+      (trigger.id == null || ctx.id === trigger.id) && ctx.amount >= trigger.min,
   },
 
   valueLoss: {
-    create: (id, min = 1) => ({ type: "valueLoss", id, min }),
+    create: (id = null, min = 1) => ({ type: "valueLoss", id, min }),
     check: (trigger, ctx) =>
-      ctx.id === trigger.id && ctx.amount <= -trigger.min,
+      (trigger.id == null || ctx.id === trigger.id) && ctx.amount <= -trigger.min,
   },
 
   resourceDropsBelowThreshold: {
@@ -110,6 +110,13 @@ export const TRIGGER_DEFS = {
     create: (id) => ({ type: "levelUp", id }),
     check: (trigger, ctx) => ((trigger.id == null) || (ctx.id === trigger.id))
   },
+
+  delivered: {
+    create: () => ({ type: "delivered" }),
+    check: () => true,
+    display: () => "On an effect you delivered landing",
+  },
+
 };
 
 export const evt = Object.fromEntries(

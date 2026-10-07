@@ -150,7 +150,6 @@ export const INHERENT_EFFECTS = {
         event: evt.valueLoss("health"),
         requirements: fml.lt(fml.value("health"), 0),
         effects: [
-          eff.sendMessage("SYSTEM", "You pass out from your injuries"),
           eff.deactivate(sel.active(sel.tags("actions"))),
           eff.deactivate(sel.active(sel.tags("activities")))
         ],
@@ -164,7 +163,6 @@ export const INHERENT_EFFECTS = {
         event: evt.valueLoss("stamina"),
         requirements: fml.lt(fml.value("stamina"), 0),
         effects: [
-          eff.sendMessage("SYSTEM", "You pass out"),
           eff.deactivate(sel.active(sel.tags("actions"))),
           eff.deactivate(sel.active(sel.tags("activities")))
         ],
@@ -178,7 +176,6 @@ export const INHERENT_EFFECTS = {
         event: evt.valueLoss("mental"),
         requirements: fml.lt(fml.value("mental"), 0),
         effects: [
-          eff.sendMessage("SYSTEM", "You pass out from stress"),
           eff.deactivate(sel.active(sel.tags("actions"))),
           eff.deactivate(sel.active(sel.tags("activities")))
         ],
@@ -468,14 +465,37 @@ const TRAITS = {
   thorns: {
     triggers: [{
       event: evt.valueLoss("health"),
+      requirements: fml.and(
+        fml.flag("isAttack"),
+        fml.flag("melee")
+      ),
       effects: [
         eff.onTarget(
           target.actor(fml.sourceActor()),
           eff.changeValue("health", -10),
+          { damageType: "pierce", melee: true }
         ),
       ],
     }]
   },  
+
+  dodge_attack: {
+    tags: ["system"],
+    modifiers: [
+      {
+        event: evt.changeValue(),
+        requirements: fml.and(
+          fml.eq(fml.flag("isAttack"), true),
+          fml.leq(fml.roll(1, 100), fml.mul(fml.strength("dodge_attack"), 5)),
+        ),
+        modify: [mod.cancel()],
+        effects: [
+          eff.sendMessage("SYSTEM", "You dodge the attack!"),
+          eff.gainXp("evasion", 10),
+        ],
+      },
+    ],
+  },
 
 }
 
