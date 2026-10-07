@@ -292,7 +292,7 @@ export const EFFECT_DEFS = {
 
       const dirty = strength.changeReverse(e);
       if (!dirty) return;
-      game.reactor.notify(`strength:${e.id}`);
+      game.reactor.notify(`strength:${game.id}:${e.id}`);
 
     },
     scale: scaleStatLayer,

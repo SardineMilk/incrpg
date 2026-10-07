@@ -1,4 +1,4 @@
-import { resolveEffect, diffEffect, applyResolved, removeEffect, isReversible } from "../game/effects.js";
+import { resolveEffect, diffEffect, applyResolved, removeResolved } from "../game/effects.js";
 import { check } from "../game/requirements.js";
 
 const SINGLETON_KEY = Symbol("singleton-target");
@@ -117,12 +117,12 @@ export class PersistentEffect {
       if (apply) applyResolved(this._game, delta);
     } else {
       // Fallback
-      removeEffect(this._game, previous);
+      removeResolved(this._game, previous);
       applyResolved(this._game, next);
     }
   }
 
   _remove(resolved) {
-    removeEffect(this._game, resolved);
+    removeResolved(this._game, resolved);
   }
 }

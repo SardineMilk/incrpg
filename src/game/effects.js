@@ -18,7 +18,7 @@ export function resolveEffect(game, effect, strength = 1) {
     return applyModifiers(game, resolved)
   });
 
-  }
+}
 
 function changeEffectStrength(game, effect, multiplier) {
   const def = EFFECT_DEFS[effect.type];
@@ -60,17 +60,17 @@ export function applyEffect(game, effect, strength = 1) {
   return resolvedEffects;
 }
 
-export function negateEffect(game, effect) {
+export function removeEffect(game, effect) {
   const resolvedEffects = resolveEffect(game, effect);
 
   for (const resolved of resolvedEffects) {
-    removeEffect(game, resolved);
+    removeResolved(game, resolved);
   }
 }
 
 
 // Must be called with a resolved effect (returned by applyEffect)
-export function removeEffect(game, resolved) {
+export function removeResolved(game, resolved) {
   const def = EFFECT_DEFS[resolved.type];
   if (!def.remove) {
     console.warn(`Effect '${resolved.type}' has no remove(), this probably shouldn't be a passive effect`);

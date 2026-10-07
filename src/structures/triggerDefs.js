@@ -22,8 +22,8 @@ export const TRIGGER_DEFS = {
   },
 
   ctx: {
-    create: (type) => ({ type: "ctx", type }),
-    check: (trigger, ctx) => trigger.type === ctx.type,
+    create: (key) => ({ type: "ctx", key }),
+    check: (trigger, ctx) => trigger.type === ctx.key,
   },
 
   tick: {
@@ -33,7 +33,7 @@ export const TRIGGER_DEFS = {
   },
 
   onTrigger: {
-    create: (id) => ({ type: "onTrigger", id}),
+    create: (id) => ({ type: "onTrigger", id }),
     check: (trigger, ctx) => trigger.id === ctx.id
   },
 
@@ -102,7 +102,7 @@ export const TRIGGER_DEFS = {
   },
 
   progress: {
-    create: (meter="progress") => ({ type: "progress", meter}),
+    create: (meter = "progress") => ({ type: "progress", meter }),
     check: (trigger, ctx) => (trigger.meter == null || trigger.meter === ctx.meter),
   },
 

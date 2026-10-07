@@ -63,7 +63,7 @@ export class LevelHolder {
     gainXp(game, amount) {
         this.xp += amount * this.xpBonus.value;
         this._checkXpProgress(game);
-        game.reactor.notify(`xp:${this.id}`);
+        game.reactor.notify(`xp:${game.id}:${this.id}`);
     }
 
     _checkXpProgress(game) {
