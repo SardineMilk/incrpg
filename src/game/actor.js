@@ -4,6 +4,7 @@ import { NAMESPACES } from "../utils/state_creator.js";
 import { applyEffect } from "./effects.js";
 import { ACTORS } from "../data/actorData.js";
 import { EFFECT_DEFS } from "../structures/effectDefs.js";
+import { EventLog } from "./log.js";
 
 const actorCounters = new Map(); // Per-definition counters
 
@@ -43,11 +44,7 @@ export function createActor(world, { id=null, defId, team = "neutral", actorDef 
     stats: { ...actorDef?.stats },
   };
   actor.active = new ActivationLayer(actor.registry);
-
-  Object.defineProperty(actor, "log", {
-    get: () => world.log,
-    enumerable: true,
-  });
+  actor.log = new EventLog({ reactor: world.reactor, id });
 
   world.actors.set(id, actor);
   world.reactor.notify("actors");

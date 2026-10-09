@@ -2,7 +2,7 @@ import { fml, sel } from "../structures/structures.js";
 import { ui } from "../ui/widgetDefs.js";
 import { byTag, nameOf } from "../utils/tagIndex.js";
 import { actorsByTeam } from "../game/actor.js";
-
+import { LogView } from "../ui/logView.js";
 import { EFFECT_DEFS } from "../structures/effectDefs.js";
 import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
 
@@ -12,14 +12,9 @@ import { ACTIONS } from "./actionsData.js";
 import { ACTIVITIES } from "./activitiesData.js";
 import { SKILLS } from "./skillsData.js";
 
-// A def's requirements gate whether it *functions* (can be used/entered/
-// activated); its visibility gates whether it *shows up* in the UI at all.
-// Most defs don't bother drawing that distinction, so visibility falls
-// back to requirements when not given explicitly. This is a UI-local
-// convenience over the raw defs this file already imports, not a general
-// engine concept - utils/tagIndex.js deliberately knows nothing about
-// either field name, so any other consumer that wants this same fallback
-// gets to decide that for itself too, rather than inheriting it silently.
+// A def's requirements gate whether it can be used
+//  its visibility gates whether it *shows up* in the UI
+
 function visibilityOf(def) {
   return def?.visibility ?? def?.requirements;
 }
@@ -238,5 +233,13 @@ export const PANELS = {
       ),
       { className: "actor-teams", layout: "row" }
     ),
+  },
+
+  log: {
+    container: "log-box",
+    root: ui.custom((el, game) => {
+      const view = new LogView(el, game.log);
+      return () => view.destroy();
+    }),
   },
 };

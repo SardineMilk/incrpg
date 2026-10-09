@@ -1,3 +1,5 @@
+
+
 export const LogType = {
   SKILL: 1 << 0,
   ACTION: 1 << 1,
@@ -6,53 +8,37 @@ export const LogType = {
   SYSTEM: 1 << 4,
 };
 
+// Every actor gets one of these, viewed or not, so the cap is what stops
+// a swarm of NPCs from accumulating unread history forever.
+const DEFAULT_MAX_EVENTS = 1000;
+
 export class EventLog {
-  constructor({ container, rowHeight = 40, overscan = 20 }) {
-    if (!container) throw new Error("EventLog requires a valid container");
-    this.container = container;
-    this.rowHeight = rowHeight;
-    this.overscan = overscan;
-
+  constructor({ reactor = null, id, maxEvents = DEFAULT_MAX_EVENTS } = {}) {
     this.events = [];
-    this.visibleNodes = new Map();
+    this.maxEvents = maxEvents;
 
-    // true when viewing the newest entries
-    this.followTail = true;
+    // Total events trimmed from the front. Views use this to keep a reader's
+    // scroll position stable while old rows fall off the top.
+    this.dropped = 0;
 
-    this.viewport = document.createElement("div");
-    this.viewport.style.position = "relative";
-    this.viewport.style.width = "100%";
-
-    this.content = document.createElement("div");
-    this.content.style.position = "absolute";
-    this.content.style.top = "0";
-    this.content.style.left = "0";
-    this.content.style.right = "0";
-    this.content.style.width = "100%";
-
-    this.viewport.appendChild(this.content);
-    this.container.appendChild(this.viewport);
-
-    this.container.addEventListener("scroll", () => {
-      const threshold = 5;
-
-      this.followTail =
-        this.container.scrollTop + this.container.clientHeight >=
-        this.container.scrollHeight - threshold;
-    });
+    this._reactor = reactor;
+    this._cellKey = `log:${id}`;
   }
 
   append(type, text) {
-    const event = { type, text };
-
-    this.events.push(event);
-
-    this.viewport.style.height = `${this.events.length * this.rowHeight}px`;
-
-    // Follow new entries only if the user was
-    // already looking at the bottom.
-    if (this.followTail) {
-      this.container.scrollTop = this.container.scrollHeight;
+    this.events.push({ type, text });
+    while (this.events.length > this.maxEvents) {
+      this.events.shift();
+      this.dropped++;
     }
+    this._reactor?.notify(this._cellKey);
+  }
+
+  // Returns an unsubscribe function. Views never need to know the cell key.
+  subscribe(run) {
+    if (!this._reactor) return () => {};
+    // Reactor requires a Set (notify() checks sub.cellKeys.has)
+    const sub = this._reactor.subscribe(new Set([this._cellKey]), run);
+    return () => this._reactor.unsubscribe(sub);
   }
 }

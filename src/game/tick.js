@@ -1,13 +1,11 @@
 import { INHERENT_EFFECTS } from "../data/conditionsData.js";
 import { initialiseWorld } from "../utils/state_creator.js";
 import { spawnActor } from "./actor.js";
-import { EventLog } from "./log.js";
 import { setIntervalFix, clearIntervalFix } from "../utils/throttleFix.js";
 import { processTrigger } from "./events.js";
 import { applyEffect } from "./effects.js";
 import { hasStoredSave, loadFromStorage, saveToStorage } from "../utils/save.js";
 import { initUI } from "../ui/panelManager.js";
-import { renderLog } from "../ui/renderLog.js";
 import { PANELS } from "../data/panelsData.js";
 
 
@@ -32,12 +30,6 @@ export function startTicking() {
     player = spawnActor(world, { defId: "player", team: "good" });  // Look, its you!
   }
 
-  // TODO - move to world creation
-  world.log = new EventLog({ container: document.getElementById("log-box") });
-  world.log.container.scrollTop = world.log.container.scrollHeight;
-  world.log.followTail = true;
-
-
   window.world = world;
 
   // Literally the only place where player is special-cased
@@ -49,7 +41,6 @@ export function startTicking() {
       processTrigger(actor, "tick", {}, "pre");
       processTrigger(actor, "tick", {}, "post");
     }
-    renderLog(world);
 
     // TODO - replace with something better
     if (++tickCounter >= 100) {

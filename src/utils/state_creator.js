@@ -91,7 +91,6 @@ export function initialiseWorld() {
   world.candidateScope = new CandidateScope();
   world.reactor = new Reactor(MAX_STACK_DEPTH);
   world.rng = rngFactory(0);
-  world.log = null;
   world.actors = new Map();
   world.spawn = spawnActor;
   world.despawn = despawnActor;
