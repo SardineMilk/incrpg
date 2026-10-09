@@ -200,6 +200,19 @@ export const ACTIONS = {
     result: [eff.activate("new_meldrum")]
   },
 
+  meldrum_to_hut: {
+    name: "Enter your hut",
+    requirements: fml.active("new_meldrum"),
+    duration: 10,
+    result: [eff.activate("starter_hut")]
+  },
+  hut_to_meldrum: {
+    name: "Leave your hut",
+    requirements: fml.active("starter_hut"),
+    duration: 10,
+    result: [eff.activate("new_meldrum")]
+  },
+
   meldrum_to_forest: {
     name: "Enter the Forest",
     requirements: fml.active("new_meldrum"),

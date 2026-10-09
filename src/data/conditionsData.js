@@ -357,6 +357,7 @@ export const INHERENT_EFFECTS = {
     modifiers: [{ event: evt.despawn(), modify: [mod.cancel()] }],
     triggers: [{
       event: evt.despawn(),
+      phase: "pre",
       effects: [
         eff.deactivate(sel.active(sel.tags("actions"))),
         eff.deactivate(sel.active(sel.tags("activities"))),
