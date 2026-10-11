@@ -238,7 +238,7 @@ export const INHERENT_EFFECTS = {
         requirements: fml.hasTag(fml.id(), "actions"),
         effects: [
           eff.deactivate(sel.active(sel.tags("actions"))),
-          eff.sendMessage("SYSTEM", fml.add("Action: ", fml.id()))
+          eff.sendMessage("SYSTEM", fml.add("Action: ", fml.name(fml.id())))
         ],
       }
     ]

@@ -26,14 +26,14 @@ export const SKILLS = {
 
   constitution: {
     tags: ["characteristic"],
-    name: "Constitution",
+    name: "Con",
     level: [
       eff.changeValue("healthMax", 2),
     ],
   },
   strength: {
     tags: ["characteristic"],
-    name: "Strength",
+    name: "Str",
     level: [
       eff.changeValue("healthMax", 1),
       eff.changeValue("staminaMax", 1),
@@ -42,7 +42,7 @@ export const SKILLS = {
 
   agility: {
     tags: ["characteristic"],
-    name: "Agility",
+    name: "Agi",
     level: [
       eff.changeValue("staminaMax", 2),
     ],
@@ -58,14 +58,14 @@ export const SKILLS = {
 
   intelligence: {
     tags: ["characteristic"],
-    name: "Intelligence",
+    name: "Int",
     level: [
       eff.changeValue("mentalMax", 2),
     ],
   },
   willpower: {
     tags: ["characteristic"],
-    name: "Willpower",
+    name: "Wil",
     level: [
       eff.changeValue("healthMax", 1),
       eff.changeValue("mentalMax", 1),

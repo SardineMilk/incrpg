@@ -189,7 +189,7 @@ export const EFFECT_DEFS = {
     },
     diff: diffAmount,
     display(game, e) {
-      return `gain ${e.id} permanently`;
+      return `activate ${e.id}`;
     }
   },
 
@@ -205,7 +205,7 @@ export const EFFECT_DEFS = {
       activateEntity(game, e.id, null);
     },
     display(game, e) {
-      return `remove ${e.id}`;
+      return `deactivate ${e.id}`;
     }
   },
 

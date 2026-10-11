@@ -61,7 +61,14 @@ const definitions = {
     const shuffled = [...ids].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, Math.min(count, ids.length));
   },
-
+  
+  withActive: (game, id) =>
+    liveActors(game)
+      .filter((a) => {
+        game.reactor.read(`active:${a.id}:${id}`);
+        return a.active.isActive(id);
+      })
+      .map((a) => a.id),
 };
 
 export const target = Object.fromEntries(
