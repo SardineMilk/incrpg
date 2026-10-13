@@ -12,9 +12,14 @@ import { ACTIONS } from "./actionsData.js";
 import { ACTIVITIES } from "./activitiesData.js";
 import { SKILLS } from "./skillsData.js";
 
-// A def's requirements gate whether it can be used
-//  its visibility gates whether it *shows up* in the UI
-
+// A def's requirements gate whether it *functions* (can be used/entered/
+// activated); its visibility gates whether it *shows up* in the UI at all.
+// Most defs don't bother drawing that distinction, so visibility falls
+// back to requirements when not given explicitly. This is a UI-local
+// convenience over the raw defs this file already imports, not a general
+// engine concept - utils/tagIndex.js deliberately knows nothing about
+// either field name, so any other consumer that wants this same fallback
+// gets to decide that for itself too, rather than inheriting it silently.
 function visibilityOf(def) {
   return def?.visibility ?? def?.requirements;
 }
@@ -25,6 +30,23 @@ const CHARACTERISTICS = [
   "intelligence", "willpower",
 ];
 const CHARACTERISTIC_SET = new Set(CHARACTERISTICS);
+
+// The three resource meters, shared by the hero panel and actor cards.
+// The bar-* class is the styling hook (see style.css).
+const RESOURCES = [
+  { stat: "health",  label: "HP", className: "bar-hp" },
+  { stat: "stamina", label: "SP", className: "bar-sp" },
+  { stat: "mental",  label: "MP", className: "bar-mp" },
+];
+
+function resourceBars() {
+  return RESOURCES.map(({ stat, label, className }) =>
+    ui.bar(fml.value(stat), fml.value(`${stat}Max`), {
+      label,
+      className: `resource-bar ${className}`,
+    })
+  );
+}
 
 function activeLocationLabel(game) {
   const names = sel.active(sel.tags("locations"))(game).map(nameOf);
@@ -89,23 +111,23 @@ const TEAMS = ["good", "evil"];
 function actorCard(actor) {
   return ui.group([
     ui.text(actor.name ?? actor.id, { className: "actor-name" }),
-    ui.bar(fml.value("health"), fml.value("healthMax"), { label: "HP", className: "resource-bar" }),
-    ui.bar(fml.value("stamina"), fml.value("staminaMax"), { label: "SP", className: "resource-bar" }),
-    ui.bar(fml.value("mental"), fml.value("mentalMax"), { label: "MP", className: "resource-bar" }),
+    ...resourceBars(),
   ], { className: "actor-card" });
 }
 
 
+// Panel definition fields:
+//   container - id of the DOM element to mount into
+//   root      - widget descriptor
+//   title     - window title bar text
+//   theme     - change theme of CSS
 export const PANELS = {
   hero: {
     container: "hero-panel",
+    title: "STATUS.DAT",
     root: ui.group([
-      ui.text("Hero", { className: "name-box" }),
-      ui.group([
-        ui.bar(fml.value("health"),  fml.value("healthMax"),  { label: "HP", className: "resource-bar" }),
-        ui.bar(fml.value("stamina"), fml.value("staminaMax"), { label: "SP", className: "resource-bar" }),
-        ui.bar(fml.value("mental"),  fml.value("mentalMax"),  { label: "MP", className: "resource-bar" }),
-      ]),
+      ui.text("Player", { className: "name-box" }),
+      ui.group(resourceBars()),
       ui.group(
         CHARACTERISTICS.map((id) =>
           ui.text(fml.level(id), {
@@ -121,6 +143,8 @@ export const PANELS = {
 
   actions: {
     container: "actions-panel",
+    title: "ACTION.APP",
+    theme: "parasite",
     root: ui.list(
       sel.tags("actions"),
       (id) => ui.group([
@@ -153,6 +177,8 @@ export const PANELS = {
 
   activity: {
     container: "activity-panel",
+    title: "ACTIVITY.APP",
+    theme: "parasite",
     root: ui.group([
       // Every possible activity, shown only when none are active
       ui.list(
@@ -197,6 +223,7 @@ export const PANELS = {
 
   skills: {
     container: "skills-panel",
+    title: "SKILLS.DAT",
     root: ui.list(
       () => byTag("skills").filter((id) => !CHARACTERISTIC_SET.has(id)),
       (id) => ui.group([
@@ -225,6 +252,7 @@ export const PANELS = {
 
   combat: {
     container: "actor-panel",
+    title: "COMBAT.DAT",
     root: ui.group(
       TEAMS.map((team) =>
         ui.actorList((world) => actorsByTeam(world, team), actorCard, {

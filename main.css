@@ -1,350 +1,593 @@
+/* Tokens*/
+
 :root {
-  /* Theme */
-  --colour-background: #111827;
-  --colour-surface: #1f2937;
-  --colour-primary: #2563eb;
-  --colour-select:  #60a5fa;
-  --colour-border:  #374151;
-  --colour-text:    #f3f4f6;
+  --font: "Lucida Console", monospace;
 
-  /* Layout */
-  --radius: 1px;
-  --radius-sm: 1px;
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
 
-  /* Effects */
-  --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --transition: 0.2s ease;
+  --c-desk-a: #008080;
+  --c-desk-b: #007474;
+
+  --c-face: #c0c0c0;
+  --c-light: #dfdfdf;
+  --c-hilite: #ffffff;
+  --c-shadow: #808080;
+  --c-dark: #000000;
+  --c-ink: #000000;
+  --c-dim: #808080;
+  --c-danger: #aa0000;
+
+  --c-title-bg: #000080;
+  --c-title-fg: #ffffff;
+  --c-sel-bg: #000080;
+  --c-sel-fg: #ffffff;
+
+  /* terminal */
+  --c-well: #000000;
+  --c-well-ink: #aaaaaa;
+  --c-well-bright: #ffffff;
+  --c-accent: #ffff55;
+
+  --c-tip-bg: #ffffaa;
+
+  --bar-default: #55ffff;
+  --bar-hp: #ff5555;
+  --bar-sp: #55ff55;
+  --bar-mp: #5555ff;
+
+  --c-ch-sight: #55ffff;
+  --c-ch-sound: #ff55ff;
+  --c-ch-system: #ffff55;
+
+  --drop: 4px 4px 0 var(--c-dark);
+}
+
+/* Bevels are declared wherever a palette is set */
+:root,
+.window {
+  --bevel-out:
+    inset -1px -1px 0 var(--c-dark),
+    inset 1px 1px 0 var(--c-hilite),
+    inset -2px -2px 0 var(--c-shadow),
+    inset 2px 2px 0 var(--c-light);
+  --bevel-in:
+    inset 1px 1px 0 var(--c-shadow),
+    inset -1px -1px 0 var(--c-hilite),
+    inset 2px 2px 0 var(--c-dark),
+    inset -2px -2px 0 var(--c-light);
+  --bevel-thin:
+    inset 1px 1px 0 var(--c-shadow),
+    inset -1px -1px 0 var(--c-hilite);
 }
 
 
-/* Rain effect test*/
-.weather-rain::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle, var(--colour-primary) 2px, transparent 2px);
-  background-size: 20px 20px;
-  animation: rain-fall 0.5s linear infinite;
-  z-index: 1;
-  pointer-events: none;
-}
+/* Base */
 
-@keyframes rain-fall {
-  from { transform: translateY(-20px); }
-  to { transform: translateY(0); }
-}
-
-
-/*
-  Base
-*/
-
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
+html,
 body {
+  height: 100%;
   margin: 0;
-  /*Font Options: "Gill Sans", "Courier New", */
-  font-family: "Courier New", sans-serif;
-  font-variant-numeric: tabular-nums;
-  background: var(--colour-background);
-  color: var(--colour-text);
 }
 
-/*
-  Layout
-*/
-
-.game-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+html {
+  font: 16px/20px var(--font);
+  color: var(--c-ink);
+  color-scheme: light;
 }
+
+body {
+  overflow: hidden;
+  background: var(--c-desk-a);
+  cursor: default;
+}
+
+::selection {
+  background: var(--c-sel-bg);
+  color: var(--c-sel-fg);
+}
+
+:focus-visible {
+  outline: 1px dotted currentColor;
+  outline-offset: -5px;
+}
+
+
+/* Layout
+ *
+ *   hero    combat   log
+ *   skills  actions  log
+ *   skills  activity log
+ */
 
 #game-screen {
+  position: relative;
   display: grid;
-  grid-template-columns: 260px 1fr 300px;
-  grid-template-rows: 1fr auto;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-xs);
-
-  flex: 1;
-  min-height: 0;
+  height: 100dvh;
+  padding: var(--s3);
+  gap: var(--s3);
   overflow: hidden;
-}
+  /* Declared here, not in a token, so it can be changed by effects */
+  background: repeating-conic-gradient(var(--c-desk-a) 0 25%, var(--c-desk-b) 0 50%) 0 0 / 4px 4px;
 
-header,
-footer {
-  padding: var(--spacing-md);
-  background: var(--colour-surface);
+  grid-template-columns: 17rem minmax(18rem, 1fr) minmax(24rem, 1.25fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "hero   combat   log"
+    "skills actions  log"
+    "skills activity log";
 }
-
-header {
-  border-bottom: 1px solid var(--colour-border);
-}
-
-footer {
-  display: flex;
-  justify-content: space-between;
-  text-align: center;
-  border-top: 1px solid var(--colour-border);
-}
-
 
 #hero-panel {
-  grid-column: 1;
-  grid-row: 1 / 3;
+  grid-area: hero;
 }
 
-#log-box {
-  grid-column: 3;
-  grid-row: 1 / 3;
-
-  height: auto;
-  overflow-y: auto;
-}
-
-
-.centre-panel {
-  grid-column: 2;
-  grid-row: 1 / 3;
-
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  min-height: 0;
-}
-
-.top-panels, .bottom-panels {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-xs);
-
-  flex: 1;
-  min-height: 0;
-}
-
-#actions-panel,
-#activity-panel {
-  min-width: 0;
-  overflow-y: auto;
+#actor-panel {
+  grid-area: combat;
+  max-height: 30dvh;
 }
 
 #skills-panel {
-  flex: 0 0 auto;
+  grid-area: skills;
 }
-/*
-  Shared Panels
-*/
 
-/* TODO - generalize with panel class*/
-#hero-panel,
-#skills-panel,
-#actions-panel,
-#tasks-panel,
-#activity-panel,
-#actor-panel,
-#log-box {
-  background: var(--colour-surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  flex: 1;
-  padding: var(--spacing-xs);
+#actions-panel {
+  grid-area: actions;
+}
+
+#activity-panel {
+  grid-area: activity;
+  max-height: 40dvh;
 }
 
 #log-box {
-  flex: 0 0 300px;
-  padding: var(--spacing-sm);
-  overflow-y: auto;
-}
-
-/*
-   Shared Cards
-*/
-
-.name-box,
-.location-box,
-.attribute-box,
-.action-entry,
-.log-element {
-  border-radius: var(--radius-sm);
-  margin-bottom: var(--spacing-sm);
-  padding: var(--spacing-sm);
-  background: var(--colour-primary);
+  grid-area: log;
 }
 
 
-/* 
-  Log entries 
-*/
+/* Windows */
 
-.log-element {
-  display: flex;
-  align-items: center;
-
-  padding: var(--spacing-sm);
-  background: var(--colour-background);
-  border: 1px solid var(--colour-border);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-}
-/*
-  Status
-*/
-
-
-.stats-box {
-  margin-bottom: var(--spacing-sm);
-  padding: var(--spacing-sm);
-  background: var(--colour-background);
-  /* Arrange the 6 stats in a 3x 2y grid */
-  /* or a hexagon might be interesting */
-}
-
-/*
-  Actions
-*/
-
-.action-option,
-.activity-option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-sm);
-
-  margin-bottom: var(--spacing-sm);
-  padding: 0.5rem;
-
-  background: var(--colour-background);
-  border: 1px solid var(--colour-border);
-
-  transition:
-    border-color var(--transition),
-    background-color var(--transition);
-}
-
-.action-option,
-.activity-option,
-.ui-bar {
-  flex: 1;
-  margin-bottom: 0;
-  margin-left: var(--spacing-sm);
-}
-
-.active-action {
-  border-color: var(--colour-select);
-  background: rgba(37, 99, 235, 0.08);
-}
-
-.action-button,
-.activity-button,
-.leave-activity-button {
-  padding: 0.5rem 0.75rem;
-
-  background: var(--colour-primary);
-  color: var(--colour-text);
-
-  font-weight: 600;
-  cursor: pointer;
-
-  transition: filter var(--transition);
-}
-
-.action-button:hover {
-  filter: brightness(1.08);
-}
-
-/*
-  ui.* widgets
-*/
-.ui-group {
+.window {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  min-width: 0;
+  min-height: 0;
+  padding: 3px;
+  overflow: hidden;
+  background: var(--c-face);
+  color: var(--c-ink);
+  border: 1px solid var(--c-dark);
+  box-shadow: var(--bevel-out), var(--drop);
+  user-select: none;
+}
+
+.window::before {
+  content: attr(data-title);
+  flex: none;
+  height: 20px;
+  padding: 0 var(--s2);
+  overflow: hidden;
+  white-space: pre;
+  text-overflow: ellipsis;
+  background: var(--c-title-bg);
+  color: var(--c-title-fg);
+}
+
+/* Where Panels mount - recessed */
+.window>* {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 3px;
+  padding: var(--s2);
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  box-shadow: var(--bevel-thin);
+}
+
+/* Panels can choose their theme */
+.window[data-theme="parasite"] {
+  --c-face: #bfb3d6;
+  --c-light: #d8e0d4;
+  --c-hilite: #f6fff2;
+  --c-shadow: #78846f;
+  --c-dim: #78846f;
+  --c-title-bg: #24107c;
+  --c-title-fg: #ecebff;
+  --c-sel-bg: #24107c;
+  --c-sel-fg: #ecebff;
+  --bar-default: #55cfff;
+  box-shadow: var(--bevel-in), var(--drop);
+}
+
+.window[data-theme="parasite"]::before {
+  height: 24px;
+  line-height: 24px;
+  letter-spacing: 0.08em;
+}
+
+
+
+/* Widgets (see widgetDefs.js) */
+
+.ui-group,
+.ui-list,
+.ui-actorList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  min-width: 0;
 }
 
 .ui-group-row {
   flex-direction: row;
-  align-items: center;
 }
 
+.ui-text {
+  overflow-wrap: anywhere;
+}
+
+/* Bars */
+
 .ui-bar {
-  margin-bottom: var(--spacing-sm);
+  --bar-color: var(--bar-default);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
 .ui-bar-label {
-  font-size: 0.9rem;
-  margin-bottom: 2px;
+  white-space: nowrap;
 }
 
 .ui-bar-track {
-  position: relative;
-  height: 8px;
-  border-radius: 999px;
-  overflow: hidden;
-  background: var(--colour-background);
+  height: 18px;
+  padding: 3px;
+  background: var(--c-well);
+  box-shadow: var(--bevel-in);
 }
 
+/* Segmented progress bar*/
 .ui-bar-fill {
   height: 100%;
-  background: var(--colour-primary);
-  transition: width var(--transition);
+  background: repeating-linear-gradient(90deg, var(--bar-color) 0 6px, transparent 6px 8px);
 }
 
-/*
-  Activity
-*/
-
-.activity-name {
-  font-weight: 600;
-  margin-bottom: var(--spacing-sm);
+.bar-hp {
+  --bar-color: var(--bar-hp);
 }
 
-.activity-meter-row {
-  margin-bottom: var(--spacing-sm);
+.bar-sp {
+  --bar-color: var(--bar-sp);
 }
 
-/* 
-  Skills
-*/
-
-.skill-entry {
-  margin-bottom: var(--spacing-sm);
+.bar-mp {
+  --bar-color: var(--bar-mp);
 }
 
+/* Thin strips with no label (it would only read "12/100") */
+.action-progress {
+  --bar-color: var(--bar-default);
+}
+
+.action-progress .ui-bar-label,
+.skill-progress .ui-bar-label {
+  display: none;
+}
+
+.action-progress .ui-bar-track,
+.skill-progress .ui-bar-track {
+  height: 8px;
+  padding: 2px;
+  box-shadow: var(--bevel-thin);
+}
+
+.action-progress .ui-bar-fill,
 .skill-progress .ui-bar-fill {
-  background: var(--colour-select);
+  background: repeating-linear-gradient(90deg, var(--bar-color) 0 4px, transparent 4px 5px);
 }
 
+/* Buttons */
+
+.ui-button {
+  display: block;
+  width: 100%;
+  padding: var(--s1) 10px;
+  font: inherit;
+  text-align: left;
+  color: var(--c-ink);
+  background: var(--c-face);
+  border: 0;
+  box-shadow: var(--bevel-out);
+}
+
+.ui-button:hover:not(:disabled, .active-action) {
+  background: var(--c-light);
+}
+
+.ui-button:active:not(:disabled) {
+  padding: 5px 9px 3px 11px;
+  box-shadow: var(--bevel-in);
+}
+
+.ui-button:disabled {
+  color: var(--c-dim);
+  text-shadow: 1px 1px 0 var(--c-hilite);
+}
+
+/* A running action is pressed in and lit */
+.active-action {
+  background: var(--c-sel-bg);
+  color: var(--c-sel-fg);
+  box-shadow: var(--bevel-in);
+}
+
+
+/* Panels */
+
+.name-box,
+.activity-name {
+  padding: var(--s1) var(--s2);
+  background: var(--c-well);
+  color: var(--c-accent);
+  box-shadow: var(--bevel-in);
+}
+
+.stats-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px var(--s2);
+  padding: var(--s1) 6px;
+  background: var(--c-well);
+  color: var(--c-well-ink);
+  box-shadow: var(--bevel-in);
+}
+
+.attribute-box {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.location-box {
+  padding: 3px 6px;
+  background: var(--c-well);
+  color: var(--c-well-bright);
+  box-shadow: var(--bevel-thin);
+}
+
+.actions-list {
+  gap: var(--s3);
+}
+
+.action-option {
+  gap: var(--s1);
+}
+
+
+.skills-list {
+  gap: 0;
+}
+
+.skill-entry:hover {
+  background: var(--c-sel-bg);
+  color: var(--c-sel-fg);
+}
+
+.actor-teams {
+  gap: var(--s2);
+}
+
+.team-column {
+  flex: 1 1 0;
+  gap: 6px;
+  padding: var(--s1);
+  background: var(--c-well);
+  color: var(--c-well-ink);
+  box-shadow: var(--bevel-in);
+}
+
+.team-column::before {
+  content: "TEAM";
+  padding: 0 var(--s2);
+  color: var(--c-sel-fg);
+  background: var(--c-title-bg);
+}
+
+.team-good::before {
+  content: "GOOD";
+}
+
+.team-evil::before {
+  content: "EVIL";
+  background: var(--c-danger);
+}
+
+.actor-card {
+  gap: var(--s1);
+  padding: 6px;
+  background: var(--c-face);
+  color: var(--c-ink);
+  box-shadow: var(--bevel-out);
+}
+
+.actor-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+/* Log
+ * renderLog() clamps to 2 row, so further text is cut off.
+ */
+
+#log-box {
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--c-well);
+  color: var(--c-well-ink);
+  border: 4px solid var(--c-face);
+  outline: 1px solid var(--c-dark);
+  box-shadow: inset 0 0 0 1px var(--c-shadow), var(--drop);
+}
+
+.log-element {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  padding: 0 var(--s3) 0 var(--s2);
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.log-element[data-channel="sight"] {
+  --ch: var(--c-ch-sight);
+}
+
+.log-element[data-channel="sound"] {
+  --ch: var(--c-ch-sound);
+}
+
+.log-element[data-channel="system"] {
+  --ch: var(--c-ch-system);
+}
+
+
+/* Tooltip 
+ * Post-it style
+ */
 
 #ui-tooltip-layer {
   position: fixed;
   inset: 0;
+  z-index: 10000;
   pointer-events: none;
-  z-index: 1000;
 }
 
 .ui-tooltip {
-  position: fixed;
-  max-width: 280px;
-  padding: var(--spacing-sm);
-  background: var(--colour-background);
-  border: 1px solid var(--colour-border);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow);
-  font-size: 0.85rem;
-  line-height: 1.4;
+  position: absolute;
+  max-width: 34ch;
+  padding: var(--s1) var(--s2);
+  background: var(--c-tip-bg);
+  color: var(--c-ink);
+  border: 1px solid var(--c-dark);
+  box-shadow: 3px 3px 0 var(--c-dark);
   white-space: pre-line;
+  /* describeAction() joins lines with \n */
 }
 
-/*
-  Misc
-*/
 
-.logo {
-  width: 36px;
-  height: 36px;
+/* Scrollbars */
+
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--c-face);
+}
+
+::-webkit-scrollbar-track {
+  background: repeating-conic-gradient(var(--c-light) 0 25%, var(--c-face) 0 50%) 0 0 / 2px 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--c-face);
+  box-shadow: var(--bevel-out);
+}
+
+/* Chromium ignores the rules above once scrollbar-color is set */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-color: var(--c-face) var(--c-light);
+  }
+}
+
+
+/* Entity-driven effects
+ * Not rendered by default. Entities switch these on by adding a class, 
+ * e.g.
+ * a rain overlay across the screen - eff.uiClass("#game-screen", "weather-rain")
+ */
+
+#game-screen.weather-rain {
+  --c-desk-a: #0a4a56;
+  --c-desk-b: #08424d;
+  --rain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' shape-rendering='crispEdges'%3E%3Cg fill='%23a8d8ff' fill-opacity='.6'%3E%3Crect x='8' y='6' width='1' height='7'/%3E%3Crect x='22' y='38' width='1' height='7'/%3E%3Crect x='37' y='14' width='1' height='7'/%3E%3Crect x='50' y='50' width='1' height='7'/%3E%3Crect x='58' y='26' width='1' height='7'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Two layers at different sizes, so the streaks fall at different speeds */
+#game-screen.weather-rain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--rain), var(--rain);
+  background-size: 64px 64px, 80px 80px;
+  background-position: 0 0, 24px 0;
+  animation: rain-fall 0.4s steps(8) infinite;
+}
+
+@keyframes rain-fall {
+  to {
+    background-position: 0 64px, 24px 160px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #game-screen.weather-rain::after {
+    animation: none;
+  }
+}
+
+
+/* Responsive */
+
+@media (max-width: 960px) {
+  body {
+    overflow: auto;
+  }
+
+  #game-screen {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas:
+      "hero"
+      "combat"
+      "log"
+      "actions"
+      "activity"
+      "skills";
+  }
+
+  #log-box {
+    height: 45dvh;
+  }
+
+  #actions-panel,
+  #skills-panel {
+    max-height: 50dvh;
+  }
 }

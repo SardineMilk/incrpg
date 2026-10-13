@@ -8,7 +8,7 @@ let panels = [];
 export function initUI(world, actorId, panelDefs) {
   teardownUI();
   panels = Object.entries(panelDefs).map(
-    ([id, def]) => new Panel(id, def.root, def.container)
+    ([id, def]) => new Panel(id, def.root, def.container, def)
   );
   for (const panel of panels) panel.mount(actorId);
 }
