@@ -143,7 +143,7 @@ export const PANELS = {
 
   actions: {
     container: "actions-panel",
-    title: "ACTION.APP",
+    title: "ACT.ION",
     theme: "parasite",
     root: ui.list(
       sel.tags("actions"),
@@ -177,7 +177,7 @@ export const PANELS = {
 
   activity: {
     container: "activity-panel",
-    title: "ACTIVITY.APP",
+    title: "ACT.IVITY",
     theme: "parasite",
     root: ui.group([
       // Every possible activity, shown only when none are active
@@ -265,6 +265,7 @@ export const PANELS = {
 
   log: {
     container: "log-box",
+    title: "EVENTS.DAT",
     root: ui.custom((el, game) => {
       const view = new LogView(el, game.log);
       return () => view.destroy();
