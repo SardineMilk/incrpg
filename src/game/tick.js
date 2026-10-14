@@ -42,12 +42,7 @@ export function startTicking() {
       processTrigger(actor, "tick", {}, "post");
     }
 
-    // TODO - replace with something better
-    if (++tickCounter >= 100) {
-      tickCounter = 0;
-      console.log("Saving...")
-      saveToStorage(world);
-    }
+    autoSave();
 
   }, TICK_RATE);
 
@@ -57,4 +52,13 @@ export function startTicking() {
       intervalId = null;
     }
   };
+}
+
+// TODO - replace with something better
+function autoSave() {
+  if (++tickCounter >= 100) {
+    tickCounter = 0;
+    console.log("Saving...")
+    saveToStorage(world);
+  }
 }
