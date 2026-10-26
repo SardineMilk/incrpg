@@ -276,6 +276,15 @@ export const INHERENT_EFFECTS = {
       },
     ],
   },
+  despawn_when_apart: {
+    tags: ["system", "entropy"],
+    triggers: [{
+      event: evt.tick(),
+      requirements: fml.not(fml.sharesActive("locations", ["player"])),
+      effects: [eff.despawn()],
+    }],
+  },
+
 
   // Stupid
   force_notify_per_tick: {
