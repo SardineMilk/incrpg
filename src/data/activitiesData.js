@@ -119,9 +119,9 @@ function route(name, from, to, distance) {
         repeat: false,
         result: [
           eff.sendMessage("SYSTEM", fml.add("You arrive at ", fml.name(to))),
-          // Meters stay at max when repeat is false, so reset before leaving
-          // TODO - examine this engine-level structure
-          eff.resetMeter(sel.active(sel.tags("route")), 0, "distance"),
+            // Meters stay at max when repeat is false, so reset before leaving
+            // TODO - examine this engine-level structure
+            eff.resetMeter(sel.active(sel.tags("route")), 0, "distance"),
           eff.deactivate(sel.active(sel.tags("route"))),
           eff.activate(to),
         ],
@@ -131,18 +131,24 @@ function route(name, from, to, distance) {
 }
 
 const ROUTES = {
-    meldrum_to_library: route("Visit the library", "new_meldrum", "meldrum_library", 5),
-    library_to_meldrum: route("Leave the library", "meldrum_library", "new_meldrum", 5),
-    meldrum_to_hut:     route("Enter your hut", "new_meldrum", "starter_hut", 3),
-    hut_to_meldrum:     route("Leave your hut", "starter_hut", "new_meldrum", 3),
-    meldrum_to_forest:  route("Enter the Forest", "new_meldrum", "meldrum_forest", 12),
-    forest_to_meldrum:  route("Return to the Village", "meldrum_forest", "new_meldrum", 12),
-    forest_to_deep:     route("Enter the Deep Forest", "meldrum_forest", "meldrum_forest_deep", 30),
-    deep_to_forest:     route("Return to the Forest Outskirts", "meldrum_forest_deep", "meldrum_forest", 30),
-    beach_to_cave:      route("Enter Sea Cave", "meldrum_beach", "meldrum_sea_cave", 8),
-    cave_to_beach:      route("Exit the Cave to the Beach", "meldrum_sea_cave", "meldrum_beach", 8),
-    beach_to_pools:     route("Stroll Along to the Tide Pools", "meldrum_beach", "meldrum_tide_pools", 10),
-    pools_to_beach:     route("Return to the Sandy Beach", "meldrum_tide_pools", "meldrum_beach", 10),
+    meldrum_to_library: route("Visit the library",              "new_meldrum",         "meldrum_library",      5),
+    library_to_meldrum: route("Leave the library",              "meldrum_library",     "new_meldrum",          5),
+
+    meldrum_to_hut:     route("Enter your hut",                 "new_meldrum",         "starter_hut",          3),
+    hut_to_meldrum:     route("Leave your hut",                 "starter_hut",         "new_meldrum",          3),
+
+    meldrum_to_forest:  route("Enter the Forest",               "new_meldrum",         "meldrum_forest",      12),
+    forest_to_meldrum:  route("Return to the Village",          "meldrum_forest",      "new_meldrum",         12),
+
+    forest_to_deep:     route("Enter the Deep Forest",          "meldrum_forest",      "meldrum_forest_deep", 30),
+    deep_to_forest:     route("Return to the Forest Outskirts", "meldrum_forest_deep", "meldrum_forest",      30),
+
+    beach_to_cave:      route("Enter Sea Cave",                 "meldrum_beach",       "meldrum_sea_cave",     8),
+    cave_to_beach:      route("Exit the Cave to the Beach",     "meldrum_sea_cave",    "meldrum_beach",        8),
+
+    beach_to_pools:     route("Stroll Along to the Tide Pools", "meldrum_beach",       "meldrum_tide_pools",  10),
+    pools_to_beach:     route("Return to the Sandy Beach",      "meldrum_tide_pools",  "meldrum_beach",       10),
+
 }
 
 export const ACTIVITIES = Object.assign({}, GENERAL_ACTIVITIES, ROUTES);

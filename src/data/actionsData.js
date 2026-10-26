@@ -143,18 +143,10 @@ export const ACTIONS = {
     ],
   },
 
-  spawn_rat: {
-    name: "TEST - Spawn Rat",
-    requirements: fml.active("meldrum_library"),
-    passives: [
-      eff.spawn("rat", "evil")
-    ],
-  },
-
 
   punch: {
     name: "TEST - Punch",
-    requirements: fml.active("meldrum_library"),
+    // requirement: in combat
     duration: 10,
     result: [
       eff.onTarget(
