@@ -1,11 +1,9 @@
-import { INHERENT_EFFECTS } from "../data/conditionsData.js";
 import { initialiseWorld } from "../utils/state_creator.js";
 import { spawnActor } from "./actor.js";
 import { setIntervalFix, clearIntervalFix } from "../utils/throttleFix.js";
 import { processTrigger } from "./events.js";
-import { applyEffect } from "./effects.js";
 import { hasStoredSave, loadFromStorage, saveToStorage } from "../utils/save.js";
-import { initUI } from "../ui/panelManager.js";
+import { initUI, changeUIActor } from "../ui/panelManager.js";
 import { PANELS } from "../data/panelsData.js";
 
 
@@ -33,7 +31,8 @@ export function startTicking() {
   window.world = world;
 
   // Literally the only place where player is special-cased
-  initUI(world, player, PANELS);
+  initUI(PANELS);
+  changeUIActor(player);
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {

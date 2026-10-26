@@ -193,28 +193,6 @@ body {
   box-shadow: var(--bevel-thin);
 }
 
-/* Panels can choose their theme */
-.window[data-theme="parasite"] {
-  --c-face: #bfb3d6;
-  --c-light: #d8e0d4;
-  --c-hilite: #f6fff2;
-  --c-shadow: #78846f;
-  --c-dim: #78846f;
-  --c-title-bg: #24107c;
-  --c-title-fg: #ecebff;
-  --c-sel-bg: #24107c;
-  --c-sel-fg: #ecebff;
-  --bar-default: #55cfff;
-  box-shadow: var(--bevel-in), var(--drop);
-}
-
-.window[data-theme="parasite"]::before {
-  height: 24px;
-  line-height: 24px;
-  letter-spacing: 0.08em;
-}
-
-
 
 /* Widgets (see widgetDefs.js) */
 
@@ -426,6 +404,93 @@ body {
   text-overflow: ellipsis;
 }
 
+
+/* Parasite theme */
+/*
+.window[data-theme="parasite"] {
+  --c-face: #bfb3d6;
+  --c-light: #d8e0d4;
+  --c-hilite: #f6fff2;
+  --c-shadow: #78846f;
+  --c-dim: #78846f;
+  --c-title-bg: #24107c;
+  --c-title-fg: #ecebff;
+  --c-sel-bg: #24107c;
+  --c-sel-fg: #ecebff;
+  --bar-default: #55cfff;
+
+  --bevel-out:
+    inset 1px -1px 0 var(--c-dark),
+    inset -1px 1px 0 var(--c-hilite),
+    inset 2px -2px 0 var(--c-shadow),
+    inset -2px 2px 0 var(--c-light);
+  --bevel-in:
+    inset -1px 1px 0 var(--c-shadow),
+    inset 1px -1px 0 var(--c-hilite),
+    inset -2px 2px 0 var(--c-dark),
+    inset 2px -2px 0 var(--c-light);
+  --bevel-thin:
+    inset -1px 1px 0 var(--c-shadow),
+    inset 1px -1px 0 var(--c-hilite);
+
+  --bevel-out-alt:
+    inset -1px 1px 0 var(--c-dark),
+    inset 1px -1px 0 var(--c-hilite),
+    inset -2px 2px 0 var(--c-shadow),
+    inset 2px -2px 0 var(--c-light);
+  --bevel-in-alt:
+    inset 1px -1px 0 var(--c-shadow),
+    inset -1px 1px 0 var(--c-hilite),
+    inset 2px -2px 0 var(--c-dark),
+    inset -2px 2px 0 var(--c-light);
+
+  box-shadow: var(--bevel-in), var(--drop);
+}
+
+.window[data-theme="parasite"]::after {
+  content: attr(data-title);
+  flex: none;
+  height: 9px;
+  margin-top: 3px;
+  padding: 0 var(--s2);
+  background: var(--c-title-bg);
+  color: var(--c-title-fg);
+}
+
+.window[data-theme="parasite"]>* {
+  padding-left: 28px;
+  background:
+    linear-gradient(var(--c-face), var(--c-face)) left 3px top 42% / 10px 40px no-repeat,
+    repeating-linear-gradient(0deg, var(--c-light) 0 1px, var(--c-face) 1px 2px) left top / 16px 100% no-repeat;
+}
+
+
+.window[data-theme="parasite"] .action-option {
+  flex-direction: column-reverse;
+}
+
+
+.window[data-theme="parasite"] .ui-bar-fill {
+  background: repeating-linear-gradient(90deg,
+      var(--bar-color) 0 5px, transparent 5px 7px,
+      var(--bar-color) 7px 8px, transparent 8px 11px,
+      var(--bar-color) 11px 14px, transparent 14px 15px);
+}
+
+.window[data-theme="parasite"] .ui-button {
+  background-image: repeating-conic-gradient(var(--c-light) 0 25%, transparent 0 50%) 0 0 / 2px 2px;
+  box-shadow: var(--bevel-out-alt);
+}
+
+.window[data-theme="parasite"] .active-action {
+  background-image: none;
+}
+
+.window[data-theme="parasite"] .ui-button:active:not(:disabled),
+.window[data-theme="parasite"] .active-action {
+  box-shadow: var(--bevel-in-alt);
+}
+*/
 
 /* Log
  * renderLog() clamps to 2 row, so further text is cut off.
