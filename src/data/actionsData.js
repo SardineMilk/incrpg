@@ -151,23 +151,6 @@ export const ACTIONS = {
     ],
   },
 
-  become_rat: {
-    name: "TEST - Become Rat",
-    requirements: fml.active("meldrum_library"),
-    duration: 10,
-    result: [
-      eff.changeUIActor(fml.actor("rat"))
-    ]
-  },
-
-  become_player: {
-    name: "TEST - Become Player",
-    requirements: fml.active("meldrum_library"),
-    duration: 10,
-    result: [
-      eff.changeUIActor(fml.actor("player"))
-    ]
-  },
 
   punch: {
     name: "TEST - Punch",
