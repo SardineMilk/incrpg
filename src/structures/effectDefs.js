@@ -3,6 +3,8 @@ import { processTrigger } from "../game/events.js";
 import { scaleAmount, scaleStatLayer } from "./scaling.js";
 import { changeUIActor } from "../ui/panelManager.js";
 import { isTargetSelector } from "./targetDefs.js";
+import { byTag } from "../utils/tagIndex.js";
+
 /*
  * Each entry defines one effect type:
  *
@@ -388,6 +390,14 @@ export const EFFECT_DEFS = {
         team: e.team,
       });
       e.spawnedId = actor.id;
+
+      // Spawn actor in same location as spawner
+      // O(n) for location count
+      for (const id of byTag("locations")) {
+        if (game.active.isActive(id)) {
+          game.world.applyEffect(actor, EFFECT_DEFS.activate.create(id));
+        }
+      }
     },
     display(game, e) {
       return `spawn a new ${e.team} ${e.id}`;

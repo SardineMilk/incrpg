@@ -151,10 +151,23 @@ export const ACTIONS = {
     result: [
       eff.onTarget(
         target.random(target.enemies()),
-        eff.changeValue("health", -25),
+        eff.changeValue("health", -20),
         { isAttack: true, damageType: "physical" }
       )
     ]
+  },
+
+  rat_bite: {
+    name: "Bite",
+    requirements: fml.active("ratkin"),
+    duration: 10,
+    result: [
+      eff.onTarget(
+        target.random(target.enemies()),
+        eff.changeValue("health", -5),
+        { isAttack: true, damageType: "pierce", melee: true }
+      ),
+    ],
   },
 
 };

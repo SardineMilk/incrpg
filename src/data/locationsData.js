@@ -1,3 +1,5 @@
+import { eff, evt, fml } from "../structures/structures.js";
+
 export const LOCATIONS = {
   /*
   * New Meldrum sits on the top of a rugged cliff, overlooking the sea to the south
@@ -48,7 +50,15 @@ export const LOCATIONS = {
     name: "Tide Pools",
   },
   meldrum_sea_cave: {
-    name: "Sea Cave"
+    name: "Sea Cave",
+    triggers: [{
+      event: evt.onActivate("meldrum_sea_cave"),
+      requirements: fml.not(fml.active("ratkin")),
+      effects: [
+        eff.spawn("rat", "evil"),
+        eff.spawn("rat", "evil"),
+      ],
+    }],
   },
 
   /*
