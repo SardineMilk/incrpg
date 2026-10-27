@@ -2,7 +2,7 @@ import { fml, sel } from "../structures/structures.js";
 import { ui } from "../ui/widgetDefs.js";
 import { byTag, nameOf } from "../utils/tagIndex.js";
 import { actorsByTeam } from "../game/actor.js";
-import { LogView } from "../ui/logView.js";
+import { LogView } from "../ui/logBox.js";
 import { EFFECT_DEFS } from "../structures/effectDefs.js";
 import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
 
