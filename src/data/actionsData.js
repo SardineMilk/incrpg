@@ -6,7 +6,7 @@ export const ACTIONS = {
     name: "Walk",
     tags: ["traversal"],
     requirements: fml.any(sel.active(sel.tags("activities", "traversal"))),
-    duration: 100,
+    duration: 25,
     triggers: [
       {
         event: evt.tick(),
@@ -29,7 +29,7 @@ export const ACTIONS = {
     name: "Jog",
     tags: ["traversal"],
     requirements: fml.any(sel.active(sel.tags("activities", "traversal"))),
-    duration: 50,
+    duration: 25,
     triggers: [
       {
         event: evt.tick(),
@@ -55,7 +55,7 @@ export const ACTIONS = {
     name: "Sprint",
     tags: ["traversal"],
     requirements: fml.any(sel.active(sel.tags("activities", "traversal"))),
-    duration: 20,
+    duration: 25,
     triggers: [
       {
         event: evt.tick(),

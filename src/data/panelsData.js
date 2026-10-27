@@ -153,10 +153,7 @@ export const PANELS = {
           (game, rowId) => [{ type: game.active.isActive(rowId) ? "deactivate" : "activate", id: rowId }],
           {
             className: "action-button",
-            active: (game, rowId) => {
-              game.reactor.read(`active:${rowId}`);
-              return game.active.isActive(rowId);
-            },
+            active: (game, rowId) => fml.active(rowId)(game),
           }
         ),
         ui.bar(

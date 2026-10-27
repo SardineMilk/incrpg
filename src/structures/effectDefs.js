@@ -1,5 +1,4 @@
 import { LogType } from "../game/log.js";
-import { LOCATIONS } from "../data/locationsData.js";
 import { processTrigger } from "../game/events.js";
 import { scaleAmount, scaleStatLayer } from "./scaling.js";
 import { changeUIActor } from "../ui/panelManager.js";
@@ -138,7 +137,7 @@ export const EFFECT_DEFS = {
         .xpBonus
         .changeReverse(e);
     },
-    scale: scaleAmount,
+    scale: scaleStatLayer,
     diff: diffStatLayer,
     display(game, e) {
       let m = `increase ${e.id} xp gain multiplier by: `;
@@ -557,6 +556,7 @@ export const EFFECT_DEFS = {
 
       // Needs some way to apply without calling applyEffect()
       // Due to circular dependency stuff
+      // - game.applyEffect?
       // Also needs strength to be applied properly
       // Should work for nested checks too
       if (successful) {
