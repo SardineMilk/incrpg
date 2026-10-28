@@ -174,6 +174,7 @@ export const ACTIONS = {
     name: "Possess",
     duration: 10,
     result: [
+      eff.deactivate("plot_armor"),
       eff.changeUIActor(
         fml.randomActor()
       )
