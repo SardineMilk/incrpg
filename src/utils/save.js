@@ -35,6 +35,7 @@ export function serializeGame(world) {
   return {
     version: SAVE_VERSION,
     rngSeed: world.rng.getSeed(),
+    protagonist: world.protagonist,
     actors: [...world.actors.values()].map(serializeActor),
   };
 }
@@ -72,6 +73,7 @@ function deserializeActor(actor, saved) {
 // Populates world.actors from a save
 export function deserializeGame(world, save) {
   world.rng.setSeed(save.rngSeed);
+  world.protagonist = save.protagonist;
 
   for (const actorSave of save.actors) {
     const actor = createActor(world, { id: actorSave.id, team: actorSave.team });

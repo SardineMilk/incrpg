@@ -126,7 +126,7 @@ export const PANELS = {
     container: "hero-panel",
     title: "STATUS.DAT",
     root: ui.group([
-      ui.text("Player", { className: "name-box" }),
+      ui.text(fml.protagonist(), { className: "name-box" }),
       ui.group(resourceBars()),
       ui.group(
         CHARACTERISTICS.map((id) =>

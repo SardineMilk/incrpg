@@ -280,7 +280,7 @@ export const INHERENT_EFFECTS = {
     tags: ["system", "entropy"],
     triggers: [{
       event: evt.tick(),
-      requirements: fml.not(fml.sharesActive("locations", ["player"])),
+      requirements: fml.not(fml.sharesActive("locations", fml.protagonist())),
       effects: [eff.despawn()],
     }],
   },

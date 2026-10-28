@@ -170,6 +170,16 @@ export const ACTIONS = {
     ],
   },
 
+  possess: {
+    name: "Possess",
+    duration: 10,
+    result: [
+      eff.changeUIActor(
+        fml.randomActor()
+      )
+    ]
+  },
+
 };
 
 

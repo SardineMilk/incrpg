@@ -17,9 +17,13 @@ export function teardownUI() {
   panels = [];
 }
 
-export function changeUIActor(actorId) {
+export function changeUIActor(actor) {
+  if (!actor || actor.dead) return false;
+  actor.world.protagonist = actor.id;
+  actor.world.protagonistTeam = actor.team;
   for (const panel of panels) {
     panel.unmount();
-    panel.mount(actorId);
+    panel.mount(actor);
   }
+  return true;
 }

@@ -64,6 +64,15 @@ const definitions = {
   parent: (_game, id) => parentOf(id),
   name: (game, id) => nameOf(id),
 
+  // Excludes the caller, returns an ID
+  randomActor: (game) => {
+    game.reactor.read("actors");
+    const others = [...game.world.actors.values()].filter((a) => a.id !== game.id);
+    return others.length ? others[Math.floor(game.rng() * others.length)].id : undefined;
+  },
+
+  protagonist: (game) => game.world.protagonist,
+
   add: (_game, ...args) => args.reduce((a, b) => a + b, ""),  // TODO - properly test string+number handling
   sub: (_game, ...args) => args.reduce((a, b) => a - b),
   mul: (_game, ...args) => args.reduce((a, b) => a * b, 1),
@@ -122,14 +131,13 @@ const definitions = {
   any:  (_game, ids) => ids.length > 0,
   none: (_game, ids) => ids.length === 0,
 
-  sharesActive: (game, tag, actorIds) => {
+  sharesActive: (game, tag, actorId ) => {
     const mine = new Set(sel.active(sel.tags(tag))(game));
-    return actorIds.some((otherId) => {
-      if (otherId === game.id) return true;
-      const other = game.world.actors.get(otherId);
-      return !!other && sel.active(sel.tags(tag))(other).some((id) => mine.has(id));
-    });
+    if (actorId === game.id) return true;
+    const other = game.world.actors.get(actorId);
+    return !!other && sel.active(sel.tags(tag))(other).some((id) => mine.has(id));
   },
+
   
   and:     (_game, ...bools) => bools.every(satisfied),
   or:      (_game, ...bools) => bools.some(satisfied),

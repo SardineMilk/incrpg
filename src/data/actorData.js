@@ -21,7 +21,8 @@ export const ACTORS = {
       eff.activate(sel.tags("mortal", "conditions")),
       eff.activate("ratkin"),
       eff.activate("thorns"),
-      eff.activate("punch")
+      eff.activate("punch"),
+      eff.activate("new_meldrum")
     ]
   }
 };

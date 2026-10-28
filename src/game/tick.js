@@ -16,23 +16,22 @@ export function startTicking() {
   const world = initialiseWorld();
 
   if (hasStoredSave()) {
-    loadFromStorage(world); // populates world.actors
+    loadFromStorage(world); // populates world.actors and other fields
   }
 
   // TODO - ensure actor id collision doesnt happen
   // player data getting overwritten by a football-themed mod wouldnt be ideal lmao
-  let player = world.actors.get("player");
+  let protagonist = world.actors.get(world.protagonist);
 
-  const isNewGame = !player;
-  if (isNewGame) {
-    player = spawnActor(world, { defId: "player", team: "good" });  // Look, its you!
+  if (!protagonist) {
+    // TODO - define default protag in config file not engine
+    protagonist = spawnActor(world, { defId: "player", team: "good" });  // Look, its you!
   }
 
   window.world = world;
 
-  // Literally the only place where player is special-cased
   initUI(PANELS);
-  changeUIActor(player);
+  changeUIActor(protagonist);
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {

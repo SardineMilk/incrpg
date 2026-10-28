@@ -522,7 +522,9 @@ export const EFFECT_DEFS = {
       id
     }),
     apply(game, e) {
-      changeUIActor(e.id);
+      // accept id or actor object
+      const actor = typeof e.id === "string" ? game.world.actors.get(e.id) : e.id;
+      changeUIActor(actor);
     }
   },
 
