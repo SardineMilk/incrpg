@@ -1,5 +1,12 @@
 import { eff, sel, fml } from "../structures/structures.js";
 
+const maxResources = () => [
+  eff.setValue("health", fml.value("healthMax")),
+  eff.setValue("stamina", fml.value("staminaMax")),
+  eff.setValue("mental", fml.value("mentalMax")),
+];
+
+
 export const ACTORS = {
   player: {
     name: "Player",
@@ -10,7 +17,9 @@ export const ACTORS = {
       eff.activate(sel.tags("mortal", "conditions")),
       eff.activate("human"),
       eff.activate("new_meldrum"),
-      eff.activate("plot_armor")
+      eff.activate("plot_armor"),
+      
+      ...maxResources(),
     ]
   },
 
@@ -22,7 +31,9 @@ export const ACTORS = {
       eff.activate("ratkin"),
       eff.activate("thorns"),
       eff.activate("punch"),
-      eff.activate("new_meldrum")
+      eff.activate("new_meldrum"),
+
+      ...maxResources(),
     ]
   }
 };
