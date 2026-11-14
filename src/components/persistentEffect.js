@@ -115,7 +115,7 @@ export class PersistentEffect {
     this.instances.set(key, next);
     if (delta) {
       if (apply) applyResolved(this._game, delta);
-    } else {
+    } else if (delta === undefined) {
       // Fallback
       removeResolved(this._game, previous);
       applyResolved(this._game, next);

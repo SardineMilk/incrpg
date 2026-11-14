@@ -439,19 +439,6 @@ const TRAITS = {
   * 
   */
 
-  // This requires:
-  // modifiers to be able to hook formula resolution events
-  // formulas to be modifiable
-  // pre-triggers too preferably
-  loaded_die: {
-    modifiers: [
-      {
-        event: null,  // on fml.roll()
-        modify: null // increase roll.min by 1
-      },
-    ]
-  },
-
   // 0.5x health regen normally
   // 1.5x health regen for 10 ticks after taking damage
   trollish_regeneration: {
