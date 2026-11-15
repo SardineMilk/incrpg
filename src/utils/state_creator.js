@@ -39,15 +39,19 @@ import { applyEffect } from "../game/effects.js";
 */
 const MAX_STACK_DEPTH = 64;
 
+// ooh yeah, mulberry32
+// these evasion rolls are uncrackable!
 export function rngFactory(seed) {
-  let state = seed
+  let state = seed >>> 0;
   const rng = () => {
-    state = (state * 1103515245 + 12345) % 2147483648;
-    return state / 2147483648;
+    state = (state + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(state ^ (state >>> 15), state | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
   rng.getSeed = () => state;
-  rng.setSeed = (s) => { state = s; };
-  return rng
+  rng.setSeed = (s) => { state = s >>> 0; };
+  return rng;
 }
 
 export const NAMESPACES = {
@@ -85,12 +89,12 @@ export function buildTemplateRegistry() {
   return registry;
 }
 
-export function initialiseWorld() {
+export function initialiseWorld(seed) {
   const world = {};
   world.context = new ContextStack(MAX_STACK_DEPTH);
   world.candidateScope = new CandidateScope();
   world.reactor = new Reactor(MAX_STACK_DEPTH);
-  world.rng = rngFactory(0);
+  world.rng = rngFactory(seed);
   world.actors = new Map();
   world.spawn = spawnActor;
   world.despawn = despawnActor;
@@ -98,7 +102,8 @@ export function initialiseWorld() {
 
   for (const [namespace, dataset] of Object.entries(NAMESPACES)) {
     for (const id in dataset) {
-      dataset[id].tags = [...(dataset[id].tags ?? []), namespace];
+      const dedupTags = 
+      dataset[id].tags = [...new Set([...(dataset[id].tags ?? []), namespace])];
     }
   }
 

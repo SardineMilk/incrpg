@@ -35,12 +35,18 @@ export function startTicking() {
 
   if (intervalId !== null) clearIntervalFix(intervalId);
   intervalId = setIntervalFix(() => {
-    for (const actor of world.actors.values()) {
-      processTrigger(actor, "tick", {}, "pre");
-      processTrigger(actor, "tick", {}, "post");
+    for (const actor of [...world.actors.values()]) {
+      try {
+        processTrigger(actor, "tick", {}, "pre");
+        processTrigger(actor, "tick", {}, "post");
+      }
+      catch {
+        console.error(`tick failed for actor "${actor.id}":`, err);
+        // TODO - smite failing actor with tribulation lightning. 9999 damage.
+      }
     }
 
-    autoSave();
+    autoSave(world);
 
   }, TICK_RATE);
 
@@ -53,7 +59,7 @@ export function startTicking() {
 }
 
 // TODO - replace with something better
-function autoSave() {
+function autoSave(world) {
   if (++tickCounter >= 100) {
     tickCounter = 0;
     console.log("Saving...")

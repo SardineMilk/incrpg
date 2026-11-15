@@ -4,6 +4,7 @@ import { scaleAmount, scaleStatLayer } from "./scaling.js";
 import { changeUIActor } from "../ui/panelManager.js";
 import { isTargetSelector } from "./targetDefs.js";
 import { byTag } from "../utils/tagIndex.js";
+import { check } from "../game/requirements.js";
 
 /*
  * Each entry defines one effect type:
@@ -62,6 +63,7 @@ export function unwireRequirementHolders(game, entity) {
 
 function activateEntity(game, entity, duration = null) {
   if (game.active.isActive(entity)) return;
+
 
   if (duration != null) {
     game.registry.get(entity, "CompletionHolder")?.resetMeter("duration", duration);
@@ -182,6 +184,8 @@ export const EFFECT_DEFS = {
 
   activate: {
     create: (id, amount = null) => ({ type: "activate", id, amount}),
+    // Unmet requirements -> no activation
+    canApply: (game, e) => check(game, game.registry.get(e.id, "RequirementHolder")?.formula),
     apply(game, e) {
       activateEntity(game, e.id, e.amount);
     },
@@ -551,32 +555,6 @@ export const EFFECT_DEFS = {
     create: (str) => ({ type: "log", str }),
     apply(game, e) {
       console.log(e.str);
-    },
-  },
-
-  skillCheck: {
-    create: (skills, difficulty, success, failure) => ({ type: "skillCheck", skills, difficulty, success, failure }),
-    resolve(game, c) {
-      const power = Object.entries(c.skills).reduce(
-        (sum, [skill, weight]) =>
-          sum + (game.registry.get(skill, "LevelHolder")?.level ?? 0) * weight,
-        0
-      );
-      // Placeholder balancing: skill power vs a difficulty-scaled roll.
-      const roll = Math.random() * c.difficulty * 2;
-      const successful =  power + roll >= c.difficulty;
-
-      // Needs some way to apply without calling applyEffect()
-      // Due to circular dependency stuff
-      // - game.applyEffect?
-      // Also needs strength to be applied properly
-      // Should work for nested checks too
-      if (successful) {
-
-      } else {
-
-      }
-
     },
   },
 

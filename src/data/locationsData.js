@@ -56,7 +56,6 @@ export const LOCATIONS = {
       requirements: fml.not(fml.active("ratkin")),
       effects: [
         eff.spawn("rat", "evil"),
-        eff.spawn("rat", "evil"),
       ],
     }],
   },

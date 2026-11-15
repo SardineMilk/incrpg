@@ -6,13 +6,18 @@ import { ACTORS } from "../data/actorData.js";
 import { EFFECT_DEFS } from "../structures/effectDefs.js";
 import { EventLog } from "./log.js";
 
-const actorCounters = new Map(); // Per-definition counters
-
-function getNextId(definitionId) {
-  const current = actorCounters.get(definitionId) ?? 0;
-  actorCounters.set(definitionId, current + 1);
-  if (current == 0) return definitionId;
-  return `${definitionId}_${current}`;
+// Per-world counters; 
+// skips taken ids, so spawning after a load wont collide with restored actors
+function getNextId(world, definitionId) {
+  const counters = (world.actorCounters ??= new Map());
+  let n = counters.get(definitionId) ?? 0;
+  let id;
+  do {
+    id = n === 0 ? definitionId : `${definitionId}_${n}`;
+    n++;
+  } while (world.actors.has(id));
+  counters.set(definitionId, n);
+  return id;
 }
 
 // Create the bare actor skeleton
@@ -22,7 +27,7 @@ export function createActor(world, { id=null, defId, team = "neutral", actorDef 
     throw new Error("createActor: must provide either id or definitionId");
   }
 
-  id ??= getNextId(defId);
+  id ??= getNextId(world, defId);
 
   if (world.actors.has(id)) {
     throw new Error(`createActor: id "${id}" already exists in this world`);

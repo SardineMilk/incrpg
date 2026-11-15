@@ -5,7 +5,10 @@ export function generateTagIndex(dataset) {
   for (const [id, def] of Object.entries(dataset)) {
     const tags = def.tags ?? [];
     _entities[id] = { name: def.name ?? id, tags, parent: def.parent };
-    for (const tag of tags) (_index[tag] ??= []).push(id);
+    for (const tag of tags) {
+      const ids = (_index[tag] ??= []);
+      if (!ids.includes(id)) ids.push(id);
+    }
   }
 }
 

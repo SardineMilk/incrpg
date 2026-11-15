@@ -55,16 +55,16 @@ const GENERAL_ACTIVITIES = {
     },
 
 
-    explore_meldrum_woods: {
-        name: "Explore New Meldrum Woods",
+    explore_meldrum_forest: {
+        name: "Explore New Meldrum Forest",
         tags: ["exploration", "traversal"],
-        requirements: fml.active("meldrum_woods"),
+        requirements: fml.active("meldrum_forest"),
         meters: {
             distance: {
                 max: 1000,
                 result: [
                     eff.sendMessage("SYSTEM", "You reach the centre of the forest"),
-                    eff.deactivate("explore_meldrum_woods")
+                    eff.deactivate("explore_meldrum_forest")
                 ],
             },
         },

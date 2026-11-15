@@ -1,6 +1,7 @@
 import { byTag } from "../utils/tagIndex.js";
 import { check } from "../game/requirements.js";
 import { resolveFormulas } from "./formulaDefs.js";
+import { sample } from "../utils/math.js";
 
 // Tag selectors so resolveTargets can find them in arbitrary fields.
 const SELECTOR = Symbol("selector");
@@ -82,14 +83,7 @@ export const sel = {
     }),
 
   random: (selector, count = 1) =>
-    makeSelector((game) => {
-      const ids = resolveIds(game, selector);
-      if (ids.length === 0) return [];
-      
-      const shuffled = [...ids].sort(() => Math.random() - 0.5);
-      return shuffled.slice(0, Math.min(count, ids.length));
-    }),
-
+    makeSelector((game) => sample(game.rng, resolveIds(game, selector), count)),
 };
 
 /*

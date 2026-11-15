@@ -1,6 +1,7 @@
 export function processTrigger(game, triggerType, context, phase) {
   if (game.dead) return;  // if you are dead. you cannot do thing.
-  for (const id of game.active.view("TriggerHolder")) {
+  for (const id of [...game.active.view("TriggerHolder")]) {
+    if (!game.active.isActive(id)) continue;  // deactivated by smth earlier in this loop
     if (game.registry.get(id, "DormantHolder")?.state === false) continue;
 
     const triggerHolder = game.registry.get(id, "TriggerHolder");

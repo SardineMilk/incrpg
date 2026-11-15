@@ -12,6 +12,16 @@ const lift =
 // An absent requirement is treated as true
 const satisfied = (b) => b == null || !!b;
 
+// lazy eval boolean ops
+// so only reached args are evaluated
+// an absent argument is treated as false
+const given = (a, game) => a == null || !!res(a, game);
+const lazy = {
+  and: (...args) => (game) => args.every((a) => given(a, game)),
+  or: (...args) => (game) => args.some((a) => given(a, game)),
+  ternary: (cond, t, f) => (game) => res(res(cond, game) ? t : f, game),
+};
+
 // When adding a new formula it always takes `game` as a parameter,
 // but you don't need to pass game at point of use.
 const definitions = {
@@ -54,7 +64,7 @@ const definitions = {
   },
   xpToNext: (game, id) => {
     game.reactor.read(`level:${game.id}:${id}`);
-    return xpToNext(game.registry.get(id, "LevelHolder")?.level);
+    return xpToNext(game.registry.get(id, "LevelHolder")?.baseLevel);
   },
   xp: (game, id) => {
     game.reactor.read(`xp:${game.id}:${id}`);
@@ -73,7 +83,11 @@ const definitions = {
 
   protagonist: (game) => game.world.protagonist,
 
-  add: (_game, ...args) => args.reduce((a, b) => a + b, ""),  // TODO - properly test string+number handling
+  concat: (_game, ...args) => args.reduce((a, b) => a + b, ""),
+  add: (_game, ...args) => args.every((a) => typeof a === "number") ? 
+    /* If all args are numbers, add. Else concat */ 
+      args.reduce((a, b) => a + b, 0) : 
+      args.reduce((a, b) => a + b, ""),
   sub: (_game, ...args) => args.reduce((a, b) => a - b),
   mul: (_game, ...args) => args.reduce((a, b) => a * b, 1),
   div: (_game, ...args) => args.reduce((a, b) => a / b),
@@ -81,7 +95,6 @@ const definitions = {
   max: (_game, ...args) => Math.max(...args),
   neg: (_game, x) => -x,
   clamp: (_game, x, min, max) => Math.max(min, Math.min(max, x)),
-  ternary: (_game, cond, t, f) => (cond ? t : f),
   roll: (game, min, max) => (Math.floor(game.rng() * (max - min + 1)) + min),
 
   // ── Boolean predicates ("requirements") ─────────────────────────────
@@ -138,17 +151,15 @@ const definitions = {
     return !!other && sel.active(sel.tags(tag))(other).some((id) => mine.has(id));
   },
 
-  
-  and:     (_game, ...bools) => bools.every(satisfied),
-  or:      (_game, ...bools) => bools.some(satisfied),
   not:     (_game, x) => !satisfied(x),
   atLeast: (_game, n, ...bools) => bools.filter(satisfied).length >= n,
 };
 
 
-export const fml = Object.fromEntries(
-  Object.entries(definitions).map(([name, fn]) => [name, lift(fn)]),
-);
+export const fml = {
+  ...Object.fromEntries(Object.entries(definitions).map(([name, fn]) => [name, lift(fn)])),
+  ...lazy,
+};
 
 
 export function resolveFormulas(game, structure, { fields = null } = {}) {

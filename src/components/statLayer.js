@@ -10,7 +10,6 @@ export class StatLayer {
   }
 
   get value() {
-    this.preventDrift();
     return this.flat * this.percent * this.multiplier;
   }
 
@@ -28,6 +27,7 @@ export class StatLayer {
       this.flat = flat;
       this.percent = percent;
       this.multiplier = multiplier;
+      this.preventDrift();
     }
 
     return dirty;
@@ -43,6 +43,7 @@ export class StatLayer {
       this.flat += flat;
       this.percent += percent;
       this.multiplier *= multiplier;
+      this.preventDrift();
     }
 
     return dirty;
@@ -58,14 +59,18 @@ export class StatLayer {
       this.flat -= flat;
       this.percent -= percent;
       this.multiplier /= multiplier;
+      this.preventDrift();
     }
 
     return dirty;
   }
 
-  // TODO - prevent floating point drift
+  // prevent floating point drift
   preventDrift() {
-    return;
+    const snap = (x) => Math.round(x * 1e9) / 1e9;
+    this.flat = snap(this.flat);
+    this.percent = snap(this.percent);
+    this.multiplier = snap(this.multiplier);
   }
 
   getState() { return { flat: this.flat, percent: this.percent, multiplier: this.multiplier }; }
