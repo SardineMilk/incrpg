@@ -52,33 +52,6 @@ const GENERAL_ACTIVITIES = {
                 ],
             },
         },
-        actions: {
-            wind_gust:       { weight: 1, },
-            falling_rocks:   { weight: 0.5, },
-            falling_boulder: { weight: 0.5, },
-        },
-    },
-
-
-    fall_asleep: {
-        name: "Try to fall asleep",
-        tags: ["rest"],
-        requirements: fml.active(sel.tags("bed")),
-        meters: {
-            relaxation: {
-                repeat: false,
-                max: 100,
-            }
-        },
-        passives: [
-            {
-                requirements: fml.geq(fml.progress("fall_asleep", "relaxation"), 50),
-                effects: [
-                    eff.activate("asleep"), 
-                    eff.uiStyle("#hero-panel", { backgroundColor:"black", })
-                ],
-            }
-        ],   
     },
 
 
@@ -94,14 +67,6 @@ const GENERAL_ACTIVITIES = {
                     eff.deactivate("explore_meldrum_woods")
                 ],
             },
-        },
-        actions: {
-            root_trip:   { weight: 1, },
-            mud_puddle:  { weight: 1, },
-            thorn_bush:  { weight: 0.5, },
-            wind_gust:   { weight: 0.25, },
-            spot_trail:  { weight:  0.25, },
-            ignore_wisps:{ weight:  0.25, },
         },
     },
 
