@@ -80,6 +80,10 @@ export const TRIGGER_DEFS = {
     create: () => ({ type: "delivered" }),
     display: () => "On an effect you delivered landing",
   },
+  error: {
+    create: (err) => ({type: "error", err}),
+    display: () => "When this actor causes an error",
+  }
 };
 
 export const evt = Object.fromEntries(

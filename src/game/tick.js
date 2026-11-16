@@ -41,7 +41,7 @@ export function startTicking() {
       }
       catch {
         console.error(`tick failed for actor "${actor.id}":`, err);
-        // TODO - smite failing actor with tribulation lightning. 9999 damage.
+        actor.events.emit("error", {err}, "post");
       }
     }
 

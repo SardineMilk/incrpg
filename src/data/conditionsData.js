@@ -286,17 +286,6 @@ export const INHERENT_EFFECTS = {
   },
 
 
-  // Stupid
-  force_notify_per_tick: {
-    tags: ["!system"],
-    triggers: [
-      {
-        event: evt.tick(),
-        effects: [eff.forceNotifyAll()]
-      }
-    ],
-  },
-
   tick_counter: {
     tags: ["system"],
     triggers: [
@@ -374,8 +363,24 @@ export const INHERENT_EFFECTS = {
         eff.setValue("health", 0),
         eff.sendMessage("SYSTEM", "You wake up in your hut."),
       ],
-      }]
+    }],
   },
+
+  // smite failing actor with tribulation lightning. 9999 damage.
+  tribulation: {
+    name: "Tribulation",
+    description: "Withstand the cost of your transgressions",
+    tags: ["system"],
+    triggers: [{
+      event: evt.error(),
+      phase: "post",
+      effects: [
+        eff.sendMessage("SYSTEM", fml.ctx("err")),
+        eff.sendMessage("SYSTEM", "You have transgressed agaist the system, now suffer the consequences"),
+        eff.changeValue("health", -9999)
+      ]
+    }]
+  }
 
 };
 
