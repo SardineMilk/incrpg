@@ -1,5 +1,4 @@
 import { LogType } from "../game/log.js";
-import { processTrigger } from "../game/events.js";
 import { scaleAmount, scaleStatLayer } from "./scaling.js";
 import { changeUIActor } from "../ui/panelManager.js";
 import { isTargetSelector } from "./targetDefs.js";
@@ -80,7 +79,7 @@ function activateEntity(game, entity, duration = null) {
   });
 
   if (!game.active.isActive(entity)) return;
-  processTrigger(game, "onActivate", { id: entity }, "post");
+  game.events.emit("onActivate", { id: entity });
 }
 
 function deactivateEntity(game, entity) {
@@ -94,7 +93,7 @@ function deactivateEntity(game, entity) {
 
   game.active.deactivate(entity);
   game.reactor.notify(`active:${game.id}:${entity}`);
-  processTrigger(game, "onDeactivate", { id: entity }, "post");
+  game.events.emit("onDeactivate", { id: entity });
 }
 
 
@@ -104,12 +103,10 @@ export const EFFECT_DEFS = {
   gainXp: {
     create: (id, amount) => ({ type: "gainXp", id, amount }),
     apply(game, e) {
-      if (e.id == null) return null;
+      if (e.id == null) return;
       if (e.amount == 0) return;
       game.registry.get(e.id, "LevelHolder")?.gainXp(game, e.amount);
       game.reactor.notify(`level:${game.id}:${e.id}`);
-
-      return "gainXp";
     },
     scale: scaleAmount,
     display(game, e) {
@@ -234,7 +231,7 @@ export const EFFECT_DEFS = {
       const outcome = game.registry.get(e.id, "CompletionHolder")
         ?.advanceProgress(game, e.amount, "duration");
       game.reactor.notify(`meter:${game.id}:${e.id}:duration`);
-      if (outcome === "meterMin") return "durationExpired";
+      if (outcome === "meterMin") game.events.emit("durationExpired", { id: e.id });
     },
     display(game, e) {
       return `change the duration of ${e.id} by ${e.amount}`;
@@ -287,9 +284,9 @@ export const EFFECT_DEFS = {
 
       const dirty = strength.change(e);
       if (!dirty) return;
-      game.reactor.notify(`strength:${game.id}:${e.id}`);
 
-      return "strengthChanged";
+      game.reactor.notify(`strength:${game.id}:${e.id}`);
+      game.events.emit("strengthChanged", e);
     },
     remove(game, e) {
       const strength = game.registry.get(e.id, "StatLayer");
@@ -297,8 +294,9 @@ export const EFFECT_DEFS = {
 
       const dirty = strength.changeReverse(e);
       if (!dirty) return;
-      game.reactor.notify(`strength:${game.id}:${e.id}`);
 
+      game.reactor.notify(`strength:${game.id}:${e.id}`);
+      game.events.emit("strengthChanged", e);
     },
     scale: scaleStatLayer,
     diff: diffStatLayer,
@@ -325,9 +323,9 @@ export const EFFECT_DEFS = {
       
       const dirty = strength.set(e);
       if (!dirty) return;
-      game.reactor.notify(`strength:${game.id}:${e.id}`);
 
-      return "strengthChanged";
+      game.reactor.notify(`strength:${game.id}:${e.id}`);
+      game.events.emit("strengthChanged", e);
     },
     scale: scaleStatLayer,
     display(game, e) {
@@ -352,13 +350,15 @@ export const EFFECT_DEFS = {
       game.values[e.id] += e.amount;
       game.reactor.notify(`value:${game.id}:${e.id}`);
 
-      if (e.amount > 0) return "valueGain";
-      if (e.amount < 0) return "valueLoss";
-      return null;
+      if (e.amount > 0) game.events.emit("valueGain", e);
+      else game.events.emit("valueLoss", e);
     },
     remove(game, e) {
       game.values[e.id] -= e.amount;
       game.reactor.notify(`value:${game.id}:${e.id}`);
+
+      if (e.amount > 0) game.events.emit("valueGain", e);
+      else game.events.emit("valueLoss", e);
     },
     scale: scaleAmount,
     diff: diffAmount,
@@ -420,9 +420,8 @@ export const EFFECT_DEFS = {
     create: (selector, effect, flags = {}) => {
       if (!isTargetSelector(selector)) {
         throw new Error(
-          `eff.onTarget() requires a target.* selector (targetDefs.js), got ${typeof selector}. ` +
-          `sel.* selectors resolve entity ids within an actor's own registry, not actor ids ` +
-          `in the world - they can't be used here.`
+          `eff.onTarget() requires a target.* selector, got ${typeof selector}. ` +
+          `sel.* selectors resolve entity ids, not actor ids `
         );
       }
       return { type: "onTarget", selector, effect, flags };
@@ -444,7 +443,7 @@ export const EFFECT_DEFS = {
 
         // Report the delivery's final flags, with any modifiers
         const finalFlags = landed.reduce((acc, r) => ({ ...acc, ...(r.flags ?? {}) }), e.flags ?? {});
-        processTrigger(game, "delivered", { target: targetId, flags: finalFlags }, "post");
+        game.events.emit("delivered", { target: targetId, flags: finalFlags })
       }
     },
     scale(game, e, multiplier) {
@@ -535,14 +534,12 @@ export const EFFECT_DEFS = {
   // ── Misc ──────────────────────────────────────────────────────────────────
 
   forceTrigger: {
-    create: (trigger) => ({ type: "forceTrigger", trigger }),
+    create: (trigger) => ({ type: "forceTrigger", trigger}),
     apply(game, e) {
-      return e.trigger;
-    },
-    display(game, e) {
-      return `force trigger ${e.trigger}`;
+      game.events.emit(e.trigger, e)
     }
   },
+
 
   forceNotifyAll: {
     create: () => ({ type: "forceNotifyAll" }),

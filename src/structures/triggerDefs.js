@@ -1,128 +1,123 @@
-/*
- * Each entry defines one trigger type:
- *
- *   create(...args) -> trigger plain-object  (becomes evt.X in structure.js)
- *   check(trigger, context) -> boolean
- *
- * Triggers are placed on conditions. When an effect fires, its type is compared
- * against the trigger types of every active condition; matching conditions have
- * their effects applied. The context object is whatever the effect passes along
- * (usually the resolved effect itself, occasionally with extra fields added).
- */
 import { tagsOf } from "../utils/tagIndex.js";
 
-
-
+/*
+ * Event types come from two places:
+ *   1. Every applied effect fires <effect.type> in "pre" and "post" automatically.
+ *   2. Anything else is fired from code: game.events.emit(type, payload, phase).
+ * Only events that have an entry here can be listened to.
+ * 
+ * `match` is used to add requirements to any Trigger that must be met by the Payload
+ * `key` is a syntactic wrapper to make trivial `p.foo == t.foo` matches easier to write
+ * 
+ */
 export const TRIGGER_DEFS = {
-  // TODO - replace all similar events with something like evt.apply(eff)
+  // Effect lifecycle events - fired automatically by applyResolved
   activate: {
-    create: (tags = []) => ({ type: "activate", tags }),
-    check: (trigger, ctx) =>
-      trigger.tags.length === 0 || trigger.tags.every((tag) => tagsOf(ctx.id).includes(tag)),
+    create: (id = null) => ({ type: "activate", id }),
+    key: "id"
   },
-
-  ctx: {
-    create: (key) => ({ type: "ctx", key }),
-    check: (trigger, ctx) => trigger.type === ctx.key,
-  },
-
-  tick: {
-    create: () => ({ type: "tick" }),
-    check: () => true,
-    display: () => "On tick"
-  },
-
-  onTrigger: {
-    create: (id) => ({ type: "onTrigger", id }),
-    check: (trigger, ctx) => trigger.id === ctx.id
-  },
-
-
-  onActivate: {
-    create: (id) => ({ type: "onActivate", id }),
-    check: (trigger, ctx) => trigger.id == null || trigger.id === ctx.id,
-  },
-
-  onDeactivate: {
-    create: (id) => ({ type: "onDeactivate", id }),
-    check: (trigger, ctx) => trigger.id == null || trigger.id === ctx.id,
-  },
-
   changeValue: {
     create: (id = null) => ({ type: "changeValue", id }),
-    check: (trigger, ctx) => trigger.id == null || ctx.id === trigger.id,
+    key: "id",
   },
-
-  valueGain: {
-    create: (id = null, min = 1) => ({ type: "valueGain", id, min }),
-    check: (trigger, ctx) =>
-      (trigger.id == null || ctx.id === trigger.id) && ctx.amount >= trigger.min,
-  },
-
-  valueLoss: {
-    create: (id = null, min = 1) => ({ type: "valueLoss", id, min }),
-    check: (trigger, ctx) =>
-      (trigger.id == null || ctx.id === trigger.id) && ctx.amount <= -trigger.min,
-  },
-
-  resourceDropsBelowThreshold: {
-    create: (resource, threshold) => ({
-      type: "resourceDropsBelowThreshold",
-      resource,
-      threshold,
-    }),
-    check: (trigger, ctx) =>
-      ctx.resource === trigger.resource && ctx.current < trigger.threshold,
-  },
-
   gainXp: {
-    // skill is optional - none fires on any skill gaining xp
     create: (id) => ({ type: "gainXp", id }),
-    check: (trigger, ctx) => {
-      if (!ctx.id) return false;
-      const matches = trigger.id == null || ctx.id === trigger.id
-      return matches && ctx.amount >= 0;
-    },
+    key: "id",
+    match: (t, p) => !!p.id && p.amount >= 0,
   },
-
-  conditionApplied: {
-    create: (condition) => ({ type: "conditionApplied", condition }),
-    check: (trigger, ctx) => ctx.condition === trigger.condition,
-  },
-
-  locationChanges: {
-    create: (tags = []) => ({ type: "locationChanges", tags }),
-    check: (trigger, ctx) =>
-      trigger.tags.length === 0 || trigger.tags.every((tag) => tagsOf(ctx.location).includes(tag)),
-  },
-
-  durationExpired: {
-    create: (id) => ({ type: "durationExpired", id }),
-    check: (trigger, ctx) => trigger.id == null || trigger.id === ctx.id,
-  },
-
   progress: {
     create: (meter = "progress") => ({ type: "progress", meter }),
-    check: (trigger, ctx) => (trigger.meter == null || trigger.meter === ctx.meter),
+    key: "meter",
   },
-
-  levelUp: {
-    create: (id) => ({ type: "levelUp", id }),
-    check: (trigger, ctx) => ((trigger.id == null) || (ctx.id === trigger.id))
-  },
-
-  delivered: {
-    create: () => ({ type: "delivered" }),
-    check: () => true,
-    display: () => "On an effect you delivered landing",
-  },
-
   despawn: {
     create: () => ({ type: "despawn" }),
-    check: () => true,
+  },
+
+  // Semantic events (emitted explicitly)
+  tick: {
+    create: () => ({ type: "tick" }),
+    display: () => "On tick",
+  },
+  onTrigger: {
+    create: (id) => ({ type: "onTrigger", id }),
+    key: "id",
+  },
+  onActivate: {
+    create: (id) => ({ type: "onActivate", id }),
+    key: "id",
+  },
+  onDeactivate: {
+    create: (id) => ({ type: "onDeactivate", id }),
+    key: "id",
+  },
+  valueGain: {
+    create: (id = null, min = 1) => ({ type: "valueGain", id, min }),
+    key: "id",
+    match: (t, p) => p.amount >= t.min,
+  },
+  valueLoss: {
+    create: (id = null, min = 1) => ({ type: "valueLoss", id, min }),
+    key: "id",
+    match: (t, p) => p.amount <= -t.min,
+  },
+  strengthChanged: {
+    create: (id = null) => ({ type: "strengthChanged", id }),
+    key: "id",
+  },
+  durationExpired: {
+    create: (id) => ({ type: "durationExpired", id }),
+    key: "id",
+  },
+  levelUp: {
+    create: (id) => ({ type: "levelUp", id }),
+    key: "id",
+  },
+  levelDown: {
+    create: (id) => ({ type: "levelDown", id }),
+    key: "id",
+  },
+  delivered: {
+    create: () => ({ type: "delivered" }),
+    display: () => "On an effect you delivered landing",
   },
 };
 
 export const evt = Object.fromEntries(
   Object.entries(TRIGGER_DEFS).map(([key, def]) => [key, def.create]),
 );
+
+// Rule compilation
+// Runs once per definition, not actor (holders are shared by every actor).
+// Output: { type, phase, match(game, payload), requirements, effects, modify }
+
+const PHASES = new Set(["pre", "post", "modify"]);
+
+export function compileRule(def, defaultPhase, where = "?") {
+  const { event } = def;
+  const eventDef = TRIGGER_DEFS[event?.type];
+  if (!eventDef) throw new Error(`${where}: unknown event type "${event?.type}"`);
+
+  const phase = def.phase ?? defaultPhase;
+  if (!PHASES.has(phase)) throw new Error(`${where}: unknown phase "${phase}"`);
+
+  // Does this payload satisfy the resolved trigger;s requirements?
+  // check key here, then match()
+  const { key, match } = eventDef;
+  const accepts = (ev, p) =>
+    (key == null || ev[key] == null || ev[key] === p[key]) && (!match || match(ev, p));
+
+  // Does this trigger have requirements dependent on live state? 
+  // If it has any formulas, assume yes
+  const dynamic = Object.values(event).some((v) => typeof v === "function");
+
+  return {
+    type: event.type,
+    phase,
+    match: dynamic
+      ? (game, p) => resolveTargets(game, event).some((e) => accepts(resolveFormulas(game, e), p))
+      : (_game, p) => accepts(event, p),
+    requirements: def.requirements ?? null,
+    effects: def.effects ?? [],
+    modify: def.modify ?? [],
+  };
+}

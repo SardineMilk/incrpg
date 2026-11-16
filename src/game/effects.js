@@ -1,9 +1,7 @@
 import { EFFECT_DEFS } from "../structures/effectDefs.js";
-import { processTrigger } from "./events.js";
 import { resolveTargets } from "../structures/selectorDefs.js";
 import { resolveFormulas } from "../structures/formulaDefs.js";
 import { tagsOf } from "../utils/tagIndex.js";
-import { applyModifiers } from "../components/modifierHolder.js";
 
 
 // Resolves an effect's targets + formulas, scaling by strength if required.
@@ -13,11 +11,10 @@ export function resolveEffect(game, effect, strength = 1) {
   const scaledEffect = strength === 1 ? effect : changeEffectStrength(game, effect, strength);
 
   const targets = resolveTargets(game, scaledEffect);
-  return targets.map(target => {
+  return targets.map((target) => {
     const resolved = resolveFormulas(game, target)
-    return applyModifiers(game, resolved)
+    return game.events.modify(resolved);
   });
-
 }
 
 function changeEffectStrength(game, effect, multiplier) {
@@ -36,14 +33,12 @@ export function applyResolved(game, e) {
   // bail out before pre-triggers if effect requirements not met
   if (def.canApply && !def.canApply(game, e)) return;
 
-  // TODO - replace with a standard trigger, e.type as additional data
-  processTrigger(game, e.type, e, "pre");
-  if (e.cancelled) return; // Cancels *after* all pre-triggers have executed
+  game.events.emit(e.type, e, "pre")
+  if (e.cancelled) return; // Cancels *after* all "pre" listeners have run
 
-  const result = def.apply(game, e);
+  def.apply(game, e);
 
-  const resultType = result || e.type;  // TODO - additive not replacing
-  processTrigger(game, resultType, e, "post");
+  game.events.emit(e.type, e, "post")
 }
 
 /* 

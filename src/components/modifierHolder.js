@@ -1,70 +1,17 @@
-// components/modifierHolder.js
-import { MODIFIER_DEFS } from "../structures/modifierDefs.js";
-import { check } from "../game/requirements.js";
-import { resolveFormulas } from "../structures/formulaDefs.js";
-import { resolveTargets } from "../structures/selectorDefs.js";
-import { TRIGGER_DEFS } from "../structures/triggerDefs.js";
+import { compileRule } from "../structures/triggerDefs.js";
 
+// Shared between actors. 
+// Modifier rules default to the "modify" phase. 
+// Because why would they do anything different.
+// ^ genuine question, lmk if you find a use case
 export class ModifierHolder {
   static shareable = true;
-  constructor(modifierDefs = []) { this.modifierDefs = modifierDefs; }
-  static fromDefinition(def) { return new ModifierHolder(def.modifiers); }
+
+  constructor(modifierDefs = [], id = "?") {
+    this.modifierDefs = modifierDefs;
+    this.rules = modifierDefs.map((m, i) => compileRule(m, "modify", `${id}.modifiers[${i}]`));
+  }
+
+  static fromDefinition(def, id) { return new ModifierHolder(def.modifiers, id); }
   static appliesTo(def) { return (def.modifiers?.length ?? 0) > 0; }
-
-  collect(game, resolved) {
-    const ops = [];
-    const matched = [];
-    for (const m of this.modifierDefs) {
-      if (m.event.type !== resolved.type) continue;
-      if (!this._matches(game, m.event, resolved)) continue;
-      if (!check(game, m.requirements)) continue;
-      if (m.modify) ops.push(...m.modify);
-      if (m.effects?.length) matched.push(m);
-    }
-    return { ops, matched };
-  }
-
-  _matches(game, event, context) {
-    const expanded = resolveTargets(game, event);
-    return expanded.some((e) => {
-      const r = resolveFormulas(game, e);
-      return TRIGGER_DEFS[r.type].check(r, context);
-    });
-  }
-}
-
-function scaleOp(game, rawOp, strength) {
-  if (strength === 1) return rawOp;
-  const def = MODIFIER_DEFS[rawOp.type];
-  return def.scale ? def.scale(game, rawOp, strength) : rawOp;
-}
-
-export function applyModifiers(game, resolved) {
-  let current = { ...resolved, flags: resolved.flags ?? {} };
-
-  for (const id of [...game.active.view("ModifierHolder")]) {
-    if (!game.active.isActive(id)) continue;
-    if (game.registry.get(id, "DormantHolder")?.state === false) continue;
-
-    const holder = game.registry.get(id, "ModifierHolder");
-    const strength = game.registry.get(id, "StatLayer")?.value ?? 1;
-
-    const { ops: rawOps, matched } = game.context.with(current, () => holder.collect(game, current), `modifier:${id}`);
-
-    for (const rawOp of rawOps) {
-      current = game.context.with(current, () => {
-        const scaled = scaleOp(game, rawOp, strength);
-        const op = resolveFormulas(game, scaled);
-        return MODIFIER_DEFS[op.type].apply(current, op);
-      }, `modifier-op:${id}`);
-    }
-
-    for (const m of matched) {
-      game.context.with(current, () => {
-        for (const effect of m.effects) game.world.applyEffect(game, effect, strength);
-      }, `modifier-reaction:${id}`);
-    }
-  }
-
-  return current;
 }

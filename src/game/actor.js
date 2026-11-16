@@ -5,6 +5,7 @@ import { applyEffect } from "./effects.js";
 import { ACTORS } from "../data/actorData.js";
 import { EFFECT_DEFS } from "../structures/effectDefs.js";
 import { EventLog } from "./log.js";
+import { EventBus } from "./events.js";
 
 // Per-world counters; 
 // skips taken ids, so spawning after a load wont collide with restored actors
@@ -49,6 +50,11 @@ export function createActor(world, { id=null, defId, team = "neutral", actorDef 
     stats: { ...actorDef?.stats },
   };
   actor.active = new ActivationLayer(actor.registry);
+  
+  actor.events = new EventBus(actor);
+  actor.active.onActivated = (id) => actor.events.attach(id);
+  actor.active.onDeactivated = (id) => actor.events.detach(id);
+  
   actor.log = new EventLog({ reactor: world.reactor, id });
 
   world.actors.set(id, actor);

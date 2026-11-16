@@ -1,7 +1,6 @@
 import { initialiseWorld } from "../utils/state_creator.js";
 import { spawnActor } from "./actor.js";
 import { setIntervalFix, clearIntervalFix } from "../utils/throttleFix.js";
-import { processTrigger } from "./events.js";
 import { hasStoredSave, loadFromStorage, saveToStorage } from "../utils/save.js";
 import { initUI, changeUIActor } from "../ui/panelManager.js";
 import { PANELS } from "../data/panelsData.js";
@@ -37,8 +36,8 @@ export function startTicking() {
   intervalId = setIntervalFix(() => {
     for (const actor of [...world.actors.values()]) {
       try {
-        processTrigger(actor, "tick", {}, "pre");
-        processTrigger(actor, "tick", {}, "post");
+        actor.events.emit("tick", {}, "pre");
+        actor.events.emit("tick", {}, "post");
       }
       catch {
         console.error(`tick failed for actor "${actor.id}":`, err);

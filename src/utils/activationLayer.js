@@ -19,6 +19,7 @@ export class ActivationLayer {
     for (const type of this.registry.typesOf(id)) {
       this._indexFor(type).add(id);
     }
+    this.onActivated?.(id); 
     return true;
   }
 
@@ -28,6 +29,7 @@ export class ActivationLayer {
     for (const type of this.registry.typesOf(id)) {
       this._byComponent.get(type)?.delete(id);
     }
+    this.onDeactivated?.(id); 
     return true;
   }
 
