@@ -6,6 +6,18 @@ const maxResources = () => [
   eff.setValue("mental", fml.value("mentalMax")),
 ];
 
+const foe = (name, form, action) => ({
+  name,
+  values: {health:0, stamina: 0, mental: 0},
+  startup: [
+    eff.activate(sel.tags("system", "conditions")),
+    eff.activate("health_death"),
+    eff.activate(form),
+    eff.activate(action),
+    ...maxResources(),
+  ],
+});
+
 
 export const ACTORS = {
   player: {
@@ -23,17 +35,8 @@ export const ACTORS = {
     ]
   },
 
-  rat: {
-    name: "Rat",
-    startup: [
-      eff.activate(sel.tags("system", "conditions")),
-      eff.activate(sel.tags("mortal", "conditions")),
-      eff.activate("ratkin"),
-      eff.activate("thorns"),
-      eff.activate("punch"),
-      eff.activate("new_meldrum"),
-
-      ...maxResources(),
-    ]
-  }
+  rat:              foe("Feral Rat",      "rat",            "rat_bite"),
+  rat_matriarch:    foe("Rat Matriarch",  "rat_matriarch",  "rat_gnaw"),
+  rock_crab:        foe("Rock Crab",      "rock_crab",      "crab_pinch"),
+  wild_boar:        foe("Wild Boar",      "wild_boar",      "boar_gore"),
 };

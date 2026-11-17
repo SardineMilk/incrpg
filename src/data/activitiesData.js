@@ -70,14 +70,62 @@ const GENERAL_ACTIVITIES = {
         },
     },
 
+    track_game: {
+        name: "Track Game",
+        tags: ["tracking"],
+        requirements: fml.active("meldrum_forest_deep"),
+        meters: {
+        track: {
+            max: 8,
+            result: [
+            eff.sendMessage("SYSTEM", "The tracks end at a churned wallow. Something huge snorts in the brush."),
+            eff.spawn("wild_boar"),
+            eff.deactivate("track_game"),
+            ],
+        },
+        },
+    },
+
+    comb_pools: {
+        name: "Comb the Tide Pools",
+        tags: ["tracking"],
+        requirements: fml.active("meldrum_tide_pools"),
+        meters: {
+        track: {
+            max: 6,
+            result: [
+            eff.sendMessage("SYSTEM", "A rock crab scuttles out of the pool, claws raised"),
+            eff.spawn("rock_crab"),
+            eff.spawn("rock_crab"),
+            ],
+        },
+        },
+    },
+
+    delve_cave: {
+        name: "Delve the Sea Cave",
+        tags: ["exploration", "traversal"],
+        requirements: fml.active("meldrum_sea_cave"),
+        meters: {
+        distance: {
+            max: 40,
+            result: [
+            eff.sendMessage("SYSTEM", "The tunnel opens into a nest chamber, with the most beautiful creature you've ever seen standing in the middle"),
+            eff.spawn("rat_matriarch"),
+            eff.deactivate("delve_cave"),
+            ],
+        },
+        },
+  },
+
 }
 
 
-function route(name, from, to, distance) {
+function route(name, from, to, distance, gate = null) {
   return {
     name,
     tags: ["traversal", "route"],
-    requirements: fml.active(from),
+    requirements: gate ? fml.and(fml.active(from), gate) : fml.active(from),
     meters: {
       distance: {
         max: distance,
@@ -114,6 +162,11 @@ const ROUTES = {
     beach_to_pools:     route("Stroll Along to the Tide Pools", "meldrum_beach",       "meldrum_tide_pools",  10),
     pools_to_beach:     route("Return to the Sandy Beach",      "meldrum_tide_pools",  "meldrum_beach",       10),
 
+    meldrum_to_stream:  route("Follow the Stream",              "new_meldrum",         "meldrum_stream",       6),
+    stream_to_meldrum:  route("Return to the Village",          "meldrum_stream",      "new_meldrum",          6),
+
+    forest_to_moor:     route("Climb onto the Moor",            "meldrum_forest",      "meldrum_moor",        20),
+    moor_to_forest:     route("Descend into the forest",        "meldrum_moor",        "meldrum_forest",      20),
 }
 
 export const ACTIVITIES = Object.assign({}, GENERAL_ACTIVITIES, ROUTES);

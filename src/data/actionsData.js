@@ -1,7 +1,16 @@
 import { eff, evt, fml, sel, target } from "../structures/structures.js";
 
+const hit = (stat, amount, flags) =>
+  eff.onTarget(target.random(target.enemies()), eff.changeValue(stat, amount), { isAttack: true, ...flags });
 
-export const ACTIONS = {
+const foeAttack = (name, form, duration, damage, flags = {}) => ({
+  name, duration,
+  requirements: fml.active(form),
+  result: [hit("health", -damage, { damageType: "physical", melee: true, ...flags })],
+});
+
+
+const PLAYER_ACTIONS = {
   walk: {
     name: "Walk",
     tags: ["traversal"],
@@ -97,6 +106,24 @@ export const ACTIONS = {
     ],
   },
 
+  track_prey: {
+    name: "Track Your Prey",
+    requirements: fml.any(sel.active(sel.tags("activities", "tracking"))),
+    duration: 10,
+    triggers: [
+      {
+        event: evt.tick(),
+        effects: [
+          eff.changeValue("stamina", -2),
+        ],
+      },
+    ],
+    result: [
+      eff.gainXp("tracking", 14), eff.gainXp("observation", 4), eff.gainXp("sneaking", 6),
+      eff.progress(sel.active(sel.tags("activities")), 1, "track")
+    ],
+  },
+
   climb_up: {
     name: "Climb Up",
     duration: 10,
@@ -145,30 +172,20 @@ export const ACTIONS = {
 
 
   punch: {
-    name: "TEST - Punch",
+    name: "Punch",
     // requirement: in combat
+    requirements: fml.any(target.enemies()),
     duration: 10,
     result: [
       eff.onTarget(
         target.random(target.enemies()),
-        eff.changeValue("health", -20),
+        eff.changeValue("health", -10),
         { isAttack: true, damageType: "physical" }
       )
     ]
   },
 
-  rat_bite: {
-    name: "Bite",
-    requirements: fml.active("ratkin"),
-    duration: 10,
-    result: [
-      eff.onTarget(
-        target.random(target.enemies()),
-        eff.changeValue("health", -5),
-        { isAttack: true, damageType: "pierce", melee: true }
-      ),
-    ],
-  },
+
 
   possess: {
     name: "Possess",
@@ -182,3 +199,14 @@ export const ACTIONS = {
   },
 
 };
+
+
+
+const ENEMY_ACTIONS = {
+  rat_bite:         foeAttack("Bite",  "feral_rat", 5,  6,  { damageType: "pierce" }),
+  matriarch_gnaw:   foeAttack("Gnaw",  "matriarch", 8,  11, { damageType: "pierce" }),
+  crab_pinch:       foeAttack("Pinch", "rock_crab", 12, 12, { damageType: "pierce" }),
+  boar_gore:        foeAttack("Gore",  "wild_boar", 15, 22, { damageType: "slash" }),
+};
+
+export const ACTIONS = Object.assign({}, PLAYER_ACTIONS, ENEMY_ACTIONS);

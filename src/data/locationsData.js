@@ -22,43 +22,29 @@ export const LOCATIONS = {
   * 
   * 
   */
-  new_meldrum: {
-    name: "New Meldrum",
-    tags: ["outside", "forest", "town"],
-  },
-  starter_hut: {
-    name: "Sturdy Hut",
-    tags: ["inside", "forest", "town", "building"],
-  },
-  meldrum_library: {
-    name: "Meldrum Library",
-    tags: ["inside", "forest", "town", "building"],
-  },
+  new_meldrum:         { name: "New Meldrum",         tags: ["outside", "forest", "town"] },
+  starter_hut:         { name: "Sturdy Hut",          tags: ["inside", "forest", "town", "building", "bed", "hearth"] },
+  meldrum_library:     { name: "Meldrum Library",     tags: ["inside", "forest", "town", "building"] },
 
-  meldrum_forest: {
-    name: "Meldrum Shaw",
-    tags: ["outside", "forest"],
-  },
-  meldrum_forest_deep: {
-    name: "Deep Meldrum Forest",
-  },
+  meldrum_stream:      { name: "Meldrum Stream",      tags: ["outside", "water"] },
 
-  meldrum_beach: {
-    name: "Meldrum Beach",
-  },
-  meldrum_tide_pools: {
-    name: "Tide Pools",
-  },
+  meldrum_forest:      { name: "Meldrum Forest",      tags: ["outside", "forest"] },
+  meldrum_forest_deep: { name: "Deep Meldrum Forest", tags: ["outside", "forest"] },
+  meldrum_moor:        { name: "Windswept Moor",      tags: ["outside", "moor"] },
+
+  meldrum_beach:      { name: "Meldrum Beach", tags: ["outside", "shore"] },
+  meldrum_tide_pools: { name: "Tide Pools",    tags: ["outside", "shore"] },
   meldrum_sea_cave: {
     name: "Sea Cave",
+    tags: ["inside", "dark"],
     triggers: [{
       event: evt.onActivate("meldrum_sea_cave"),
-      requirements: fml.not(fml.active("ratkin")),
-      effects: [
-        eff.spawn("rat", "evil"),
-      ],
+      requirements: fml.isProtagonist(),
+      effects: [eff.spawn("rat", "evil"), eff.spawn("rat", "evil")],
     }],
   },
+
+};
 
   /*
   * Realm Structure
@@ -169,4 +155,3 @@ export const LOCATIONS = {
   walled_city_streets: {},
   walled_city_chambers: {},
   */
-};
