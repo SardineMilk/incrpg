@@ -79,7 +79,7 @@ const GENERAL_ACTIVITIES = {
             max: 8,
             result: [
             eff.sendMessage("SYSTEM", "The tracks end at a churned wallow. Something huge snorts in the brush."),
-            eff.spawn("wild_boar"),
+            eff.spawn("wild_boar", "evil"),
             eff.deactivate("track_game"),
             ],
         },
@@ -95,8 +95,8 @@ const GENERAL_ACTIVITIES = {
             max: 6,
             result: [
             eff.sendMessage("SYSTEM", "A rock crab scuttles out of the pool, claws raised"),
-            eff.spawn("rock_crab"),
-            eff.spawn("rock_crab"),
+            eff.spawn("rock_crab", "evil"),
+            eff.spawn("rock_crab", "evil"),
             ],
         },
         },
@@ -104,14 +104,16 @@ const GENERAL_ACTIVITIES = {
 
     delve_cave: {
         name: "Delve the Sea Cave",
-        tags: ["exploration", "traversal"],
+        tags: ["tracking"],
         requirements: fml.active("meldrum_sea_cave"),
         meters: {
-        distance: {
-            max: 40,
+        track: {
+            max: 4,
             result: [
-            eff.sendMessage("SYSTEM", "The tunnel opens into a nest chamber, with the most beautiful creature you've ever seen standing in the middle"),
-            eff.spawn("rat_matriarch"),
+            eff.spawn(
+                fml.ternary(fml.lt(fml.roll(0, 99), 10), "rat_matriarch", "rat"),
+                "evil",
+            ),
             eff.deactivate("delve_cave"),
             ],
         },

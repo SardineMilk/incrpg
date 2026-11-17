@@ -83,6 +83,7 @@ const definitions = {
 
   protagonist: (game) => game.world.protagonist,
   isProtagonist: (game) => game.id === game.world.protagonist,
+  me: (game) => game.id,
 
   concat: (_game, ...args) => args.reduce((a, b) => a + b, ""),
   add: (_game, ...args) => args.every((a) => typeof a === "number") ? 

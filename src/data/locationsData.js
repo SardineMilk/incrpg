@@ -34,15 +34,7 @@ export const LOCATIONS = {
 
   meldrum_beach:      { name: "Meldrum Beach", tags: ["outside", "shore"] },
   meldrum_tide_pools: { name: "Tide Pools",    tags: ["outside", "shore"] },
-  meldrum_sea_cave: {
-    name: "Sea Cave",
-    tags: ["inside", "dark"],
-    triggers: [{
-      event: evt.onActivate("meldrum_sea_cave"),
-      requirements: fml.isProtagonist(),
-      effects: [eff.spawn("rat", "evil"), eff.spawn("rat", "evil")],
-    }],
-  },
+  meldrum_sea_cave:   { name: "Sea Cave",      tags: ["inside", "dark"],  },
 
 };
 

@@ -39,7 +39,7 @@ export function startTicking() {
         actor.events.emit("tick", {}, "pre");
         actor.events.emit("tick", {}, "post");
       }
-      catch {
+      catch (err){
         console.error(`tick failed for actor "${actor.id}":`, err);
         actor.events.emit("error", {err}, "post");
       }

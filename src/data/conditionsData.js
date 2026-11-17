@@ -406,7 +406,7 @@ const TRAITS = {
     ],
   },
 
-  matriarch: {
+  rat_matriarch: {
     name: "Rat Matriarch",
     tags: ["form", "beast", "rat"],
     passives: [

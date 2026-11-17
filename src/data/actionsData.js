@@ -203,8 +203,8 @@ const PLAYER_ACTIONS = {
 
 
 const ENEMY_ACTIONS = {
-  rat_bite:         foeAttack("Bite",  "feral_rat", 5,  6,  { damageType: "pierce" }),
-  matriarch_gnaw:   foeAttack("Gnaw",  "matriarch", 8,  11, { damageType: "pierce" }),
+  rat_bite:         foeAttack("Bite",  "rat", 5,  6,  { damageType: "pierce" }),
+  matriarch_gnaw:   foeAttack("Gnaw",  "rat_matriarch", 8,  11, { damageType: "pierce" }),
   crab_pinch:       foeAttack("Pinch", "rock_crab", 12, 12, { damageType: "pierce" }),
   boar_gore:        foeAttack("Gore",  "wild_boar", 15, 22, { damageType: "slash" }),
 };

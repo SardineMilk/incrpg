@@ -29,7 +29,7 @@ function changeEffectStrength(game, effect, multiplier) {
 // through applyEffect() each time.
 export function applyResolved(game, e) {
   const def = EFFECT_DEFS[e.type];
-
+  if (!def) throw new Error(`applyResolved: "${e.type}" is not an effect (got ${typeof e}). Formulas can't be used as whole effects.`);
   // bail out before pre-triggers if effect requirements not met
   if (def.canApply && !def.canApply(game, e)) return;
 
