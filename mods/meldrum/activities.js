@@ -1,0 +1,174 @@
+import {eff, evt, sel, fml } from "../../api/index.js";
+
+
+const GENERAL_ACTIVITIES = {
+    climb_sea_cliff: {
+        name: "Climb Sea Cliff",
+        tags: ["exploration", "vertical_traversal"],
+        requirements: fml.or(fml.active("new_meldrum"), fml.active("meldrum_beach")),
+
+        triggers: [
+            {
+                event: evt.onActivate("climb_sea_cliff"),
+                effects: [
+                    eff.resetMeter("climb_sea_cliff",
+                        fml.ternary(fml.active("new_meldrum"), 200, 0), "height"),
+                    eff.resetMeter("climb_sea_cliff", 100, "grip"),
+                ],
+            },
+        ],
+        meters: {
+            height: {
+                max: 200,
+                min: 0,
+                repeat: false,
+                result: [
+                    eff.sendMessage("SYSTEM", "You reach the top of the cliff"),
+                    eff.deactivate("climb_sea_cliff"),
+                    eff.activate("new_meldrum"),
+                ],
+                onMin: [
+                    eff.sendMessage("SYSTEM", "You reach the bottom of the cliff"),
+                    eff.deactivate("climb_sea_cliff"),
+                    eff.activate("meldrum_beach"),
+                ],
+            },
+            // Depletes while climbing, regenerates on it's own
+            // Losing grip makes you fall to the bottom, losing health
+            grip: {
+                start: 100,
+                max: 100,
+                min: 0,
+                repeat: false,
+                onMin: [
+                    eff.sendMessage("SYSTEM", "Your grip gives out and you fall"),
+                    // Damage scales with how far you'd fallen
+                    eff.changeValue(
+                        "health",
+                        fml.mul(fml.progress("climb_sea_cliff", "height"), -0.5),
+                    ),
+                    eff.setMeter("climb_sea_cliff", 0, "height"),
+                    eff.resetMeter("climb_sea_cliff", 100, "grip"),
+                ],
+            },
+        },
+    },
+
+
+    explore_meldrum_forest: {
+        name: "Explore New Meldrum Forest",
+        tags: ["exploration", "traversal"],
+        requirements: fml.active("meldrum_forest"),
+        meters: {
+            distance: {
+                max: 1000,
+                result: [
+                    eff.sendMessage("SYSTEM", "You reach the centre of the forest"),
+                    eff.deactivate("explore_meldrum_forest")
+                ],
+            },
+        },
+    },
+
+    track_game: {
+        name: "Track Game",
+        tags: ["tracking"],
+        requirements: fml.active("meldrum_forest_deep"),
+        meters: {
+        track: {
+            max: 8,
+            result: [
+            eff.sendMessage("SYSTEM", "The tracks end at a churned wallow. Something huge snorts in the brush."),
+            eff.spawn("wild_boar", "evil"),
+            eff.deactivate("track_game"),
+            ],
+        },
+        },
+    },
+
+    comb_pools: {
+        name: "Comb the Tide Pools",
+        tags: ["tracking"],
+        requirements: fml.active("meldrum_tide_pools"),
+        meters: {
+        track: {
+            max: 6,
+            result: [
+            eff.sendMessage("SYSTEM", "A rock crab scuttles out of the pool, claws raised"),
+            eff.spawn("rock_crab", "evil"),
+            eff.spawn("rock_crab", "evil"),
+            ],
+        },
+        },
+    },
+
+    delve_cave: {
+        name: "Delve the Sea Cave",
+        tags: ["tracking"],
+        requirements: fml.active("meldrum_sea_cave"),
+        meters: {
+        track: {
+            max: 4,
+            result: [
+            eff.spawn(
+                fml.ternary(fml.lt(fml.roll(0, 99), 10), "rat_matriarch", "rat"),
+                "evil",
+            ),
+            eff.deactivate("delve_cave"),
+            ],
+        },
+        },
+  },
+
+}
+
+
+function route(name, from, to, distance, gate = null) {
+  return {
+    name,
+    tags: ["traversal", "route"],
+    requirements: gate ? fml.and(fml.active(from), gate) : fml.active(from),
+    meters: {
+      distance: {
+        max: distance,
+        repeat: false,
+        result: [
+          eff.sendMessage("SYSTEM", fml.add("You arrive at ", fml.name(to))),
+            // Meters stay at max when repeat is false, so reset before leaving
+            // TODO - examine this engine-level structure
+            eff.resetMeter(sel.active(sel.tags("route")), 0, "distance"),
+          eff.deactivate(sel.active(sel.tags("route"))),
+          eff.activate(to),
+        ],
+      },
+    },
+  };
+}
+
+const ROUTES = {
+    meldrum_to_library: route("Visit the library",              "new_meldrum",         "meldrum_library",      5),
+    library_to_meldrum: route("Leave the library",              "meldrum_library",     "new_meldrum",          5),
+
+    meldrum_to_hut:     route("Enter your hut",                 "new_meldrum",         "starter_hut",          3),
+    hut_to_meldrum:     route("Leave your hut",                 "starter_hut",         "new_meldrum",          3),
+
+    meldrum_to_forest:  route("Enter the Forest",               "new_meldrum",         "meldrum_forest",      12),
+    forest_to_meldrum:  route("Return to the Village",          "meldrum_forest",      "new_meldrum",         12),
+
+    forest_to_deep:     route("Enter the Deep Forest",          "meldrum_forest",      "meldrum_forest_deep", 30),
+    deep_to_forest:     route("Return to the Forest Outskirts", "meldrum_forest_deep", "meldrum_forest",      30),
+
+    beach_to_cave:      route("Enter Sea Cave",                 "meldrum_beach",       "meldrum_sea_cave",     8),
+    cave_to_beach:      route("Exit the Cave to the Beach",     "meldrum_sea_cave",    "meldrum_beach",        8),
+
+    beach_to_pools:     route("Stroll Along to the Tide Pools", "meldrum_beach",       "meldrum_tide_pools",  10),
+    pools_to_beach:     route("Return to the Sandy Beach",      "meldrum_tide_pools",  "meldrum_beach",       10),
+
+    meldrum_to_stream:  route("Follow the Stream",              "new_meldrum",         "meldrum_stream",       6),
+    stream_to_meldrum:  route("Return to the Village",          "meldrum_stream",      "new_meldrum",          6),
+
+    forest_to_moor:     route("Climb onto the Moor",            "meldrum_forest",      "meldrum_moor",        20),
+    moor_to_forest:     route("Descend into the forest",        "meldrum_moor",        "meldrum_forest",      20),
+}
+
+export const ACTIVITIES = Object.assign({}, GENERAL_ACTIVITIES, ROUTES);
