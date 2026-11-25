@@ -1,4 +1,4 @@
-import { tagsOf } from "../util/tagIndex.js";
+import { resolveTargets, resolveFormulas } from "./formulaDefs.js";
 
 /*
  * Event types come from two places:
