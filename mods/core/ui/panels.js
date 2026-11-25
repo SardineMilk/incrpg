@@ -132,7 +132,6 @@ export const PANELS = {
   actions: {
     container: "actions-panel",
     title: "ACT.ION",
-    theme: "parasite",
     root: ui.list(
       sel.tags("actions"),
       (id) => ui.group([
@@ -163,7 +162,6 @@ export const PANELS = {
   activity: {
     container: "activity-panel",
     title: "ACT.IVITY",
-    theme: "parasite",
     root: ui.group([
       // Every possible activity, shown only when none are active
       ui.list(
