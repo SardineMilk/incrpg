@@ -6,7 +6,8 @@ export const NAMESPACES = {
   locations: {},
 };
 
-// TODO - move these to NAMESPACES
+// These aren't in NAMESPACES for a reason
+// Actors and Panels aren't entities like the other structures
 export const ACTORS = {};
 export const PANELS = {};
 
